@@ -1,3 +1,5 @@
 .vscode
-main.exe
-main
+*.dll
+
+test.exe
+text
