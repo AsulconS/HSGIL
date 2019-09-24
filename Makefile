@@ -10,7 +10,9 @@ CXX_FLAGS 	= $(CXX_STANDARD) $(CXX_STANDARD_FLAGS) $(CXX_EXTRA_FLAGS)
 STATIC_CXX	= -static-libgcc -static-libstdc++
 LINK_FLAGS	= -Wl,-Bstatic -lstdc++ -lpthread
 
-INCLUDE		= -Iinclude
+INCLUDE_PATH	= -Iinclude
+LIBRARY_PATH	= -Lexternal/bin
+
 DLLS		= hsgil-window.dll
 EXTERNALS	= glad.o
 
@@ -30,16 +32,16 @@ os:
 	@echo $(C_OS)
 
 test: test.o
-	$(CXX) $(CXX_FLAGS) test.o $(DLLS) $(INCLUDE) $(LIBS) -o test $(STATIC_CXX) $(LINK_FLAGS)
+	$(CXX) $(CXX_FLAGS) test.o $(DLLS) $(INCLUDE_PATH) $(LIBRARY_PATH) $(LIBS) -o test $(STATIC_CXX) $(LINK_FLAGS)
 
 test.o: test.cpp
-	$(CXX) $(CXX_FLAGS) $(INCLUDE) -c test.cpp
+	$(CXX) $(CXX_FLAGS) $(INCLUDE_PATH) -c test.cpp
 
 window.o: src/window/window.cpp
-	$(CXX) $(CXX_FLAGS) $(INCLUDE) -fPIC -c src/window/window.cpp
+	$(CXX) $(CXX_FLAGS) $(INCLUDE_PATH) -fPIC -c src/window/window.cpp
 
 hsgil-window.dll: window.o
-	$(CXX) -shared $(CXX_FLAGS) window.o glad.o $(INCLUDE) $(LIBS) -o hsgil-window.dll $(STATIC_CXX) $(LINK_FLAGS)
+	$(CXX) -shared $(CXX_FLAGS) window.o glad.o $(INCLUDE_PATH) $(LIBRARY_PATH) $(LIBS) -o hsgil-window.dll $(STATIC_CXX) $(LINK_FLAGS)
 
 glad.o: external/src/glad/glad.c
 	$(CC) -c external/src/glad/glad.c
