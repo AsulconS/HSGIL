@@ -1,5 +1,6 @@
 .vscode
 *.dll
+*.so
 
 test.exe
-text
+test
