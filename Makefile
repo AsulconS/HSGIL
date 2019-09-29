@@ -1,79 +1,113 @@
-CC  = gcc
-CXX = g++
+# Colors and Styles For Highlighted Commands
+# -----------------------------------------------------------------------------------------
 
-CXX_STANDARD        = -std=c++11
-CXX_STANDARD_FLAGS  = -Wall -Wextra
-CXX_EXTRA_FLAGS     = -Wshadow -Wnon-virtual-dtor -pedantic
+NO_COLOR    = \x1b[0m
+OK_COLOR    = \x1b[1;32m
+ERROR_COLOR = \x1b[1;31m
+WARN_COLOR  = \x1b[1;33m
+BUILD_COLOR = \x1b[0;34m
+OS_COLOR    = \x1b[0;35m
+LIB_COLOR   = \x1b[0;36m
 
-CXX_FLAGS = $(CXX_STANDARD) $(CXX_STANDARD_FLAGS) $(CXX_EXTRA_FLAGS)
+LINE_STRING  = @for _ in {0..63}; do printf "-"; done
 
-STATIC_CXX = -static-libgcc -static-libstdc++
-LINK_FLAGS = -Wl,-Bstatic -lstdc++ -lpthread
+SKIP_TO_RIGHT = \x1b[A\x1b[31C
+OK_STRING     = $(OK_COLOR)$(SKIP_TO_RIGHT)[OK]$(NO_COLOR)
+ERROR_STRING  = $(ERROR_COLOR)[ERRORS]$(NO_COLOR)
+WARN_STRING   = $(WARN_COLOR)[WARNINGS]$(NO_COLOR)
+
+# Operative System Detection
+# -----------------------------------------------------------------------------------------
+ifeq ($(OS), Windows_NT)
+    C_OS = WINDOWS
+else
+    ifeq ($(OS), Linux)
+        C_OS = LINUX
+    endif
+endif
+# -----------------------------------------------------------------------------------------
+
+OS_STRING    = $(OS_COLOR)[$(C_OS)]$(NO_COLOR)
+LIB_STRING   = $(LIB_COLOR)HSGIL - Handy Scalable Graphics Integration Library$(NO_COLOR)
+BUILD_PRINT  = $(BUILD_COLOR)Building $@:$(NO_COLOR)
+
+# -----------------------------------------------------------------------------------------
+
+# C++ Building MACROS
+# -----------------------------------------------------------------------------------------
+
+CC  = @gcc
+CXX = @g++
+
+CXX_STANDARD      = -std=c++11
+CXX_WSTD_FLAGS    = -Wall -Wextra
+CXX_EXTRA_FLAGS   = -Wshadow -Wnon-virtual-dtor -pedantic
+CXX_WARNING_FLAGS = $(CXX_WSTD_FLAGS) $(CXX_EXTRA_FLAGS)
+
+CXX_FLAGS = $(CXX_STANDARD) $(CXX_WARNING_FLAGS)
+
+# -----------------------------------------------------------------------------------------
+
+# -----------------------------------------------------------------------------------------
+
+STATIC_LIBS = -static-libgcc -static-libstdc++
+LINK_FLAGS  = -Wl,-Bstatic -lstdc++ -lpthread
 
 INCLUDE_PATH = -Iinclude -Iexternal/include
 
-EXTERNALS = glad.o
+EXTERNAL = glad.o
 
-ifeq ($(OS),Windows_NT)
-    C_OS = Windows
+# -----------------------------------------------------------------------------------------
+
+ifeq ($(C_OS), WINDOWS)
     LIBS = -lglfw3 -lgdi32
-    SHARED = hsgil-window.dll
+    SHARED_FILES = hsgil-window.dll
     LIBRARY_PATH = -Lexternal/bin/win_x64
 else
-    C_OS = Linux
-    LIBS = -lglfw -lGL -lX11 -lpthread -lXrandr -lXi -ldl
-    SHARED = hsgil-window.so
-    LIBRARY_PATH = -Lexternal/bin/linux_x64
+    ifeq ($(C_OS), LINUX)
+        LIBS = -lglfw -lGL -lX11 -lpthread -lXrandr -lXi -ldl
+        SHARED_FILES = hsgil-window.so
+        LIBRARY_PATH = -Lexternal/bin/linux_x64
+    endif
 endif
 
-NO_COLOR=\x1b[0m
-OK_COLOR=\x1b[32;01m
-ERROR_COLOR=\x1b[31;01m
-WARN_COLOR=\x1b[33;01m
-BLUE_COLOR=\e[1;34m
+all: prompt $(EXTERNAL) $(SHARED_FILES) test trash
 
-BUILD_PRINT = $(BLUE_COLOR)Building $<\e[0m
-
-OK_STRING=$(OK_COLOR)[OK]$(NO_COLOR)
-ERROR_STRING=$(ERROR_COLOR)[ERRORS]$(NO_COLOR)
-WARN_STRING=$(WARN_COLOR)[WARNINGS]$(NO_COLOR)
-
-all: os $(EXTERNALS) $(SHARED) test trash
-
-os:
-	@printf "\n*************\n"
-	@printf "$(OK_COLOR)$(C_OS)\e[0m\n"
-	@printf "*************\n\n"
+prompt:
+	$(LINE_STRING)
+	@printf "\n$(LIB_STRING)\n"
+	$(LINE_STRING)
+	@printf "\n$(OS_STRING)\n\n"
 
 test: test.o
 	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
-	$(CXX) $(CXX_FLAGS) test.o $(SHARED) $(INCLUDE_PATH) $(LIBRARY_PATH) $(LIBS) -o test $(STATIC_CXX) $(LINK_FLAGS)
+	$(CXX) $(CXX_FLAGS) test.o $(SHARED_FILES) $(INCLUDE_PATH) $(LIBRARY_PATH) $(LIBS) -o test $(STATIC_LIBS) $(LINK_FLAGS)
 	@printf "$(OK_STRING)\n\n"
 
 test.o: test.cpp
 	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
 	$(CXX) $(CXX_FLAGS) $(INCLUDE_PATH) -c test.cpp
-	@printf "$(OK_STRING)\n\n"
+	@printf "$(OK_STRING)\n"
 
 window.o: src/window/window.cpp
 	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
 	$(CXX) $(CXX_FLAGS) $(INCLUDE_PATH) -fPIC -c src/window/window.cpp
-	@printf "$(OK_STRING)\n\n"
+	@printf "$(OK_STRING)\n"
 
 hsgil-window.dll: window.o
-	@printf "$(BLUE_COLOR)Building hsgil-window.dll\n$(WARN_COLOR)"
-	$(CXX) -shared $(CXX_FLAGS) window.o glad.o $(INCLUDE_PATH) $(LIBRARY_PATH) $(LIBS) -o hsgil-window.dll $(STATIC_CXX) $(LINK_FLAGS)
-	@printf "$(OK_STRING)\n\n"
+	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
+	$(CXX) -shared $(CXX_FLAGS) window.o glad.o $(INCLUDE_PATH) $(LIBRARY_PATH) $(LIBS) -o hsgil-window.dll $(STATIC_LIBS) $(LINK_FLAGS)
+	@printf "$(OK_STRING)\n"
 
 hsgil-window.so: window.o
-	@printf "$(BLUE_COLOR)Building hsgil-window.so\n$(WARN_COLOR)"
-	$(CXX) -shared $(CXX_FLAGS) window.o glad.o $(INCLUDE_PATH) $(LIBRARY_PATH) $(LIBS) -o hsgil-window.so $(STATIC_CXX) $(LINK_FLAGS)
-	@printf "$(OK_STRING)\n\n"
+	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
+	$(CXX) -shared $(CXX_FLAGS) window.o glad.o $(INCLUDE_PATH) $(LIBRARY_PATH) $(LIBS) -o hsgil-window.so $(STATIC_LIBS) $(LINK_FLAGS)
+	@printf "$(OK_STRING)\n"
 
 glad.o: external/src/glad/glad.c
 	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
 	$(CC) $(INCLUDE_PATH) -fPIC -c external/src/glad/glad.c
-	@printf "$(OK_STRING)\n\n"
+	@printf "$(OK_STRING)\n"
 
 trash:
 	@rm -rf *.o
