@@ -120,7 +120,7 @@ prompt:
 test: test.o
 	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
 	$(CXX) $(CXX_FLAGS) test.o $(SHARED_FILES) $(INCLUDE_PATH) $(LIBRARY_PATH) $(LIBS) -o test $(STATIC_LIBS) $(LINK_FLAGS)
-	@printf "$(OK_STRING)\n\n"
+	@printf "$(OK_STRING)\n"
 
 # -----------------------------------------------------------------------------------------
 
