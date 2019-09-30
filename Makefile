@@ -12,10 +12,16 @@ LIB_COLOR   = \x1b[0;36m
 
 LINE_STRING  = @for _ in {0..63}; do printf "-"; done
 
+MODE          = @
 SKIP_TO_RIGHT = \x1b[A\x1b[31C
 OK_STRING     = $(OK_COLOR)$(SKIP_TO_RIGHT)[OK]$(NO_COLOR)
 ERROR_STRING  = $(ERROR_COLOR)[ERRORS]$(NO_COLOR)
 WARN_STRING   = $(WARN_COLOR)[WARNINGS]$(NO_COLOR)
+
+ifeq ($(echoOn), true)
+    MODE =
+    SKIP_TO_RIGHT =
+endif
 
 # Operative System Detection
 # -----------------------------------------------------------------------------------------
@@ -42,8 +48,8 @@ BUILD_PRINT  = $(BUILD_COLOR)Building $@:$(NO_COLOR)
 # C++ Flags and MACROS --------------------------------------------------------------------
 # -----------------------------------------------------------------------------------------
 
-CC  = @gcc
-CXX = @g++
+CC  = gcc
+CXX = g++
 
 CXX_STANDARD      = -std=c++11
 CXX_WSTD_FLAGS    = -Wall -Wextra
@@ -119,7 +125,7 @@ prompt:
 
 test: test.o
 	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
-	$(CXX) $(CXX_FLAGS) test.o $(SHARED_FILES) $(INCLUDE_PATH) $(LIBRARY_PATH) $(LIBS) -o test $(STATIC_LIBS) $(LINK_FLAGS)
+	$(MODE)$(CXX) $(CXX_FLAGS) test.o $(SHARED_FILES) $(INCLUDE_PATH) $(LIBRARY_PATH) $(LIBS) -o test $(STATIC_LIBS) $(LINK_FLAGS)
 	@printf "$(OK_STRING)\n"
 
 # -----------------------------------------------------------------------------------------
@@ -129,12 +135,12 @@ test: test.o
 
 test.o: test.cpp
 	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
-	$(CXX) $(CXX_FLAGS) $(INCLUDE_PATH) -c test.cpp
+	$(MODE)$(CXX) $(CXX_FLAGS) $(INCLUDE_PATH) -c test.cpp
 	@printf "$(OK_STRING)\n"
 
 window.o: src/window/window.cpp
 	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
-	$(CXX) $(CXX_FLAGS) $(INCLUDE_PATH) -fPIC -c src/window/window.cpp
+	$(MODE)$(CXX) $(CXX_FLAGS) $(INCLUDE_PATH) -fPIC -c src/window/window.cpp
 	@printf "$(OK_STRING)\n"
 
 # -----------------------------------------------------------------------------------------
@@ -144,12 +150,12 @@ window.o: src/window/window.cpp
 
 hsgil-window.dll: window.o
 	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
-	$(CXX) -shared $(CXX_FLAGS) window.o glad.o $(INCLUDE_PATH) $(LIBRARY_PATH) $(LIBS) -o hsgil-window.dll $(STATIC_LIBS) $(LINK_FLAGS)
+	$(MODE)$(CXX) -shared $(CXX_FLAGS) window.o glad.o $(INCLUDE_PATH) $(LIBRARY_PATH) $(LIBS) -o hsgil-window.dll $(STATIC_LIBS) $(LINK_FLAGS)
 	@printf "$(OK_STRING)\n"
 
 hsgil-window.so: window.o
 	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
-	$(CXX) -shared $(CXX_FLAGS) window.o glad.o $(INCLUDE_PATH) $(LIBRARY_PATH) $(LIBS) -o hsgil-window.so $(STATIC_LIBS) $(LINK_FLAGS)
+	$(MODE)$(CXX) -shared $(CXX_FLAGS) window.o glad.o $(INCLUDE_PATH) $(LIBRARY_PATH) $(LIBS) -o hsgil-window.so $(STATIC_LIBS) $(LINK_FLAGS)
 	@printf "$(OK_STRING)\n"
 
 # -----------------------------------------------------------------------------------------
@@ -159,7 +165,7 @@ hsgil-window.so: window.o
 
 glad.o: external/src/glad/glad.c
 	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
-	$(CC) $(INCLUDE_PATH) -fPIC -c external/src/glad/glad.c
+	$(MODE)$(CC) $(INCLUDE_PATH) -fPIC -c external/src/glad/glad.c
 	@printf "$(OK_STRING)\n"
 
 # -----------------------------------------------------------------------------------------
