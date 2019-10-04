@@ -15,8 +15,8 @@ LINE_STRING  = @for _ in {0..63}; do printf "-"; done
 MODE          = @
 SKIP_TO_RIGHT = \x1b[A\x1b[31C
 OK_STRING     = $(OK_COLOR)$(SKIP_TO_RIGHT)[OK]$(NO_COLOR)
-ERROR_STRING  = $(ERROR_COLOR)[ERRORS]$(NO_COLOR)
-WARN_STRING   = $(WARN_COLOR)[WARNINGS]$(NO_COLOR)
+ERROR_STRING  = $(ERROR_COLOR)$(SKIP_TO_RIGHT)[ERRORS]$(NO_COLOR)
+WARN_STRING   = $(WARN_COLOR)$(SKIP_TO_RIGHT)[WARNINGS]$(NO_COLOR)
 
 ifeq ($(echoOn), true)
     MODE =
@@ -28,9 +28,7 @@ endif
 ifeq ($(OS), Windows_NT)
     C_OS = WINDOWS
 else
-    ifeq ($(OS), Linux)
-        C_OS = LINUX
-    endif
+    C_OS = LINUX
 endif
 # -----------------------------------------------------------------------------------------
 

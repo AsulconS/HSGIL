@@ -1,4 +1,6 @@
 .vscode
+other/misc
+
 *.dll
 *.so
 
