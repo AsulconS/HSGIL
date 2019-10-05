@@ -21,34 +21,21 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_WINDOW_EXCEPTION_HPP
-#define HSGIL_WINDOW_EXCEPTION_HPP
+#ifndef HSGIL_GENERIC_EXCEPTION_HPP
+#define HSGIL_GENERIC_EXCEPTION_HPP
 
-#include <HSGIL/core/common.hpp>
+#include <exception>
 
 namespace gil
 {
-/**
- * @brief Window Exception that is thrown when a Window can't initialize
- * 
- */
-class WindowInitException : public std::exception
+class GenericException : public std::exception
 {
-    virtual const char* what() const throw();
+public:
+    virtual const char* what() const throw() override;
 };
 
-/**
- * @brief GLAF Exception that is thrown when GLAD fails its initialization
- * 
- */
-class GLADInitException : public std::exception
-{
-    virtual const char* what() const throw();
-};
-
-#include <HSGIL/window/windowException.inl>
+#include <HSGIL/exception/genericException.inl>
 
 } // namespace gil
 
-#endif // HSGIL_WINDOW_EXCEPTION_HPP
-
+#endif // HSGIL_GENERIC_EXCEPTION_HPP

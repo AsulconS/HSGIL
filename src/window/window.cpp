@@ -28,7 +28,8 @@ namespace gil
 Window::Window(const uint32 t_width, const uint32 t_height, const char* t_title)
     : m_width (t_width),
       m_height(t_height),
-      m_title (t_title)
+      m_title (t_title),
+      m_ready (false)
 {
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -43,23 +44,29 @@ Window::Window(const uint32 t_width, const uint32 t_height, const char* t_title)
     {
         initializeWindow();
         initializeGLAD();
+        m_ready = true;
     }
-    catch(const std::exception& e)
+    catch(const GenericException& e)
     {
         std::cerr << "An Exception has occurred: " << e.what() << std::endl;
-        glfwTerminate();
-        std::terminate();
+        m_ready = false;
     }
 }
 
 Window::~Window()
 {
+    std::cout << "Destructing Window" << std::endl;
     glfwTerminate();
 }
 
-bool Window::isActive()
+bool Window::active()
 {
     return !glfwWindowShouldClose(m_window);
+}
+
+bool Window::ready()
+{
+    return m_ready;
 }
 
 void Window::processInput()
@@ -67,7 +74,9 @@ void Window::processInput()
     glfwPollEvents();
 
     if(glfwGetKey(m_window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+    {
         glfwSetWindowShouldClose(m_window, true);
+    }
 }
 
 void Window::swapBuffers()

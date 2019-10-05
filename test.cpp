@@ -27,6 +27,11 @@ int main()
 {
     gil::Window window {};
 
+    if(!window.ready())
+    {
+        return -1;
+    }
+
     gil::uint32 vertexShader = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertexShader, 1, &vertexShaderSrc, nullptr);
     glCompileShader(vertexShader);
@@ -88,7 +93,7 @@ int main()
 
     glBindVertexArray(0);
 
-    while(window.isActive())
+    while(window.active())
     {
         window.processInput();
 

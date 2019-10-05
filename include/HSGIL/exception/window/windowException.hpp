@@ -21,95 +21,36 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_WINDOW_HPP
-#define HSGIL_WINDOW_HPP
+#ifndef HSGIL_WINDOW_EXCEPTION_HPP
+#define HSGIL_WINDOW_EXCEPTION_HPP
 
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
-
-#include <HSGIL/core/common.hpp>
-#include <HSGIL/exception/window/windowException.hpp>
-
-#include <string>
-#include <iostream>
+#include <HSGIL/exception/genericException.hpp>
 
 namespace gil
 {
 /**
- * @brief Window Class that handle the Main Window of the program
+ * @brief Window Exception that is thrown when a Window can't initialize
  * 
  */
-class Window
+class WindowInitException : public GenericException
 {
 public:
-    /**
-     * @brief Construct a new Window object
-     * 
-     * @param t_title 
-     * @param t_width 
-     * @param t_height 
-     */
-    explicit Window(const uint32 t_width = 800, const uint32 t_height = 600, const char* t_title = "Untitled");
-    /**
-     * @brief Destroy the Window object
-     * 
-     */
-    virtual ~Window();
-
-    /**
-     * @brief Checks if the Window shouldn't close
-     * 
-     * @return true if the Window is active
-     * @return false if not
-     */
-    bool active();
-    /**
-     * @brief Checks if the Window is able to start rendering
-     * 
-     * @return true if right
-     * @return false if not
-     */
-    bool ready();
-    /**
-     * @brief Process the input in this Window object
-     * 
-     */
-    void processInput();
-    /**
-     * @brief Swap the buffers
-     * 
-     */
-    void swapBuffers();
-
-private:
-    /**
-     * @brief Initializes the Window itself
-     * 
-     */
-    void initializeWindow();
-    /**
-     * @brief Initialize OpenGL functions with GLAD
-     * 
-     */
-    void initializeGLAD();
-    /**
-     * @brief Framebuffer function called when window is rezised
-     * 
-     * @param window 
-     * @param width 
-     * @param height 
-     */
-    static void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-
-    uint32 m_width;
-    uint32 m_height;
-    GLFWwindow* m_window;
-
-    std::string m_title;
-
-    bool m_ready;
+    virtual const char* what() const throw() override;
 };
+
+/**
+ * @brief GLAD Exception that is thrown when GLAD fails its initialization
+ * 
+ */
+class GLADInitException : public GenericException
+{
+public:
+    virtual const char* what() const throw() override;
+};
+
+#include <HSGIL/exception/window/windowException.inl>
 
 } // namespace gil
 
-#endif // HSGIL_WINDOW_HPP
+#endif // HSGIL_WINDOW_EXCEPTION_HPP
+
