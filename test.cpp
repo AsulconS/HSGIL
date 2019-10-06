@@ -32,44 +32,7 @@ int main()
         return -1;
     }
 
-    gil::uint32 vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertexShader, 1, &vertexShaderSrc, nullptr);
-    glCompileShader(vertexShader);
-
-    int success;
-    char infolog[512];
-    glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-    if(!success)
-    {
-        glGetShaderInfoLog(vertexShader, 512, nullptr, infolog);
-        std::cerr << "ERROR in Vertex Shader: Compilation Failed\n" << infolog << std::endl;
-    }
-
-    gil::uint32 fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragmentShader, 1, &fragmentShaderSrc, nullptr);
-    glCompileShader(fragmentShader);
-
-    glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
-    if(!success)
-    {
-        glGetShaderInfoLog(fragmentShader, 512, nullptr, infolog);
-        std::cerr << "ERROR in Fragment Shader: Compilation Failed\n" << infolog << std::endl;
-    }
-
-    gil::uint32 shader = glCreateProgram();
-    glAttachShader(shader, vertexShader);
-    glAttachShader(shader, fragmentShader);
-    glLinkProgram(shader);
-
-    glGetProgramiv(shader, GL_LINK_STATUS, &success);
-    if(!success)
-    {
-        glGetProgramInfoLog(shader, 512, nullptr, infolog);
-        std::cerr << "ERROR in Shader: Link Failed\n" << infolog << std::endl;
-    }
-
-    glDeleteShader(vertexShader);
-    glDeleteShader(fragmentShader);
+    gil::Shader shader {"nullPath", vertexShaderSrc, fragmentShaderSrc};
 
     float data[] =
     {
@@ -100,7 +63,7 @@ int main()
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        glUseProgram(shader);
+        shader.use();
         glBindVertexArray(VAO);
         glDrawArrays(GL_TRIANGLES, 0, sizeof(data) / sizeof(float));
         glBindVertexArray(0);

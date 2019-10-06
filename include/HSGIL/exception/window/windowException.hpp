@@ -29,20 +29,30 @@
 namespace gil
 {
 /**
- * @brief Window Exception that is thrown when a Window can't initialize
+ * @brief Window Generic Exception
  * 
  */
-class WindowInitException : public GenericException
+class WindowException : public GenericException
 {
 public:
     virtual const char* what() const throw() override;
 };
 
 /**
- * @brief GLAD Exception that is thrown when GLAD fails its initialization
+ * @brief Window Exception that is thrown when a Window can't initialize
  * 
  */
-class GLADInitException : public GenericException
+class WindowInitException : public WindowException
+{
+public:
+    virtual const char* what() const throw() override;
+};
+
+/**
+ * @brief Window GLAD Exception that is thrown when GLAD fails its initialization
+ * 
+ */
+class GLADInitException : public WindowException
 {
 public:
     virtual const char* what() const throw() override;

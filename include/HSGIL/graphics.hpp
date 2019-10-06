@@ -21,17 +21,10 @@
  *                                                                              *
  ********************************************************************************/
 
-inline const char* WindowException::what() const throw()
-{
-    return "gil::WindowException : Window Exception";
-}
+#ifndef HSGIL_GRAPHICS_I_HPP
+#define HSGIL_GRAPHICS_I_HPP
 
-inline const char* WindowInitException::what() const throw()
-{
-    return "gil::WindowInitException : Window failed to initialize";
-}
+#include <HSGIL/graphics/shader.hpp>
+#include <HSGIL/graphics/vertexBuffer.hpp>
 
-inline const char* GLADInitException::what() const throw()
-{
-    return "gil::GLADInitException : GLAD failed to initialize";
-}
+#endif // HSGIL_GRAPHICS_I_HPP

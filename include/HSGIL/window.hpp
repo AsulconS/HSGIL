@@ -21,17 +21,9 @@
  *                                                                              *
  ********************************************************************************/
 
-inline const char* WindowException::what() const throw()
-{
-    return "gil::WindowException : Window Exception";
-}
+#ifndef HSGIL_WINDOW_I_HPP
+#define HSGIL_WINDOW_I_HPP
 
-inline const char* WindowInitException::what() const throw()
-{
-    return "gil::WindowInitException : Window failed to initialize";
-}
+#include <HSGIL/window/window.hpp>
 
-inline const char* GLADInitException::what() const throw()
-{
-    return "gil::GLADInitException : GLAD failed to initialize";
-}
+#endif // HSGIL_WINDOW_I_HPP

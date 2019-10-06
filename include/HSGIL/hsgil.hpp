@@ -21,9 +21,10 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_HPP
-#define HSGIL_HPP
+#ifndef HSGIL_I_HPP
+#define HSGIL_I_HPP
 
-#include <HSGIL/window/window.hpp>
+#include <HSGIL/window.hpp>
+#include <HSGIL/graphics.hpp>
 
-#endif // HSGIL_HPP
+#endif // HSGIL_I_HPP

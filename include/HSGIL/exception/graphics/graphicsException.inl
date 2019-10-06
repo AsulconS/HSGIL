@@ -21,17 +21,12 @@
  *                                                                              *
  ********************************************************************************/
 
-inline const char* WindowException::what() const throw()
+inline const char* GraphicsException::what() const throw()
 {
-    return "gil::WindowException : Window Exception";
+    return "gil::GraphicsException : Graphics Exception";
 }
 
-inline const char* WindowInitException::what() const throw()
+inline const char* ShaderException::what() const throw()
 {
-    return "gil::WindowInitException : Window failed to initialize";
-}
-
-inline const char* GLADInitException::what() const throw()
-{
-    return "gil::GLADInitException : GLAD failed to initialize";
+    return "gil::ShaderException : Shader failed to create";
 }

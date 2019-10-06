@@ -21,17 +21,35 @@
  *                                                                              *
  ********************************************************************************/
 
-inline const char* WindowException::what() const throw()
-{
-    return "gil::WindowException : Window Exception";
-}
+#ifndef HSGIL_GRAPHICS_EXCEPTION_HPP
+#define HSGIL_GRAPHICS_EXCEPTION_HPP
 
-inline const char* WindowInitException::what() const throw()
-{
-    return "gil::WindowInitException : Window failed to initialize";
-}
+#include <HSGIL/exception/genericException.hpp>
 
-inline const char* GLADInitException::what() const throw()
+namespace gil
 {
-    return "gil::GLADInitException : GLAD failed to initialize";
-}
+/**
+ * @brief Generic Graphics Exception
+ * 
+ */
+class GraphicsException : public GenericException
+{
+public:
+    virtual const char* what() const throw() override;
+};
+
+/**
+ * @brief Shader Exception thrown when a Shader fails when creating
+ * 
+ */
+class ShaderException : public GraphicsException
+{
+public:
+    virtual const char* what() const throw() override;
+};
+
+#include <HSGIL/exception/graphics/graphicsException.inl>
+
+} // namespace gil
+
+#endif // HSGIL_GRAPHICS_EXCEPTION_HPP

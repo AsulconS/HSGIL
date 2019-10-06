@@ -21,17 +21,39 @@
  *                                                                              *
  ********************************************************************************/
 
-inline const char* WindowException::what() const throw()
-{
-    return "gil::WindowException : Window Exception";
-}
+#ifndef HSGIL_SHADER_HPP
+#define HSGIL_SHADER_HPP
 
-inline const char* WindowInitException::what() const throw()
-{
-    return "gil::WindowInitException : Window failed to initialize";
-}
+#include <glad/glad.h>
 
-inline const char* GLADInitException::what() const throw()
+#include <string>
+#include <iostream>
+
+#include <HSGIL/core/common.hpp>
+#include <HSGIL/exception/graphics/graphicsException.hpp>
+
+namespace gil
 {
-    return "gil::GLADInitException : GLAD failed to initialize";
-}
+class Shader
+{
+public:
+    Shader(const char* t_path, const char* t_vsSrc, const char* t_fsSrc);
+    virtual ~Shader();
+
+    void use() const;
+
+private:
+    uint32 createShader(const GLenum type);
+
+    void checkErrors(const uint32 target, bool isProgram);
+
+    uint32 m_program;
+
+    std::string m_path;
+    std::string m_vsSrc;
+    std::string m_fsSrc;
+};
+
+} // namespace gil
+
+#endif // HSGIL_SHADER_HPP

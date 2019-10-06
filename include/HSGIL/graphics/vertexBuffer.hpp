@@ -26,7 +26,10 @@
 
 namespace gil
 {
+class VertexBuffer
+{
+};
 
-}
+} // namespace gil
 
 #endif // HSGIL_VERTEX_BUFFER_HPP

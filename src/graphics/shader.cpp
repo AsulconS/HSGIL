@@ -21,17 +21,85 @@
  *                                                                              *
  ********************************************************************************/
 
-inline const char* WindowException::what() const throw()
+#include <HSGIL/graphics/shader.hpp>
+
+namespace gil
 {
-    return "gil::WindowException : Window Exception";
+Shader::Shader(const char* path, const char* t_vsSrc, const char* t_fsSrc)
+{
+    m_path.assign(path);
+    m_vsSrc.assign(t_vsSrc);
+    m_fsSrc.assign(t_fsSrc);
+
+    uint32 vertexShader = createShader(GL_VERTEX_SHADER);
+    uint32 fragmentShader = createShader(GL_FRAGMENT_SHADER);
+
+    m_program = glCreateProgram();
+    glAttachShader(m_program, vertexShader);
+    glAttachShader(m_program, fragmentShader);
+    glLinkProgram(m_program);
+
+    checkErrors(m_program, true);
+
+    glDeleteShader(vertexShader);
+    glDeleteShader(fragmentShader);
 }
 
-inline const char* WindowInitException::what() const throw()
+Shader::~Shader()
 {
-    return "gil::WindowInitException : Window failed to initialize";
+    glDeleteProgram(m_program);
 }
 
-inline const char* GLADInitException::what() const throw()
+void Shader::use() const
 {
-    return "gil::GLADInitException : GLAD failed to initialize";
+    glUseProgram(m_program);
+}
+
+uint32 Shader::createShader(const GLenum type)
+{
+    uint32 shader = glCreateShader(type);
+    const int8* shaderSrc;
+
+    if(type == GL_VERTEX_SHADER)
+    {
+        shaderSrc = m_vsSrc.c_str();
+    }
+    else
+    {
+        shaderSrc = m_fsSrc.c_str();
+    }
+
+    glShaderSource(shader, 1, &shaderSrc, nullptr);
+    glCompileShader(shader);
+
+    checkErrors(shader, false);
+
+    return shader;
+}
+
+void Shader::checkErrors(const uint32 target, bool isProgram)
+{
+    int32 success;
+    int8 infolog[512];
+
+    if(isProgram)
+    {
+        glGetProgramiv(target, GL_LINK_STATUS, &success);
+        if(!success)
+        {
+            glGetProgramInfoLog(target, 512, nullptr, infolog);
+            std::cerr << "ERROR in Shader: Link Failed\n" << infolog << std::endl;
+        }
+    }
+    else
+    {
+        glGetShaderiv(target, GL_COMPILE_STATUS, &success);
+        if(!success)
+        {
+            glGetShaderInfoLog(target, 512, nullptr, infolog);
+            std::cerr << "ERROR in Shader: Compilation Failed\n" << infolog << std::endl;
+        }
+    }
+}
+
 }
