@@ -25,9 +25,9 @@
 
 namespace gil
 {
-Shader::Shader(const char* path, const char* t_vsSrc, const char* t_fsSrc)
+Shader::Shader(const char* t_path, const char* t_vsSrc, const char* t_fsSrc)
 {
-    m_path.assign(path);
+    m_path.assign(t_path);
     m_vsSrc.assign(t_vsSrc);
     m_fsSrc.assign(t_fsSrc);
 

@@ -37,14 +37,41 @@ namespace gil
 class Shader
 {
 public:
+    /**
+     * @brief Construct a new Shader object
+     * 
+     * @param t_path 
+     * @param t_vsSrc 
+     * @param t_fsSrc 
+     */
     Shader(const char* t_path, const char* t_vsSrc, const char* t_fsSrc);
+    /**
+     * @brief Destroy the Shader object
+     * 
+     */
     virtual ~Shader();
 
+    /**
+     * @brief Binds the current context to this shader
+     * 
+     */
     void use() const;
 
 private:
+    /**
+     * @brief Create a Shader object
+     * 
+     * @param type 
+     * @return uint32 
+     */
     uint32 createShader(const GLenum type);
 
+    /**
+     * @brief Check if some error ocurred
+     * 
+     * @param target 
+     * @param isProgram 
+     */
     void checkErrors(const uint32 target, bool isProgram);
 
     uint32 m_program;
