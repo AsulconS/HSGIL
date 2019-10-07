@@ -18,7 +18,7 @@ OK_STRING     = $(OK_COLOR)$(SKIP_TO_RIGHT)[OK]$(NO_COLOR)
 ERROR_STRING  = $(ERROR_COLOR)$(SKIP_TO_RIGHT)[ERRORS]$(NO_COLOR)
 WARN_STRING   = $(WARN_COLOR)$(SKIP_TO_RIGHT)[WARNINGS]$(NO_COLOR)
 
-ifeq ($(echoOn), true)
+ifeq ($(silentOff), true)
     MODE =
     SKIP_TO_RIGHT =
 endif
@@ -32,9 +32,10 @@ else
 endif
 # -----------------------------------------------------------------------------------------
 
-OS_STRING    = $(OS_COLOR)[$(C_OS)]$(NO_COLOR)
-LIB_STRING   = $(LIB_COLOR)HSGIL - Handy Scalable Graphics Integration Library$(NO_COLOR)
-BUILD_PRINT  = $(BUILD_COLOR)Building $@:$(NO_COLOR)
+OS_STRING      = $(OS_COLOR)[$(C_OS)]$(NO_COLOR)
+LIB_STRING     = $(LIB_COLOR)HSGIL - Handy Scalable Graphics Integration Library$(NO_COLOR)
+SUCCESS_STRING = $(OK_COLOR)Everything Built Successfully!$(NO_COLOR)
+BUILD_PRINT    = $(BUILD_COLOR)Building $@:$(NO_COLOR)
 
 # -----------------------------------------------------------------------------------------
 # -----------------------------------------------------------------------------------------
@@ -43,18 +44,22 @@ BUILD_PRINT  = $(BUILD_COLOR)Building $@:$(NO_COLOR)
 
 
 # -----------------------------------------------------------------------------------------
-# C++ Flags and MACROS --------------------------------------------------------------------
+# C/C++ Flags and MACROS ------------------------------------------------------------------
 # -----------------------------------------------------------------------------------------
 
 CC  = gcc
 CXX = g++
 
+CC_STANDARD       = -std=c11
 CXX_STANDARD      = -std=c++11
 CXX_WSTD_FLAGS    = -Wall -Wextra
 CXX_EXTRA_FLAGS   = -Wshadow -Wnon-virtual-dtor -pedantic
 CXX_WARNING_FLAGS = $(CXX_WSTD_FLAGS) $(CXX_EXTRA_FLAGS)
 
+CC_FLAGS  = $(CC_STANDARD)
 CXX_FLAGS = $(CXX_STANDARD) $(CXX_WARNING_FLAGS)
+
+CXX_LIBS  = -static-libgcc -lstdc++ -lpthread
 
 # -----------------------------------------------------------------------------------------
 # -----------------------------------------------------------------------------------------
@@ -66,15 +71,15 @@ CXX_FLAGS = $(CXX_STANDARD) $(CXX_WARNING_FLAGS)
 # Building Macros -------------------------------------------------------------------------
 # -----------------------------------------------------------------------------------------
 
-STATIC_LIBS = -static-libgcc -static-libstdc++
-LINK_FLAGS  = -Wl,-Bstatic -lstdc++ -lpthread
-
 INCLUDE_PATH = -Iinclude -Iexternal/include
 
 EXTERNAL_DEPENDENCIES = glad.o
 
 WINDOW_OBJECT_FILES   = window.o
 GRAPHICS_OBJECT_FILES = shader.o
+
+SHARED_TARG = hsgil-core hsgil-window hsgil-graphics
+SHARED_LIBS = -lhsgil-core -lhsgil-window -lhsgil-graphics
 
 # -----------------------------------------------------------------------------------------
 # -----------------------------------------------------------------------------------------
@@ -87,16 +92,16 @@ GRAPHICS_OBJECT_FILES = shader.o
 # -----------------------------------------------------------------------------------------
 
 ifeq ($(C_OS), WINDOWS)
-    LIBS = -lglfw3 -lgdi32
-    SHARED_FILES = hsgil-core.dll hsgil-window.dll hsgil-graphics.dll
-    LIBRARY_PATH = -Lexternal/bin/win_x64
+    STATIC_LIBS = -Wl,-Bstatic -lglfw3 -lgdi32 $(CXX_LIBS)
+    LIBRARY_PATH = -Lexternal/bin/win_x64 -L.
+    EXTENSION = dll
 else
-    ifeq ($(C_OS), LINUX)
-        LIBS = -lglfw -lGL -lX11 -lpthread -lXrandr -lXi -ldl
-        SHARED_FILES = hsgil-core.so hsgil-window.so hsgil-graphics.so
-        LIBRARY_PATH = -Lexternal/bin/linux_x64
-    endif
+    STATIC_LIBS = -Wl,-Bstatic -lglfw -lGL -lX11 -lpthread -lXrandr -lXi -ldl $(CXX_LIBS)
+    LIBRARY_PATH = -Lexternal/bin/linux_x64 -L.
+    EXTENSION = so
 endif
+
+LIBS = $(SHARED_LIBS) $(STATIC_LIBS)
 
 # -----------------------------------------------------------------------------------------
 # -----------------------------------------------------------------------------------------
@@ -108,7 +113,8 @@ endif
 # Rules -----------------------------------------------------------------------------------
 # -----------------------------------------------------------------------------------------
 
-all: prompt $(SHARED_FILES) test trash
+all: prompt $(SHARED_TARG) test trash
+	@printf "\n$(SUCCESS_STRING)\n"
 
 # HSGIL Welcome Prompt and OS
 # -----------------------------------------------------------------------------------------
@@ -126,7 +132,7 @@ prompt:
 
 test: test.o
 	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
-	$(MODE)$(CXX) $(CXX_FLAGS) test.o $(SHARED_FILES) $(INCLUDE_PATH) $(LIBRARY_PATH) $(LIBS) -o test $(STATIC_LIBS) $(LINK_FLAGS)
+	$(MODE)$(CXX) $(CXX_FLAGS) test.o $(INCLUDE_PATH) $(LIBRARY_PATH) $(LIBS) -o test
 	@printf "$(OK_STRING)\n"
 
 # -----------------------------------------------------------------------------------------
@@ -136,17 +142,17 @@ test: test.o
 
 test.o: test.cpp
 	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
-	$(MODE)$(CXX) $(CXX_FLAGS) $(INCLUDE_PATH) -c test.cpp
+	$(MODE)$(CXX) -c $(CXX_FLAGS) $(INCLUDE_PATH) test.cpp
 	@printf "$(OK_STRING)\n"
 
 window.o: src/window/window.cpp
 	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
-	$(MODE)$(CXX) $(CXX_FLAGS) $(INCLUDE_PATH) -fPIC -c src/window/window.cpp
+	$(MODE)$(CXX) -c $(CXX_FLAGS) $(INCLUDE_PATH) -fPIC src/window/window.cpp
 	@printf "$(OK_STRING)\n"
 
 shader.o: src/graphics/shader.cpp
 	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
-	$(MODE)$(CXX) $(CXX_FLAGS) $(INCLUDE_PATH) -fPIC -c src/graphics/shader.cpp
+	$(MODE)$(CXX) -c $(CXX_FLAGS) $(INCLUDE_PATH) -fPIC src/graphics/shader.cpp
 	@printf "$(OK_STRING)\n"
 
 # -----------------------------------------------------------------------------------------
@@ -154,34 +160,19 @@ shader.o: src/graphics/shader.cpp
 # Shared Files
 # -----------------------------------------------------------------------------------------
 
-hsgil-core.dll: $(EXTERNAL_DEPENDENCIES)
+hsgil-core: $(EXTERNAL_DEPENDENCIES)
 	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
-	$(MODE)$(CXX) -shared $(CXX_FLAGS) $(EXTERNAL_DEPENDENCIES) $(INCLUDE_PATH) $(LIBRARY_PATH) $(LIBS) -o hsgil-core.dll $(STATIC_LIBS) $(LINK_FLAGS)
+	$(MODE)$(CXX) -shared $(CXX_FLAGS) $(EXTERNAL_DEPENDENCIES) $(INCLUDE_PATH) $(LIBRARY_PATH) $(STATIC_LIBS) -o hsgil-core.$(EXTENSION)
 	@printf "$(OK_STRING)\n"
 
-hsgil-core.so: $(EXTERNAL_DEPENDENCIES)
+hsgil-window: $(WINDOW_OBJECT_FILES)
 	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
-	$(MODE)$(CXX) -shared $(CXX_FLAGS) $(EXTERNAL_DEPENDENCIES) $(INCLUDE_PATH) $(LIBRARY_PATH) $(LIBS) -o hsgil-core.so $(STATIC_LIBS) $(LINK_FLAGS)
+	$(MODE)$(CXX) -shared $(CXX_FLAGS) $(WINDOW_OBJECT_FILES) $(INCLUDE_PATH) $(LIBRARY_PATH) -lhsgil-core $(STATIC_LIBS) -o $@.$(EXTENSION)
 	@printf "$(OK_STRING)\n"
 
-hsgil-window.dll: $(WINDOW_OBJECT_FILES)
+hsgil-graphics: $(GRAPHICS_OBJECT_FILES)
 	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
-	$(MODE)$(CXX) -shared $(CXX_FLAGS) $(WINDOW_OBJECT_FILES) hsgil-core.dll $(INCLUDE_PATH) $(LIBRARY_PATH) $(LIBS) -o hsgil-window.dll $(STATIC_LIBS) $(LINK_FLAGS)
-	@printf "$(OK_STRING)\n"
-
-hsgil-window.so: $(WINDOW_OBJECT_FILES)
-	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
-	$(MODE)$(CXX) -shared $(CXX_FLAGS) $(WINDOW_OBJECT_FILES) hsgil-core.so $(INCLUDE_PATH) $(LIBRARY_PATH) $(LIBS) -o hsgil-window.so $(STATIC_LIBS) $(LINK_FLAGS)
-	@printf "$(OK_STRING)\n"
-
-hsgil-graphics.dll: $(GRAPHICS_OBJECT_FILES)
-	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
-	$(MODE)$(CXX) -shared $(CXX_FLAGS) $(GRAPHICS_OBJECT_FILES) hsgil-core.dll $(INCLUDE_PATH) $(LIBRARY_PATH) $(LIBS) -o hsgil-graphics.dll $(STATIC_LIBS) $(LINK_FLAGS)
-	@printf "$(OK_STRING)\n"
-
-hsgil-graphics.so: $(GRAPHICS_OBJECT_FILES)
-	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
-	$(MODE)$(CXX) -shared $(CXX_FLAGS) $(GRAPHICS_OBJECT_FILES) hsgil-core.so $(INCLUDE_PATH) $(LIBRARY_PATH) $(LIBS) -o hsgil-graphics.so $(STATIC_LIBS) $(LINK_FLAGS)
+	$(MODE)$(CXX) -shared $(CXX_FLAGS) $(GRAPHICS_OBJECT_FILES) $(INCLUDE_PATH) $(LIBRARY_PATH) -lhsgil-core $(STATIC_LIBS) -o $@.$(EXTENSION)
 	@printf "$(OK_STRING)\n"
 
 # -----------------------------------------------------------------------------------------
@@ -191,7 +182,7 @@ hsgil-graphics.so: $(GRAPHICS_OBJECT_FILES)
 
 glad.o: external/src/glad/glad.c
 	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
-	$(MODE)$(CC) $(INCLUDE_PATH) -fPIC -c external/src/glad/glad.c
+	$(MODE)$(CC) -c $(CC_FLAGS) $(INCLUDE_PATH) -fPIC external/src/glad/glad.c
 	@printf "$(OK_STRING)\n"
 
 # -----------------------------------------------------------------------------------------
