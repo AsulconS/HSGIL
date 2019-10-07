@@ -23,14 +23,14 @@ const char* fragmentShaderSrc = "#version 330 core\r\n"
 
 int main()
 {
-    gil::Window window {};
+    gil::Window window;
 
     if(!window.ready())
     {
         return -1;
     }
 
-    gil::Shader shader {"nullPath", vertexShaderSrc, fragmentShaderSrc};
+    gil::Shader shader("nullPath", vertexShaderSrc, fragmentShaderSrc);
 
     float data[] =
     {

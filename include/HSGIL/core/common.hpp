@@ -39,4 +39,6 @@ using uint64 = unsigned long long;
 
 } // namespace gil
 
+namespace luis = gil;
+
 #endif // HSGIL_COMMON_HPP
