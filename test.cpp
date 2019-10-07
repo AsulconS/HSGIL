@@ -3,8 +3,6 @@
 
 #include <iostream>
 
-void processInput(GLFWwindow* window);
-
 const char* vertexShaderSrc   = "#version 330 core\r\n"
                                 "\r\n"
                                 "layout (location = 0) in vec3 aPos;\r\n"
