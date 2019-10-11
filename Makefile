@@ -162,7 +162,7 @@ shader.o: src/graphics/shader.cpp
 
 hsgil-core: $(EXTERNAL_DEPENDENCIES)
 	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
-	$(MODE)$(CXX) -shared $(CXX_FLAGS) $(EXTERNAL_DEPENDENCIES) $(INCLUDE_PATH) $(LIBRARY_PATH) $(STATIC_LIBS) -o hsgil-core.$(EXTENSION)
+	$(MODE)$(CXX) -shared $(CXX_FLAGS) $(EXTERNAL_DEPENDENCIES) $(INCLUDE_PATH) -o hsgil-core.$(EXTENSION)
 	@printf "$(OK_STRING)\n"
 
 hsgil-window: $(WINDOW_OBJECT_FILES)
