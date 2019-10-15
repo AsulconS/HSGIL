@@ -27,6 +27,7 @@ int main()
 
     if(!window.ready())
     {
+        std::cerr << "Window is not ready, something went wrong" << std::endl;
         return -1;
     }
 
@@ -54,17 +55,42 @@ int main()
 
     glBindVertexArray(0);
 
+    //glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     while(window.active())
     {
         window.processInput();
 
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
-
         shader.use();
+
+        glEnable(GL_SCISSOR_TEST);
         glBindVertexArray(VAO);
+
+        glViewport(0, 0, 400, 300);
+        glScissor(0, 0, 400, 300);
+        glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
         glDrawArrays(GL_TRIANGLES, 0, sizeof(data) / sizeof(float));
+
+        glViewport(400, 0, 400, 300);
+        glScissor(400, 0, 400, 300);
+        glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+        glDrawArrays(GL_TRIANGLES, 0, sizeof(data) / sizeof(float));
+
+        glViewport(0, 300, 400, 300);
+        glScissor(0, 300, 400, 300);
+        glClearColor(0.25f, 0.25f, 0.25f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+        glDrawArrays(GL_TRIANGLES, 0, sizeof(data) / sizeof(float));
+
+        glViewport(400, 300, 400, 300);
+        glScissor(400, 300, 400, 300);
+        glClearColor(0.175f, 0.175f, 0.175f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+        glDrawArrays(GL_TRIANGLES, 0, sizeof(data) / sizeof(float));
+
         glBindVertexArray(0);
+        glDisable(GL_SCISSOR_TEST);
 
         window.swapBuffers();
     }
