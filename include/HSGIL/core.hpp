@@ -21,11 +21,11 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_I_HPP
-#define HSGIL_I_HPP
+#ifndef HSGIL_CORE_I_HPP
+#define HSGIL_CORE_I_HPP
 
-#include <HSGIL/core.hpp>
-#include <HSGIL/window.hpp>
-#include <HSGIL/graphics.hpp>
+#include <HSGIL/core/common.hpp>
+#include <HSGIL/core/constants.hpp>
+#include <HSGIL/core/timer.hpp>
 
-#endif // HSGIL_I_HPP
+#endif // HSGIL_CORE_I_HPP

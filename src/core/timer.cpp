@@ -21,11 +21,77 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_I_HPP
-#define HSGIL_I_HPP
+#include <HSGIL/core/timer.hpp>
 
-#include <HSGIL/core.hpp>
-#include <HSGIL/window.hpp>
-#include <HSGIL/graphics.hpp>
+namespace gil
+{
+Timer::Timer(const bool t_debugMode, const float t_period)
+    : m_start(std::chrono::steady_clock::now()),
+      m_currentStart(std::chrono::steady_clock::now()),
+      m_lastTime(std::chrono::steady_clock::now()),
+      m_totalFrames(0),
+      m_framesPerSecond(0),
+      m_debugMode(t_debugMode),
+      m_period(t_period)
+{
+}
 
-#endif // HSGIL_I_HPP
+Timer::~Timer()
+{
+}
+
+void Timer::tick()
+{
+    ++m_totalFrames;
+    ++m_framesPerSecond;
+
+    if(getCurrentElapsedTime() >= m_period)
+    {
+        if(m_debugMode)
+        {
+            std::cout << m_framesPerSecond << " fps" << std::endl;
+        }
+
+        advance();
+    }
+}
+
+void Timer::advance()
+{
+    m_currentStart = std::chrono::steady_clock::now();
+    m_lastTime = std::chrono::steady_clock::now();
+    m_framesPerSecond = 0;
+}
+
+uint32 Timer::getFrames()
+{
+    return m_totalFrames;
+}
+
+uint32 Timer::getFramesPerSecond()
+{
+    return m_framesPerSecond;
+}
+
+float Timer::getElapsedTime()
+{
+    std::chrono::time_point<std::chrono::steady_clock> currentTime = std::chrono::steady_clock::now();
+    return std::chrono::duration<float>(currentTime - m_start).count();
+}
+
+float Timer::getCurrentElapsedTime()
+{
+    std::chrono::time_point<std::chrono::steady_clock> currentTime = std::chrono::steady_clock::now();
+    return std::chrono::duration<float>(currentTime - m_currentStart).count();
+}
+
+float Timer::getDeltaTime()
+{
+    std::chrono::time_point<std::chrono::steady_clock> currentTime = std::chrono::steady_clock::now();
+    std::chrono::duration<float> deltaTime = currentTime - m_lastTime;
+    m_lastTime = currentTime;
+
+    return deltaTime.count();
+}
+
+} // namespace gil

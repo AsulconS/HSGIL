@@ -27,6 +27,8 @@
 #include <glad/glad.h>
 
 #include <string>
+#include <fstream>
+#include <sstream>
 #include <iostream>
 
 #include <HSGIL/core/common.hpp>
@@ -38,13 +40,18 @@ class Shader
 {
 public:
     /**
-     * @brief Construct a new Shader object
+     * @brief Construct a new Shader object from its name
      * 
-     * @param t_path 
+     * @param t_name 
+     */
+    Shader(const char* t_name);
+    /**
+     * @brief Construct a new Shader object from string source
+     * 
      * @param t_vsSrc 
      * @param t_fsSrc 
      */
-    Shader(const char* t_path, const char* t_vsSrc, const char* t_fsSrc);
+    Shader(const char* t_vsSrc, const char* t_fsSrc);
     /**
      * @brief Destroy the Shader object
      * 
@@ -65,6 +72,12 @@ private:
      * @return uint32 
      */
     uint32 createShader(const GLenum type);
+    /**
+     * @brief Loads some type of shader from a file
+     * 
+     * @param type Specifies the type of the shader (VS or FS)
+     */
+    void loadShaderFromFile(const GLenum type);
 
     /**
      * @brief Check if some error ocurred
@@ -72,7 +85,7 @@ private:
      * @param target 
      * @param isProgram 
      */
-    void checkErrors(const uint32 target, bool isProgram);
+    void checkErrors(const uint32 target, const bool isProgram);
 
     uint32 m_program;
 

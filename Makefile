@@ -75,6 +75,7 @@ INCLUDE_PATH = -Iinclude -Iexternal/include
 
 EXTERNAL_DEPENDENCIES = glad.o
 
+CORE_OBJECT_FILES     = $(EXTERNAL_DEPENDENCIES) timer.o
 WINDOW_OBJECT_FILES   = window.o
 GRAPHICS_OBJECT_FILES = shader.o
 
@@ -145,6 +146,11 @@ test.o: test.cpp
 	$(MODE)$(CXX) -c $(CXX_FLAGS) $(INCLUDE_PATH) test.cpp
 	@printf "$(OK_STRING)\n"
 
+timer.o: src/core/timer.cpp
+	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
+	$(MODE)$(CXX) -c $(CXX_FLAGS) $(INCLUDE_PATH) -fPIC src/core/timer.cpp
+	@printf "$(OK_STRING)\n"
+
 window.o: src/window/window.cpp
 	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
 	$(MODE)$(CXX) -c $(CXX_FLAGS) $(INCLUDE_PATH) -fPIC src/window/window.cpp
@@ -160,9 +166,9 @@ shader.o: src/graphics/shader.cpp
 # Shared Files
 # -----------------------------------------------------------------------------------------
 
-hsgil-core: $(EXTERNAL_DEPENDENCIES)
+hsgil-core: $(CORE_OBJECT_FILES)
 	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
-	$(MODE)$(CXX) -shared $(CXX_FLAGS) $(EXTERNAL_DEPENDENCIES) $(INCLUDE_PATH) -o hsgil-core.$(EXTENSION)
+	$(MODE)$(CXX) -shared $(CXX_FLAGS) $(CORE_OBJECT_FILES) $(INCLUDE_PATH) -o hsgil-core.$(EXTENSION)
 	@printf "$(OK_STRING)\n"
 
 hsgil-window: $(WINDOW_OBJECT_FILES)

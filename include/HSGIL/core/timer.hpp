@@ -21,11 +21,90 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_I_HPP
-#define HSGIL_I_HPP
+#ifndef HSGIL_TIMER_HPP
+#define HSGIL_TIMER_HPP
 
-#include <HSGIL/core.hpp>
-#include <HSGIL/window.hpp>
-#include <HSGIL/graphics.hpp>
+#include <HSGIL/core/common.hpp>
 
-#endif // HSGIL_I_HPP
+#include <chrono>
+#include <iostream>
+
+namespace gil
+{
+class Timer
+{
+public:
+    /**
+     * @brief Construct a new Timer object
+     * 
+     */
+    explicit Timer(const bool t_debugMode = false, const float t_period = 1.0f);
+    /**
+     * @brief Destroy the Timer object
+     * 
+     */
+    virtual ~Timer();
+
+    /**
+     * @brief Update the timer
+     * 
+     */
+    void tick();
+    /**
+     * @brief Moves forward the second section of the timer
+     * 
+     */
+    void advance();
+    /**
+     * @brief Restart the timer
+     * 
+     */
+    void restart();
+
+    /**
+     * @brief Get the Total Frame count
+     * 
+     * @return uint32 
+     */
+    uint32 getFrames();
+    /**
+     * @brief Get the Frames Per Second count
+     * 
+     * @return uint32 
+     */
+    uint32 getFramesPerSecond();
+    /**
+     * @brief Get the Elapsed Time
+     * 
+     * @return float 
+     */
+    float getElapsedTime();
+    /**
+     * @brief Get the Current Elapsed Time (relative to the current state)
+     * 
+     * @return float 
+     */
+    float getCurrentElapsedTime();
+    /**
+     * @brief Get the Delta Time object
+     * 
+     * @return float 
+     */
+    float getDeltaTime();
+
+private:
+    std::chrono::time_point<std::chrono::steady_clock> m_start;
+    std::chrono::time_point<std::chrono::steady_clock> m_currentStart;
+    std::chrono::time_point<std::chrono::steady_clock> m_lastTime;
+
+    uint32 m_totalFrames;
+    uint32 m_framesPerSecond;
+
+    bool m_debugMode;
+
+    float m_period;
+};
+
+} // namespace gil
+
+#endif // HSGIL_TIMER_HPP

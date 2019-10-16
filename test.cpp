@@ -3,24 +3,6 @@
 
 #include <iostream>
 
-const char* vertexShaderSrc   = "#version 330 core\r\n"
-                                "\r\n"
-                                "layout (location = 0) in vec3 aPos;\r\n"
-                                "\r\n"
-                                "void main()\r\n"
-                                "{\r\n"
-                                "    gl_Position = vec4(aPos, 1.0f);\r\n"
-                                "}\r\n";
-
-const char* fragmentShaderSrc = "#version 330 core\r\n"
-                                "\r\n"
-                                "out vec4 FragColor;\r\n"
-                                "\r\n"
-                                "void main()\r\n"
-                                "{\r\n"
-                                "    FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\r\n"
-                                "}\r\n";
-
 int main()
 {
     gil::Window window;
@@ -31,7 +13,7 @@ int main()
         return -1;
     }
 
-    gil::Shader shader("nullPath", vertexShaderSrc, fragmentShaderSrc);
+    gil::Shader shader("default");
 
     float data[] =
     {
@@ -56,6 +38,9 @@ int main()
     glBindVertexArray(0);
 
     //glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+
+    // Timer Object with Debug Mode ON
+    gil::Timer timer(true);
     while(window.active())
     {
         window.processInput();
@@ -93,6 +78,8 @@ int main()
         glDisable(GL_SCISSOR_TEST);
 
         window.swapBuffers();
+
+        timer.tick();
     }
 
     glDeleteVertexArrays(1, &VAO);

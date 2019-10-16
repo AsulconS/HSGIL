@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<layout>
+    <section tag="dl" x=0 y=0>
+        <size width=$(WIDTH)/2 height=$(HEIGHT)/2>
+        <color r=255 g=255 b=255>
+    </section>
+    <section tag="dr" x=$(WIDTH)/2 y=0>
+        <size width=$(WIDTH)/2 height=$(HEIGHT)/2>
+        <color r=127 g=127 b=127>
+    </section>
+    <section tag="ul" x=0 y=$(HEIGHT)/2>
+        <size width=$(WIDTH)/2 height=$(HEIGHT)/2>
+        <color r=63 g=63 b=63>
+    </section>
+    <section tag="ur" x=$(WIDTH)/2 y=$(HEIGHT)/2>
+        <size width=$(WIDTH)/2 height=$(HEIGHT)/2>
+        <color r=31 g=31 b=31>
+    </section>
+</layout>
