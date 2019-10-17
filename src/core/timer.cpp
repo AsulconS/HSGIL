@@ -63,7 +63,7 @@ void Timer::advance()
     m_framesPerSecond = 0;
 }
 
-uint32 Timer::getFrames()
+uint32 Timer::getTotalFrames()
 {
     return m_totalFrames;
 }
@@ -73,7 +73,7 @@ uint32 Timer::getFramesPerSecond()
     return m_framesPerSecond;
 }
 
-float Timer::getElapsedTime()
+float Timer::getTotalElapsedTime()
 {
     std::chrono::time_point<std::chrono::steady_clock> currentTime = std::chrono::steady_clock::now();
     return std::chrono::duration<float>(currentTime - m_start).count();

@@ -66,7 +66,7 @@ public:
      * 
      * @return uint32 
      */
-    uint32 getFrames();
+    uint32 getTotalFrames();
     /**
      * @brief Get the Frames Per Second count
      * 
@@ -78,7 +78,7 @@ public:
      * 
      * @return float 
      */
-    float getElapsedTime();
+    float getTotalElapsedTime();
     /**
      * @brief Get the Current Elapsed Time (relative to the current state)
      * 
