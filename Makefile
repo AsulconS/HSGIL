@@ -59,7 +59,7 @@ CXX_WARNING_FLAGS = $(CXX_WSTD_FLAGS) $(CXX_EXTRA_FLAGS)
 CC_FLAGS  = $(CC_STANDARD)
 CXX_FLAGS = $(CXX_STANDARD) $(CXX_WARNING_FLAGS)
 
-CXX_LIBS  = -static-libgcc -lstdc++ -lpthread
+CXX_LIBS  = -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread
 
 # -----------------------------------------------------------------------------------------
 # -----------------------------------------------------------------------------------------
@@ -93,11 +93,11 @@ SHARED_LIBS = -lhsgil-core -lhsgil-window -lhsgil-graphics
 # -----------------------------------------------------------------------------------------
 
 ifeq ($(C_OS), WINDOWS)
-    STATIC_LIBS = -Wl,-Bstatic -lglfw3 -lgdi32 $(CXX_LIBS)
+    STATIC_LIBS = -lglfw3 -lgdi32
     LIBRARY_PATH = -Lexternal/bin/win_x64 -L.
     EXTENSION = dll
 else
-    STATIC_LIBS = -Wl,-Bstatic -lglfw -lGL -lX11 -lpthread -lXrandr -lXi -ldl $(CXX_LIBS)
+    STATIC_LIBS = -lglfw -lGL -lX11 -lpthread -lXrandr -lXi -ldl
     LIBRARY_PATH = -Lexternal/bin/linux_x64 -L.
     EXTENSION = so
 endif
@@ -133,7 +133,7 @@ prompt:
 
 test: test.o
 	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
-	$(MODE)$(CXX) $(CXX_FLAGS) test.o $(INCLUDE_PATH) $(LIBRARY_PATH) $(LIBS) -o test
+	$(MODE)$(CXX) $(CXX_FLAGS) test.o $(INCLUDE_PATH) $(LIBRARY_PATH) $(LIBS) -o test $(CXX_LIBS)
 	@printf "$(OK_STRING)\n"
 
 # -----------------------------------------------------------------------------------------
@@ -168,17 +168,17 @@ shader.o: src/graphics/shader.cpp
 
 hsgil-core: $(CORE_OBJECT_FILES)
 	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
-	$(MODE)$(CXX) -shared $(CXX_FLAGS) $(CORE_OBJECT_FILES) $(INCLUDE_PATH) -o hsgil-core.$(EXTENSION)
+	$(MODE)$(CXX) -shared $(CXX_FLAGS) $(CORE_OBJECT_FILES) $(INCLUDE_PATH) -o hsgil-core.$(EXTENSION) $(CXX_LIBS)
 	@printf "$(OK_STRING)\n"
 
 hsgil-window: $(WINDOW_OBJECT_FILES)
 	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
-	$(MODE)$(CXX) -shared $(CXX_FLAGS) $(WINDOW_OBJECT_FILES) $(INCLUDE_PATH) $(LIBRARY_PATH) -lhsgil-core $(STATIC_LIBS) -o $@.$(EXTENSION)
+	$(MODE)$(CXX) -shared $(CXX_FLAGS) $(WINDOW_OBJECT_FILES) $(INCLUDE_PATH) $(LIBRARY_PATH) -lhsgil-core $(STATIC_LIBS) -o $@.$(EXTENSION) $(CXX_LIBS)
 	@printf "$(OK_STRING)\n"
 
 hsgil-graphics: $(GRAPHICS_OBJECT_FILES)
 	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
-	$(MODE)$(CXX) -shared $(CXX_FLAGS) $(GRAPHICS_OBJECT_FILES) $(INCLUDE_PATH) $(LIBRARY_PATH) -lhsgil-core $(STATIC_LIBS) -o $@.$(EXTENSION)
+	$(MODE)$(CXX) -shared $(CXX_FLAGS) $(GRAPHICS_OBJECT_FILES) $(INCLUDE_PATH) $(LIBRARY_PATH) -lhsgil-core $(STATIC_LIBS) -o $@.$(EXTENSION) $(CXX_LIBS)
 	@printf "$(OK_STRING)\n"
 
 # -----------------------------------------------------------------------------------------
