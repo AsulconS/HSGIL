@@ -25,6 +25,7 @@
 #define HSGIL_I_HPP
 
 #include <HSGIL/core.hpp>
+#include <HSGIL/math.hpp>
 #include <HSGIL/window.hpp>
 #include <HSGIL/graphics.hpp>
 

@@ -84,6 +84,11 @@ void Window::swapBuffers()
     glfwSwapBuffers(m_window);
 }
 
+float Window::getAspectRatio()
+{
+    return static_cast<float>(m_width) / static_cast<float>(m_height);
+}
+
 void Window::initializeWindow()
 {
     m_window = glfwCreateWindow(m_width, m_height, m_title.c_str(), nullptr, nullptr);

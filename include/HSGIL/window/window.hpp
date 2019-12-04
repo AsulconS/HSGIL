@@ -80,6 +80,12 @@ public:
      * 
      */
     void swapBuffers();
+    /**
+     * @brief Get the Aspect Ratio
+     * 
+     * @return float 
+     */
+    float getAspectRatio();
 
 private:
     /**

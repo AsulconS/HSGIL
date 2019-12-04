@@ -114,7 +114,7 @@ LIBS = $(SHARED_LIBS) $(STATIC_LIBS)
 # Rules -----------------------------------------------------------------------------------
 # -----------------------------------------------------------------------------------------
 
-all: prompt $(SHARED_TARG) test trash
+all: prompt $(SHARED_TARG) tests trash
 	@printf "\n$(SUCCESS_STRING)\n"
 
 # HSGIL Welcome Prompt and OS
@@ -131,9 +131,17 @@ prompt:
 # Test Building
 # -----------------------------------------------------------------------------------------
 
+tests: test ball
+	@printf "$(OK_STRING)\n"
+
 test: test.o
 	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
 	$(MODE)$(CXX) $(CXX_FLAGS) test.o $(INCLUDE_PATH) $(LIBRARY_PATH) $(LIBS) -o test $(CXX_LIBS)
+	@printf "$(OK_STRING)\n"
+
+ball: ball.o
+	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
+	$(MODE)$(CXX) $(CXX_FLAGS) ball.o $(INCLUDE_PATH) $(LIBRARY_PATH) $(LIBS) -o ball $(CXX_LIBS)
 	@printf "$(OK_STRING)\n"
 
 # -----------------------------------------------------------------------------------------
@@ -144,6 +152,11 @@ test: test.o
 test.o: test.cpp
 	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
 	$(MODE)$(CXX) -c $(CXX_FLAGS) $(INCLUDE_PATH) test.cpp
+	@printf "$(OK_STRING)\n"
+
+ball.o: ball.cpp
+	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
+	$(MODE)$(CXX) -c $(CXX_FLAGS) $(INCLUDE_PATH) ball.cpp
 	@printf "$(OK_STRING)\n"
 
 timer.o: src/core/timer.cpp

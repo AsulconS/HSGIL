@@ -25,6 +25,9 @@
 #define HSGIL_SHADER_HPP
 
 #include <glad/glad.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #include <string>
 #include <fstream>
@@ -33,6 +36,10 @@
 
 #include <HSGIL/core/common.hpp>
 #include <HSGIL/exception/graphics/graphicsException.hpp>
+
+#include <HSGIL/math/vec2.hpp>
+#include <HSGIL/math/vec3.hpp>
+#include <HSGIL/math/vec4.hpp>
 
 namespace gil
 {
@@ -63,6 +70,93 @@ public:
      * 
      */
     void use() const;
+
+    /**
+     * @brief Set the Bool object
+     * 
+     * @param name 
+     * @param v0 
+     */
+    void setBool(const std::string& name, bool v0);
+    /**
+     * @brief Set the Int object
+     * 
+     * @param name 
+     * @param v0 
+     */
+    void setInt(const std::string& name, int v0);
+    /**
+     * @brief Set the Float object
+     * 
+     * @param name 
+     * @param v0 
+     */
+    void setFloat(const std::string& name, float v0);
+
+    /**
+     * @brief Set the Vec2 object
+     * 
+     * @param name 
+     * @param v0 
+     * @param v1 
+     */
+    void setVec2(const std::string& name, float v0, float v1);
+    /**
+     * @brief Set the Vec3 object
+     * 
+     * @param name 
+     * @param v0 
+     * @param v1 
+     * @param v2 
+     */
+    void setVec3(const std::string& name, float v0, float v1, float v2);
+    /**
+     * @brief Set the Vec4 object
+     * 
+     * @param name 
+     * @param v0 
+     * @param v1 
+     * @param v2 
+     * @param v3 
+     */
+    void setVec4(const std::string& name, float v0, float v1, float v2, float v3);
+
+    /**
+     * @brief Set the Vec2 object
+     * 
+     * @param name 
+     * @param v 
+     */
+    void setVec2(const std::string& name, const Vec2<float>& v);
+    /**
+     * @brief Set the Vec3 object
+     * 
+     * @param name 
+     * @param v 
+     */
+    void setVec3(const std::string& name, const Vec3<float>& v);
+    /**
+     * @brief Set the Vec4 object
+     * 
+     * @param name 
+     * @param v 
+     */
+    void setVec4(const std::string& name, const Vec4<float>& v);
+
+    /**
+     * @brief Set the Mat3 object
+     * 
+     * @param name 
+     * @param m0 
+     */
+    void setMat3(const std::string& name, const glm::mat3& m0);
+    /**
+     * @brief Set the Mat4 object
+     * 
+     * @param name 
+     * @param m0 
+     */
+    void setMat4(const std::string& name, const glm::mat4& m0);
 
 private:
     /**

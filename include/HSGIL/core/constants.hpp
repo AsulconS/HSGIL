@@ -32,8 +32,10 @@ namespace fconst
 {
 constexpr int PRECISION { 7 };
 
-constexpr float PI { 3.1415927f };
-constexpr float E  { 2.7182818f };
+constexpr float PI  { 3.1415927f };
+constexpr float E   { 2.7182818f };
+
+constexpr float GAL { 9.8066500f };
 
 } // namespace fconst
 

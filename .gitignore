@@ -3,6 +3,8 @@ other/misc
 
 *.dll
 *.so
+*.o
 
-test.exe
+*.exe
 test
+ball
