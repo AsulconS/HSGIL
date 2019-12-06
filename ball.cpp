@@ -4,14 +4,14 @@
 #include <vector>
 #include <iostream>
 
-void setupLights(gil::Shader& shader)
+void setupLights(gil::Shader& shader, const glm::vec3& viewPos = {2.0f, 4.0f, 2.0f})
 {
     gil::Vec3<float> lightPos {1.2f, 1.0f, 2.0f};
 
     shader.use();
 
     // Setting up Fragment Shader Uniforms
-    shader.setVec3("viewPos", 2.0f, 4.0f, 2.0f);
+    shader.setVec3("viewPos", viewPos.x, viewPos.y, viewPos.z);
     shader.setVec3("objectColor", 0.5f, 0.5f, 0.5f);
     shader.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
 
@@ -41,15 +41,15 @@ void setupLights(gil::Shader& shader)
 class Ball
 {
 public:
-    Ball(const float t_radius, const gil::uint32 t_sectorCount = 36, const gil::uint32 t_stackCount = 18);
+    Ball(const float t_radius, const gil::uint32 t_segmentCount = 36, const gil::uint32 t_ringCount = 18);
     ~Ball();
 
     void draw(const gil::Shader& shader);
 
 private:
     float m_radius;
-    gil::uint32 m_sectorCount;
-    gil::uint32 m_stackCount;
+    gil::uint32 m_segmentCount;
+    gil::uint32 m_ringCount;
 
     gil::uint32 VAO;
     gil::uint32 VBO;
@@ -61,8 +61,8 @@ private:
     void generateMesh();
 };
 
-Ball::Ball(const float t_radius, const gil::uint32 t_sectorCount, const gil::uint32 t_stackCount)
-    : m_radius(t_radius), m_sectorCount(t_sectorCount), m_stackCount(t_stackCount)
+Ball::Ball(const float t_radius, const gil::uint32 t_segmentCount, const gil::uint32 t_ringCount)
+    : m_radius(t_radius), m_segmentCount(t_segmentCount), m_ringCount(t_ringCount)
 {
     generateVerticesAndIndices();
     generateMesh();
@@ -89,17 +89,17 @@ void Ball::generateVerticesAndIndices()
     float nx, ny, nz;
     float radiusInvLen = 1.0f / m_radius;
 
-    float sectorStep = 2 * gil::constants::fconst::PI / m_sectorCount;
-    float stackStep = gil::constants::fconst::PI / m_stackCount;
+    float sectorStep = 2 * gil::constants::fconst::PI / m_segmentCount;
+    float stackStep = gil::constants::fconst::PI / m_ringCount;
     float sectorAngle, stackAngle;
 
-    for(gil::uint32 i = 0; i <= m_stackCount; ++i)
+    for(gil::uint32 i = 0; i <= m_ringCount; ++i)
     {
         stackAngle = gil::constants::fconst::PI / 2 - i * stackStep;        // starting from pi/2 to -pi/2
         zx = m_radius * cosf(stackAngle);              // r * cos(u)
         y  = m_radius * sinf(stackAngle);              // r * sin(u)
 
-        for(gil::uint32 j = 0; j < m_sectorCount; ++j)
+        for(gil::uint32 j = 0; j < m_segmentCount; ++j)
         {
             sectorAngle = j * sectorStep;           // starting from 0 to 2pi
 
@@ -121,12 +121,12 @@ void Ball::generateVerticesAndIndices()
     }
 
     gil::uint32 k1, k2;
-    for(gil::uint32 i = 0; i < m_stackCount; ++i)
+    for(gil::uint32 i = 0; i < m_ringCount; ++i)
     {
-        k1 = i * m_sectorCount;       // beginning of current stack
-        k2 = k1 + m_sectorCount;      // beginning of next stack
+        k1 = i * m_segmentCount;       // beginning of current stack
+        k2 = k1 + m_segmentCount;      // beginning of next stack
 
-        for(gil::uint32 j = 0; j < m_sectorCount; ++j)
+        for(gil::uint32 j = 0; j < m_segmentCount; ++j)
         {
             // 2 triangles per sector excluding first and last stacks
             // k1 => k2 => k1+1
@@ -136,7 +136,7 @@ void Ball::generateVerticesAndIndices()
                 m_indices.push_back(k2 + j);
                 m_indices.push_back(k1 + j + 1);
             }
-            else if(j == m_sectorCount - 1)
+            else if(j == m_segmentCount - 1)
             {
                 m_indices.push_back(k1 + j);
                 m_indices.push_back(k2 + j);
@@ -144,7 +144,7 @@ void Ball::generateVerticesAndIndices()
             }
 
             // k1+1 => k2 => k2+1
-            if(i != (m_stackCount - 1))
+            if(i != (m_ringCount - 1))
             {
                 m_indices.push_back(k1 + j + 1);
                 m_indices.push_back(k2 + j);
@@ -185,16 +185,18 @@ int main()
         return -1;
     }
 
+    glm::vec3 viewPos {0.0f, 4.0f, 8.0f};
     gil::Shader shader("ball");
     Ball ball(1.0f);
 
     shader.use();
-    setupLights(shader);
+    setupLights(shader, viewPos);
 
     glm::vec3 rigidBodyPos { 0.0f, 0.0f, 0.0f };
-    float rigidBodyJumpForce { 3.0f };
+    float rigidBodyJumpForce { 0.16f };
 
     glEnable(GL_DEPTH_TEST);
+    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     gil::Timer timer(true);
     while(window.active())
     {
@@ -208,14 +210,14 @@ int main()
         rigidBodyPos.y += rigidBodyJumpForce * timer.getDeltaTime();
         glm::mat4 model = glm::mat4(1.0f);
         model = glm::translate(model, rigidBodyPos);
-        rigidBodyJumpForce -= gil::constants::fconst::GAL * 0.015625f;
+        rigidBodyJumpForce -= gil::constants::fconst::GAL * 0.0625f;
         if(rigidBodyPos.y <= 0.0f)
         {
             rigidBodyPos.y = 0.0f;
-            rigidBodyJumpForce = 3.0f;
+            rigidBodyJumpForce = 16.0f;
         }
 
-        glm::mat4 view = glm::lookAt(glm::vec3{2.0f, 4.0f, 2.0f}, glm::vec3{0.0f, 0.0f, 0.0f}, glm::vec3{0.0f, 1.0f, 0.0f});
+        glm::mat4 view = glm::lookAt(viewPos, glm::vec3{0.0f, 0.0f, 0.0f}, glm::vec3{0.0f, 1.0f, 0.0f});
         glm::mat4 projection = glm::perspective(45.0f, window.getAspectRatio(), 0.1f, 100.0f);
         shader.setMat4("model", model);
         shader.setMat4("view", view);
