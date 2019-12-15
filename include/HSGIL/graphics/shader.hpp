@@ -24,15 +24,15 @@
 #ifndef HSGIL_SHADER_HPP
 #define HSGIL_SHADER_HPP
 
-#include <glad/glad.h>
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-
 #include <string>
 #include <fstream>
 #include <sstream>
 #include <iostream>
+
+#include <HSGIL/external/glad/glad.h>
+#include <HSGIL/external/glm/glm.hpp>
+#include <HSGIL/external/glm/gtc/matrix_transform.hpp>
+#include <HSGIL/external/glm/gtc/type_ptr.hpp>
 
 #include <HSGIL/core/common.hpp>
 #include <HSGIL/exception/graphics/graphicsException.hpp>

@@ -71,7 +71,7 @@ CXX_LIBS  = -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread
 # Building Macros -------------------------------------------------------------------------
 # -----------------------------------------------------------------------------------------
 
-INCLUDE_PATH = -Iinclude -Iexternal/include
+INCLUDE_PATH = -Iinclude -Iinclude/HSGIL/external
 
 EXTERNAL_DEPENDENCIES = glad.o
 

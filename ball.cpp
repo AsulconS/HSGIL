@@ -1,4 +1,3 @@
-#include <glad/glad.h>
 #include <HSGIL/hsgil.hpp>
 
 #include <vector>

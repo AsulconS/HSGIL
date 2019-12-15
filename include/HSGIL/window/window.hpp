@@ -24,8 +24,8 @@
 #ifndef HSGIL_WINDOW_HPP
 #define HSGIL_WINDOW_HPP
 
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
+#include <HSGIL/external/glad/glad.h>
+#include <HSGIL/external/GLFW/glfw3.h>
 
 #include <HSGIL/core/common.hpp>
 #include <HSGIL/exception/window/windowException.hpp>
