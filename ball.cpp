@@ -89,13 +89,13 @@ void Ball::generateVerticesAndIndices()
     float nx, ny, nz;
     float radiusInvLen = 1.0f / m_radius;
 
-    float sectorStep = 2 * gil::constants::fconst::PI / m_segmentCount;
-    float stackStep = gil::constants::fconst::PI / m_ringCount;
+    float sectorStep = 2 * gil::constants::PI / m_segmentCount;
+    float stackStep = gil::constants::PI / m_ringCount;
     float sectorAngle, stackAngle;
 
     for(gil::uint32 i = 0; i <= m_ringCount; ++i)
     {
-        stackAngle = gil::constants::fconst::PI / 2 - i * stackStep;        // starting from pi/2 to -pi/2
+        stackAngle = gil::constants::PI / 2 - i * stackStep;        // starting from pi/2 to -pi/2
         zx = m_radius * cosf(stackAngle);              // r * cos(u)
         y  = m_radius * sinf(stackAngle);              // r * sin(u)
 
@@ -193,7 +193,7 @@ int main()
     setupLights(shader, viewPos);
 
     glm::vec3 rigidBodyPos { 0.0f, 0.0f, 0.0f };
-    float rigidBodyJumpForce { 0.16f };
+    float rigidBodyJumpForce { 16.0f };
 
     glEnable(GL_DEPTH_TEST);
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -210,7 +210,7 @@ int main()
         rigidBodyPos.y += rigidBodyJumpForce * timer.getDeltaTime();
         glm::mat4 model = glm::mat4(1.0f);
         model = glm::translate(model, rigidBodyPos);
-        rigidBodyJumpForce -= gil::constants::fconst::GAL * 0.0625f;
+        rigidBodyJumpForce -= gil::constants::GAL * 0.0625f;
         if(rigidBodyPos.y <= 0.0f)
         {
             rigidBodyPos.y = 0.0f;

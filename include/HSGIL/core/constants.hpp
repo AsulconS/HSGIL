@@ -28,25 +28,22 @@ namespace gil
 {
 namespace constants
 {
-namespace fconst
-{
-constexpr int PRECISION { 7 };
+constexpr int FLOAT_PRECISION  { 7 };
+constexpr int DOUBLE_PRECISION { 15 };
+
+// Float constants
 
 constexpr float PI  { 3.1415927f };
 constexpr float E   { 2.7182818f };
 
 constexpr float GAL { 9.8066500f };
 
-} // namespace fconst
+// Double constants
 
-namespace dconst
-{
-constexpr int PRECISION { 15 };
+constexpr double PId  { 3.141592653589793 };
+constexpr double Ed   { 2.718281828459045 };
 
-constexpr double PI { 3.141592653589793 };
-constexpr double E  { 2.718281828459045 };
-
-} // namespace dconst
+constexpr double GALd { 9.806650000000000 };
 
 } // namespace constants
 } // namespace gil
