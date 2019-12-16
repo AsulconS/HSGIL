@@ -23,3 +23,4 @@ freely, subject to the following restrictions:
 ### (More info about them at external/licenses)
 
 * _glfw_ : licensed under the zlib/libpng license.
+* _glm_  : licensed under The Happy Bunny License or MIT License.
