@@ -35,6 +35,8 @@
 
 namespace gil
 {
+class Window;
+typedef void (*InputFunction)(Window& window);
 /**
  * @brief Window Class that handle the Main Window of the program
  * 
@@ -57,6 +59,14 @@ public:
     virtual ~Window();
 
     /**
+     * @brief Checks if some key gets pressed
+     * 
+     * @param key 
+     * @return true 
+     * @return false 
+     */
+    bool keyPressed(const int32 key);
+    /**
      * @brief Checks if the Window shouldn't close
      * 
      * @return true if the Window is active
@@ -70,6 +80,16 @@ public:
      * @return false if not
      */
     bool ready();
+    /**
+     * @brief Sends signal to close window
+     * 
+     */
+    void close();
+    /**
+     * @brief Set the Input Function pointer
+     * 
+     */
+    void setInputFunction(InputFunction foo);
     /**
      * @brief Process the input in this Window object
      * 
@@ -106,6 +126,10 @@ private:
      * @param height 
      */
     static void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+
+    static void defaultInputFunction(Window& window);
+
+    InputFunction m_inputFunction;
 
     uint32 m_width;
     uint32 m_height;

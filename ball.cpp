@@ -21,7 +21,7 @@ Ball::Ball(const float t_radius, const gil::uint32 t_segmentCount, const gil::ui
     : gil::Mesh(), m_radius(t_radius), m_segmentCount(t_segmentCount), m_ringCount(t_ringCount)
 {
     generateBallVerticesAndIndices();
-    generateMesh();
+    generate();
 }
 
 void Ball::generateBallVerticesAndIndices()
@@ -58,6 +58,10 @@ void Ball::generateBallVerticesAndIndices()
             m_vertexData.push_back(nx);
             m_vertexData.push_back(ny);
             m_vertexData.push_back(nz);
+
+            // 0.0f UV coords
+            m_vertexData.push_back(0.0f);
+            m_vertexData.push_back(0.0f);
         }
     }
 
@@ -105,7 +109,7 @@ int main()
     }
 
     glm::vec3 viewPos {0.0f, 4.0f, 8.0f};
-    gil::Shader shader("ball");
+    gil::Shader shader("3default");
     Ball ball(1.0f);
 
     shader.use();

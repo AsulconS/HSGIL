@@ -77,7 +77,7 @@ EXTERNAL_DEPENDENCIES = glad.o
 
 CORE_OBJECT_FILES     = $(EXTERNAL_DEPENDENCIES) timer.o
 WINDOW_OBJECT_FILES   = window.o
-GRAPHICS_OBJECT_FILES = shader.o mesh.o utils.o
+GRAPHICS_OBJECT_FILES = shader.o mesh.o model.o utils.o
 
 SHARED_TARG = hsgil-core hsgil-window hsgil-graphics
 SHARED_LIBS = -lhsgil-core -lhsgil-window -lhsgil-graphics
@@ -131,7 +131,7 @@ prompt:
 # Test Building
 # -----------------------------------------------------------------------------------------
 
-tests: test ball
+tests: test ball finn
 	@printf "$(OK_STRING)\n"
 
 test: test.o
@@ -142,6 +142,11 @@ test: test.o
 ball: ball.o
 	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
 	$(MODE)$(CXX) $(CXX_FLAGS) ball.o $(INCLUDE_PATH) $(LIBRARY_PATH) $(LIBS) -o ball $(CXX_LIBS)
+	@printf "$(OK_STRING)\n"
+
+finn: finn.o
+	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
+	$(MODE)$(CXX) $(CXX_FLAGS) finn.o $(INCLUDE_PATH) $(LIBRARY_PATH) $(LIBS) -o finn $(CXX_LIBS)
 	@printf "$(OK_STRING)\n"
 
 # -----------------------------------------------------------------------------------------
@@ -157,6 +162,11 @@ test.o: test.cpp
 ball.o: ball.cpp
 	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
 	$(MODE)$(CXX) -c $(CXX_FLAGS) $(INCLUDE_PATH) ball.cpp
+	@printf "$(OK_STRING)\n"
+
+finn.o: finn.cpp
+	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
+	$(MODE)$(CXX) -c $(CXX_FLAGS) $(INCLUDE_PATH) finn.cpp
 	@printf "$(OK_STRING)\n"
 
 timer.o: src/core/timer.cpp
@@ -177,6 +187,11 @@ shader.o: src/graphics/shader.cpp
 mesh.o: src/graphics/mesh.cpp
 	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
 	$(MODE)$(CXX) -c $(CXX_FLAGS) $(INCLUDE_PATH) -fPIC src/graphics/mesh.cpp
+	@printf "$(OK_STRING)\n"
+
+model.o: src/graphics/model.cpp
+	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
+	$(MODE)$(CXX) -c $(CXX_FLAGS) $(INCLUDE_PATH) -fPIC src/graphics/model.cpp
 	@printf "$(OK_STRING)\n"
 
 utils.o: src/graphics/utils.cpp

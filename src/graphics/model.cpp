@@ -21,23 +21,27 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_UTILS_HPP
-#define HSGIL_UTILS_HPP
-
-#include <vector>
-
-#include <HSGIL/external/glm/glm.hpp>
-
-#include <HSGIL/graphics/shader.hpp>
+#include <HSGIL/graphics/model.hpp>
 
 namespace gil
 {
-bool loadObj(const char* path, std::vector<float>& vertexData, std::vector<uint32>& indices);
+Model::Model(const char* path, const char* texturePath) : m_mesh(path)
+{
+    m_diffuseMap = loadTexture(texturePath);
+}
 
-uint32 loadTexture(char const * path);
+Model::~Model()
+{
+    //
+}
 
-void setupDefaultLights(Shader& shader, const glm::vec3& viewPos = {2.0f, 4.0f, 2.0f});
+void Model::draw(Shader& shader)
+{
+    shader.use();
+    shader.setInt("material.texture_diffuse", 0);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, m_diffuseMap);
+    m_mesh.draw(shader);
+}
 
 } // namespace gil
-
-#endif // HSGIL_UTILS_HPP

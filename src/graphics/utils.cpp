@@ -21,7 +21,10 @@
  *                                                                              *
  ********************************************************************************/
 
+#define STB_IMAGE_IMPLEMENTATION
+
 #include <HSGIL/graphics/utils.hpp>
+#include <HSGIL/external/stb_image.h>
 
 namespace gil
 {
@@ -29,9 +32,11 @@ bool loadObj(const char* path, std::vector<float>& vertexData, std::vector<uint3
 {
     std::vector<uint32> vertexIndices;
     std::vector<uint32> normalIndices;
+    std::vector<uint32> UVIndices;
 
     std::vector<glm::vec3> vertices;
     std::vector<glm::vec3> normals;
+    std::vector<glm::vec2> UVs;
 
     std::ifstream objFile;
 
@@ -62,21 +67,28 @@ bool loadObj(const char* path, std::vector<float>& vertexData, std::vector<uint3
                     sscanf(buffer, "%s %f %f %f", type, &normal.x, &normal.y, &normal.z);
                     normals.push_back(normal);
                 }
+                else if(buffer[1] == 't')
+                {
+                    glm::vec2 UV;
+                    sscanf(buffer, "%s %f %f", type, &UV.x, &UV.y);
+                    UVs.push_back(UV);
+                }
             }
             else if(buffer[0] == 'f')
             {
                 uint32 faceVertexIndices[3];
                 uint32 faceNormalIndices[3];
-                uint32 faceDummyIndices[3];
+                uint32 faceUVIndices[3];
                 sscanf(buffer, "%s %u/%u/%u %u/%u/%u %u/%u/%u", type,
-                                                                &faceVertexIndices[0], &faceDummyIndices[0], &faceNormalIndices[0],
-                                                                &faceVertexIndices[1], &faceDummyIndices[1], &faceNormalIndices[1],
-                                                                &faceVertexIndices[2], &faceDummyIndices[2], &faceNormalIndices[2]);
+                                                                &faceVertexIndices[0], &faceUVIndices[0], &faceNormalIndices[0],
+                                                                &faceVertexIndices[1], &faceUVIndices[1], &faceNormalIndices[1],
+                                                                &faceVertexIndices[2], &faceUVIndices[2], &faceNormalIndices[2]);
 
                 for(uint8 i = 0; i < 3; ++i)
                 {
                     vertexIndices.push_back(faceVertexIndices[i] - 1);
                     normalIndices.push_back(faceNormalIndices[i] - 1);
+                    UVIndices.push_back(faceUVIndices[i] - 1);
                 }
             }
             else
@@ -103,9 +115,52 @@ bool loadObj(const char* path, std::vector<float>& vertexData, std::vector<uint3
         vertexData.push_back(normals[normalIndices[i]].x);
         vertexData.push_back(normals[normalIndices[i]].y);
         vertexData.push_back(normals[normalIndices[i]].z);
+
+        vertexData.push_back(UVs[UVIndices[i]].x);
+        vertexData.push_back(UVs[UVIndices[i]].y);
     }
 
     return true;
+}
+
+uint32 loadTexture(const char* path)
+{
+    uint32 textureID;
+    glGenTextures(1, &textureID);
+
+    int width;
+    int height;
+    int nrComponents;
+
+    stbi_set_flip_vertically_on_load(true);
+    uint8* data = stbi_load(path, &width, &height, &nrComponents, 0);
+    if(data)
+    {
+        GLenum format;
+        if (nrComponents == 1)
+            format = GL_RED;
+        else if (nrComponents == 3)
+            format = GL_RGB;
+        else if (nrComponents == 4)
+            format = GL_RGBA;
+
+        glBindTexture(GL_TEXTURE_2D, textureID);
+        glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+        glGenerateMipmap(GL_TEXTURE_2D);
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+        stbi_image_free(data);
+    }
+    else
+    {
+        std::cout << "Texture failed to load at: " << path << std::endl;
+        stbi_image_free(data);
+    }
+
 }
 
 void setupDefaultLights(Shader& shader, const glm::vec3& viewPos)
@@ -114,9 +169,10 @@ void setupDefaultLights(Shader& shader, const glm::vec3& viewPos)
 
     shader.use();
 
+    shader.setVec3("material.specular", 1.0f, 1.0f, 1.0f);
+
     // Setting up Fragment Shader Uniforms
     shader.setVec3("viewPos", viewPos.x, viewPos.y, viewPos.z);
-    shader.setVec3("objectColor", 0.5f, 0.5f, 0.5f);
     shader.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
 
     // Light Parameters

@@ -59,6 +59,11 @@ Window::~Window()
     glfwTerminate();
 }
 
+bool Window::keyPressed(const int32 key)
+{
+    return glfwGetKey(m_window, key) == GLFW_PRESS;
+}
+
 bool Window::active()
 {
     return !glfwWindowShouldClose(m_window);
@@ -69,14 +74,20 @@ bool Window::ready()
     return m_ready;
 }
 
+void Window::close()
+{
+    glfwSetWindowShouldClose(m_window, true);
+}
+
+void Window::setInputFunction(InputFunction foo)
+{
+    m_inputFunction = foo;
+}
+
 void Window::processInput()
 {
     glfwPollEvents();
-
-    if(glfwGetKey(m_window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-    {
-        glfwSetWindowShouldClose(m_window, true);
-    }
+    m_inputFunction(*this);
 }
 
 void Window::swapBuffers()
@@ -98,6 +109,7 @@ void Window::initializeWindow()
     }
     glfwMakeContextCurrent(m_window);
     glfwSetFramebufferSizeCallback(m_window, framebuffer_size_callback);
+    setInputFunction(defaultInputFunction);
 }
 
 void Window::initializeGLAD()
@@ -111,6 +123,14 @@ void Window::initializeGLAD()
 void Window::framebuffer_size_callback(GLFWwindow*, int width, int height)
 {
     glViewport(0, 0, width, height);
+}
+
+void Window::defaultInputFunction(Window& window)
+{
+    if(glfwGetKey(window.m_window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+    {
+        window.close();
+    }
 }
 
 } // namespace gil

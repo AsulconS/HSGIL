@@ -21,23 +21,33 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_UTILS_HPP
-#define HSGIL_UTILS_HPP
+#ifndef HSGIL_MODEL_HPP
+#define HSGIL_MODEL_HPP
 
 #include <vector>
 
 #include <HSGIL/external/glm/glm.hpp>
 
 #include <HSGIL/graphics/shader.hpp>
+#include <HSGIL/graphics/mesh.hpp>
+#include <HSGIL/graphics/utils.hpp>
 
 namespace gil
 {
-bool loadObj(const char* path, std::vector<float>& vertexData, std::vector<uint32>& indices);
+class Model
+{
+public:
+    Model() : m_mesh() {}
+    Model(const char* path, const char* texturePath);
+    virtual ~Model();
 
-uint32 loadTexture(char const * path);
+    void draw(Shader& shader);
 
-void setupDefaultLights(Shader& shader, const glm::vec3& viewPos = {2.0f, 4.0f, 2.0f});
+protected:
+    uint32 m_diffuseMap;
+    Mesh m_mesh;
+};
 
 } // namespace gil
 
-#endif // HSGIL_UTILS_HPP
+#endif // HSGIL_MODEL_HPP

@@ -43,11 +43,11 @@ public:
     void draw(const Shader& shader);
 
 protected:
-    void generateMesh();
+    void generate();
 
-    gil::uint32 m_VAO;
-    gil::uint32 m_VBO;
-    gil::uint32 m_EBO;
+    uint32 m_VAO;
+    uint32 m_VBO;
+    uint32 m_EBO;
 
     std::vector<float> m_vertexData;
     std::vector<uint32> m_indices;
