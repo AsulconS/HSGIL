@@ -199,4 +199,4 @@ void Shader::checkErrors(const uint32 target, const bool isProgram)
     }
 }
 
-}
+} // namespace gil

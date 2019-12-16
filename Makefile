@@ -77,7 +77,7 @@ EXTERNAL_DEPENDENCIES = glad.o
 
 CORE_OBJECT_FILES     = $(EXTERNAL_DEPENDENCIES) timer.o
 WINDOW_OBJECT_FILES   = window.o
-GRAPHICS_OBJECT_FILES = shader.o
+GRAPHICS_OBJECT_FILES = shader.o mesh.o utils.o
 
 SHARED_TARG = hsgil-core hsgil-window hsgil-graphics
 SHARED_LIBS = -lhsgil-core -lhsgil-window -lhsgil-graphics
@@ -172,6 +172,16 @@ window.o: src/window/window.cpp
 shader.o: src/graphics/shader.cpp
 	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
 	$(MODE)$(CXX) -c $(CXX_FLAGS) $(INCLUDE_PATH) -fPIC src/graphics/shader.cpp
+	@printf "$(OK_STRING)\n"
+
+mesh.o: src/graphics/mesh.cpp
+	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
+	$(MODE)$(CXX) -c $(CXX_FLAGS) $(INCLUDE_PATH) -fPIC src/graphics/mesh.cpp
+	@printf "$(OK_STRING)\n"
+
+utils.o: src/graphics/utils.cpp
+	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
+	$(MODE)$(CXX) -c $(CXX_FLAGS) $(INCLUDE_PATH) -fPIC src/graphics/utils.cpp
 	@printf "$(OK_STRING)\n"
 
 # -----------------------------------------------------------------------------------------

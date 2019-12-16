@@ -3,86 +3,28 @@
 #include <vector>
 #include <iostream>
 
-void setupLights(gil::Shader& shader, const glm::vec3& viewPos = {2.0f, 4.0f, 2.0f})
-{
-    gil::Vec3<float> lightPos {1.2f, 1.0f, 2.0f};
-
-    shader.use();
-
-    // Setting up Fragment Shader Uniforms
-    shader.setVec3("viewPos", viewPos.x, viewPos.y, viewPos.z);
-    shader.setVec3("objectColor", 0.5f, 0.5f, 0.5f);
-    shader.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
-
-    // Light Parameters
-    // Directional Light
-    shader.setVec3("dirLight.direction", -0.2f, -1.0f, -0.3f);
-
-    // Light Intensity
-    shader.setVec3("dirLight.ambient", 0.2f, 0.2f, 0.2f);
-    shader.setVec3("dirLight.diffuse", 0.5f, 0.5f, 0.5f);
-    shader.setVec3("dirLight.specular", 1.0f, 1.0f, 1.0f);
-
-    // Point Light
-    shader.setInt("nrPointLights", 1);
-
-    shader.setVec3( "pointLights[0].position", lightPos);
-
-    shader.setVec3( "pointLights[0].ambient", 0.2f, 0.2f, 0.2f);
-    shader.setVec3( "pointLights[0].diffuse", 0.5f, 0.5f, 0.5f);
-    shader.setVec3( "pointLights[0].specular", 1.0f, 1.0f, 1.0f);
-
-    shader.setFloat("pointLights[0].constant", 1.0f);
-    shader.setFloat("pointLights[0].linear", 0.09f);
-    shader.setFloat("pointLights[0].quadratic", 0.032f);
-}
-
-class Ball
+class Ball : public gil::Mesh
 {
 public:
     Ball(const float t_radius, const gil::uint32 t_segmentCount = 36, const gil::uint32 t_ringCount = 18);
-    ~Ball();
-
-    void draw(const gil::Shader& shader);
+    virtual ~Ball() {}
 
 private:
     float m_radius;
     gil::uint32 m_segmentCount;
     gil::uint32 m_ringCount;
 
-    gil::uint32 VAO;
-    gil::uint32 VBO;
-    gil::uint32 EBO;
-    std::vector<float> m_vertexData;
-    std::vector<gil::uint32> m_indices;
-
-    void generateVerticesAndIndices();
-    void generateMesh();
+    void generateBallVerticesAndIndices();
 };
 
 Ball::Ball(const float t_radius, const gil::uint32 t_segmentCount, const gil::uint32 t_ringCount)
-    : m_radius(t_radius), m_segmentCount(t_segmentCount), m_ringCount(t_ringCount)
+    : gil::Mesh(), m_radius(t_radius), m_segmentCount(t_segmentCount), m_ringCount(t_ringCount)
 {
-    generateVerticesAndIndices();
+    generateBallVerticesAndIndices();
     generateMesh();
 }
 
-Ball::~Ball()
-{
-    glDeleteVertexArrays(1, &VAO);
-    glDeleteBuffers(1, &VBO);
-    glDeleteBuffers(1, &EBO);
-}
-
-void Ball::draw(const gil::Shader& shader)
-{
-    shader.use();
-    glBindVertexArray(VAO);
-        glDrawElements(GL_TRIANGLES, (gil::uint32)m_indices.size(), GL_UNSIGNED_INT, (void*)0);
-    glBindVertexArray(0);
-}
-
-void Ball::generateVerticesAndIndices()
+void Ball::generateBallVerticesAndIndices()
 {
     float x, y, z, zx;
     float nx, ny, nz;
@@ -153,28 +95,6 @@ void Ball::generateVerticesAndIndices()
     }
 }
 
-void Ball::generateMesh()
-{
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
-    glGenBuffers(1, &EBO);
-
-    glBindVertexArray(VAO);
-
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, m_vertexData.size() * sizeof(float), m_vertexData.data(), GL_STATIC_DRAW);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indices.size() * sizeof(gil::uint32), m_indices.data(), GL_STATIC_DRAW);
-
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
-    glEnableVertexAttribArray(1);
-
-    glBindVertexArray(0);
-}
-
 int main()
 {
     gil::Window window;
@@ -189,7 +109,7 @@ int main()
     Ball ball(1.0f);
 
     shader.use();
-    setupLights(shader, viewPos);
+    gil::setupDefaultLights(shader, viewPos);
 
     glm::vec3 rigidBodyPos { 0.0f, 0.0f, 0.0f };
     float rigidBodyJumpForce { 16.0f };
