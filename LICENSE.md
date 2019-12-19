@@ -24,3 +24,4 @@ freely, subject to the following restrictions:
 
 * _glfw_ : licensed under the zlib/libpng license.
 * _glm_  : licensed under The Happy Bunny License or MIT License.
+* _stb_  : licensed under MIT License.
