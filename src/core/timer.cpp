@@ -26,13 +26,13 @@
 namespace gil
 {
 Timer::Timer(const bool t_debugMode, const float t_period)
-    : m_start(std::chrono::steady_clock::now()),
-      m_currentStart(std::chrono::steady_clock::now()),
-      m_lastTime(std::chrono::steady_clock::now()),
-      m_totalFrames(0),
-      m_framesPerSecond(0),
-      m_debugMode(t_debugMode),
-      m_period(t_period)
+    : m_start           {std::chrono::steady_clock::now()},
+      m_currentStart    {std::chrono::steady_clock::now()},
+      m_lastTime        {std::chrono::steady_clock::now()},
+      m_totalFrames     {0},
+      m_framesPerSecond {0},
+      m_period          {t_period},
+      m_debugMode       {t_debugMode}
 {
 }
 

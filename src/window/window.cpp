@@ -26,10 +26,12 @@
 namespace gil
 {
 Window::Window(const uint32 t_width, const uint32 t_height, const char* t_title)
-    : m_width (t_width),
-      m_height(t_height),
-      m_title (t_title),
-      m_ready (false)
+    : m_width         {t_width},
+      m_height        {t_height},
+      m_title         {t_title},
+      m_ready         {false},
+      m_window        {nullptr},
+      m_inputFunction {nullptr}
 {
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -59,7 +61,7 @@ Window::~Window()
     glfwTerminate();
 }
 
-bool Window::keyPressed(const int32 key)
+bool Window::keyPressed(const Key key)
 {
     return glfwGetKey(m_window, key) == GLFW_PRESS;
 }
@@ -127,7 +129,7 @@ void Window::framebuffer_size_callback(GLFWwindow*, int width, int height)
 
 void Window::defaultInputFunction(Window& window)
 {
-    if(glfwGetKey(window.m_window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+    if(glfwGetKey(window.m_window, KEY_ESCAPE) == GLFW_PRESS)
     {
         window.close();
     }

@@ -28,6 +28,7 @@
 #include <HSGIL/external/GLFW/glfw3.h>
 
 #include <HSGIL/core/common.hpp>
+#include <HSGIL/core/keyBindings.hpp>
 #include <HSGIL/exception/window/windowException.hpp>
 
 #include <string>
@@ -37,6 +38,7 @@ namespace gil
 {
 class Window;
 typedef void (*InputFunction)(Window& window);
+
 /**
  * @brief Window Class that handle the Main Window of the program
  * 
@@ -65,7 +67,7 @@ public:
      * @return true 
      * @return false 
      */
-    bool keyPressed(const int32 key);
+    bool keyPressed(const Key key);
     /**
      * @brief Checks if the Window shouldn't close
      * 
@@ -129,15 +131,14 @@ private:
 
     static void defaultInputFunction(Window& window);
 
-    InputFunction m_inputFunction;
-
     uint32 m_width;
     uint32 m_height;
-    GLFWwindow* m_window;
-
     std::string m_title;
 
     bool m_ready;
+
+    GLFWwindow* m_window;
+    InputFunction m_inputFunction;
 };
 
 } // namespace gil

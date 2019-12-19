@@ -37,15 +37,34 @@ namespace gil
 class Model
 {
 public:
-    Model() : m_mesh() {}
+    /**
+     * @brief Construct a new Model object
+     * 
+     */
+    Model();
+    /**
+     * @brief Construct a new Model object from an OBJ file path and texture path
+     * 
+     * @param path 
+     * @param texturePath 
+     */
     Model(const char* path, const char* texturePath);
+    /**
+     * @brief Destroy the Model object
+     * 
+     */
     virtual ~Model();
 
+    /**
+     * @brief Draw the Model object with the shader passed by
+     * 
+     * @param shader 
+     */
     void draw(Shader& shader);
 
 protected:
+    Mesh   m_mesh;
     uint32 m_diffuseMap;
-    Mesh m_mesh;
 };
 
 } // namespace gil

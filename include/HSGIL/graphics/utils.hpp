@@ -32,10 +32,31 @@
 
 namespace gil
 {
+/**
+ * @brief Load an OBJ file from a path and load the vertexData and indices into the parameters
+ * 
+ * @param path 
+ * @param vertexData 
+ * @param indices 
+ * @return true 
+ * @return false 
+ */
 bool loadObj(const char* path, std::vector<float>& vertexData, std::vector<uint32>& indices);
 
-uint32 loadTexture(char const * path);
+/**
+ * @brief Load a texture from a path and return the texture object created by OpenGL
+ * 
+ * @param path 
+ * @return uint32 
+ */
+uint32 loadTexture(const char* path);
 
+/**
+ * @brief Setup the Default Lights for a shader from some view position
+ * 
+ * @param shader 
+ * @param viewPos 
+ */
 void setupDefaultLights(Shader& shader, const glm::vec3& viewPos = {2.0f, 4.0f, 2.0f});
 
 } // namespace gil

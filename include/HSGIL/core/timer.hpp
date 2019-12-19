@@ -100,9 +100,8 @@ private:
     uint32 m_totalFrames;
     uint32 m_framesPerSecond;
 
-    bool m_debugMode;
-
     float m_period;
+    bool  m_debugMode;
 };
 
 } // namespace gil

@@ -36,21 +36,43 @@ namespace gil
 class Mesh
 {
 public:
-    Mesh() {}
+    /**
+     * @brief Construct a new Mesh object
+     * 
+     */
+    Mesh();
+    /**
+     * @brief Construct a new Mesh object from a path to the OBJ file
+     * 
+     * @param path 
+     */
     Mesh(const char* path);
+    /**
+     * @brief Destroy the Mesh object
+     * 
+     */
     virtual ~Mesh();
 
+    /**
+     * @brief Draw the Mesh object with the shader passed by
+     * 
+     * @param shader 
+     */
     void draw(const Shader& shader);
 
 protected:
+    /**
+     * @brief Generate the VAO, VBO and EBO and setups them
+     * 
+     */
     void generate();
 
     uint32 m_VAO;
     uint32 m_VBO;
     uint32 m_EBO;
 
-    std::vector<float> m_vertexData;
     std::vector<uint32> m_indices;
+    std::vector<float>  m_vertexData;
 };
 
 } // namespace gil

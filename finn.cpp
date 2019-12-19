@@ -4,16 +4,16 @@ glm::mat4 rTransform = glm::mat4(1.0f);
 
 void inputFunction(gil::Window& window)
 {
-    if(window.keyPressed(GLFW_KEY_ESCAPE))
+    if(window.keyPressed(gil::KEY_ESCAPE))
     {
         window.close();
     }
 
-    if(window.keyPressed(GLFW_KEY_Q))
+    if(window.keyPressed(gil::KEY_Q))
     {
         rTransform = glm::rotate(rTransform, glm::radians(-1.5f), glm::vec3{0.0f, 1.0f, 0.0f});
     }
-    if(window.keyPressed(GLFW_KEY_E))
+    if(window.keyPressed(gil::KEY_E))
     {
         rTransform = glm::rotate(rTransform, glm::radians(1.5f), glm::vec3{0.0f, 1.0f, 0.0f});
     }

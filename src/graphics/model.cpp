@@ -25,14 +25,22 @@
 
 namespace gil
 {
-Model::Model(const char* path, const char* texturePath) : m_mesh(path)
+Model::Model()
+    : m_mesh       {},
+      m_diffuseMap {0}
+{
+}
+
+Model::Model(const char* path, const char* texturePath)
+    : m_mesh       {path},
+      m_diffuseMap {0}
 {
     m_diffuseMap = loadTexture(texturePath);
 }
 
 Model::~Model()
 {
-    //
+    glDeleteTextures(1, &m_diffuseMap);
 }
 
 void Model::draw(Shader& shader)

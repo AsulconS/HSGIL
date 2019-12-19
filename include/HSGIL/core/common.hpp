@@ -37,10 +37,13 @@ using uint16 = unsigned short;
 using uint32 = unsigned int;
 using uint64 = unsigned long long;
 
+using byte   = unsigned char;
+
 } // namespace gil
 
 namespace luis  = gil;
 namespace erick = gil;
 namespace yober = gil;
+namespace daryl = gil;
 
 #endif // HSGIL_COMMON_HPP

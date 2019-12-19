@@ -25,7 +25,21 @@
 
 namespace gil
 {
+Mesh::Mesh()
+    : m_VAO        {0},
+      m_VBO        {0},
+      m_EBO        {0},
+      m_indices    {},
+      m_vertexData {}
+{
+}
+
 Mesh::Mesh(const char* path)
+    : m_VAO        {0},
+      m_VBO        {0},
+      m_EBO        {0},
+      m_indices    {},
+      m_vertexData {}
 {
     loadObj(path, m_vertexData, m_indices);
     generate();
@@ -42,7 +56,7 @@ void Mesh::draw(const Shader& shader)
 {
     shader.use();
     glBindVertexArray(m_VAO);
-        glDrawElements(GL_TRIANGLES, (gil::uint32)m_indices.size(), GL_UNSIGNED_INT, (void*)0);
+        glDrawElements(GL_TRIANGLES, (uint32)m_indices.size(), GL_UNSIGNED_INT, (void*)0);
     glBindVertexArray(0);
 }
 
@@ -57,7 +71,7 @@ void Mesh::generate()
     glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
     glBufferData(GL_ARRAY_BUFFER, m_vertexData.size() * sizeof(float), m_vertexData.data(), GL_STATIC_DRAW);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indices.size() * sizeof(gil::uint32), m_indices.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indices.size() * sizeof(uint32), m_indices.data(), GL_STATIC_DRAW);
 
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
