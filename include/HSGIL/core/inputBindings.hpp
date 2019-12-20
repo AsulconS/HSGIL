@@ -21,12 +21,12 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_KEY_BINDINGS_HPP
-#define HSGIL_KEY_BINDINGS_HPP
+#ifndef HSGIL_INPUT_BINDINGS_HPP
+#define HSGIL_INPUT_BINDINGS_HPP
 
 namespace gil
 {
-enum Key
+enum InputCode
 {
     /* SPECIAL KEYS 01 */
     KEY_UNKNOWN    = -1,
@@ -148,9 +148,28 @@ enum Key
     /* ALTERNATIVE NAME KEYS */
     KEY_ENTER     = KEY_RETURN,
     KEY_BACKSPACE = KEY_DELETE_B,
-    KEY_DELETE    = KEY_DELETE_F
+    KEY_DELETE    = KEY_DELETE_F,
+
+    /* MOUSE BUTTONS */
+    MOUSE_BUTTON_1 = 0,
+    MOUSE_BUTTON_2 = 1,
+    MOUSE_BUTTON_3 = 2,
+    MOUSE_BUTTON_4 = 3,
+    MOUSE_BUTTON_5 = 4,
+    MOUSE_BUTTON_6 = 5,
+    MOUSE_BUTTON_7 = 6,
+    MOUSE_BUTTON_8 = 7,
+
+    /* MOUSE BUTTON ENUM DELIMITATORS */
+    MOUSE_BUTTON_FIRST = MOUSE_BUTTON_1,
+    MOUSE_BUTTON_LAST  = MOUSE_BUTTON_8,
+
+    /* ALTERNATIVE NAME MOUSE BUTTONS */
+    MOUSE_BUTTON_LEFT   = MOUSE_BUTTON_1,
+    MOUSE_BUTTON_RIGHT  = MOUSE_BUTTON_2,
+    MOUSE_BUTTON_MIDDLE = MOUSE_BUTTON_3
 };
 
 } // namespace gil
 
-#endif // HSGIL_KEY_BINDINGS_HPP
+#endif // HSGIL_INPUT_BINDINGS_HPP

@@ -26,6 +26,11 @@
 
 namespace gil
 {
+/**
+ * @brief 2-Component Mathematical Vector
+ * 
+ * @tparam T 
+ */
 template <typename T>
 struct Vec2
 {

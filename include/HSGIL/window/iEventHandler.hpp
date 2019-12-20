@@ -21,56 +21,71 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_MODEL_HPP
-#define HSGIL_MODEL_HPP
+#ifndef HSGIL_I_EVENT_HANDLER_HPP
+#define HSGIL_I_EVENT_HANDLER_HPP
 
-#include <vector>
-
-#include <HSGIL/external/glm/glm.hpp>
-
-#include <HSGIL/graphics/shader.hpp>
-#include <HSGIL/graphics/gUtils.hpp>
-#include <HSGIL/graphics/mesh.hpp>
+#include <HSGIL/core/common.hpp>
+#include <HSGIL/core/inputBindings.hpp>
 
 namespace gil
 {
 /**
- * @brief Model Class that allows us to load a 3D Model from a file and store it with a texture
+ * @brief IEventHandler Class that deals with the system events
  * 
  */
-class Model
+class IEventHandler
 {
 public:
     /**
-     * @brief Construct a new Model object
+     * @brief Construct a new IEventHandler object
      * 
      */
-    Model();
+    IEventHandler() {}
     /**
-     * @brief Construct a new Model object from an OBJ file path and texture path
-     * 
-     * @param path 
-     * @param texturePath 
-     */
-    Model(const char* path, const char* texturePath);
-    /**
-     * @brief Destroy the Model object
+     * @brief Destroy the IEventHandler object
      * 
      */
-    virtual ~Model();
+    virtual ~IEventHandler() {}
 
     /**
-     * @brief Draw the Model object with the shader passed by
+     * @brief Function called when a key is pressed
      * 
-     * @param shader 
+     * @param key 
+     * @param repeat 
      */
-    void draw(Shader& shader);
-
-protected:
-    Mesh   m_mesh;
-    uint32 m_diffuseMap;
+    virtual void onKeyDown(InputCode key, bool repeat) = 0;
+    /**
+     * @brief Function called when a key is released
+     * 
+     * @param key 
+     * @param repeat 
+     */
+    virtual void onKeyUp(InputCode key, bool repeat) = 0;
+    /**
+     * @brief Function called when a mouse button is pressed
+     * 
+     * @param mouseButton 
+     * @param numClicks 
+     */
+    virtual void onMouseDown(InputCode mouseButton, uint8 numClicks) = 0;
+    /**
+     * @brief Function called when a mouse button is released
+     * 
+     * @param mouseButton 
+     * @param numClicks 
+     */
+    virtual void onMouseUp(InputCode mouseButton, uint8 numClicks) = 0;
+    /**
+     * @brief Function called when mouse is moved
+     * 
+     * @param mousePosX 
+     * @param mousePosY 
+     * @param deltaX 
+     * @param deltaY 
+     */
+    virtual void onMouseMove(int32 mousePosX, int32 mousePosY, int32 deltaX, int32 deltaY) = 0;
 };
 
 } // namespace gil
 
-#endif // HSGIL_MODEL_HPP
+#endif // HSGIL_I_EVENT_HANDLER_HPP

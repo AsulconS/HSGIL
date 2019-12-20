@@ -7,7 +7,7 @@ int main()
 {
     gil::Window window;
 
-    if(!window.ready())
+    if(!window.isReady())
     {
         std::cerr << "Window is not ready, something went wrong" << std::endl;
         return -1;
@@ -41,9 +41,9 @@ int main()
 
     // Timer Object with Debug Mode ON
     gil::Timer timer(true);
-    while(window.active())
+    while(window.isActive())
     {
-        window.processInput();
+        window.pollEvents();
 
         shader.use();
 

@@ -21,56 +21,40 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_MODEL_HPP
-#define HSGIL_MODEL_HPP
-
-#include <vector>
-
-#include <HSGIL/external/glm/glm.hpp>
-
-#include <HSGIL/graphics/shader.hpp>
-#include <HSGIL/graphics/gUtils.hpp>
-#include <HSGIL/graphics/mesh.hpp>
+#include <HSGIL/math/mUtils.hpp>
 
 namespace gil
 {
-/**
- * @brief Model Class that allows us to load a 3D Model from a file and store it with a texture
- * 
- */
-class Model
+float clampf(float val, float lBound, float rBound)
 {
-public:
-    /**
-     * @brief Construct a new Model object
-     * 
-     */
-    Model();
-    /**
-     * @brief Construct a new Model object from an OBJ file path and texture path
-     * 
-     * @param path 
-     * @param texturePath 
-     */
-    Model(const char* path, const char* texturePath);
-    /**
-     * @brief Destroy the Model object
-     * 
-     */
-    virtual ~Model();
+    if(val < lBound)
+    {
+        return lBound;
+    }
+    else if(val > rBound)
+    {
+        return rBound;
+    }
+    else
+    {
+        return val;
+    }
+}
 
-    /**
-     * @brief Draw the Model object with the shader passed by
-     * 
-     * @param shader 
-     */
-    void draw(Shader& shader);
-
-protected:
-    Mesh   m_mesh;
-    uint32 m_diffuseMap;
-};
+int clampi(int val, int lBound, int rBound)
+{
+    if(val < lBound)
+    {
+        return lBound;
+    }
+    else if(val > rBound)
+    {
+        return rBound;
+    }
+    else
+    {
+        return val;
+    }
+}
 
 } // namespace gil
-
-#endif // HSGIL_MODEL_HPP

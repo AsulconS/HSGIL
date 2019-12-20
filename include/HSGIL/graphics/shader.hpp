@@ -43,6 +43,10 @@
 
 namespace gil
 {
+/**
+ * @brief Shader Class that abstracts almost all the shader functions
+ * 
+ */
 class Shader
 {
 public:

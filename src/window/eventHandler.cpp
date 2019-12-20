@@ -21,56 +21,65 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_MODEL_HPP
-#define HSGIL_MODEL_HPP
-
-#include <vector>
-
-#include <HSGIL/external/glm/glm.hpp>
-
-#include <HSGIL/graphics/shader.hpp>
-#include <HSGIL/graphics/gUtils.hpp>
-#include <HSGIL/graphics/mesh.hpp>
+#include <HSGIL/window/eventHandler.hpp>
 
 namespace gil
 {
-/**
- * @brief Model Class that allows us to load a 3D Model from a file and store it with a texture
- * 
- */
-class Model
+EventHandler::EventHandler()
+    : inputMap {}
 {
-public:
-    /**
-     * @brief Construct a new Model object
-     * 
-     */
-    Model();
-    /**
-     * @brief Construct a new Model object from an OBJ file path and texture path
-     * 
-     * @param path 
-     * @param texturePath 
-     */
-    Model(const char* path, const char* texturePath);
-    /**
-     * @brief Destroy the Model object
-     * 
-     */
-    virtual ~Model();
+}
 
-    /**
-     * @brief Draw the Model object with the shader passed by
-     * 
-     * @param shader 
-     */
-    void draw(Shader& shader);
+EventHandler::~EventHandler()
+{
+}
 
-protected:
-    Mesh   m_mesh;
-    uint32 m_diffuseMap;
-};
+void EventHandler::onKeyDown(InputCode key, bool repeat)
+{
+    updateInput(key, 1.0f, repeat);
+}
+
+void EventHandler::onKeyUp(InputCode key, bool repeat)
+{
+    updateInput(key, -1.0f, repeat);
+}
+
+void EventHandler::onMouseDown(InputCode mouseButton, uint8 numClicks)
+{
+    updateInput(mouseButton, 1.0f, false);
+}
+
+void EventHandler::onMouseUp(InputCode mouseButton, uint8 numClicks)
+{
+    updateInput(mouseButton, -1.0f, false);
+}
+
+void EventHandler::onMouseMove(int32 mousePosX, int32 mousePosY, int32 deltaX, int32 deltaY)
+{
+    //
+}
+
+void EventHandler::addKeyControl(InputCode key, InputControl* inputControl, float weight)
+{
+    inputMap[key].push_back({inputControl, weight});
+}
+
+void EventHandler::addMouseControl(InputCode mouseButton, InputControl* inputControl, float weight)
+{
+    inputMap[mouseButton].push_back({inputControl, weight});
+}
+
+void EventHandler::updateInput(InputCode inputCode, float dir, bool repeat)
+{
+    if(repeat)
+    {
+        return;
+    }
+
+    for(const auto& i : inputMap[inputCode])
+    {
+        i.first->accum(i.second * dir);
+    }
+}
 
 } // namespace gil
-
-#endif // HSGIL_MODEL_HPP

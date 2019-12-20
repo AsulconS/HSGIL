@@ -76,11 +76,12 @@ INCLUDE_PATH = -Iinclude -Iinclude/HSGIL/external
 EXTERNAL_DEPENDENCIES = glad.o
 
 CORE_OBJECT_FILES     = $(EXTERNAL_DEPENDENCIES) timer.o
-WINDOW_OBJECT_FILES   = window.o
-GRAPHICS_OBJECT_FILES = shader.o mesh.o model.o utils.o
+MATH_OBJECT_FILES     = mUtils.o
+WINDOW_OBJECT_FILES   = window.o eventHandler.o inputControl.o
+GRAPHICS_OBJECT_FILES = shader.o mesh.o model.o gUtils.o
 
-SHARED_TARG = hsgil-core hsgil-window hsgil-graphics
-SHARED_LIBS = -lhsgil-core -lhsgil-window -lhsgil-graphics
+SHARED_TARG = hsgil-core hsgil-math hsgil-window hsgil-graphics
+SHARED_LIBS = -lhsgil-core -lhsgil-math -lhsgil-window -lhsgil-graphics
 
 # -----------------------------------------------------------------------------------------
 # -----------------------------------------------------------------------------------------
@@ -174,9 +175,24 @@ timer.o: src/core/timer.cpp
 	$(MODE)$(CXX) -c $(CXX_FLAGS) $(INCLUDE_PATH) -fPIC src/core/timer.cpp
 	@printf "$(OK_STRING)\n"
 
+mUtils.o: src/math/mUtils.cpp
+	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
+	$(MODE)$(CXX) -c $(CXX_FLAGS) $(INCLUDE_PATH) -fPIC src/math/mUtils.cpp
+	@printf "$(OK_STRING)\n"
+
 window.o: src/window/window.cpp
 	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
 	$(MODE)$(CXX) -c $(CXX_FLAGS) $(INCLUDE_PATH) -fPIC src/window/window.cpp
+	@printf "$(OK_STRING)\n"
+
+eventHandler.o: src/window/eventHandler.cpp
+	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
+	$(MODE)$(CXX) -c $(CXX_FLAGS) $(INCLUDE_PATH) -fPIC src/window/eventHandler.cpp
+	@printf "$(OK_STRING)\n"
+
+inputControl.o: src/window/inputControl.cpp
+	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
+	$(MODE)$(CXX) -c $(CXX_FLAGS) $(INCLUDE_PATH) -fPIC src/window/inputControl.cpp
 	@printf "$(OK_STRING)\n"
 
 shader.o: src/graphics/shader.cpp
@@ -194,9 +210,9 @@ model.o: src/graphics/model.cpp
 	$(MODE)$(CXX) -c $(CXX_FLAGS) $(INCLUDE_PATH) -fPIC src/graphics/model.cpp
 	@printf "$(OK_STRING)\n"
 
-utils.o: src/graphics/utils.cpp
+gUtils.o: src/graphics/gUtils.cpp
 	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
-	$(MODE)$(CXX) -c $(CXX_FLAGS) $(INCLUDE_PATH) -fPIC src/graphics/utils.cpp
+	$(MODE)$(CXX) -c $(CXX_FLAGS) $(INCLUDE_PATH) -fPIC src/graphics/gUtils.cpp
 	@printf "$(OK_STRING)\n"
 
 # -----------------------------------------------------------------------------------------
@@ -209,14 +225,19 @@ hsgil-core: $(CORE_OBJECT_FILES)
 	$(MODE)$(CXX) -shared $(CXX_FLAGS) $(CORE_OBJECT_FILES) $(INCLUDE_PATH) -o hsgil-core.$(EXTENSION) $(CXX_LIBS)
 	@printf "$(OK_STRING)\n"
 
+hsgil-math: $(MATH_OBJECT_FILES)
+	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
+	$(MODE)$(CXX) -shared $(CXX_FLAGS) $(MATH_OBJECT_FILES) $(INCLUDE_PATH) $(LIBRARY_PATH) -lhsgil-core $(STATIC_LIBS) -o $@.$(EXTENSION) $(CXX_LIBS)
+	@printf "$(OK_STRING)\n"
+
 hsgil-window: $(WINDOW_OBJECT_FILES)
 	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
-	$(MODE)$(CXX) -shared $(CXX_FLAGS) $(WINDOW_OBJECT_FILES) $(INCLUDE_PATH) $(LIBRARY_PATH) -lhsgil-core $(STATIC_LIBS) -o $@.$(EXTENSION) $(CXX_LIBS)
+	$(MODE)$(CXX) -shared $(CXX_FLAGS) $(WINDOW_OBJECT_FILES) $(INCLUDE_PATH) $(LIBRARY_PATH) -lhsgil-core -lhsgil-math $(STATIC_LIBS) -o $@.$(EXTENSION) $(CXX_LIBS)
 	@printf "$(OK_STRING)\n"
 
 hsgil-graphics: $(GRAPHICS_OBJECT_FILES)
 	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
-	$(MODE)$(CXX) -shared $(CXX_FLAGS) $(GRAPHICS_OBJECT_FILES) $(INCLUDE_PATH) $(LIBRARY_PATH) -lhsgil-core $(STATIC_LIBS) -o $@.$(EXTENSION) $(CXX_LIBS)
+	$(MODE)$(CXX) -shared $(CXX_FLAGS) $(GRAPHICS_OBJECT_FILES) $(INCLUDE_PATH) $(LIBRARY_PATH) -lhsgil-core -lhsgil-math $(STATIC_LIBS) -o $@.$(EXTENSION) $(CXX_LIBS)
 	@printf "$(OK_STRING)\n"
 
 # -----------------------------------------------------------------------------------------

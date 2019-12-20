@@ -23,7 +23,7 @@
 
 #define STB_IMAGE_IMPLEMENTATION
 
-#include <HSGIL/graphics/utils.hpp>
+#include <HSGIL/graphics/gUtils.hpp>
 #include <HSGIL/external/stb_image.h>
 
 namespace gil

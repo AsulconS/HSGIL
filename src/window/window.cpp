@@ -25,13 +25,13 @@
 
 namespace gil
 {
-Window::Window(const uint32 t_width, const uint32 t_height, const char* t_title)
-    : m_width         {t_width},
-      m_height        {t_height},
-      m_title         {t_title},
-      m_ready         {false},
-      m_window        {nullptr},
-      m_inputFunction {nullptr}
+Window::Window(const uint32 t_width, const uint32 t_height, const char* t_title, IEventHandler* t_eventHandler)
+    : m_width        {t_width},
+      m_height       {t_height},
+      m_title        {t_title},
+      m_ready        {false},
+      m_window       {nullptr},
+      m_eventHandler {t_eventHandler}
 {
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -61,17 +61,12 @@ Window::~Window()
     glfwTerminate();
 }
 
-bool Window::keyPressed(const Key key)
-{
-    return glfwGetKey(m_window, key) == GLFW_PRESS;
-}
-
-bool Window::active()
+bool Window::isActive()
 {
     return !glfwWindowShouldClose(m_window);
 }
 
-bool Window::ready()
+bool Window::isReady()
 {
     return m_ready;
 }
@@ -81,15 +76,14 @@ void Window::close()
     glfwSetWindowShouldClose(m_window, true);
 }
 
-void Window::setInputFunction(InputFunction foo)
+void Window::setEventHandler(IEventHandler* t_eventHandler)
 {
-    m_inputFunction = foo;
+    m_eventHandler = t_eventHandler;
 }
 
-void Window::processInput()
+void Window::pollEvents()
 {
     glfwPollEvents();
-    m_inputFunction(*this);
 }
 
 void Window::swapBuffers()
@@ -110,8 +104,9 @@ void Window::initializeWindow()
         throw WindowInitException();
     }
     glfwMakeContextCurrent(m_window);
+    glfwSetWindowUserPointer(m_window, this);
+    glfwSetKeyCallback(m_window, key_callback);
     glfwSetFramebufferSizeCallback(m_window, framebuffer_size_callback);
-    setInputFunction(defaultInputFunction);
 }
 
 void Window::initializeGLAD()
@@ -122,16 +117,38 @@ void Window::initializeGLAD()
     }
 }
 
-void Window::framebuffer_size_callback(GLFWwindow*, int width, int height)
+void Window::framebuffer_size_callback(GLFWwindow* /*window*/, int width, int height)
 {
     glViewport(0, 0, width, height);
 }
 
-void Window::defaultInputFunction(Window& window)
+void Window::key_callback(GLFWwindow* window, int key, int /*scancode*/, int action, int /*mods*/)
 {
-    if(glfwGetKey(window.m_window, KEY_ESCAPE) == GLFW_PRESS)
+    if(key == KEY_ESCAPE && action == GLFW_PRESS)
     {
-        window.close();
+        glfwSetWindowShouldClose(window, true);
+        return;
+    }
+
+    Window* userWindow = reinterpret_cast<Window*>(glfwGetWindowUserPointer(window));
+    if(userWindow->m_eventHandler != nullptr)
+    {
+        InputCode inputCode {static_cast<InputCode>(key)};
+        switch(action)
+        {
+        case GLFW_PRESS:
+            std::cout << "Pressed Key " << key << '\n';
+            userWindow->m_eventHandler->onKeyDown(inputCode, false);
+            break;
+
+        case GLFW_RELEASE:
+            std::cout << "Released Key " << key << '\n';
+            userWindow->m_eventHandler->onKeyUp(inputCode, false);
+            break;
+        
+        default:
+            break;
+        }
     }
 }
 

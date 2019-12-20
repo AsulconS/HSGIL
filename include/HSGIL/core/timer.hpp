@@ -31,6 +31,10 @@
 
 namespace gil
 {
+/**
+ * @brief Timer Class that measures the time intervals, calculate Delta Time and other time stuff
+ * 
+ */
 class Timer
 {
 public:

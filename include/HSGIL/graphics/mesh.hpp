@@ -29,10 +29,14 @@
 #include <HSGIL/external/glm/glm.hpp>
 
 #include <HSGIL/graphics/shader.hpp>
-#include <HSGIL/graphics/utils.hpp>
+#include <HSGIL/graphics/gUtils.hpp>
 
 namespace gil
 {
+/**
+ * @brief Mesh Class that stores a 3D Mesh and lets us draw it dynamically
+ * 
+ */
 class Mesh
 {
 public:

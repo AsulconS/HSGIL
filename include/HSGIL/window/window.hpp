@@ -28,17 +28,16 @@
 #include <HSGIL/external/GLFW/glfw3.h>
 
 #include <HSGIL/core/common.hpp>
-#include <HSGIL/core/keyBindings.hpp>
+#include <HSGIL/core/inputBindings.hpp>
 #include <HSGIL/exception/window/windowException.hpp>
+
+#include <HSGIL/window/iEventHandler.hpp>
 
 #include <string>
 #include <iostream>
 
 namespace gil
 {
-class Window;
-typedef void (*InputFunction)(Window& window);
-
 /**
  * @brief Window Class that handle the Main Window of the program
  * 
@@ -53,7 +52,7 @@ public:
      * @param t_width 
      * @param t_height 
      */
-    explicit Window(const uint32 t_width = 800, const uint32 t_height = 600, const char* t_title = "Untitled");
+    explicit Window(const uint32 t_width = 800, const uint32 t_height = 600, const char* t_title = "Untitled", IEventHandler* t_eventHandler = nullptr);
     /**
      * @brief Destroy the Window object
      * 
@@ -61,44 +60,37 @@ public:
     virtual ~Window();
 
     /**
-     * @brief Checks if some key gets pressed
-     * 
-     * @param key 
-     * @return true 
-     * @return false 
-     */
-    bool keyPressed(const Key key);
-    /**
-     * @brief Checks if the Window shouldn't close
+     * @brief Check if the Window shouldn't close
      * 
      * @return true if the Window is active
      * @return false if not
      */
-    bool active();
+    bool isActive();
     /**
-     * @brief Checks if the Window is able to start rendering
+     * @brief Check if the Window is able to start rendering
      * 
      * @return true if right
      * @return false if not
      */
-    bool ready();
+    bool isReady();
     /**
-     * @brief Sends signal to close window
+     * @brief Send signal to close window
      * 
      */
     void close();
+
     /**
-     * @brief Set the Input Function pointer
+     * @brief Set the Event Handler object
      * 
      */
-    void setInputFunction(InputFunction foo);
+    void setEventHandler(IEventHandler* t_eventHandler);
     /**
-     * @brief Process the input in this Window object
+     * @brief Poll the Events to process the input
      * 
      */
-    void processInput();
+    void pollEvents();
     /**
-     * @brief Swap the buffers
+     * @brief Swap the framebuffers
      * 
      */
     void swapBuffers();
@@ -128,8 +120,16 @@ private:
      * @param height 
      */
     static void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-
-    static void defaultInputFunction(Window& window);
+    /**
+     * @brief Key function called when some key is pressed
+     * 
+     * @param window 
+     * @param key 
+     * @param scancode 
+     * @param action 
+     * @param mods 
+     */
+    static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 
     uint32 m_width;
     uint32 m_height;
@@ -138,7 +138,7 @@ private:
     bool m_ready;
 
     GLFWwindow* m_window;
-    InputFunction m_inputFunction;
+    IEventHandler* m_eventHandler;
 };
 
 } // namespace gil

@@ -21,56 +21,44 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_MODEL_HPP
-#define HSGIL_MODEL_HPP
+#ifndef HSGIL_G_UTILS_HPP
+#define HSGIL_G_UTILS_HPP
 
 #include <vector>
 
 #include <HSGIL/external/glm/glm.hpp>
 
 #include <HSGIL/graphics/shader.hpp>
-#include <HSGIL/graphics/gUtils.hpp>
-#include <HSGIL/graphics/mesh.hpp>
 
 namespace gil
 {
 /**
- * @brief Model Class that allows us to load a 3D Model from a file and store it with a texture
+ * @brief Load an OBJ file from a path and load the vertexData and indices into the parameters
  * 
+ * @param path 
+ * @param vertexData 
+ * @param indices 
+ * @return true 
+ * @return false 
  */
-class Model
-{
-public:
-    /**
-     * @brief Construct a new Model object
-     * 
-     */
-    Model();
-    /**
-     * @brief Construct a new Model object from an OBJ file path and texture path
-     * 
-     * @param path 
-     * @param texturePath 
-     */
-    Model(const char* path, const char* texturePath);
-    /**
-     * @brief Destroy the Model object
-     * 
-     */
-    virtual ~Model();
+bool loadObj(const char* path, std::vector<float>& vertexData, std::vector<uint32>& indices);
 
-    /**
-     * @brief Draw the Model object with the shader passed by
-     * 
-     * @param shader 
-     */
-    void draw(Shader& shader);
+/**
+ * @brief Load a texture from a path and return the texture object created by OpenGL
+ * 
+ * @param path 
+ * @return uint32 
+ */
+uint32 loadTexture(const char* path);
 
-protected:
-    Mesh   m_mesh;
-    uint32 m_diffuseMap;
-};
+/**
+ * @brief Setup the Default Lights for a shader from some view position
+ * 
+ * @param shader 
+ * @param viewPos 
+ */
+void setupDefaultLights(Shader& shader, const glm::vec3& viewPos = {2.0f, 4.0f, 2.0f});
 
 } // namespace gil
 
-#endif // HSGIL_MODEL_HPP
+#endif // HSGIL_G_UTILS_HPP

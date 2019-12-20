@@ -21,56 +21,51 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_MODEL_HPP
-#define HSGIL_MODEL_HPP
+#ifndef HSGIL_INPUT_CONTROL_HPP
+#define HSGIL_INPUT_CONTROL_HPP
 
-#include <vector>
+#include <HSGIL/core/common.hpp>
+#include <HSGIL/core/inputBindings.hpp>
 
-#include <HSGIL/external/glm/glm.hpp>
-
-#include <HSGIL/graphics/shader.hpp>
-#include <HSGIL/graphics/gUtils.hpp>
-#include <HSGIL/graphics/mesh.hpp>
+#include <HSGIL/math/mUtils.hpp>
 
 namespace gil
 {
 /**
- * @brief Model Class that allows us to load a 3D Model from a file and store it with a texture
+ * @brief InputControl Class that is just a input controller with a magnitude
  * 
  */
-class Model
+class InputControl
 {
 public:
     /**
-     * @brief Construct a new Model object
+     * @brief Construct a new Input Control object
      * 
      */
-    Model();
+    InputControl();
     /**
-     * @brief Construct a new Model object from an OBJ file path and texture path
-     * 
-     * @param path 
-     * @param texturePath 
-     */
-    Model(const char* path, const char* texturePath);
-    /**
-     * @brief Destroy the Model object
+     * @brief Destroy the Input Control object
      * 
      */
-    virtual ~Model();
+    virtual ~InputControl();
 
     /**
-     * @brief Draw the Model object with the shader passed by
+     * @brief Adds an amount to its magnitude
      * 
-     * @param shader 
+     * @param amount 
      */
-    void draw(Shader& shader);
+    void accum(const float amount);
+    /**
+     * @brief Get the Magnitude of the object
+     * 
+     * @return float 
+     */
+    float getMagnitude();
 
-protected:
-    Mesh   m_mesh;
-    uint32 m_diffuseMap;
+private:
+    float m_magnitude;
 };
 
 } // namespace gil
 
-#endif // HSGIL_MODEL_HPP
+#endif // HSGIL_INPUT_CONTROL_HPP

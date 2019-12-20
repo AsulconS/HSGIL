@@ -21,44 +21,30 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_UTILS_HPP
-#define HSGIL_UTILS_HPP
-
-#include <vector>
-
-#include <HSGIL/external/glm/glm.hpp>
-
-#include <HSGIL/graphics/shader.hpp>
+#ifndef HSGIL_M_UTILS_HPP
+#define HSGIL_M_UTILS_HPP
 
 namespace gil
 {
 /**
- * @brief Load an OBJ file from a path and load the vertexData and indices into the parameters
+ * @brief Clamping function to limit a float value between 2 ranges
  * 
- * @param path 
- * @param vertexData 
- * @param indices 
- * @return true 
- * @return false 
+ * @param val 
+ * @param lBound 
+ * @param rBound 
+ * @return float 
  */
-bool loadObj(const char* path, std::vector<float>& vertexData, std::vector<uint32>& indices);
+float clampf(float val, float lBound, float rBound);
 
 /**
- * @brief Load a texture from a path and return the texture object created by OpenGL
+ * @brief Clamping function to limit an integer value between 2 ranges
  * 
- * @param path 
- * @return uint32 
+ * @param val 
+ * @param lBound 
+ * @return int 
  */
-uint32 loadTexture(const char* path);
-
-/**
- * @brief Setup the Default Lights for a shader from some view position
- * 
- * @param shader 
- * @param viewPos 
- */
-void setupDefaultLights(Shader& shader, const glm::vec3& viewPos = {2.0f, 4.0f, 2.0f});
+int clampi(int val, int lBound, int rBound);
 
 } // namespace gil
 
-#endif // HSGIL_UTILS_HPP
+#endif // HSGIL_M_UTILS_HPP

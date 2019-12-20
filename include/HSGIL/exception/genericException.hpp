@@ -28,9 +28,18 @@
 
 namespace gil
 {
+/**
+ * @brief Generic HSGIL Exception used to catch derived Exceptions
+ * 
+ */
 class GenericException : public std::exception
 {
 public:
+    /**
+     * @brief Overridden method to know why exactly the Exception was thrown
+     * 
+     * @return const char* 
+     */
     virtual const char* what() const throw() override;
 };
 

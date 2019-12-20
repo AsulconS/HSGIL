@@ -102,7 +102,7 @@ void Ball::generateBallVerticesAndIndices()
 int main()
 {
     gil::Window window;
-    if(!window.ready())
+    if(!window.isReady())
     {
         std::cerr << "Window is not ready, something went wrong" << std::endl;
         return -1;
@@ -121,9 +121,9 @@ int main()
     glEnable(GL_DEPTH_TEST);
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     gil::Timer timer(true);
-    while(window.active())
+    while(window.isActive())
     {
-        window.processInput();
+        window.pollEvents();
 
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

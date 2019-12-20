@@ -26,6 +26,7 @@
 
 #include <HSGIL/core/common.hpp>
 #include <HSGIL/core/constants.hpp>
+#include <HSGIL/core/inputBindings.hpp>
 #include <HSGIL/core/timer.hpp>
 
 #endif // HSGIL_CORE_I_HPP

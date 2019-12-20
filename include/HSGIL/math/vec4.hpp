@@ -26,6 +26,11 @@
 
 namespace gil
 {
+/**
+ * @brief 4-Component Mathematical Vector
+ * 
+ * @tparam T 
+ */
 template <typename T>
 struct Vec4
 {
