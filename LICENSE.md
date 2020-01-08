@@ -1,7 +1,7 @@
 # HSGIL
 ## Handy Scalable Graphics Integration Library
 
-HSGIL - Copyright (c) 2019 Adrian Bedregal and Gabriela Chipana
+HSGIL - Copyright (c) 2020 Adrian Bedregal and Gabriela Chipana
 
 This software is provided 'as-is', without any express or implied
 warranty. In no event will the authors be held liable for any damages
