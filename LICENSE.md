@@ -22,6 +22,5 @@ freely, subject to the following restrictions:
 ## External Libraries:
 ### (More info about them at external/licenses)
 
-* _glfw_ : licensed under the zlib/libpng license.
 * _glm_  : licensed under The Happy Bunny License or MIT License.
 * _stb_  : licensed under MIT License.
