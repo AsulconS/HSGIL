@@ -156,10 +156,10 @@ void WindowManager::createRenderingWindow(const char* title, int x, int y, int w
 
             x, y, width, height,
 
-            NULL,                   // Parent Window Handle
-            NULL,                   // Menu Handle
-            s_procInstanceHandle,   // Handle to current instance
-            NULL                    // Additional Application Data
+            nullptr,              // Parent Window Handle
+            nullptr,              // Menu Handle
+            s_procInstanceHandle, // Handle to current instance
+            nullptr               // Additional Application Data
         );
         m_active = true;
         ++s_activeSessions;
@@ -184,7 +184,7 @@ void WindowManager::setKeyCallbackFunction(Window* t_windowCallbackInstance, Key
 
 void WindowManager::pollEvents()
 {
-    if(PeekMessageW(&s_msg, NULL, 0, 0, PM_REMOVE))
+    if(PeekMessageW(&s_msg, nullptr, 0, 0, PM_REMOVE))
     {
         DispatchMessageW(&s_msg);
     }
@@ -246,12 +246,12 @@ void WindowManager::registerGLDCC()
     s_gldcc.cbClsExtra    = 0;
     s_gldcc.cbWndExtra    = 0;
     s_gldcc.hInstance     = s_procInstanceHandle;
-    s_gldcc.hIcon         = NULL;
-    s_gldcc.hCursor       = LoadCursorA(NULL, MAKEINTRESOURCEA(32512));
+    s_gldcc.hIcon         = nullptr;
+    s_gldcc.hCursor       = LoadCursorA(nullptr, MAKEINTRESOURCEA(32512));
     s_gldcc.hbrBackground = (HBRUSH)(COLOR_BACKGROUND);
-    s_gldcc.lpszMenuName  = NULL;
+    s_gldcc.lpszMenuName  = nullptr;
     s_gldcc.lpszClassName = s_gldccName;
-    s_gldcc.hIconSm       = NULL;
+    s_gldcc.hIconSm       = nullptr;
 
     RegisterClassExA(&s_gldcc);
 }
