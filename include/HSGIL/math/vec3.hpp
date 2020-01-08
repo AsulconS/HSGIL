@@ -27,17 +27,28 @@
 namespace gil
 {
 /**
- * @brief 3-Component Mathematical Vector
+ * @brief 3-Component float-composed Mathematical Vector
  * 
- * @tparam T 
  */
-template <typename T>
-struct Vec3
+struct Vec3f
 {
-    T x;
-    T y;
-    T z;
+    float x;
+    float y;
+    float z;
 };
+
+/**
+ * @brief 3-Component int-composed Mathematical Vector
+ * 
+ */
+struct Vec3i
+{
+    int x;
+    int y;
+    int z;
+};
+
+using Vec3 = Vec3f;
 
 } // namespace gil
 

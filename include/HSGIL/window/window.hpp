@@ -24,13 +24,11 @@
 #ifndef HSGIL_WINDOW_HPP
 #define HSGIL_WINDOW_HPP
 
-#include <HSGIL/external/glad/glad.h>
-#include <HSGIL/external/GLFW/glfw3.h>
-
 #include <HSGIL/core/common.hpp>
 #include <HSGIL/core/inputBindings.hpp>
 #include <HSGIL/exception/window/windowException.hpp>
 
+#include <HSGIL/window/windowManager.hpp>
 #include <HSGIL/window/iEventHandler.hpp>
 
 #include <string>
@@ -52,7 +50,7 @@ public:
      * @param t_width 
      * @param t_height 
      */
-    explicit Window(const uint32 t_width = 800, const uint32 t_height = 600, const char* t_title = "Untitled", IEventHandler* t_eventHandler = nullptr);
+    explicit Window(const uint32 t_width = 800u, const uint32 t_height = 600u, const char* t_title = "Untitled", IEventHandler* t_eventHandler = nullptr);
     /**
      * @brief Destroy the Window object
      * 
@@ -108,28 +106,10 @@ private:
      */
     void initializeWindow();
     /**
-     * @brief Initialize OpenGL functions with GLAD
+     * @brief Key Callback Function
      * 
      */
-    void initializeGLAD();
-    /**
-     * @brief Framebuffer function called when window is rezised
-     * 
-     * @param window 
-     * @param width 
-     * @param height 
-     */
-    static void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-    /**
-     * @brief Key function called when some key is pressed
-     * 
-     * @param window 
-     * @param key 
-     * @param scancode 
-     * @param action 
-     * @param mods 
-     */
-    static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
+    static void keyCallback(Window* window, uint32 action, uint64 key, bool repeat);
 
     uint32 m_width;
     uint32 m_height;
@@ -137,7 +117,7 @@ private:
 
     bool m_ready;
 
-    GLFWwindow* m_window;
+    WindowManager* m_windowManager;
     IEventHandler* m_eventHandler;
 };
 

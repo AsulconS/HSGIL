@@ -24,12 +24,12 @@
 #ifndef HSGIL_EVENT_HANDLER_HPP
 #define HSGIL_EVENT_HANDLER_HPP
 
-#include <map>
-#include <vector>
-
 #include <HSGIL/core/common.hpp>
 #include <HSGIL/window/iEventHandler.hpp>
 #include <HSGIL/window/inputControl.hpp>
+
+#include <vector>
+#include <unordered_map>
 
 namespace gil
 {
@@ -116,7 +116,7 @@ private:
      */
     void updateInput(InputCode inputCode, float dir, bool repeat);
 
-    std::map<InputCode, std::vector<std::pair<InputControl*, float>>> inputMap;
+    std::unordered_map<InputCode, std::vector<std::pair<InputControl*, float>>> inputMap;
 };
 
 } // namespace gil

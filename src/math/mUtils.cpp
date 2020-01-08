@@ -25,7 +25,7 @@
 
 namespace gil
 {
-float clampf(float val, float lBound, float rBound)
+int clamp(int val, int lBound, int rBound)
 {
     if(val < lBound)
     {
@@ -41,7 +41,7 @@ float clampf(float val, float lBound, float rBound)
     }
 }
 
-int clampi(int val, int lBound, int rBound)
+float clamp(float val, float lBound, float rBound)
 {
     if(val < lBound)
     {
@@ -55,6 +55,21 @@ int clampi(int val, int lBound, int rBound)
     {
         return val;
     }
+}
+
+bool isBetween(int val, int lBound, int rBound)
+{
+    return ((val - lBound) * (rBound - val)) >= 0;
+}
+
+bool isBetween(unsigned int val, unsigned int lBound, unsigned int rBound)
+{
+    return ((static_cast<int>(val) - static_cast<int>(lBound)) * (static_cast<int>(rBound) - static_cast<int>(val))) >= 0;
+}
+
+bool isBetween(float val, float lBound, float rBound)
+{
+    return ((val - lBound) * (rBound - val)) >= 0.0f;
 }
 
 } // namespace gil

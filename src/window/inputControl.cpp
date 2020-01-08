@@ -41,7 +41,7 @@ void InputControl::accum(const float amount)
 
 float InputControl::getMagnitude()
 {
-    return clampf(m_magnitude, -1.0f, 1.0f);
+    return clamp(m_magnitude, -1.0f, 1.0f);
 }
 
 } // namespace gil

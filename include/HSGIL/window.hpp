@@ -25,6 +25,7 @@
 #define HSGIL_WINDOW_I_HPP
 
 #include <HSGIL/window/window.hpp>
+#include <HSGIL/window/windowManager.hpp>
 #include <HSGIL/window/iEventHandler.hpp>
 #include <HSGIL/window/inputControl.hpp>
 #include <HSGIL/window/eventHandler.hpp>

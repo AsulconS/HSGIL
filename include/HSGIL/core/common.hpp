@@ -24,8 +24,6 @@
 #ifndef HSGIL_COMMON_HPP
 #define HSGIL_COMMON_HPP
 
-#include <type_traits>
-
 namespace gil
 {
 using int8   = char;

@@ -24,12 +24,12 @@
 #ifndef HSGIL_MESH_HPP
 #define HSGIL_MESH_HPP
 
-#include <vector>
-
 #include <HSGIL/external/glm/glm.hpp>
 
 #include <HSGIL/graphics/shader.hpp>
 #include <HSGIL/graphics/gUtils.hpp>
+
+#include <vector>
 
 namespace gil
 {

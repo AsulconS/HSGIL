@@ -24,11 +24,6 @@
 #ifndef HSGIL_SHADER_HPP
 #define HSGIL_SHADER_HPP
 
-#include <string>
-#include <fstream>
-#include <sstream>
-#include <iostream>
-
 #include <HSGIL/external/glad/glad.h>
 #include <HSGIL/external/glm/glm.hpp>
 #include <HSGIL/external/glm/gtc/matrix_transform.hpp>
@@ -40,6 +35,11 @@
 #include <HSGIL/math/vec2.hpp>
 #include <HSGIL/math/vec3.hpp>
 #include <HSGIL/math/vec4.hpp>
+
+#include <string>
+#include <fstream>
+#include <sstream>
+#include <iostream>
 
 namespace gil
 {
@@ -131,21 +131,21 @@ public:
      * @param name 
      * @param v 
      */
-    void setVec2(const std::string& name, const Vec2<float>& v);
+    void setVec2(const std::string& name, const Vec2& v);
     /**
      * @brief Set the Vec3 object
      * 
      * @param name 
      * @param v 
      */
-    void setVec3(const std::string& name, const Vec3<float>& v);
+    void setVec3(const std::string& name, const Vec3& v);
     /**
      * @brief Set the Vec4 object
      * 
      * @param name 
      * @param v 
      */
-    void setVec4(const std::string& name, const Vec4<float>& v);
+    void setVec4(const std::string& name, const Vec4& v);
 
     /**
      * @brief Set the Mat3 object

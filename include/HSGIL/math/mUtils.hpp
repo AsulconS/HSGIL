@@ -27,6 +27,26 @@
 namespace gil
 {
 /**
+ * @brief Clamping function to limit an integer value between 2 ranges
+ * 
+ * @param val 
+ * @param lBound 
+ * @param rBound 
+ * @return int 
+ */
+int clamp(int val, int lBound, int rBound);
+
+/**
+ * @brief Clamping function to limit an unsigned integer value between 2 ranges
+ * 
+ * @param val 
+ * @param lBound 
+ * @param rBound 
+ * @return unsigned int 
+ */
+unsigned int clamp(unsigned int val, unsigned int lBound, unsigned int rBound);
+
+/**
  * @brief Clamping function to limit a float value between 2 ranges
  * 
  * @param val 
@@ -34,16 +54,40 @@ namespace gil
  * @param rBound 
  * @return float 
  */
-float clampf(float val, float lBound, float rBound);
+float clamp(float val, float lBound, float rBound);
 
 /**
- * @brief Clamping function to limit an integer value between 2 ranges
+ * @brief Check if an integer value is between a range
  * 
  * @param val 
  * @param lBound 
- * @return int 
+ * @param rBound 
+ * @return true 
+ * @return false 
  */
-int clampi(int val, int lBound, int rBound);
+bool isBetween(int val, int lBound, int rBound);
+
+/**
+ * @brief Check if an unsigned integer value is between a range
+ * 
+ * @param val 
+ * @param lBound 
+ * @param rBound 
+ * @return true 
+ * @return false 
+ */
+bool isBetween(unsigned int val, unsigned int lBound, unsigned int rBound);
+
+/**
+ * @brief Check if a float value is between a range
+ * 
+ * @param val 
+ * @param lBound 
+ * @param rBound 
+ * @return true 
+ * @return false 
+ */
+bool isBetween(float val, float lBound, float rBound);
 
 } // namespace gil
 

@@ -2,7 +2,7 @@
 
 int main()
 {
-    gil::Window window(800, 600, "Avatar");
+    gil::Window window(800, 600, "Finn");
     if(!window.isReady())
     {
         return -1;

@@ -24,11 +24,11 @@
 #ifndef HSGIL_G_UTILS_HPP
 #define HSGIL_G_UTILS_HPP
 
-#include <vector>
-
 #include <HSGIL/external/glm/glm.hpp>
 
 #include <HSGIL/graphics/shader.hpp>
+
+#include <vector>
 
 namespace gil
 {

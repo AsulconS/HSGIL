@@ -27,16 +27,26 @@
 namespace gil
 {
 /**
- * @brief 2-Component Mathematical Vector
+ * @brief 2-Component float-composed Mathematical Vector
  * 
- * @tparam T 
  */
-template <typename T>
-struct Vec2
+struct Vec2f
 {
-    T x;
-    T y;
+    float x;
+    float y;
 };
+
+/**
+ * @brief 2-Component int-composed Mathematical Vector
+ * 
+ */
+struct Vec2i
+{
+    int x;
+    int y;
+};
+
+using Vec2 = Vec2f;
 
 } // namespace gil
 

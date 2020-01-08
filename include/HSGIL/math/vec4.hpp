@@ -27,18 +27,30 @@
 namespace gil
 {
 /**
- * @brief 4-Component Mathematical Vector
+ * @brief 4-Component float-composed Mathematical Vector
  * 
- * @tparam T 
  */
-template <typename T>
-struct Vec4
+struct Vec4f
 {
-    T x;
-    T y;
-    T z;
-    T w;
+    float x;
+    float y;
+    float z;
+    float w;
 };
+
+/**
+ * @brief 4-Component int-composed Mathematical Vector
+ * 
+ */
+struct Vec4i
+{
+    int x;
+    int y;
+    int z;
+    int w;
+};
+
+using Vec4 = Vec4f;
 
 } // namespace gil
 

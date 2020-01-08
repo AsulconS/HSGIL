@@ -24,8 +24,6 @@
 #ifndef HSGIL_MODEL_HPP
 #define HSGIL_MODEL_HPP
 
-#include <vector>
-
 #include <HSGIL/external/glm/glm.hpp>
 
 #include <HSGIL/graphics/shader.hpp>

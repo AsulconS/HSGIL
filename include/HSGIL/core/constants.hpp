@@ -28,8 +28,8 @@ namespace gil
 {
 namespace constants
 {
-constexpr int FLOAT_PRECISION  { 7 };
-constexpr int DOUBLE_PRECISION { 15 };
+constexpr unsigned int FLOAT_PRECISION  { 7u };
+constexpr unsigned int DOUBLE_PRECISION { 15u };
 
 // Float constants
 

@@ -26,26 +26,21 @@
 namespace gil
 {
 Window::Window(const uint32 t_width, const uint32 t_height, const char* t_title, IEventHandler* t_eventHandler)
-    : m_width        {t_width},
-      m_height       {t_height},
-      m_title        {t_title},
-      m_ready        {false},
-      m_window       {nullptr},
-      m_eventHandler {t_eventHandler}
+    : m_width         {t_width},
+      m_height        {t_height},
+      m_title         {t_title},
+      m_ready         {false},
+      m_windowManager {nullptr},
+      m_eventHandler  {t_eventHandler}
 {
-    glfwInit();
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-#ifdef __APPLE__
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-#endif
+    m_windowManager = WindowManager::createInstance();
+    m_windowManager->setKeyCallbackFunction(this, keyCallback);
+    std::cout << "Manager at: " << m_windowManager << std::endl;
+    std::cout << "Size is   : " << sizeof(WindowManager) << std::endl;
 
     try
     {
         initializeWindow();
-        initializeGLAD();
         m_ready = true;
     }
     catch(const GenericException& e)
@@ -57,13 +52,12 @@ Window::Window(const uint32 t_width, const uint32 t_height, const char* t_title,
 
 Window::~Window()
 {
-    std::cout << "Destructing Window" << std::endl;
-    glfwTerminate();
+    std::cout << "Destructing Window " << m_title << std::endl;
 }
 
 bool Window::isActive()
 {
-    return !glfwWindowShouldClose(m_window);
+    return m_windowManager->isActive();
 }
 
 bool Window::isReady()
@@ -73,7 +67,7 @@ bool Window::isReady()
 
 void Window::close()
 {
-    glfwSetWindowShouldClose(m_window, true);
+    m_windowManager->destroyRenderingWindow();
 }
 
 void Window::setEventHandler(IEventHandler* t_eventHandler)
@@ -83,12 +77,12 @@ void Window::setEventHandler(IEventHandler* t_eventHandler)
 
 void Window::pollEvents()
 {
-    glfwPollEvents();
+    m_windowManager->pollEvents();
 }
 
 void Window::swapBuffers()
 {
-    glfwSwapBuffers(m_window);
+    m_windowManager->swapBuffers();
 }
 
 float Window::getAspectRatio()
@@ -98,52 +92,34 @@ float Window::getAspectRatio()
 
 void Window::initializeWindow()
 {
-    m_window = glfwCreateWindow(m_width, m_height, m_title.c_str(), nullptr, nullptr);
-    if(m_window == nullptr)
+    m_windowManager->createRenderingWindow(m_title.c_str(), 0, 0, m_width, m_height);
+    if(!m_windowManager->isActive())
     {
         throw WindowInitException();
     }
-    glfwMakeContextCurrent(m_window);
-    glfwSetWindowUserPointer(m_window, this);
-    glfwSetKeyCallback(m_window, key_callback);
-    glfwSetFramebufferSizeCallback(m_window, framebuffer_size_callback);
 }
 
-void Window::initializeGLAD()
+void Window::keyCallback(Window* window, uint32 action, uint64 key, bool repeat)
 {
-    if(!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+    if(key == KEY_ESCAPE && action == WM_KEYDOWN)
     {
-        throw GLADInitException();
-    }
-}
-
-void Window::framebuffer_size_callback(GLFWwindow* /*window*/, int width, int height)
-{
-    glViewport(0, 0, width, height);
-}
-
-void Window::key_callback(GLFWwindow* window, int key, int /*scancode*/, int action, int /*mods*/)
-{
-    if(key == KEY_ESCAPE && action == GLFW_PRESS)
-    {
-        glfwSetWindowShouldClose(window, true);
+        window->close();
         return;
     }
 
-    Window* userWindow = reinterpret_cast<Window*>(glfwGetWindowUserPointer(window));
-    if(userWindow->m_eventHandler != nullptr)
+    if(window->m_eventHandler != nullptr)
     {
         InputCode inputCode {static_cast<InputCode>(key)};
         switch(action)
         {
-        case GLFW_PRESS:
-            std::cout << "Pressed Key " << key << '\n';
-            userWindow->m_eventHandler->onKeyDown(inputCode, false);
+        case WM_KEYDOWN:
+            std::cout << "Pressed Key " << key << " Repeated? " << repeat << '\n';
+            window->m_eventHandler->onKeyDown(inputCode, repeat);
             break;
 
-        case GLFW_RELEASE:
-            std::cout << "Released Key " << key << '\n';
-            userWindow->m_eventHandler->onKeyUp(inputCode, false);
+        case WM_KEYUP:
+            std::cout << "Released Key " << key << " Repeated? " << repeat << '\n';
+            window->m_eventHandler->onKeyUp(inputCode, repeat);
             break;
         
         default:
