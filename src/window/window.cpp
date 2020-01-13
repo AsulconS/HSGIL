@@ -70,9 +70,9 @@ void Window::close()
     m_windowManager->destroyRenderingWindow();
 }
 
-void Window::setEventHandler(IEventHandler* t_eventHandler)
+void Window::setEventHandler(IEventHandler& t_eventHandler)
 {
-    m_eventHandler = t_eventHandler;
+    m_eventHandler = &t_eventHandler;
 }
 
 void Window::pollEvents()
@@ -101,29 +101,27 @@ void Window::initializeWindow()
 
 void Window::keyCallback(Window* window, uint32 action, uint64 key, bool repeat)
 {
-    if(key == KEY_ESCAPE && action == WM_KEYDOWN)
-    {
-        window->close();
-        return;
-    }
-
     if(window->m_eventHandler != nullptr)
     {
         InputCode inputCode {static_cast<InputCode>(key)};
         switch(action)
         {
-        case WM_KEYDOWN:
-            std::cout << "Pressed Key " << key << " Repeated? " << repeat << '\n';
-            window->m_eventHandler->onKeyDown(inputCode, repeat);
-            break;
+            case WM_KEYDOWN:
+                {
+                    std::cout << "Pressed Key " << key << " Repeated? " << repeat << '\n';
+                    window->m_eventHandler->onKeyDown(inputCode, repeat);
+                }
+                break;
 
-        case WM_KEYUP:
-            std::cout << "Released Key " << key << " Repeated? " << repeat << '\n';
-            window->m_eventHandler->onKeyUp(inputCode, repeat);
-            break;
-        
-        default:
-            break;
+            case WM_KEYUP:
+                {
+                    std::cout << "Released Key " << key << " Repeated? " << repeat << '\n';
+                    window->m_eventHandler->onKeyUp(inputCode, repeat);
+                }
+                break;
+
+            default:
+                break;
         }
     }
 }

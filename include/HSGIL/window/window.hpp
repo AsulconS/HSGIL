@@ -37,7 +37,7 @@
 namespace gil
 {
 /**
- * @brief Window Class that handle the Main Window of the program
+ * @brief Window Class that handle a Window of the program
  * 
  */
 class Window
@@ -81,7 +81,7 @@ public:
      * @brief Set the Event Handler object
      * 
      */
-    void setEventHandler(IEventHandler* t_eventHandler);
+    void setEventHandler(IEventHandler& t_eventHandler);
     /**
      * @brief Poll the Events to process the input
      * 

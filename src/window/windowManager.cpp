@@ -299,17 +299,16 @@ LRESULT CALLBACK WindowManager::HSGILInputProc(HWND hWnd, UINT uMsg, WPARAM wPar
 
         case WM_KEYDOWN:
             {
+                s_repeatFlag = (lParam & 0x40000000) != 0;
                 WindowManager* windowInstance = s_wmInstances[s_hwndMap[hWnd]];
                 windowInstance->mf_keyCallbackFunction(windowInstance->m_windowCallbackInstance, WM_KEYDOWN, wParam, s_repeatFlag);
-                s_repeatFlag = true;
             }
             break;
 
         case WM_KEYUP:
             {
-                s_repeatFlag = false;
                 WindowManager* windowInstance = s_wmInstances[s_hwndMap[hWnd]];
-                windowInstance->mf_keyCallbackFunction(windowInstance->m_windowCallbackInstance, WM_KEYUP, wParam, s_repeatFlag);
+                windowInstance->mf_keyCallbackFunction(windowInstance->m_windowCallbackInstance, WM_KEYUP, wParam, false);
             }
             break;
 

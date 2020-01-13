@@ -44,29 +44,29 @@ void EventHandler::onKeyUp(InputCode key, bool repeat)
     updateInput(key, -1.0f, repeat);
 }
 
-void EventHandler::onMouseDown(InputCode mouseButton, uint8 numClicks)
+void EventHandler::onMouseDown(InputCode mouseButton, uint8 /*numClicks*/)
 {
     updateInput(mouseButton, 1.0f, false);
 }
 
-void EventHandler::onMouseUp(InputCode mouseButton, uint8 numClicks)
+void EventHandler::onMouseUp(InputCode mouseButton, uint8 /*numClicks*/)
 {
     updateInput(mouseButton, -1.0f, false);
 }
 
-void EventHandler::onMouseMove(int32 mousePosX, int32 mousePosY, int32 deltaX, int32 deltaY)
+void EventHandler::onMouseMove(int32 /*mousePosX*/, int32 /*mousePosY*/, int32 /*deltaX*/, int32 /*deltaY*/)
 {
     //
 }
 
-void EventHandler::addKeyControl(InputCode key, InputControl* inputControl, float weight)
+void EventHandler::addKeyControl(InputCode key, InputControl& inputControl, float weight)
 {
-    inputMap[key].push_back({inputControl, weight});
+    inputMap[key].push_back({&inputControl, weight});
 }
 
-void EventHandler::addMouseControl(InputCode mouseButton, InputControl* inputControl, float weight)
+void EventHandler::addMouseControl(InputCode mouseButton, InputControl& inputControl, float weight)
 {
-    inputMap[mouseButton].push_back({inputControl, weight});
+    inputMap[mouseButton].push_back({&inputControl, weight});
 }
 
 void EventHandler::updateInput(InputCode inputCode, float dir, bool repeat)

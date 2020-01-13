@@ -44,4 +44,9 @@ float InputControl::getMagnitude()
     return clamp(m_magnitude, -1.0f, 1.0f);
 }
 
+bool InputControl::isActive()
+{
+    return m_magnitude != 0.0f;
+}
+
 } // namespace gil

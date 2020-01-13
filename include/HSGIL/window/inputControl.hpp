@@ -56,11 +56,18 @@ public:
      */
     void accum(const float amount);
     /**
-     * @brief Get the Magnitude of the object
+     * @brief Get the Magnitude of the control
      * 
      * @return float 
      */
     float getMagnitude();
+    /**
+     * @brief Check if the Control has a non-zero magnitude
+     * 
+     * @return true 
+     * @return false 
+     */
+    bool isActive();
 
 private:
     float m_magnitude;

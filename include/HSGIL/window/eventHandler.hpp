@@ -96,7 +96,7 @@ public:
      * @param inputControl 
      * @param weight 
      */
-    void addKeyControl(InputCode key, InputControl* inputControl, float weight);
+    void addKeyControl(InputCode key, InputControl& inputControl, float weight);
     /**
      * @brief Function to assign a new mouse control to the Event Handler
      * 
@@ -104,7 +104,7 @@ public:
      * @param inputControl 
      * @param weight 
      */
-    void addMouseControl(InputCode mouseButton, InputControl* inputControl, float weight);
+    void addMouseControl(InputCode mouseButton, InputControl& inputControl, float weight);
 
 private:
     /**
