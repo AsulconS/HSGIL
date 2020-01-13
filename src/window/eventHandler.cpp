@@ -26,7 +26,8 @@
 namespace gil
 {
 EventHandler::EventHandler()
-    : inputMap {}
+    : IEventHandler {},
+      inputMap      {}
 {
 }
 
@@ -59,12 +60,12 @@ void EventHandler::onMouseMove(int32 /*mousePosX*/, int32 /*mousePosY*/, int32 /
     //
 }
 
-void EventHandler::addKeyControl(InputCode key, InputControl& inputControl, float weight)
+void EventHandler::addKeyControl(InputCode key, IInputControl& inputControl, float weight)
 {
     inputMap[key].push_back({&inputControl, weight});
 }
 
-void EventHandler::addMouseControl(InputCode mouseButton, InputControl& inputControl, float weight)
+void EventHandler::addMouseControl(InputCode mouseButton, IInputControl& inputControl, float weight)
 {
     inputMap[mouseButton].push_back({&inputControl, weight});
 }

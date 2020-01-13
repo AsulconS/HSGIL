@@ -9,8 +9,8 @@ int main()
     }
 
     gil::InputControl yRot;
-    gil::InputControl exit;
-    gil::InputControl switcher;
+    gil::InputTrigger exit;
+    gil::InputTrigger switcher;
 
     gil::EventHandler eventHandler01;
     eventHandler01.addKeyControl(gil::KEY_F1, switcher, 1.0f);
@@ -25,7 +25,6 @@ int main()
     eventHandler02.addKeyControl(gil::KEY_Q, exit,  1.0f);
 
     bool ceh {0};
-    bool swt {false};
     window.setEventHandler(eventHandler01);
 
     glm::vec3 position = {0.0f, 0.5f, 2.0f};
@@ -40,30 +39,22 @@ int main()
     while(window.isActive())
     {
         window.pollEvents();
-        if(exit.isActive())
+        if(exit.isTriggered())
         {
             break;
         }
-        if(switcher.isActive())
+        if(switcher.isTriggered())
         {
-            if(!swt)
+            if(!ceh)
             {
-                if(!ceh)
-                {
-                    window.setEventHandler(eventHandler02);
-                    ceh = 1;
-                }
-                else
-                {
-                    window.setEventHandler(eventHandler01);
-                    ceh = 0;
-                }
-                swt = true;
+                window.setEventHandler(eventHandler02);
+                ceh = 1;
             }
-        }
-        else
-        {
-            swt = false;
+            else
+            {
+                window.setEventHandler(eventHandler01);
+                ceh = 0;
+            }
         }
 
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);

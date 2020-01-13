@@ -27,6 +27,22 @@
 namespace gil
 {
 /**
+ * @brief Function that returns the absolute value of an integer
+ * 
+ * @param val 
+ * @return int 
+ */
+int absolute(int val);
+
+/**
+ * @brief Function that returns the absolute value of a float
+ * 
+ * @param val 
+ * @return float 
+ */
+float absolute(float val);
+
+/**
  * @brief Clamping function to limit an integer value between 2 ranges
  * 
  * @param val 

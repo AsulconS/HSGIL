@@ -159,8 +159,10 @@ uint32 loadTexture(const char* path)
     {
         std::cout << "Texture failed to load at: " << path << std::endl;
         stbi_image_free(data);
+        return 0;
     }
 
+    return textureID;
 }
 
 void setupDefaultLights(Shader& shader, const glm::vec3& viewPos)

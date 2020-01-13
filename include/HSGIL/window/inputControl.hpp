@@ -25,17 +25,19 @@
 #define HSGIL_INPUT_CONTROL_HPP
 
 #include <HSGIL/core/common.hpp>
-#include <HSGIL/core/inputBindings.hpp>
 
 #include <HSGIL/math/mUtils.hpp>
+
+#include <HSGIL/window/iInputControl.hpp>
 
 namespace gil
 {
 /**
- * @brief InputControl Class that is just a input controller with a magnitude
- * 
+ * @brief InputControl Class that is an input controller with a magnitude
+ * clamped between -1.0f and 1.0f, its aimed to be some axis or direction
+ * handler (i.e. movement, rotation, physics).
  */
-class InputControl
+class InputControl : public IInputControl
 {
 public:
     /**
@@ -54,23 +56,13 @@ public:
      * 
      * @param amount 
      */
-    void accum(const float amount);
+    virtual void accum(const float amount) override;
     /**
      * @brief Get the Magnitude of the control
      * 
      * @return float 
      */
-    float getMagnitude();
-    /**
-     * @brief Check if the Control has a non-zero magnitude
-     * 
-     * @return true 
-     * @return false 
-     */
-    bool isActive();
-
-private:
-    float m_magnitude;
+    virtual float getMagnitude() override;
 };
 
 } // namespace gil

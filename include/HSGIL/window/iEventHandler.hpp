@@ -30,7 +30,7 @@
 namespace gil
 {
 /**
- * @brief IEventHandler Class that deals with the system events
+ * @brief IEventHandler Interface that deals with the system events
  * 
  */
 class IEventHandler

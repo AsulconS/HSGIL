@@ -21,27 +21,46 @@
  *                                                                              *
  ********************************************************************************/
 
-#include <HSGIL/window/inputControl.hpp>
+#ifndef HSGIL_I_INPUT_CONTROL_HPP
+#define HSGIL_I_INPUT_CONTROL_HPP
 
 namespace gil
 {
-InputControl::InputControl()
-    : IInputControl {}
+/**
+ * @brief IInputControl Interface that is just a input controller with a magnitude
+ * 
+ */
+class IInputControl
 {
-}
+public:
+    /**
+     * @brief Construct a new IInputControl object
+     * 
+     */
+    IInputControl() : m_magnitude {0.0f} {}
+    /**
+     * @brief Destroy the IInputControl object
+     * 
+     */
+    virtual ~IInputControl() {}
 
-InputControl::~InputControl()
-{
-}
+    /**
+     * @brief Adds an amount to its magnitude
+     * 
+     * @param amount 
+     */
+    virtual void accum(const float amount) = 0;
+    /**
+     * @brief Get the Magnitude of the control
+     * 
+     * @return float 
+     */
+    virtual float getMagnitude() = 0;
 
-void InputControl::accum(const float amount)
-{
-    m_magnitude += amount;
-}
-
-float InputControl::getMagnitude()
-{
-    return clamp(m_magnitude, -1.0f, 1.0f);
-}
+protected:
+    float m_magnitude;
+};
 
 } // namespace gil
+
+#endif // HSGIL_I_INPUT_CONTROL_HPP

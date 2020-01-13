@@ -85,7 +85,7 @@ EXTERNAL_DEPENDENCIES = glad.o
 
 CORE_OBJECT_FILES     = $(EXTERNAL_DEPENDENCIES) timer.o
 MATH_OBJECT_FILES     = mUtils.o
-WINDOW_OBJECT_FILES   = window.o windowManager.o eventHandler.o inputControl.o
+WINDOW_OBJECT_FILES   = window.o windowManager.o eventHandler.o inputControl.o inputTrigger.o
 GRAPHICS_OBJECT_FILES = shader.o mesh.o model.o gUtils.o
 
 SHARED_TARG = hsgil-core hsgil-math hsgil-window hsgil-graphics
@@ -206,6 +206,11 @@ eventHandler.o: src/window/eventHandler.cpp
 inputControl.o: src/window/inputControl.cpp
 	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
 	$(VISIBILITY)$(CXX) -c $(CXX_FLAGS) $(INCLUDE_PATH) -fPIC src/window/inputControl.cpp
+	@printf "$(OK_STRING)\n"
+
+inputTrigger.o: src/window/inputTrigger.cpp
+	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
+	$(VISIBILITY)$(CXX) -c $(CXX_FLAGS) $(INCLUDE_PATH) -fPIC src/window/inputTrigger.cpp
 	@printf "$(OK_STRING)\n"
 
 shader.o: src/graphics/shader.cpp

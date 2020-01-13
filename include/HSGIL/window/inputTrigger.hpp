@@ -21,27 +21,61 @@
  *                                                                              *
  ********************************************************************************/
 
-#include <HSGIL/window/inputControl.hpp>
+#ifndef HSGIL_INPUT_TRIGGER_HPP
+#define HSGIL_INPUT_TRIGGER_HPP
+
+#include <HSGIL/core/common.hpp>
+
+#include <HSGIL/window/iInputControl.hpp>
 
 namespace gil
 {
-InputControl::InputControl()
-    : IInputControl {}
+/**
+ * @brief InputTrigger Class that is an input controller that triggers
+ * some accion once when pressed (no repeat) and can't do nothing until
+ * it gets pressed again (i.e. exit key, 'once' keys).
+ * 
+ */
+class InputTrigger : public IInputControl
 {
-}
+public:
+    /**
+     * @brief Construct a new InputTrigger object
+     * 
+     */
+    InputTrigger();
+    /**
+     * @brief Destroy the InputTrigger object
+     * 
+     */
+    virtual ~InputTrigger();
 
-InputControl::~InputControl()
-{
-}
+    /**
+     * @brief Adds an amount to its magnitude
+     * 
+     * @param amount 
+     */
+    virtual void accum(const float amount) override;
+    /**
+     * @brief Get the Magnitude of the control
+     * 
+     * @return float 
+     */
+    virtual float getMagnitude() override;
 
-void InputControl::accum(const float amount)
-{
-    m_magnitude += amount;
-}
+    /**
+     * @brief Checks once if the control has been triggered, then sets its flag to 1
+     * until its ammount makes 0 again
+     * 
+     * @return true 
+     * @return false 
+     */
+    bool isTriggered();
 
-float InputControl::getMagnitude()
-{
-    return clamp(m_magnitude, -1.0f, 1.0f);
-}
+private:
+    bool m_triggered;
+};
 
 } // namespace gil
+
+#endif // HSGIL_INPUT_TRIGGER_HPP

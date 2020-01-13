@@ -21,27 +21,46 @@
  *                                                                              *
  ********************************************************************************/
 
-#include <HSGIL/window/inputControl.hpp>
+#include <HSGIL/window/inputTrigger.hpp>
 
 namespace gil
 {
-InputControl::InputControl()
-    : IInputControl {}
+InputTrigger::InputTrigger()
+    : IInputControl {},
+      m_triggered   {false}
 {
 }
 
-InputControl::~InputControl()
+InputTrigger::~InputTrigger()
 {
 }
 
-void InputControl::accum(const float amount)
+void InputTrigger::accum(const float amount)
 {
     m_magnitude += amount;
 }
 
-float InputControl::getMagnitude()
+float InputTrigger::getMagnitude()
 {
-    return clamp(m_magnitude, -1.0f, 1.0f);
+    if(m_magnitude != 0.0f)
+    {
+        if(!m_triggered)
+        {
+            m_triggered = true;
+            return 1.0f;
+        }
+    }
+    else
+    {
+        m_triggered = false;
+    }
+
+    return 0.0f;
+}
+
+bool InputTrigger::isTriggered()
+{
+    return getMagnitude() == 1.0f;
 }
 
 } // namespace gil

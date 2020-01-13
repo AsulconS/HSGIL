@@ -26,7 +26,7 @@
 
 #include <HSGIL/core/common.hpp>
 #include <HSGIL/window/iEventHandler.hpp>
-#include <HSGIL/window/inputControl.hpp>
+#include <HSGIL/window/iInputControl.hpp>
 
 #include <vector>
 #include <unordered_map>
@@ -96,7 +96,7 @@ public:
      * @param inputControl 
      * @param weight 
      */
-    void addKeyControl(InputCode key, InputControl& inputControl, float weight);
+    void addKeyControl(InputCode key, IInputControl& inputControl, float weight);
     /**
      * @brief Function to assign a new mouse control to the Event Handler
      * 
@@ -104,7 +104,7 @@ public:
      * @param inputControl 
      * @param weight 
      */
-    void addMouseControl(InputCode mouseButton, InputControl& inputControl, float weight);
+    void addMouseControl(InputCode mouseButton, IInputControl& inputControl, float weight);
 
 private:
     /**
@@ -116,7 +116,7 @@ private:
      */
     void updateInput(InputCode inputCode, float dir, bool repeat);
 
-    std::unordered_map<InputCode, std::vector<std::pair<InputControl*, float>>> inputMap;
+    std::unordered_map<InputCode, std::vector<std::pair<IInputControl*, float>>> inputMap;
 };
 
 } // namespace gil

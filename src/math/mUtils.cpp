@@ -25,6 +25,16 @@
 
 namespace gil
 {
+int absolute(int val)
+{
+    return (val < 0) ? -val : val;
+}
+
+float absolute(float val)
+{
+    return (val < 0.0f) ? -val : val;
+}
+
 int clamp(int val, int lBound, int rBound)
 {
     if(val < lBound)
