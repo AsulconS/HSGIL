@@ -34,6 +34,7 @@
 #include <HSGIL/window/wUtils.hpp>
 
 #include <X11/Xlib.h>
+#include <GL/glx.h>
 
 #include <iostream>
 #include <unordered_map>
