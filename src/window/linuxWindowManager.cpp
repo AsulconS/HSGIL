@@ -123,8 +123,8 @@ WindowManager* WindowManager::createInstance()
     if(!s_wmInstanceCount)
     {
         s_display = XOpenDisplay(nullptr);
-        s_screen = DefaultScreen(s_display);
-        s_screenID = DefaultScreenOfDisplay(s_display);
+        s_screen = DefaultScreenOfDisplay(s_display);
+        s_screenID = DefaultScreen(s_display);
 
         s_wmInstances[0u].init(0u);
         ++s_wmInstanceCount;
@@ -172,7 +172,7 @@ void WindowManager::createRenderingWindow(const char* title, int x, int y, int w
         m_windowAttributes.border_pixel = BlackPixel(s_display, s_screenID);
         m_windowAttributes.background_pixel = WhitePixel(s_display, s_screenID);
         m_windowAttributes.override_redirect = true;
-        m_windowAttributes.colormap = XCreateColormap(s_display, RootWindow(s_display, s_screenID), visual->visual, AllocNone);
+        m_windowAttributes.colormap = XCreateColormap(s_display, RootWindow(s_display, s_screenID), m_visual->visual, AllocNone);
         m_windowAttributes.event_mask = ExposureMask;
 
         m_windowHandle = XCreateWindow
@@ -182,8 +182,9 @@ void WindowManager::createRenderingWindow(const char* title, int x, int y, int w
             width, height,
             0, m_visual->depth, InputOutput, m_visual->visual,
             CWBackPixel | CWColormap | CWBorderPixel | CWEventMask,
-            &windowAttribs
+            &m_windowAttributes
         );
+        XStoreName(s_display, m_windowHandle, title);
 
 	    m_atomWmDeleteWindow = XInternAtom(s_display, "WM_DELETE_WINDOW", false);
 	    XSetWMProtocols(s_display, m_windowHandle, &m_atomWmDeleteWindow, 1);
@@ -227,17 +228,12 @@ void WindowManager::pollEvents()
 
 void WindowManager::swapBuffers()
 {
-    SwapBuffers(m_deviceContextHandle);
+    glXSwapBuffers(s_display, m_windowHandle);
 }
 
 WindowManager::WindowManager(const uint32 t_index)
     : m_active                   {false},
-      m_index                    {t_index},
-      m_windowHandle             {nullptr},
-      m_fbConfig                 {nullptr},
-      m_context                  {nullptr},
-      m_visual                   {nullptr},
-      m_windowAttributes         {}
+      m_index                    {t_index}
 {
 }
 
@@ -319,7 +315,7 @@ GLXFBConfig WindowManager::chooseBestFBC()
         }
     }
     GLXFBConfig bestFbConfig = s_fbConfigs[bestFbConfigIndex];
-    XFree(fbConfigs);
+    XFree(s_fbConfigs);
 
     return bestFbConfig;
 }
@@ -340,7 +336,7 @@ void WindowManager::HSGILProc()
     switch(s_event.type)
     {
         case ClientMessage:
-            if (ev.xclient.data.l[0] == s_wmInstances[s_hwndMap[s_event.xany.window]]->m_atomWmDeleteWindow)
+            if (s_event.xclient.data.l[0] == s_wmInstances[s_hwndMap[s_event.xany.window]]->m_atomWmDeleteWindow)
             {
 				break;
 			}

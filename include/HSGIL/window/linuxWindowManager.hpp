@@ -104,6 +104,8 @@ private:
     Window* m_windowCallbackInstance;
     KeyCallbackFunction mf_keyCallbackFunction;
 
+    void createContext();
+
     /* Privated constructor and destructor */
 
     WindowManager(const uint32 t_index);
@@ -131,7 +133,6 @@ private:
 
     static glXCreateContextAttribsARBProc glXCreateContextAttribsARB;
 
-    static void createContext();
     static GLXFBConfig chooseBestFBC();
 
     static void loadGLExtensions();
