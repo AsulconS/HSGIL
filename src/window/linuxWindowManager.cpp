@@ -58,6 +58,66 @@ GLXFBConfig* WindowManager::s_fbConfigs {nullptr};
 
 glXCreateContextAttribsARBProc WindowManager::glXCreateContextAttribsARB {nullptr};
 
+// LazyPointer
+
+WMLazyPtr::WMLazyPtr()
+    : m_wm {nullptr}
+{
+}
+
+WMLazyPtr::~WMLazyPtr()
+{
+    if(m_wm != nullptr)
+    {
+        delete m_wm;
+    }
+}
+
+void WMLazyPtr::init(const uint32 index)
+{
+    if(m_wm == nullptr)
+    {
+        m_wm = new WindowManager(index);
+    }
+}
+
+WindowManager& WMLazyPtr::operator*()
+{
+    return *m_wm;
+}
+
+WindowManager* WMLazyPtr::operator->()
+{
+    return m_wm;
+}
+
+bool WMLazyPtr::operator==(const WMLazyPtr& o)
+{
+    return this->m_wm == o.m_wm;
+}
+
+bool WMLazyPtr::operator!=(const WMLazyPtr& o)
+{
+    return this->m_wm != o.m_wm;
+}
+
+bool WMLazyPtr::operator==(const std::nullptr_t nullPtr)
+{
+    return this->m_wm == nullPtr;
+}
+
+bool WMLazyPtr::operator!=(const std::nullptr_t nullPtr)
+{
+    return this->m_wm != nullPtr;
+}
+
+WMLazyPtr::operator WindowManager*()
+{
+    return m_wm;
+}
+
+// WM
+
 WindowManager* WindowManager::createInstance()
 {
     if(!s_wmInstanceCount)

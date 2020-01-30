@@ -24,6 +24,8 @@
 #ifndef HSGIL_W_UTILS_HPP
 #define HSGIL_W_UTILS_HPP
 
+#include <cstring>
+
 namespace gil
 {
 /**
