@@ -21,25 +21,21 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_WINDOW_MANAGER_HPP
-#define HSGIL_WINDOW_MANAGER_HPP
+#ifndef HSGIL_W_UTILS_HPP
+#define HSGIL_W_UTILS_HPP
 
-#if defined(_WIN32) || (WIN32)
-    #define OS_WINDOWS
-#else
-    #if defined(__unix__) || defined(linux)
-        #define OS_LINUX
-    #endif
-#endif
+namespace gil
+{
+/**
+ * @brief Function that checks if an OpenGL extension is supported
+ * 
+ * @param extList 
+ * @param extension 
+ * @return true 
+ * @return false 
+ */
+bool isExtensionSupported(const char* extList, const char* extension);
 
-#ifdef OS_WINDOWS
-    #include <HSGIL/window/win32WindowManager.hpp>
-#else
-    #ifdef OS_LINUX
-        #include <HSGIL/window/linuxWindowManager.hpp>
-    #else
-        #error HSGIL has no support for this OS
-    #endif
-#endif
+} // namespace gil
 
-#endif // HSGIL_WINDOW_MANAGER_HPP
+#endif // HSGIL_W_UTILS_HPP

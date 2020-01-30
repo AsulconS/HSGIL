@@ -21,25 +21,33 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_WINDOW_MANAGER_HPP
-#define HSGIL_WINDOW_MANAGER_HPP
+#ifndef HSGIL_WINDOW_MANAGER_LAZY_POINTER_HPP
+#define HSGIL_WINDOW_MANAGER_LAZY_POINTER_HPP
 
-#if defined(_WIN32) || (WIN32)
-    #define OS_WINDOWS
-#else
-    #if defined(__unix__) || defined(linux)
-        #define OS_LINUX
-    #endif
-#endif
+namespace gil
+{
+class WindowManager;
 
-#ifdef OS_WINDOWS
-    #include <HSGIL/window/win32WindowManager.hpp>
-#else
-    #ifdef OS_LINUX
-        #include <HSGIL/window/linuxWindowManager.hpp>
-    #else
-        #error HSGIL has no support for this OS
-    #endif
-#endif
+class WMLazyPtr final
+{
+public:
+    WMLazyPtr();
+    ~WMLazyPtr();
 
-#endif // HSGIL_WINDOW_MANAGER_HPP
+    void init(const uint32 t_index);
+
+    WindowManager& operator*();
+    WindowManager* operator->();
+    bool operator==(const WMLazyPtr& o);
+    bool operator!=(const WMLazyPtr& o);
+    bool operator==(const std::nullptr_t nullPtr);
+    bool operator!=(const std::nullptr_t nullPtr);
+    operator WindowManager*();
+
+private:
+    WindowManager* m_wm;
+};
+
+} // namespace gil
+
+#endif // HSGIL_WINDOW_MANAGER_LAZY_POINTER_HPP

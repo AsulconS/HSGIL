@@ -25,6 +25,7 @@
 #define HSGIL_WINDOW_HPP
 
 #include <HSGIL/core/common.hpp>
+#include <HSGIL/core/inputEvents.hpp>
 #include <HSGIL/core/inputBindings.hpp>
 #include <HSGIL/exception/window/windowException.hpp>
 
@@ -109,7 +110,7 @@ private:
      * @brief Key Callback Function
      * 
      */
-    static void keyCallback(Window* window, uint32 action, uint64 key, bool repeat);
+    static void keyCallback(Window* window, InputEvent event, InputCode keyCode, bool repeat);
 
     uint32 m_width;
     uint32 m_height;

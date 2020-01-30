@@ -21,25 +21,64 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_WINDOW_MANAGER_HPP
-#define HSGIL_WINDOW_MANAGER_HPP
+#include <HSGIL/window/WMLazyPtr.hpp>
 
-#if defined(_WIN32) || (WIN32)
-    #define OS_WINDOWS
-#else
-    #if defined(__unix__) || defined(linux)
-        #define OS_LINUX
-    #endif
-#endif
+namespace gil
+{
+WMLazyPtr::WMLazyPtr()
+    : m_wm {nullptr}
+{
+}
 
-#ifdef OS_WINDOWS
-    #include <HSGIL/window/win32WindowManager.hpp>
-#else
-    #ifdef OS_LINUX
-        #include <HSGIL/window/linuxWindowManager.hpp>
-    #else
-        #error HSGIL has no support for this OS
-    #endif
-#endif
+WMLazyPtr::~WMLazyPtr()
+{
+    if(m_wm != nullptr)
+    {
+        delete m_wm;
+    }
+}
 
-#endif // HSGIL_WINDOW_MANAGER_HPP
+void WMLazyPtr::init(const uint32 index)
+{
+    if(m_wm == nullptr)
+    {
+        m_wm = new WindowManager(index);
+    }
+}
+
+WindowManager& WMLazyPtr::operator*()
+{
+    return *m_wm;
+}
+
+WindowManager* WMLazyPtr::operator->()
+{
+    return m_wm;
+}
+
+bool WMLazyPtr::operator==(const WMLazyPtr& o)
+{
+    return this->m_wm == o.m_wm;
+}
+
+bool WMLazyPtr::operator!=(const WMLazyPtr& o)
+{
+    return this->m_wm != o.m_wm;
+}
+
+bool WMLazyPtr::operator==(const std::nullptr_t nullPtr)
+{
+    return this->m_wm == nullPtr;
+}
+
+bool WMLazyPtr::operator!=(const std::nullptr_t nullPtr)
+{
+    return this->m_wm != nullPtr;
+}
+
+WMLazyPtr::operator WindowManager*()
+{
+    return m_wm;
+}
+
+} // namespace gil

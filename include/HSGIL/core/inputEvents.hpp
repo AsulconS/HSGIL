@@ -21,25 +21,17 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_WINDOW_MANAGER_HPP
-#define HSGIL_WINDOW_MANAGER_HPP
+#ifndef HSGIL_INPUT_EVENTS_HPP
+#define HSGIL_INPUT_EVENTS_HPP
 
-#if defined(_WIN32) || (WIN32)
-    #define OS_WINDOWS
-#else
-    #if defined(__unix__) || defined(linux)
-        #define OS_LINUX
-    #endif
-#endif
+namespace gil
+{
+enum InputEvent
+{
+    KEY_RELEASED = 0x0,
+    KEY_PRESSED  = 0x1
+};
 
-#ifdef OS_WINDOWS
-    #include <HSGIL/window/win32WindowManager.hpp>
-#else
-    #ifdef OS_LINUX
-        #include <HSGIL/window/linuxWindowManager.hpp>
-    #else
-        #error HSGIL has no support for this OS
-    #endif
-#endif
+} // namespace gil
 
-#endif // HSGIL_WINDOW_MANAGER_HPP
+#endif // HSGIL_INPUT_EVENTS_HPP

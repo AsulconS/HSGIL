@@ -38,6 +38,8 @@ LIB_STRING     = $(LIB_COLOR)HSGIL - Handy Scalable Graphics Integration Library
 SUCCESS_STRING = $(OK_COLOR)Everything Built Successfully!$(NO_COLOR)
 BUILD_PRINT    = $(BUILD_COLOR)Building $@:$(NO_COLOR)
 
+SAMPLES_STRING = $(LIB_COLOR)Building Samples$(NO_COLOR)
+
 # -----------------------------------------------------------------------------------------
 # -----------------------------------------------------------------------------------------
 
@@ -83,9 +85,16 @@ INCLUDE_PATH = -Iinclude -Iinclude/HSGIL/external
 
 EXTERNAL_DEPENDENCIES = glad.o
 
+OS_DEPENDENT_WINDOW_MANAGER =
+ifeq ($(C_OS), WINDOWS)
+    OS_DEPENDENT_WINDOW_MANAGER = win32WindowManager.o
+else
+    OS_DEPENDENT_WINDOW_MANAGER = linuxWindowManager.o
+endif
+
 CORE_OBJECT_FILES     = $(EXTERNAL_DEPENDENCIES) timer.o
 MATH_OBJECT_FILES     = mUtils.o
-WINDOW_OBJECT_FILES   = window.o windowManager.o eventHandler.o inputControl.o inputTrigger.o
+WINDOW_OBJECT_FILES   = window.o WMLazyPtr.o $(OS_DEPENDENT_WINDOW_MANAGER) eventHandler.o inputControl.o inputTrigger.o
 GRAPHICS_OBJECT_FILES = shader.o mesh.o model.o gUtils.o
 
 SHARED_TARG = hsgil-core hsgil-math hsgil-window hsgil-graphics
@@ -106,8 +115,8 @@ ifeq ($(C_OS), WINDOWS)
     LIBRARY_PATH = -L.
     EXTENSION = dll
 else
-    STATIC_LIBS = -lglfw -lGL -lX11 -lpthread -lXrandr -lXi -ldl
-    LIBRARY_PATH = -Lexternal/bin/linux_x64 -L.
+    STATIC_LIBS = -lX11 -lGL -ldl
+    LIBRARY_PATH = -L.
     EXTENSION = so
 endif
 
@@ -123,13 +132,18 @@ LIBS = $(SHARED_LIBS) $(STATIC_LIBS)
 # Rules -----------------------------------------------------------------------------------
 # -----------------------------------------------------------------------------------------
 
-all: prompt $(SHARED_TARG) tests trash
+all: lprompt $(SHARED_TARG) trash
 	@printf "\n$(SUCCESS_STRING)\n"
+
+samples: tprompt tests trash
+	@printf "\n$(SUCCESS_STRING)\n"
+
+full: all samples
 
 # HSGIL Welcome Prompt and OS
 # -----------------------------------------------------------------------------------------
 
-prompt:
+lprompt:
 	$(LINE_STRING)
 	@printf "\n$(LIB_STRING)\n"
 	$(LINE_STRING)
@@ -140,7 +154,13 @@ prompt:
 # Test Building
 # -----------------------------------------------------------------------------------------
 
-tests: test ball finn
+tprompt:
+	$(LINE_STRING)
+	@printf "\n$(SAMPLES_STRING)\n"
+	$(LINE_STRING)
+	@printf "\n$(OS_STRING)\n\n"
+
+tests: test ball finn simple
 	@printf "$(OK_STRING)\n"
 
 test: test.o
@@ -156,6 +176,11 @@ ball: ball.o
 finn: finn.o
 	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
 	$(VISIBILITY)$(CXX) $(CXX_FLAGS) finn.o $(INCLUDE_PATH) $(LIBRARY_PATH) $(LIBS) -o finn $(CXX_LIBS)
+	@printf "$(OK_STRING)\n"
+
+simple: simple.o
+	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
+	$(VISIBILITY)$(CXX) $(CXX_FLAGS) simple.o $(INCLUDE_PATH) $(LIBRARY_PATH) $(LIBS) -o simple $(CXX_LIBS)
 	@printf "$(OK_STRING)\n"
 
 # -----------------------------------------------------------------------------------------
@@ -178,6 +203,11 @@ finn.o: finn.cpp
 	$(VISIBILITY)$(CXX) -c $(CXX_FLAGS) $(INCLUDE_PATH) finn.cpp
 	@printf "$(OK_STRING)\n"
 
+simple.o: simple.cpp
+	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
+	$(VISIBILITY)$(CXX) -c $(CXX_FLAGS) $(INCLUDE_PATH) simple.cpp
+	@printf "$(OK_STRING)\n"
+
 timer.o: src/core/timer.cpp
 	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
 	$(VISIBILITY)$(CXX) -c $(CXX_FLAGS) $(INCLUDE_PATH) -fPIC src/core/timer.cpp
@@ -193,9 +223,19 @@ window.o: src/window/window.cpp
 	$(VISIBILITY)$(CXX) -c $(CXX_FLAGS) $(INCLUDE_PATH) -fPIC src/window/window.cpp
 	@printf "$(OK_STRING)\n"
 
-windowManager.o: src/window/windowManager.cpp
+WMLazyPtr.o: src/window/WMLazyPtr.cpp
 	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
-	$(VISIBILITY)$(CXX) -c $(CXX_FLAGS) $(INCLUDE_PATH) -fPIC src/window/windowManager.cpp
+	$(VISIBILITY)$(CXX) -c $(CXX_FLAGS) $(INCLUDE_PATH) -fPIC src/window/WMLazyPtr.cpp
+	@printf "$(OK_STRING)\n"
+
+win32WindowManager.o: src/window/win32WindowManager.cpp
+	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
+	$(VISIBILITY)$(CXX) -c $(CXX_FLAGS) $(INCLUDE_PATH) -fPIC src/window/win32WindowManager.cpp
+	@printf "$(OK_STRING)\n"
+
+linuxWindowManager.o: src/window/linuxWindowManager.cpp
+	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
+	$(VISIBILITY)$(CXX) -c $(CXX_FLAGS) $(INCLUDE_PATH) -fPIC src/window/linuxWindowManager.cpp
 	@printf "$(OK_STRING)\n"
 
 eventHandler.o: src/window/eventHandler.cpp

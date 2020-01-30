@@ -99,24 +99,23 @@ void Window::initializeWindow()
     }
 }
 
-void Window::keyCallback(Window* window, uint32 action, uint64 key, bool repeat)
+void Window::keyCallback(Window* window, InputEvent event, InputCode keyCode, bool repeat)
 {
     if(window->m_eventHandler != nullptr)
     {
-        InputCode inputCode {static_cast<InputCode>(key)};
-        switch(action)
+        switch(event)
         {
-            case WM_KEYDOWN:
+            case KEY_PRESSED:
                 {
-                    std::cout << "Pressed Key " << key << " Repeated? " << repeat << '\n';
-                    window->m_eventHandler->onKeyDown(inputCode, repeat);
+                    std::cout << "Pressed Key " << keyCode << " Repeated? " << repeat << '\n';
+                    window->m_eventHandler->onKeyDown(keyCode, repeat);
                 }
                 break;
 
-            case WM_KEYUP:
+            case KEY_RELEASED:
                 {
-                    std::cout << "Released Key " << key << " Repeated? " << repeat << '\n';
-                    window->m_eventHandler->onKeyUp(inputCode, repeat);
+                    std::cout << "Released Key " << keyCode << " Repeated? " << repeat << '\n';
+                    window->m_eventHandler->onKeyUp(keyCode, repeat);
                 }
                 break;
 

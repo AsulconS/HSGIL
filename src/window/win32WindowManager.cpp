@@ -21,7 +21,7 @@
  *                                                                              *
  ********************************************************************************/
 
-#include <HSGIL/window/windowManager.hpp>
+#include <HSGIL/window/win32WindowManager.hpp>
 
 namespace gil
 {
@@ -34,78 +34,34 @@ WNDCLASSEXA WindowManager::s_gldcc {};
 const char  WindowManager::s_gldccName[GLDCC_NAME_SIZE] {"GLDCC"};
 
 PIXELFORMATDESCRIPTOR WindowManager::s_pfd;
+const int WindowManager::s_attribs[ATTRIB_LIST_SIZE]
+{
+    WGL_DRAW_TO_WINDOW_ARB  , GL_TRUE,
+    WGL_SUPPORT_OPENGL_ARB  , GL_TRUE,
+    WGL_DOUBLE_BUFFER_ARB   , GL_TRUE,
+    WGL_ACCELERATION_ARB    , WGL_FULL_ACCELERATION_ARB,
+    WGL_PIXEL_TYPE_ARB      , WGL_TYPE_RGBA_ARB,
+    WGL_COLOR_BITS_ARB      , 32,
+    WGL_DEPTH_BITS_ARB      , 24,
+    WGL_STENCIL_BITS_ARB    , 8,
+    0
+};
 
 MSG WindowManager::s_msg {};
 bool WindowManager::s_repeatFlag {false};
 HINSTANCE WindowManager::s_procInstanceHandle {nullptr};
 
-/* Window Manager Lazy Pointer Stuff */
-
-WMLazyPtr::WMLazyPtr()
-    : m_wm {nullptr}
-{
-}
-
-WMLazyPtr::~WMLazyPtr()
-{
-    if(m_wm != nullptr)
-    {
-        delete m_wm;
-    }
-}
-
-void WMLazyPtr::init(const uint32 index)
-{
-    if(m_wm == nullptr)
-    {
-        m_wm = new WindowManager(index);
-    }
-}
-
-WindowManager& WMLazyPtr::operator*()
-{
-    return *m_wm;
-}
-
-WindowManager* WMLazyPtr::operator->()
-{
-    return m_wm;
-}
-
-bool WMLazyPtr::operator==(const WMLazyPtr& o)
-{
-    return this->m_wm == o.m_wm;
-}
-
-bool WMLazyPtr::operator!=(const WMLazyPtr& o)
-{
-    return this->m_wm != o.m_wm;
-}
-
-bool WMLazyPtr::operator==(const std::nullptr_t nullPtr)
-{
-    return this->m_wm == nullPtr;
-}
-
-bool WMLazyPtr::operator!=(const std::nullptr_t nullPtr)
-{
-    return this->m_wm != nullPtr;
-}
-
-WMLazyPtr::operator WindowManager*()
-{
-    return m_wm;
-}
-
-/* Window Manager Stuff */
+PFNWGLCHOOSEPIXELFORMATARBPROC WindowManager::wglChoosePixelFormatARB {nullptr};
+PFNWGLGETEXTENSIONSSTRINGARBPROC WindowManager::wglGetExtensionsStringARB {nullptr};
+PFNWGLCREATECONTEXTATTRIBSARBPROC WindowManager::wglCreateContextAttribsARB {nullptr};
 
 WindowManager* WindowManager::createInstance()
 {
     if(!s_wmInstanceCount)
     {
         s_procInstanceHandle = GetModuleHandleW(nullptr);
-        initGLPFD();
         registerGLDCC();
+        loadGLExtensions();
 
         s_wmInstances[0u].init(0u);
         ++s_wmInstanceCount;
@@ -208,41 +164,11 @@ WindowManager::~WindowManager()
 {
 }
 
-void WindowManager::initGLPFD()
-{
-    s_pfd.nSize           = sizeof(PIXELFORMATDESCRIPTOR);
-    s_pfd.nVersion        = 1;
-    s_pfd.dwFlags         = PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER;
-    s_pfd.iPixelType      = PFD_TYPE_RGBA;
-    s_pfd.cColorBits      = 32;
-    s_pfd.cRedBits        = 0;
-    s_pfd.cRedShift       = 0;
-    s_pfd.cBlueBits       = 0;
-    s_pfd.cBlueShift      = 0;
-    s_pfd.cGreenBits      = 0;
-    s_pfd.cGreenShift     = 0;
-    s_pfd.cAlphaBits      = 0;
-    s_pfd.cAlphaShift     = 0;
-    s_pfd.cAccumBits      = 0;
-    s_pfd.cAccumRedBits   = 0;
-    s_pfd.cAccumBlueBits  = 0;
-    s_pfd.cAccumGreenBits = 0;
-    s_pfd.cAccumAlphaBits = 0;
-    s_pfd.cDepthBits      = 24;
-    s_pfd.cStencilBits    = 8;
-    s_pfd.cAuxBuffers     = 0;
-    s_pfd.iLayerType      = PFD_MAIN_PLANE;
-    s_pfd.bReserved       = 0;
-    s_pfd.dwLayerMask     = 0;
-    s_pfd.dwVisibleMask   = 0;
-    s_pfd.dwDamageMask    = 0;
-}
-
 void WindowManager::registerGLDCC()
 {
-    s_gldcc.cbSize        = sizeof(WNDCLASSEXW);
-    s_gldcc.style         = CS_OWNDC | CS_VREDRAW | CS_HREDRAW;
-    s_gldcc.lpfnWndProc   = HSGILInputProc;
+    s_gldcc.cbSize        = sizeof(WNDCLASSEXA);
+    s_gldcc.style         = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
+    s_gldcc.lpfnWndProc   = HSGILProc;
     s_gldcc.cbClsExtra    = 0;
     s_gldcc.cbWndExtra    = 0;
     s_gldcc.hInstance     = s_procInstanceHandle;
@@ -253,10 +179,121 @@ void WindowManager::registerGLDCC()
     s_gldcc.lpszClassName = s_gldccName;
     s_gldcc.hIconSm       = nullptr;
 
-    RegisterClassExA(&s_gldcc);
+    if(!RegisterClassExA(&s_gldcc))
+    {
+        fatalError("Failed to register Window.");
+    }
 }
 
-LRESULT CALLBACK WindowManager::HSGILInputProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+void WindowManager::loadGLExtensions()
+{
+    WNDCLASSEXA dWindowClass;
+    dWindowClass.cbSize         = sizeof(WNDCLASSEXA);
+    dWindowClass.style          = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
+    dWindowClass.lpfnWndProc    = DefWindowProcA;
+    dWindowClass.cbClsExtra     = 0;
+    dWindowClass.cbWndExtra     = 0;
+    dWindowClass.hInstance      = s_procInstanceHandle;
+    dWindowClass.hIcon          = nullptr;
+    dWindowClass.hCursor        = nullptr;
+    dWindowClass.hbrBackground  = nullptr;
+    dWindowClass.lpszMenuName   = nullptr;
+    dWindowClass.lpszClassName  = "DWC";
+    dWindowClass.hIconSm        = nullptr;
+
+    if(!RegisterClassExA(&dWindowClass))
+    {
+        fatalError("Failed to register dummy OpenGL window.");
+    }
+
+    HWND dWindow = CreateWindowExA
+    (
+        0L,                         // Extended Window Style
+        dWindowClass.lpszClassName, // Window Class Name
+        "DWC",                      // Window Title
+        0,                          // Window Style
+
+        CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
+
+        nullptr,                // Parent Window Handle
+        nullptr,                // Menu Handle
+        dWindowClass.hInstance, // Handle to current instance
+        nullptr                 // Additional Application Data
+    );
+
+    if(!dWindow)
+    {
+        fatalError("Failed to create dummy OpenGL window.");
+    }
+
+    HDC ddc = GetDC(dWindow);
+
+    PIXELFORMATDESCRIPTOR dpfd;
+    dpfd.nSize           = sizeof(PIXELFORMATDESCRIPTOR);
+    dpfd.nVersion        = 1;
+    dpfd.dwFlags         = PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER;
+    dpfd.iPixelType      = PFD_TYPE_RGBA;
+    dpfd.cColorBits      = 32;
+    dpfd.cRedBits        = 0;
+    dpfd.cRedShift       = 0;
+    dpfd.cBlueBits       = 0;
+    dpfd.cBlueShift      = 0;
+    dpfd.cGreenBits      = 0;
+    dpfd.cGreenShift     = 0;
+    dpfd.cAlphaBits      = 0;
+    dpfd.cAlphaShift     = 0;
+    dpfd.cAccumBits      = 0;
+    dpfd.cAccumRedBits   = 0;
+    dpfd.cAccumBlueBits  = 0;
+    dpfd.cAccumGreenBits = 0;
+    dpfd.cAccumAlphaBits = 0;
+    dpfd.cDepthBits      = 24;
+    dpfd.cStencilBits    = 8;
+    dpfd.cAuxBuffers     = 0;
+    dpfd.iLayerType      = PFD_MAIN_PLANE;
+    dpfd.bReserved       = 0;
+    dpfd.dwLayerMask     = 0;
+    dpfd.dwVisibleMask   = 0;
+    dpfd.dwDamageMask    = 0;
+
+    int dPixelformat = ChoosePixelFormat(ddc, &dpfd);
+    if(!dPixelformat)
+    {
+        fatalError("Failed to find a suitable pixel format.");
+    }
+    if(!SetPixelFormat(ddc, dPixelformat, &dpfd))
+    {
+        fatalError("Failed to set the pixel format.");
+    }
+
+    HGLRC dContext = wglCreateContext(ddc);
+    if(!dContext)
+    {
+        fatalError("Failed to create a dummy OpenGL rendering context.");
+    }
+
+    if(!wglMakeCurrent(ddc, dContext))
+    {
+        fatalError("Failed to activate dummy OpenGL rendering context.");
+    }
+
+    wglChoosePixelFormatARB = (PFNWGLCHOOSEPIXELFORMATARBPROC)wglGetProcAddress("wglChoosePixelFormatARB");
+    wglGetExtensionsStringARB = (PFNWGLGETEXTENSIONSSTRINGARBPROC)wglGetProcAddress("wglGetExtensionsStringARB");
+    wglCreateContextAttribsARB = (PFNWGLCREATECONTEXTATTRIBSARBPROC)wglGetProcAddress("wglCreateContextAttribsARB");
+
+    wglMakeCurrent(ddc, nullptr);
+    wglDeleteContext(dContext);
+    ReleaseDC(dWindow, ddc);
+    DestroyWindow(dWindow);
+}
+
+void WindowManager::fatalError(const char* msg)
+{
+    MessageBoxA(nullptr, msg, "Fatal Error", MB_OK | MB_ICONERROR);
+    exit(EXIT_FAILURE);
+}
+
+LRESULT CALLBACK WindowManager::HSGILProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     switch(uMsg)
     {
@@ -265,12 +302,25 @@ LRESULT CALLBACK WindowManager::HSGILInputProc(HWND hWnd, UINT uMsg, WPARAM wPar
                 WindowManager* windowInstance = s_wmInstances[s_hwndMap[hWnd]];
                 HDC& hdc = windowInstance->m_deviceContextHandle;
                 hdc = GetDC(hWnd);
-                int format = ChoosePixelFormat(hdc, &s_pfd);
-                SetPixelFormat(hdc, format, &s_pfd);
 
-                HGLRC& hglrc = windowInstance->m_glRenderingContextHandle;
-                hglrc = wglCreateContext(hdc);
-                wglMakeCurrent(hdc, hglrc);
+                int pixelFormat;
+                uint32 numFormats;
+                wglChoosePixelFormatARB(hdc, s_attribs, nullptr, 1, &pixelFormat, &numFormats);
+
+                DescribePixelFormat(hdc, pixelFormat, sizeof(s_pfd), &s_pfd);
+                SetPixelFormat(hdc, pixelFormat, &s_pfd);
+
+                int glContextAttribs[] =
+                {
+                    WGL_CONTEXT_MAJOR_VERSION_ARB, 3,
+                    WGL_CONTEXT_MINOR_VERSION_ARB, 3,
+                    WGL_CONTEXT_PROFILE_MASK_ARB,  WGL_CONTEXT_CORE_PROFILE_BIT_ARB,
+                    0
+                };
+
+                HGLRC& glContext = windowInstance->m_glRenderingContextHandle;
+                glContext = wglCreateContextAttribsARB(hdc, 0, glContextAttribs);
+                wglMakeCurrent(hdc, glContext);
 
                 gladLoadGL();
                 MessageBoxA(0, (char*)glGetString(GL_VERSION), "OpenGL Version", 0);
@@ -301,14 +351,14 @@ LRESULT CALLBACK WindowManager::HSGILInputProc(HWND hWnd, UINT uMsg, WPARAM wPar
             {
                 s_repeatFlag = (lParam & 0x40000000) != 0;
                 WindowManager* windowInstance = s_wmInstances[s_hwndMap[hWnd]];
-                windowInstance->mf_keyCallbackFunction(windowInstance->m_windowCallbackInstance, WM_KEYDOWN, wParam, s_repeatFlag);
+                windowInstance->mf_keyCallbackFunction(windowInstance->m_windowCallbackInstance, KEY_PRESSED, static_cast<InputCode>(wParam), s_repeatFlag);
             }
             break;
 
         case WM_KEYUP:
             {
                 WindowManager* windowInstance = s_wmInstances[s_hwndMap[hWnd]];
-                windowInstance->mf_keyCallbackFunction(windowInstance->m_windowCallbackInstance, WM_KEYUP, wParam, false);
+                windowInstance->mf_keyCallbackFunction(windowInstance->m_windowCallbackInstance, KEY_RELEASED, static_cast<InputCode>(wParam), false);
             }
             break;
 

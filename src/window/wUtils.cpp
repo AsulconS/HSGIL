@@ -21,25 +21,46 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_WINDOW_MANAGER_HPP
-#define HSGIL_WINDOW_MANAGER_HPP
+#include <HSGIL/window/wUtils.hpp>
 
-#if defined(_WIN32) || (WIN32)
-    #define OS_WINDOWS
-#else
-    #if defined(__unix__) || defined(linux)
-        #define OS_LINUX
-    #endif
-#endif
+namespace gil
+{
+bool isExtensionSupported(const char* extList, const char* extension)
+{
+	const char* start;
+	const char* where;
+    const char* terminator;
 
-#ifdef OS_WINDOWS
-    #include <HSGIL/window/win32WindowManager.hpp>
-#else
-    #ifdef OS_LINUX
-        #include <HSGIL/window/linuxWindowManager.hpp>
-    #else
-        #error HSGIL has no support for this OS
-    #endif
-#endif
+	where = strchr(extension, ' ');
+	if (where || *extension == '\0')
+    {
+	    return false;
+    }
 
-#endif // HSGIL_WINDOW_MANAGER_HPP
+    start = extList;
+	while(true)
+    {
+	    where = strstr(start, extension);
+
+	    if(!where)
+        {
+	 	    break;
+        }
+
+        terminator = where + strlen(extension);
+
+        if(where == start || *(where - 1) == ' ')
+        {
+            if(*terminator == ' ' || *terminator == '\0' )
+            {
+                return true;
+            }
+	    }
+
+	    start = terminator;
+	}
+
+	return false;
+}
+
+} // namepace gil
