@@ -2,19 +2,19 @@
 # Colors and Styles For Highlighted Commands ----------------------------------------------
 # -----------------------------------------------------------------------------------------
 
-NO_COLOR    = \x1b[0m
-ERROR_COLOR = \x1b[1;31m
-OK_COLOR    = \x1b[1;32m
-WARN_COLOR  = \x1b[1;33m
-MODE_COLOR  = \x1b[0;33m
-BUILD_COLOR = \x1b[0;34m
-OS_COLOR    = \x1b[0;35m
-LIB_COLOR   = \x1b[0;36m
+NO_COLOR    = \e[0m
+ERROR_COLOR = \e[1;31m
+OK_COLOR    = \e[1;32m
+WARN_COLOR  = \e[1;33m
+MODE_COLOR  = \e[0;33m
+BUILD_COLOR = \e[0;34m
+OS_COLOR    = \e[0;35m
+LIB_COLOR   = \e[0;36m
 
 LINE_STRING  = @for _ in {0..63}; do printf "-"; done
 
 VISIBILITY    = @
-SKIP_TO_RIGHT = \x1b[A\x1b[31C
+SKIP_TO_RIGHT = \e[A\e[31C
 OK_STRING     = $(OK_COLOR)$(SKIP_TO_RIGHT)[OK]$(NO_COLOR)
 ERROR_STRING  = $(ERROR_COLOR)$(SKIP_TO_RIGHT)[ERRORS]$(NO_COLOR)
 WARN_STRING   = $(WARN_COLOR)$(SKIP_TO_RIGHT)[WARNINGS]$(NO_COLOR)
