@@ -3,7 +3,7 @@ other/misc
 doc
 
 *.dll
-*.so
+*.a
 *.o
 
 *.exe
