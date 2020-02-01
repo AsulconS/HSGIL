@@ -390,7 +390,7 @@ LRESULT CALLBACK WindowManager::HSGILProc(HWND hWnd, UINT uMsg, WPARAM wParam, L
 
                 gladLoadGL();
 
-                wglSwapIntervalEXT(0);
+                wglSwapIntervalEXT(1);
 
                 MessageBoxA(0, (char*)glGetString(GL_VERSION), "OpenGL Version", 0);
                 MessageBoxA(0, (char*)glGetString(GL_SHADING_LANGUAGE_VERSION), "GLSL Version", 0);
