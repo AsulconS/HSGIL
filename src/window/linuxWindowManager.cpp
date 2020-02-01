@@ -56,7 +56,12 @@ bool WindowManager::s_repeatFlag {false};
 int WindowManager::s_fbCount {0};
 GLXFBConfig* WindowManager::s_fbConfigs {nullptr};
 
+bool WindowManager::s_vSyncCompat {true};
+bool WindowManager::s_attribCtxCompat {true};
+
 glXCreateContextAttribsARBProc WindowManager::glXCreateContextAttribsARB {nullptr};
+
+glXSwapIntervalProc WindowManager::glXSwapInterval {nullptr};
 
 // Lazy Pointer Stuff
 
@@ -125,6 +130,8 @@ WindowManager* WindowManager::createInstance()
         s_display = XOpenDisplay(nullptr);
         s_screen = DefaultScreenOfDisplay(s_display);
         s_screenID = DefaultScreen(s_display);
+
+        loadGLExtensions();
 
         s_wmInstances[0u].init(0u);
         ++s_wmInstanceCount;
@@ -243,11 +250,6 @@ WindowManager::~WindowManager()
 
 void WindowManager::createContext()
 {
-    if(glXCreateContextAttribsARB == nullptr)
-    {
-        glXCreateContextAttribsARB = (glXCreateContextAttribsARBProc)glXGetProcAddressARB((const GLubyte*)"glXCreateContextAttribsARB");
-    }
-
     int contextAttribs[] =
     {
         GLX_CONTEXT_MAJOR_VERSION_ARB, 3,
@@ -256,28 +258,73 @@ void WindowManager::createContext()
 		None
 	};
 
-	const char* glxExtensions = glXQueryExtensionsString(s_display, s_screenID);
-	if(!isExtensionSupported(glxExtensions, "GLX_ARB_create_context"))
+    if(s_attribCtxCompat)
     {
-		std::cout << "GLX_ARB_create_context not supported\n";
-		m_context = glXCreateNewContext(s_display, m_fbConfig, GLX_RGBA_TYPE, 0, true);
-	}
-	else
+        m_context = glXCreateContextAttribsARB(s_display, m_fbConfig, 0, true, contextAttribs);
+    }
+    else
     {
-		m_context = glXCreateContextAttribsARB(s_display, m_fbConfig, 0, true, contextAttribs);
-	}
+        m_context = glXCreateNewContext(s_display, m_fbConfig, GLX_RGBA_TYPE, 0, true);
+    }
 	XSync(s_display, false);
 
 	if(!glXIsDirect(s_display, m_context))
     {
-		std::cout << "Indirect GLX rendering context obtained\n";
+		std::cout << "Indirect GLX rendering context obtained\n\n";
 	}
 	else
     {
-		std::cout << "Direct GLX rendering context obtained\n";
+		std::cout << "Direct GLX rendering context obtained\n\n";
 	}
 	glXMakeCurrent(s_display, m_windowHandle, m_context);
+
     gladLoadGL();
+
+    glXSwapInterval(1);
+}
+
+void WindowManager::loadGLExtensions()
+{
+    const char* glxExtensions = glXQueryExtensionsString(s_display, s_screenID);
+    std::cout << "\nGLX Extensions Available:\n" << glxExtensions << "\n\n";
+
+    if(!isExtensionSupported(glxExtensions, "GLX_ARB_create_context"))
+    {
+        s_attribCtxCompat = false;
+		std::cout << "GLX_ARB_create_context not supported\n\n";
+	}
+	else
+    {
+        glXCreateContextAttribsARB = (glXCreateContextAttribsARBProc)glXGetProcAddressARB((const GLubyte*)"glXCreateContextAttribsARB");
+	}
+
+    if(!isExtensionSupported(glxExtensions, "GLX_EXT_swap_control"))
+    {
+        if(!isExtensionSupported(glxExtensions, "GLX_SGI_swap_control"))
+        {
+            if(!isExtensionSupported(glxExtensions, "GLX_MESA_swap_control"))
+            {
+                s_vSyncCompat = false;
+                glXSwapInterval = defaultSwapIntervalProc;
+                std::cout << "Swap Control not supported\n\n";
+            }
+            else
+            {
+                glXSwapInterval = (glXSwapIntervalProc)glXGetProcAddressARB((const GLubyte*)"glXSwapIntervalMESA");
+                std::cout << "MESA Swap Control supported\n\n";
+            }
+        }
+        else
+        {
+            glXSwapInterval = (glXSwapIntervalProc)glXGetProcAddressARB((const GLubyte*)"glXSwapIntervalSGI");
+            std::cout << "SGI Swap Control supported\n\n";
+        }
+	}
+	else
+    {
+        glXSwapInterval = (glXSwapIntervalProc)glXGetProcAddressARB((const GLubyte*)"glXSwapIntervalEXT");
+        std::cout << "EXT Swap Control supported\n\n";
+	}
 }
 
 GLXFBConfig WindowManager::chooseBestFBC()
@@ -319,6 +366,11 @@ GLXFBConfig WindowManager::chooseBestFBC()
     XFree(s_fbConfigs);
 
     return bestFbConfig;
+}
+
+int WindowManager::defaultSwapIntervalProc(int interval)
+{
+    return 0;
 }
 
 void WindowManager::fatalError(const char* msg)

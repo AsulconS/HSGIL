@@ -71,6 +71,7 @@ private:
 
 typedef void (*KeyCallbackFunction)(Window*, InputEvent, InputCode, bool);
 typedef GLXContext (*glXCreateContextAttribsARBProc)(Display*, GLXFBConfig, GLXContext, bool, const int*);
+typedef int (*glXSwapIntervalProc)(int);
 
 class WindowManager final
 {
@@ -131,9 +132,16 @@ private:
     static int s_fbCount;
     static GLXFBConfig* s_fbConfigs;
 
+    static bool s_vSyncCompat;
+    static bool s_attribCtxCompat;
+
     static glXCreateContextAttribsARBProc glXCreateContextAttribsARB;
 
+    static glXSwapIntervalProc glXSwapInterval;
+
+    static void loadGLExtensions();
     static GLXFBConfig chooseBestFBC();
+    static int defaultSwapIntervalProc(int interval);
 
     static void fatalError(const char* msg);
 
