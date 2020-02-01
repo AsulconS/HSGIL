@@ -55,7 +55,7 @@ PFNWGLCHOOSEPIXELFORMATARBPROC WindowManager::wglChoosePixelFormatARB {nullptr};
 PFNWGLGETEXTENSIONSSTRINGARBPROC WindowManager::wglGetExtensionsStringARB {nullptr};
 PFNWGLCREATECONTEXTATTRIBSARBPROC WindowManager::wglCreateContextAttribsARB {nullptr};
 
-// LazyPointer
+// Lazy Pointer Stuff
 
 WMLazyPtr::WMLazyPtr()
     : m_wm {nullptr}
@@ -113,7 +113,7 @@ WMLazyPtr::operator WindowManager*()
     return m_wm;
 }
 
-// WM
+// Window Manager Stuff
 
 WindowManager* WindowManager::createInstance()
 {
