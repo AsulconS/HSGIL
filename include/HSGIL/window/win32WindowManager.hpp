@@ -127,6 +127,9 @@ private:
     static PFNWGLGETEXTENSIONSSTRINGARBPROC wglGetExtensionsStringARB;
     static PFNWGLCREATECONTEXTATTRIBSARBPROC wglCreateContextAttribsARB;
 
+    static PFNWGLSWAPINTERVALEXTPROC wglSwapIntervalEXT;
+    static PFNWGLGETSWAPINTERVALEXTPROC wglGetSwapIntervalEXT;
+
     static LRESULT CALLBACK HSGILProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
     /* Deleted Constructors and assignment */

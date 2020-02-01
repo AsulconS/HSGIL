@@ -55,6 +55,9 @@ PFNWGLCHOOSEPIXELFORMATARBPROC WindowManager::wglChoosePixelFormatARB {nullptr};
 PFNWGLGETEXTENSIONSSTRINGARBPROC WindowManager::wglGetExtensionsStringARB {nullptr};
 PFNWGLCREATECONTEXTATTRIBSARBPROC WindowManager::wglCreateContextAttribsARB {nullptr};
 
+PFNWGLSWAPINTERVALEXTPROC WindowManager::wglSwapIntervalEXT {nullptr};
+PFNWGLGETSWAPINTERVALEXTPROC WindowManager::wglGetSwapIntervalEXT {nullptr};
+
 // Lazy Pointer Stuff
 
 WMLazyPtr::WMLazyPtr()
@@ -341,6 +344,9 @@ void WindowManager::loadGLExtensions()
     wglGetExtensionsStringARB = (PFNWGLGETEXTENSIONSSTRINGARBPROC)wglGetProcAddress("wglGetExtensionsStringARB");
     wglCreateContextAttribsARB = (PFNWGLCREATECONTEXTATTRIBSARBPROC)wglGetProcAddress("wglCreateContextAttribsARB");
 
+    wglSwapIntervalEXT = (PFNWGLSWAPINTERVALEXTPROC)wglGetProcAddress("wglSwapIntervalEXT");
+    wglGetSwapIntervalEXT = (PFNWGLGETSWAPINTERVALEXTPROC)wglGetProcAddress("wglGetSwapIntervalEXT");
+
     wglMakeCurrent(ddc, nullptr);
     wglDeleteContext(dContext);
     ReleaseDC(dWindow, ddc);
@@ -383,6 +389,9 @@ LRESULT CALLBACK WindowManager::HSGILProc(HWND hWnd, UINT uMsg, WPARAM wParam, L
                 wglMakeCurrent(hdc, glContext);
 
                 gladLoadGL();
+
+                wglSwapIntervalEXT(0);
+
                 MessageBoxA(0, (char*)glGetString(GL_VERSION), "OpenGL Version", 0);
                 MessageBoxA(0, (char*)glGetString(GL_SHADING_LANGUAGE_VERSION), "GLSL Version", 0);
             }
