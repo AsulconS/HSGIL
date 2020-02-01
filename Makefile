@@ -11,7 +11,7 @@ BUILD_COLOR = \e[0;34m
 OS_COLOR    = \e[0;35m
 LIB_COLOR   = \e[0;36m
 
-LINE_STRING  = @for _ in {0..63}; do printf "-"; done
+LINE_STRING  = @for _ in {0..63..1}; do printf "-"; done
 
 VISIBILITY    = @
 SKIP_TO_RIGHT = \e[A\e[31C
@@ -104,11 +104,10 @@ GRAPHICS_OBJECT_FILES = shader.o mesh.o model.o gUtils.o
 
 ifeq ($(C_OS), WINDOWS)
     LIB_TARG = win32_hsgil-core win32_hsgil-math win32_hsgil-window win32_hsgil-graphics
-    LIB_ARGS = -lhsgil-core -lhsgil-math -lhsgil-window -lhsgil-graphics
 else
     LIB_TARG = linux_hsgil-core linux_hsgil-math linux_hsgil-window linux_hsgil-graphics
-    LIB_ARGS = -L -lhsgil-core -L -lhsgil-math -L -lhsgil-window -L -lhsgil-graphics
 endif
+LIB_ARGS = -lhsgil-core -lhsgil-math -lhsgil-window -lhsgil-graphics
 
 # -----------------------------------------------------------------------------------------
 # -----------------------------------------------------------------------------------------
@@ -128,8 +127,17 @@ ifeq ($(C_OS), WINDOWS)
 else
     STATIC_LIBS = -lX11 -lGL -ldl
     LIBRARY_PATH =
-    B_FPIC =
-    EXTENSION = a
+    B_FPIC = -fPIC
+    EXTENSION = so
+
+    DISTRO = $(shell lsb_release -si)
+    ifeq ($(DISTRO), Ubuntu)
+        LIB_DIR_LINK = /usr/lib/x86_64-linux-gnu
+    else
+        ifeq ($(DISTRO), ManjaroLinux)
+            LIB_DIR_LINK = /usr/lib
+        endif
+	endif
 endif
 
 LIBS = $(LIB_ARGS) $(STATIC_LIBS)
@@ -292,22 +300,22 @@ gUtils.o: src/graphics/gUtils.cpp
 
 win32_hsgil-core: $(CORE_OBJECT_FILES)
 	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
-	$(VISIBILITY)$(CXX) -shared $(CXX_FLAGS) $(CORE_OBJECT_FILES) $(INCLUDE_PATH) -o hsgil-core.$(EXTENSION) $(CXX_LIBS)
+	$(VISIBILITY)$(CXX) -shared $(CXX_FLAGS) $(CORE_OBJECT_FILES) -o hsgil-core.$(EXTENSION) $(CXX_LIBS)
 	@printf "$(OK_STRING)\n"
 
 win32_hsgil-math: $(MATH_OBJECT_FILES)
 	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
-	$(VISIBILITY)$(CXX) -shared $(CXX_FLAGS) $(MATH_OBJECT_FILES) $(INCLUDE_PATH) $(LIBRARY_PATH) -lhsgil-core $(STATIC_LIBS) -o hsgil-math.$(EXTENSION) $(CXX_LIBS)
+	$(VISIBILITY)$(CXX) -shared $(CXX_FLAGS) $(MATH_OBJECT_FILES) $(LIBRARY_PATH) -lhsgil-core $(STATIC_LIBS) -o hsgil-math.$(EXTENSION) $(CXX_LIBS)
 	@printf "$(OK_STRING)\n"
 
 win32_hsgil-window: $(WINDOW_OBJECT_FILES)
 	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
-	$(VISIBILITY)$(CXX) -shared $(CXX_FLAGS) $(WINDOW_OBJECT_FILES) $(INCLUDE_PATH) $(LIBRARY_PATH) -lhsgil-core -lhsgil-math $(STATIC_LIBS) -o hsgil-window.$(EXTENSION) $(CXX_LIBS)
+	$(VISIBILITY)$(CXX) -shared $(CXX_FLAGS) $(WINDOW_OBJECT_FILES) $(LIBRARY_PATH) -lhsgil-core -lhsgil-math $(STATIC_LIBS) -o hsgil-window.$(EXTENSION) $(CXX_LIBS)
 	@printf "$(OK_STRING)\n"
 
 win32_hsgil-graphics: $(GRAPHICS_OBJECT_FILES)
 	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
-	$(VISIBILITY)$(CXX) -shared $(CXX_FLAGS) $(GRAPHICS_OBJECT_FILES) $(INCLUDE_PATH) $(LIBRARY_PATH) -lhsgil-core -lhsgil-math $(STATIC_LIBS) -o hsgil-graphics.$(EXTENSION) $(CXX_LIBS)
+	$(VISIBILITY)$(CXX) -shared $(CXX_FLAGS) $(GRAPHICS_OBJECT_FILES) $(LIBRARY_PATH) -lhsgil-core -lhsgil-math $(STATIC_LIBS) -o hsgil-graphics.$(EXTENSION) $(CXX_LIBS)
 	@printf "$(OK_STRING)\n"
 
 # Static Files
@@ -315,22 +323,34 @@ win32_hsgil-graphics: $(GRAPHICS_OBJECT_FILES)
 
 linux_hsgil-core: $(CORE_OBJECT_FILES)
 	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
-	$(VISIBILITY)$(AR) cr hsgil-core.$(EXTENSION) $(CORE_OBJECT_FILES)
+	$(VISIBILITY)$(CXX) -shared $(CXX_FLAGS) -Wl,-soname,libhsgil-core.so.1 $(CORE_OBJECT_FILES) -o libhsgil-core.so.1.0
+	@cp libhsgil-core.so.1.0 $(LIB_DIR_LINK)
+	@ln -sf $(LIB_DIR_LINK)/libhsgil-core.so.1.0 $(LIB_DIR_LINK)/libhsgil-core.so.1
+	@ln -sf $(LIB_DIR_LINK)/libhsgil-core.so.1.0 $(LIB_DIR_LINK)/libhsgil-core.so
 	@printf "$(OK_STRING)\n"
 
 linux_hsgil-math: $(MATH_OBJECT_FILES)
 	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
-	$(VISIBILITY)$(AR) cr hsgil-math.$(EXTENSION) $(MATH_OBJECT_FILES)
+	$(VISIBILITY)$(CXX) -shared $(CXX_FLAGS) -Wl,-soname,libhsgil-math.so.1 $(MATH_OBJECT_FILES) -lhsgil-core -o libhsgil-math.so.1.0
+	@cp libhsgil-math.so.1.0 $(LIB_DIR_LINK)
+	@ln -sf $(LIB_DIR_LINK)/libhsgil-math.so.1.0 $(LIB_DIR_LINK)/libhsgil-math.so.1
+	@ln -sf $(LIB_DIR_LINK)/libhsgil-math.so.1.0 $(LIB_DIR_LINK)/libhsgil-math.so
 	@printf "$(OK_STRING)\n"
 
 linux_hsgil-window: $(WINDOW_OBJECT_FILES)
 	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
-	$(VISIBILITY)$(AR) cr hsgil-window.$(EXTENSION) $(WINDOW_OBJECT_FILES)
+	$(VISIBILITY)$(CXX) -shared $(CXX_FLAGS) -Wl,-soname,libhsgil-window.so.1 $(WINDOW_OBJECT_FILES) -lhsgil-core -lhsgil-math -o libhsgil-window.so.1.0
+	@cp libhsgil-window.so.1.0 $(LIB_DIR_LINK)
+	@ln -sf $(LIB_DIR_LINK)/libhsgil-window.so.1.0 $(LIB_DIR_LINK)/libhsgil-window.so.1
+	@ln -sf $(LIB_DIR_LINK)/libhsgil-window.so.1.0 $(LIB_DIR_LINK)/libhsgil-window.so
 	@printf "$(OK_STRING)\n"
 
 linux_hsgil-graphics: $(GRAPHICS_OBJECT_FILES)
 	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
-	$(VISIBILITY)$(AR) cr hsgil-graphics.$(EXTENSION) $(GRAPHICS_OBJECT_FILES)
+	$(VISIBILITY)$(CXX) -shared $(CXX_FLAGS) -Wl,-soname,libhsgil-graphics.so.1 $(GRAPHICS_OBJECT_FILES) -lhsgil-core -lhsgil-math -o libhsgil-graphics.so.1.0
+	@cp libhsgil-graphics.so.1.0 $(LIB_DIR_LINK)
+	@ln -sf $(LIB_DIR_LINK)/libhsgil-graphics.so.1.0 $(LIB_DIR_LINK)/libhsgil-graphics.so.1
+	@ln -sf $(LIB_DIR_LINK)/libhsgil-graphics.so.1.0 $(LIB_DIR_LINK)/libhsgil-graphics.so
 	@printf "$(OK_STRING)\n"
 
 # -----------------------------------------------------------------------------------------
@@ -352,7 +372,7 @@ trash:
 	@rm -rf *.o
 
 clean:
-	@rm -rf *.dll *.a *.o *.exe
+	@rm -rf *.dll *.so.1.0 *.o *.exe
 
 # -----------------------------------------------------------------------------------------
 
