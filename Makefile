@@ -348,7 +348,7 @@ win32_hsgil-graphics: $(GRAPHICS_OBJECT_FILES)
 linux_hsgil-core: $(CORE_OBJECT_FILES)
 	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
 	$(VISIBILITY)$(CXX) -shared $(CXX_FLAGS) -Wl,-soname,libhsgil-core.so.1 $(CORE_OBJECT_FILES) -o libhsgil-core.so.1.0
-	@cp libhsgil-core.so.1.0 $(LIB_DIR_LINK)
+	@mv libhsgil-core.so.1.0 $(LIB_DIR_LINK)
 	@ln -sf $(LIB_DIR_LINK)/libhsgil-core.so.1.0 $(LIB_DIR_LINK)/libhsgil-core.so.1
 	@ln -sf $(LIB_DIR_LINK)/libhsgil-core.so.1.0 $(LIB_DIR_LINK)/libhsgil-core.so
 	@printf "$(OK_STRING)\n"
@@ -356,7 +356,7 @@ linux_hsgil-core: $(CORE_OBJECT_FILES)
 linux_hsgil-math: $(MATH_OBJECT_FILES)
 	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
 	$(VISIBILITY)$(CXX) -shared $(CXX_FLAGS) -Wl,-soname,libhsgil-math.so.1 $(MATH_OBJECT_FILES) -lhsgil-core -o libhsgil-math.so.1.0
-	@cp libhsgil-math.so.1.0 $(LIB_DIR_LINK)
+	@mv libhsgil-math.so.1.0 $(LIB_DIR_LINK)
 	@ln -sf $(LIB_DIR_LINK)/libhsgil-math.so.1.0 $(LIB_DIR_LINK)/libhsgil-math.so.1
 	@ln -sf $(LIB_DIR_LINK)/libhsgil-math.so.1.0 $(LIB_DIR_LINK)/libhsgil-math.so
 	@printf "$(OK_STRING)\n"
@@ -364,7 +364,7 @@ linux_hsgil-math: $(MATH_OBJECT_FILES)
 linux_hsgil-window: $(WINDOW_OBJECT_FILES)
 	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
 	$(VISIBILITY)$(CXX) -shared $(CXX_FLAGS) -Wl,-soname,libhsgil-window.so.1 $(WINDOW_OBJECT_FILES) -lhsgil-core -lhsgil-math -o libhsgil-window.so.1.0
-	@cp libhsgil-window.so.1.0 $(LIB_DIR_LINK)
+	@mv libhsgil-window.so.1.0 $(LIB_DIR_LINK)
 	@ln -sf $(LIB_DIR_LINK)/libhsgil-window.so.1.0 $(LIB_DIR_LINK)/libhsgil-window.so.1
 	@ln -sf $(LIB_DIR_LINK)/libhsgil-window.so.1.0 $(LIB_DIR_LINK)/libhsgil-window.so
 	@printf "$(OK_STRING)\n"
@@ -372,7 +372,7 @@ linux_hsgil-window: $(WINDOW_OBJECT_FILES)
 linux_hsgil-graphics: $(GRAPHICS_OBJECT_FILES)
 	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
 	$(VISIBILITY)$(CXX) -shared $(CXX_FLAGS) -Wl,-soname,libhsgil-graphics.so.1 $(GRAPHICS_OBJECT_FILES) -lhsgil-core -lhsgil-math -o libhsgil-graphics.so.1.0
-	@cp libhsgil-graphics.so.1.0 $(LIB_DIR_LINK)
+	@mv libhsgil-graphics.so.1.0 $(LIB_DIR_LINK)
 	@ln -sf $(LIB_DIR_LINK)/libhsgil-graphics.so.1.0 $(LIB_DIR_LINK)/libhsgil-graphics.so.1
 	@ln -sf $(LIB_DIR_LINK)/libhsgil-graphics.so.1.0 $(LIB_DIR_LINK)/libhsgil-graphics.so
 	@printf "$(OK_STRING)\n"

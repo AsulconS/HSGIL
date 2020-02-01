@@ -58,7 +58,7 @@ GLXFBConfig* WindowManager::s_fbConfigs {nullptr};
 
 glXCreateContextAttribsARBProc WindowManager::glXCreateContextAttribsARB {nullptr};
 
-// LazyPointer
+// Lazy Pointer Stuff
 
 WMLazyPtr::WMLazyPtr()
     : m_wm {nullptr}
@@ -116,7 +116,7 @@ WMLazyPtr::operator WindowManager*()
     return m_wm;
 }
 
-// WM
+// Window Manager Stuff
 
 WindowManager* WindowManager::createInstance()
 {
@@ -277,6 +277,7 @@ void WindowManager::createContext()
 		std::cout << "Direct GLX rendering context obtained\n";
 	}
 	glXMakeCurrent(s_display, m_windowHandle, m_context);
+    gladLoadGL();
 }
 
 GLXFBConfig WindowManager::chooseBestFBC()
@@ -320,10 +321,6 @@ GLXFBConfig WindowManager::chooseBestFBC()
     return bestFbConfig;
 }
 
-void WindowManager::loadGLExtensions()
-{
-}
-
 void WindowManager::fatalError(const char* msg)
 {
     std::cerr << "Fatal Error: " << msg << std::endl;
@@ -336,7 +333,7 @@ void WindowManager::HSGILProc()
     switch(s_event.type)
     {
         case ClientMessage:
-            if (s_event.xclient.data.l[0] == s_wmInstances[s_hwndMap[s_event.xany.window]]->m_atomWmDeleteWindow)
+            if(s_event.xclient.data.l[0] == s_wmInstances[s_hwndMap[s_event.xany.window]]->m_atomWmDeleteWindow)
             {
 				break;
 			}

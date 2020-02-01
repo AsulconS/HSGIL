@@ -135,7 +135,6 @@ private:
 
     static GLXFBConfig chooseBestFBC();
 
-    static void loadGLExtensions();
     static void fatalError(const char* msg);
 
     static void HSGILProc();
