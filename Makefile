@@ -28,12 +28,14 @@ endif
 # -----------------------------------------------------------------------------------------
 ifeq ($(OS), Windows_NT)
     C_OS = WINDOWS
+    OS_STRING = $(OS_COLOR)[WINDOWS]$(NO_COLOR)
 else
     C_OS = LINUX
+    DISTRO = $(shell lsb_release -si)
+    OS_STRING = $(OS_COLOR)[LINUX][$(DISTRO)]$(NO_COLOR)
 endif
 # -----------------------------------------------------------------------------------------
 
-OS_STRING      = $(OS_COLOR)[$(C_OS)]$(NO_COLOR)
 LIB_STRING     = $(LIB_COLOR)HSGIL - Handy Scalable Graphics Integration Library$(NO_COLOR)
 SUCCESS_STRING = $(OK_COLOR)Everything Built Successfully!$(NO_COLOR)
 BUILD_PRINT    = $(BUILD_COLOR)Building $@:$(NO_COLOR)
@@ -130,7 +132,6 @@ else
     B_FPIC = -fPIC
     EXTENSION = so
 
-    DISTRO = $(shell lsb_release -si)
     ifeq ($(DISTRO), Ubuntu)
         LIB_DIR_LINK = /usr/lib/x86_64-linux-gnu
     else
