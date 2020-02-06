@@ -141,7 +141,6 @@ private:
 
     static void loadGLExtensions();
     static GLXFBConfig chooseBestFBC();
-    static int defaultSwapIntervalProc(int interval);
 
     static void fatalError(const char* msg);
 

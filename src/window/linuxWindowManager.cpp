@@ -280,7 +280,10 @@ void WindowManager::createContext()
 
     gladLoadGL();
 
-    glXSwapInterval(1);
+    if(s_vSyncCompat)
+    {
+        glXSwapInterval(1);
+    }
 }
 
 void WindowManager::loadGLExtensions()
@@ -305,7 +308,6 @@ void WindowManager::loadGLExtensions()
             if(!isExtensionSupported(glxExtensions, "GLX_MESA_swap_control"))
             {
                 s_vSyncCompat = false;
-                glXSwapInterval = defaultSwapIntervalProc;
                 std::cout << "Swap Control not supported\n\n";
             }
             else
@@ -366,11 +368,6 @@ GLXFBConfig WindowManager::chooseBestFBC()
     XFree(s_fbConfigs);
 
     return bestFbConfig;
-}
-
-int WindowManager::defaultSwapIntervalProc(int interval)
-{
-    return 0;
 }
 
 void WindowManager::fatalError(const char* msg)

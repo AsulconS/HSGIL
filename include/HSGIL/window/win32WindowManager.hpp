@@ -31,6 +31,8 @@
 #include <HSGIL/core/inputBindings.hpp>
 #include <HSGIL/math/mUtils.hpp>
 
+#include <HSGIL/window/wUtils.hpp>
+
 #include <windows.h>
 #include <GL/wglext.h>
 
@@ -119,8 +121,13 @@ private:
     static bool s_repeatFlag;
     static HINSTANCE s_procInstanceHandle;
 
+    static bool s_vSyncCompat;
+    static bool s_attribCtxCompat;
+    static bool s_pixelFormatCompat;
+
     static void registerGLDCC();
     static void loadGLExtensions();
+    static void warning(const char* msg);
     static void fatalError(const char* msg);
 
     static PFNWGLCHOOSEPIXELFORMATARBPROC wglChoosePixelFormatARB;

@@ -51,6 +51,10 @@ MSG WindowManager::s_msg {};
 bool WindowManager::s_repeatFlag {false};
 HINSTANCE WindowManager::s_procInstanceHandle {nullptr};
 
+bool WindowManager::s_vSyncCompat {true};
+bool WindowManager::s_attribCtxCompat {true};
+bool WindowManager::s_pixelFormatCompat {true};
+
 PFNWGLCHOOSEPIXELFORMATARBPROC WindowManager::wglChoosePixelFormatARB {nullptr};
 PFNWGLGETEXTENSIONSSTRINGARBPROC WindowManager::wglGetExtensionsStringARB {nullptr};
 PFNWGLCREATECONTEXTATTRIBSARBPROC WindowManager::wglCreateContextAttribsARB {nullptr};
@@ -340,17 +344,50 @@ void WindowManager::loadGLExtensions()
         fatalError("Failed to activate dummy OpenGL rendering context.");
     }
 
-    wglChoosePixelFormatARB = (PFNWGLCHOOSEPIXELFORMATARBPROC)wglGetProcAddress("wglChoosePixelFormatARB");
     wglGetExtensionsStringARB = (PFNWGLGETEXTENSIONSSTRINGARBPROC)wglGetProcAddress("wglGetExtensionsStringARB");
-    wglCreateContextAttribsARB = (PFNWGLCREATECONTEXTATTRIBSARBPROC)wglGetProcAddress("wglCreateContextAttribsARB");
+    const char* wglExtensions = wglGetExtensionsStringARB(ddc);
 
-    wglSwapIntervalEXT = (PFNWGLSWAPINTERVALEXTPROC)wglGetProcAddress("wglSwapIntervalEXT");
-    wglGetSwapIntervalEXT = (PFNWGLGETSWAPINTERVALEXTPROC)wglGetProcAddress("wglGetSwapIntervalEXT");
+    if(!isExtensionSupported(wglExtensions, "WGL_ARB_create_context"))
+    {
+        s_attribCtxCompat = false;
+        warning("WGL_ARB_create_context not supported.");
+    }
+    else
+    {
+        wglCreateContextAttribsARB = (PFNWGLCREATECONTEXTATTRIBSARBPROC)wglGetProcAddress("wglCreateContextAttribsARB");
+    }
+
+    if(!isExtensionSupported(wglExtensions, "WGL_ARB_pixel_format"))
+    {
+        s_pfd = dpfd;
+        s_pixelFormatCompat = false;
+        warning("WGL_ARB_pixel_format not supported.");
+    }
+    else
+    {
+        wglChoosePixelFormatARB = (PFNWGLCHOOSEPIXELFORMATARBPROC)wglGetProcAddress("wglChoosePixelFormatARB");
+    }
+
+    if(!isExtensionSupported(wglExtensions, "WGL_EXT_swap_control"))
+    {
+        s_vSyncCompat = false;
+        warning("WGL_EXT_swap_control not supported (V-Sync not supported).");
+    }
+    else
+    {
+        wglSwapIntervalEXT = (PFNWGLSWAPINTERVALEXTPROC)wglGetProcAddress("wglSwapIntervalEXT");
+        wglGetSwapIntervalEXT = (PFNWGLGETSWAPINTERVALEXTPROC)wglGetProcAddress("wglGetSwapIntervalEXT");
+    }
 
     wglMakeCurrent(ddc, nullptr);
     wglDeleteContext(dContext);
     ReleaseDC(dWindow, ddc);
     DestroyWindow(dWindow);
+}
+
+void WindowManager::warning(const char* msg)
+{
+    MessageBoxA(nullptr, msg, "Warning", MB_OK | MB_ICONWARNING);
 }
 
 void WindowManager::fatalError(const char* msg)
@@ -370,27 +407,46 @@ LRESULT CALLBACK WindowManager::HSGILProc(HWND hWnd, UINT uMsg, WPARAM wParam, L
                 hdc = GetDC(hWnd);
 
                 int pixelFormat;
-                uint32 numFormats;
-                wglChoosePixelFormatARB(hdc, s_attribs, nullptr, 1, &pixelFormat, &numFormats);
 
-                DescribePixelFormat(hdc, pixelFormat, sizeof(s_pfd), &s_pfd);
+                if(s_pixelFormatCompat)
+                {
+                    uint32 numFormats;
+                    wglChoosePixelFormatARB(hdc, s_attribs, nullptr, 1, &pixelFormat, &numFormats);
+                    DescribePixelFormat(hdc, pixelFormat, sizeof(s_pfd), &s_pfd);
+                }
+                else
+                {
+                    pixelFormat = ChoosePixelFormat(hdc, &s_pfd);
+                }
+
                 SetPixelFormat(hdc, pixelFormat, &s_pfd);
 
-                int glContextAttribs[] =
-                {
-                    WGL_CONTEXT_MAJOR_VERSION_ARB, 3,
-                    WGL_CONTEXT_MINOR_VERSION_ARB, 3,
-                    WGL_CONTEXT_PROFILE_MASK_ARB,  WGL_CONTEXT_CORE_PROFILE_BIT_ARB,
-                    0
-                };
-
                 HGLRC& glContext = windowInstance->m_glRenderingContextHandle;
-                glContext = wglCreateContextAttribsARB(hdc, 0, glContextAttribs);
+
+                if(s_attribCtxCompat)
+                {
+                    int glContextAttribs[] =
+                    {
+                        WGL_CONTEXT_MAJOR_VERSION_ARB, 3,
+                        WGL_CONTEXT_MINOR_VERSION_ARB, 3,
+                        WGL_CONTEXT_PROFILE_MASK_ARB,  WGL_CONTEXT_CORE_PROFILE_BIT_ARB,
+                        0
+                    };
+
+                    glContext = wglCreateContextAttribsARB(hdc, 0, glContextAttribs);
+                }
+                else
+                {
+                    glContext = wglCreateContext(hdc);
+                }
                 wglMakeCurrent(hdc, glContext);
 
                 gladLoadGL();
 
-                wglSwapIntervalEXT(1);
+                if(s_vSyncCompat)
+                {
+                    wglSwapIntervalEXT(1);
+                }
 
                 MessageBoxA(0, (char*)glGetString(GL_VERSION), "OpenGL Version", 0);
                 MessageBoxA(0, (char*)glGetString(GL_SHADING_LANGUAGE_VERSION), "GLSL Version", 0);
