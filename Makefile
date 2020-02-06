@@ -155,6 +155,7 @@ else
     B_FPIC = -fPIC
     EXTENSION = so
 
+    LIB_DIR_LINK = /usr/lib
     ifeq ($(DISTRO), Ubuntu)
         LIB_DIR_LINK = /usr/lib/x86_64-linux-gnu
     else
