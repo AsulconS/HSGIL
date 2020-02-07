@@ -458,6 +458,7 @@ LRESULT CALLBACK WindowManager::HSGILProc(HWND hWnd, UINT uMsg, WPARAM wParam, L
                 WindowManager* windowInstance = s_wmInstances[s_hwndMap[hWnd]];
                 --s_activeSessions;
                 windowInstance->m_active = false;
+                wglMakeCurrent(windowInstance->m_deviceContextHandle, nullptr);
                 wglDeleteContext(windowInstance->m_glRenderingContextHandle);
                 if(!s_activeSessions)
                 {
