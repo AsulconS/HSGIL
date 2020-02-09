@@ -59,9 +59,9 @@ GLXFBConfig* WindowManager::s_fbConfigs {nullptr};
 bool WindowManager::s_vSyncCompat {true};
 bool WindowManager::s_attribCtxCompat {true};
 
-glXCreateContextAttribsARBProc WindowManager::glXCreateContextAttribsARB {nullptr};
+PFNGLXCREATECONTEXTATTRIBSARBPROC WindowManager::glXCreateContextAttribsARB {nullptr};
 
-glXSwapIntervalProc WindowManager::glXSwapInterval {nullptr};
+PFNGLXSWAPINTERVALPROC WindowManager::glXSwapInterval {nullptr};
 
 // Lazy Pointer Stuff
 
@@ -166,6 +166,23 @@ WindowManager* WindowManager::getInstance(const uint32 index)
 
 bool WindowManager::isActive()
 {
+    if(m_shouldClose)
+    {
+        glXDestroyContext(s_display, m_context);
+
+        XFree(m_visual);
+        XFreeColormap(s_display, m_windowAttributes.colormap);
+        XDestroyWindow(s_display, m_windowHandle);
+
+        --s_activeSessions;
+        m_active = false;
+        m_shouldClose = false;
+
+        if(!s_activeSessions)
+        {
+            XCloseDisplay(s_display);
+        }
+    }
     return m_active;
 }
 
@@ -211,10 +228,7 @@ void WindowManager::destroyRenderingWindow()
 {
     if(m_active)
     {
-        XFree(m_visual);
-	    XFreeColormap(s_display, m_windowAttributes.colormap);
-	    XDestroyWindow(s_display, m_windowHandle);
-        m_active = false;
+        m_shouldClose = true;
     }
 }
 
@@ -239,8 +253,9 @@ void WindowManager::swapBuffers()
 }
 
 WindowManager::WindowManager(const uint32 t_index)
-    : m_active                   {false},
-      m_index                    {t_index}
+    : m_active      {false},
+      m_shouldClose {false},
+      m_index       {t_index}
 {
 }
 
@@ -298,7 +313,7 @@ void WindowManager::loadGLExtensions()
 	}
 	else
     {
-        glXCreateContextAttribsARB = (glXCreateContextAttribsARBProc)glXGetProcAddressARB((const GLubyte*)"glXCreateContextAttribsARB");
+        glXCreateContextAttribsARB = (PFNGLXCREATECONTEXTATTRIBSARBPROC)glXGetProcAddressARB((const GLubyte*)"glXCreateContextAttribsARB");
 	}
 
     if(!isExtensionSupported(glxExtensions, "GLX_EXT_swap_control"))
@@ -312,19 +327,19 @@ void WindowManager::loadGLExtensions()
             }
             else
             {
-                glXSwapInterval = (glXSwapIntervalProc)glXGetProcAddressARB((const GLubyte*)"glXSwapIntervalMESA");
+                glXSwapInterval = (PFNGLXSWAPINTERVALPROC)glXGetProcAddressARB((const GLubyte*)"glXSwapIntervalMESA");
                 std::cout << "MESA Swap Control supported\n\n";
             }
         }
         else
         {
-            glXSwapInterval = (glXSwapIntervalProc)glXGetProcAddressARB((const GLubyte*)"glXSwapIntervalSGI");
+            glXSwapInterval = (PFNGLXSWAPINTERVALPROC)glXGetProcAddressARB((const GLubyte*)"glXSwapIntervalSGI");
             std::cout << "SGI Swap Control supported\n\n";
         }
 	}
 	else
     {
-        glXSwapInterval = (glXSwapIntervalProc)glXGetProcAddressARB((const GLubyte*)"glXSwapIntervalEXT");
+        glXSwapInterval = (PFNGLXSWAPINTERVALPROC)glXGetProcAddressARB((const GLubyte*)"glXSwapIntervalEXT");
         std::cout << "EXT Swap Control supported\n\n";
 	}
 }
@@ -382,12 +397,20 @@ void WindowManager::HSGILProc()
     switch(s_event.type)
     {
         case ClientMessage:
-            if(s_event.xclient.data.l[0] == s_wmInstances[s_hwndMap[s_event.xany.window]]->m_atomWmDeleteWindow)
             {
-				break;
-			}
+                WindowManager* windowInstance = s_wmInstances[s_hwndMap[s_event.xany.window]];
+                if(s_event.xclient.data.l[0] == windowInstance->m_atomWmDeleteWindow)
+                {
+                    windowInstance->destroyRenderingWindow();
+                }
+            }
+            break;
 
         case DestroyNotify:
+            {
+                WindowManager* windowInstance = s_wmInstances[s_hwndMap[s_event.xany.window]];
+                windowInstance->destroyRenderingWindow();
+            }
             break;
 
         default:

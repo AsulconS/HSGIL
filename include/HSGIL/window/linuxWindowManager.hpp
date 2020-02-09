@@ -35,6 +35,7 @@
 
 #include <X11/Xlib.h>
 #include <GL/glx.h>
+#include <GL/glxext.h>
 
 #include <iostream>
 #include <unordered_map>
@@ -70,8 +71,7 @@ private:
 };
 
 typedef void (*KeyCallbackFunction)(Window*, InputEvent, InputCode, bool);
-typedef GLXContext (*glXCreateContextAttribsARBProc)(Display*, GLXFBConfig, GLXContext, bool, const int*);
-typedef int (*glXSwapIntervalProc)(int);
+typedef int (*PFNGLXSWAPINTERVALPROC)(int);
 
 class WindowManager final
 {
@@ -91,6 +91,7 @@ public:
 
 private:
     bool m_active;
+    bool m_shouldClose;
 
     uint32 m_index;
     XWindow m_windowHandle;
@@ -135,9 +136,9 @@ private:
     static bool s_vSyncCompat;
     static bool s_attribCtxCompat;
 
-    static glXCreateContextAttribsARBProc glXCreateContextAttribsARB;
+    static PFNGLXCREATECONTEXTATTRIBSARBPROC glXCreateContextAttribsARB;
 
-    static glXSwapIntervalProc glXSwapInterval;
+    static PFNGLXSWAPINTERVALPROC glXSwapInterval;
 
     static void loadGLExtensions();
     static GLXFBConfig chooseBestFBC();
