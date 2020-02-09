@@ -27,8 +27,8 @@
 #include <HSGIL/external/glad/glad.h>
 
 #include <HSGIL/core/common.hpp>
-#include <HSGIL/core/inputEvents.hpp>
-#include <HSGIL/core/inputBindings.hpp>
+#include <HSGIL/window/inputEvents.hpp>
+#include <HSGIL/window/inputBindings.hpp>
 #include <HSGIL/math/mUtils.hpp>
 
 #include <HSGIL/window/wUtils.hpp>

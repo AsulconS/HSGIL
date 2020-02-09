@@ -413,6 +413,20 @@ void WindowManager::HSGILProc()
             }
             break;
 
+        case KeyPress:
+            {
+                WindowManager* windowInstance = s_wmInstances[s_hwndMap[s_event.xany.window]];
+                windowInstance->mf_keyCallbackFunction(windowInstance->m_windowCallbackInstance, KEY_PRESSED, static_cast<InputCode>(s_event.xkey.keycode), s_repeatFlag);
+            }
+            break;
+
+        case KeyRelease:
+            {
+                WindowManager* windowInstance = s_wmInstances[s_hwndMap[s_event.xany.window]];
+                windowInstance->mf_keyCallbackFunction(windowInstance->m_windowCallbackInstance, KEY_RELEASED, static_cast<InputCode>(s_event.xkey.keycode), false);
+            }
+            break;
+
         default:
             break;
     }

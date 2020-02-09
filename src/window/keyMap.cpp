@@ -21,71 +21,25 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_I_EVENT_HANDLER_HPP
-#define HSGIL_I_EVENT_HANDLER_HPP
-
-#include <HSGIL/core/common.hpp>
 #include <HSGIL/window/inputBindings.hpp>
 
 namespace gil
 {
-/**
- * @brief IEventHandler Interface that deals with the system events
- * 
- */
-class IEventHandler
+const std::unordered_map<unsigned int, InputCode> lKeyMap
 {
-public:
-    /**
-     * @brief Construct a new IEventHandler object
-     * 
-     */
-    IEventHandler() {}
-    /**
-     * @brief Destroy the IEventHandler object
-     * 
-     */
-    virtual ~IEventHandler() {}
+    { XK_BackSpace  , KEY_BACKSPACE  },
+    { XK_Tab        , KEY_TAB        },
+    { XK_Clear      , KEY_CLEAR      },
+    { XK_Return     , KEY_ENTER      },
+    { XK_Pause      , KEY_PAUSE      },
+    { XK_Scroll_Lock, KEY_SCROLLLOCK },
+};
 
-    /**
-     * @brief Function called when a key is pressed
-     * 
-     * @param key 
-     * @param repeat 
-     */
-    virtual void onKeyDown(InputCode key, bool repeat) = 0;
-    /**
-     * @brief Function called when a key is released
-     * 
-     * @param key 
-     * @param repeat 
-     */
-    virtual void onKeyUp(InputCode key, bool repeat) = 0;
-    /**
-     * @brief Function called when a mouse button is pressed
-     * 
-     * @param mouseButton 
-     * @param numClicks 
-     */
-    virtual void onMouseDown(InputCode mouseButton, uint8 numClicks) = 0;
-    /**
-     * @brief Function called when a mouse button is released
-     * 
-     * @param mouseButton 
-     * @param numClicks 
-     */
-    virtual void onMouseUp(InputCode mouseButton, uint8 numClicks) = 0;
-    /**
-     * @brief Function called when mouse is moved
-     * 
-     * @param mousePosX 
-     * @param mousePosY 
-     * @param deltaX 
-     * @param deltaY 
-     */
-    virtual void onMouseMove(int32 mousePosX, int32 mousePosY, int32 deltaX, int32 deltaY) = 0;
+const std::unordered_map<unsigned int, InputCode> wKeyMap
+{
+    {},
+    {},
+    {}
 };
 
 } // namespace gil
-
-#endif // HSGIL_I_EVENT_HANDLER_HPP

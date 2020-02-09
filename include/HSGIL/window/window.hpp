@@ -25,10 +25,10 @@
 #define HSGIL_WINDOW_HPP
 
 #include <HSGIL/core/common.hpp>
-#include <HSGIL/core/inputEvents.hpp>
-#include <HSGIL/core/inputBindings.hpp>
 #include <HSGIL/exception/window/windowException.hpp>
 
+#include <HSGIL/window/inputEvents.hpp>
+#include <HSGIL/window/inputBindings.hpp>
 #include <HSGIL/window/windowManager.hpp>
 #include <HSGIL/window/iEventHandler.hpp>
 
