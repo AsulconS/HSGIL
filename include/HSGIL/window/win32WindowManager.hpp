@@ -109,7 +109,6 @@ private:
     static WMLazyPtr s_wmInstances[MAX_WINDOW_INSTANCES];
 
     static std::unordered_map<HWND, uint32> s_hwndMap;
-    static std::unordered_map<int, InputCode> s_keyMap;
 
     /* Satatic Win32 API Internal Data */
 

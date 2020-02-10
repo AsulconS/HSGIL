@@ -38,9 +38,11 @@
 #include <GL/glx.h>
 #include <GL/glxext.h>
 
+#include <cstring>
 #include <iostream>
 #include <unordered_map>
 
+#define KEY_CODES_SIZE 256
 #define ATTRIB_LIST_SIZE 23u
 #define MAX_WINDOW_INSTANCES 16u
 
@@ -121,13 +123,18 @@ private:
     static WMLazyPtr s_wmInstances[MAX_WINDOW_INSTANCES];
 
     static std::unordered_map<XWND, uint32> s_hwndMap;
-    static std::unordered_map<int, InputCode> s_keyMap;
 
-    /* Satatic Win32 API Internal Data */
+    /* Static Internal Data */
 
     static const int s_glxAttribs[ATTRIB_LIST_SIZE];
 
+    static int s_keyCodesMap[256];
+
+    static Time s_lastKeyRelTime;
+    static Time s_lastKeyPressTime;
+
     static XEvent s_event;
+    static XkbDescPtr s_kbDesc;
     static Display* s_display;
     static Screen*  s_screen;
     static int s_screenID;
@@ -143,6 +150,7 @@ private:
 
     static PFNGLXSWAPINTERVALPROC glXSwapInterval;
 
+    static void loadKeyboardMap();
     static void loadGLExtensions();
     static GLXFBConfig chooseBestFBC();
 

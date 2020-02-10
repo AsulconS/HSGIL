@@ -108,6 +108,8 @@ enum InputCode
     KEY_Y = 0x59,
     KEY_Z = 0x5A,
 
+    KEY_LESS_GREATER_THAN = 0x3C,
+
     KEY_LEFT_WINDOWS  = 0x5B,
     KEY_RIGHT_WINDOWS = 0x5C,
     KEY_APPS          = 0x5D,
