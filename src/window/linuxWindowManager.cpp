@@ -28,7 +28,9 @@ namespace gil
 uint32 WindowManager::s_activeSessions  {0u};
 uint32 WindowManager::s_wmInstanceCount {0u};
 WMLazyPtr WindowManager::s_wmInstances[MAX_WINDOW_INSTANCES] {};
-std::unordered_map<XWindow, uint32> WindowManager::s_hwndMap {};
+
+std::unordered_map<XWND, uint32> WindowManager::s_hwndMap {};
+std::unordered_map<int, InputCode> WindowManager::s_keyMap {};
 
 const int WindowManager::s_glxAttribs[ATTRIB_LIST_SIZE]
 {

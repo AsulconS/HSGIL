@@ -28,7 +28,9 @@ namespace gil
 uint32 WindowManager::s_activeSessions  {0u};
 uint32 WindowManager::s_wmInstanceCount {0u};
 WMLazyPtr WindowManager::s_wmInstances[MAX_WINDOW_INSTANCES] {};
+
 std::unordered_map<HWND, uint32> WindowManager::s_hwndMap {};
+std::unordered_map<int, InputCode> WindowManager::s_keyMap {};
 
 WNDCLASSEXA WindowManager::s_gldcc {};
 const char  WindowManager::s_gldccName[GLDCC_NAME_SIZE] {"GLDCC"};

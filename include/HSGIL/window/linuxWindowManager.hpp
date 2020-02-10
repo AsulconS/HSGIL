@@ -34,6 +34,7 @@
 #include <HSGIL/window/wUtils.hpp>
 
 #include <X11/Xlib.h>
+#include <X11/XKBlib.h>
 #include <GL/glx.h>
 #include <GL/glxext.h>
 
@@ -43,7 +44,7 @@
 #define ATTRIB_LIST_SIZE 23u
 #define MAX_WINDOW_INSTANCES 16u
 
-typedef XID XWindow;
+typedef XID XWND;
 
 namespace gil
 {
@@ -94,7 +95,7 @@ private:
     bool m_shouldClose;
 
     uint32 m_index;
-    XWindow m_windowHandle;
+    XWND m_windowHandle;
     Atom m_atomWmDeleteWindow;
 
     GLXFBConfig m_fbConfig;
@@ -118,7 +119,9 @@ private:
     static uint32 s_activeSessions;
     static uint32 s_wmInstanceCount;
     static WMLazyPtr s_wmInstances[MAX_WINDOW_INSTANCES];
-    static std::unordered_map<XWindow, uint32> s_hwndMap;
+
+    static std::unordered_map<XWND, uint32> s_hwndMap;
+    static std::unordered_map<int, InputCode> s_keyMap;
 
     /* Satatic Win32 API Internal Data */
 

@@ -124,7 +124,7 @@ endif
 
 CORE_OBJECT_FILES     = $(EXTERNAL_DEPENDENCIES) timer.o
 MATH_OBJECT_FILES     = mUtils.o
-WINDOW_OBJECT_FILES   = window.o $(OS_DEPENDENT_WINDOW_MANAGER) keyMap.o eventHandler.o inputControl.o inputTrigger.o wUtils.o
+WINDOW_OBJECT_FILES   = window.o $(OS_DEPENDENT_WINDOW_MANAGER) eventHandler.o inputControl.o inputTrigger.o wUtils.o
 GRAPHICS_OBJECT_FILES = shader.o mesh.o model.o gUtils.o
 
 ifeq ($(C_OS), WINDOWS)
@@ -276,11 +276,6 @@ win32WindowManager.o: src/window/win32WindowManager.cpp
 linuxWindowManager.o: src/window/linuxWindowManager.cpp
 	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
 	$(VISIBILITY)$(CXX) -c $(CXX_FLAGS) $(INCLUDE_PATH) $(B_FPIC) src/window/linuxWindowManager.cpp
-	@printf "$(OK_STRING)\n"
-
-keyMap.o: src/window/keyMap.cpp
-	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
-	$(VISIBILITY)$(CXX) -c $(CXX_FLAGS) $(INCLUDE_PATH) $(B_FPIC) src/window/keyMap.cpp
 	@printf "$(OK_STRING)\n"
 
 eventHandler.o: src/window/eventHandler.cpp

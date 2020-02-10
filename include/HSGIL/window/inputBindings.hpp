@@ -24,11 +24,6 @@
 #ifndef HSGIL_INPUT_BINDINGS_HPP
 #define HSGIL_INPUT_BINDINGS_HPP
 
-#include <unordered_map>
-
-#include <X11/keysym.h>
-#include <X11/keysymdef.h>
-
 namespace gil
 {
 enum InputCode
@@ -211,9 +206,6 @@ enum InputCode
 
     UNKNOWN_INPUT_CODE = 0xFF
 };
-
-extern const std::unordered_map<unsigned int, InputCode> lKeyMap;
-extern const std::unordered_map<unsigned int, InputCode> wKeyMap;
 
 } // namespace gil
 
