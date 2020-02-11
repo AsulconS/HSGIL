@@ -35,6 +35,9 @@
 
 #include <X11/Xlib.h>
 #include <X11/XKBlib.h>
+#include <X11/keysym.h>
+#include <X11/keysymdef.h>
+
 #include <GL/glx.h>
 #include <GL/glxext.h>
 
@@ -42,7 +45,7 @@
 #include <iostream>
 #include <unordered_map>
 
-#define KEY_CODES_SIZE 256
+#define NUM_KEYS_SIZE 256
 #define ATTRIB_LIST_SIZE 23u
 #define MAX_WINDOW_INSTANCES 16u
 
@@ -128,17 +131,14 @@ private:
 
     static const int s_glxAttribs[ATTRIB_LIST_SIZE];
 
-    static int s_keyCodesMap[256];
-
-    static Time s_lastKeyRelTime;
-    static Time s_lastKeyPressTime;
+    static int s_keyCodesMap[NUM_KEYS_SIZE];
+    static int s_keysPhysicState[NUM_KEYS_SIZE];
 
     static XEvent s_event;
     static XkbDescPtr s_kbDesc;
     static Display* s_display;
     static Screen*  s_screen;
     static int s_screenID;
-    static bool s_repeatFlag;
 
     static int s_fbCount;
     static GLXFBConfig* s_fbConfigs;
@@ -151,6 +151,8 @@ private:
     static PFNGLXSWAPINTERVALPROC glXSwapInterval;
 
     static void loadKeyboardMap();
+    static int rawToStandard(int rawCode);
+
     static void loadGLExtensions();
     static GLXFBConfig chooseBestFBC();
 

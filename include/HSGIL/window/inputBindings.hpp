@@ -108,8 +108,6 @@ enum InputCode
     KEY_Y = 0x59,
     KEY_Z = 0x5A,
 
-    KEY_LESS_GREATER_THAN = 0x3C,
-
     KEY_LEFT_WINDOWS  = 0x5B,
     KEY_RIGHT_WINDOWS = 0x5C,
     KEY_APPS          = 0x5D,
@@ -160,8 +158,8 @@ enum InputCode
     KEY_F23 = 0x86,
     KEY_F24 = 0x87,
 
-    KEY_NUMLOCK    = 0x90,
-    KEY_SCROLLLOCK = 0x91,
+    KEY_NUM_LOCK    = 0x90,
+    KEY_SCROLL_LOCK = 0x91,
 
     KEY_LEFT_SHIFT    = 0xA0,
     KEY_RIGHT_SHIFT   = 0xA1,
@@ -170,6 +168,9 @@ enum InputCode
 
     KEY_LEFT_MENU  = 0xA4,
     KEY_RIGHT_MENU = 0xA5,
+
+/*
+    Not available yet
 
     KEY_BROWSER_BACK      = 0xA6,
     KEY_BROWSER_FORWARD   = 0xA7,
@@ -192,6 +193,7 @@ enum InputCode
     KEY_LAUNCH_MEDIA_SELECT = 0xB5,
     KEY_LAUNCH_APP_1        = 0xB6,
     KEY_LAUNCH_APP_2        = 0xB7,
+*/
 
     KEY_SEMICOLON     = 0xBA,
     KEY_EQUAL         = 0xBB,
@@ -205,6 +207,25 @@ enum InputCode
     KEY_BACKSLASH     = 0xDC,
     KEY_RIGHT_BRACKET = 0xDD,
     KEY_APOSTROPHE    = 0xDE,
+
+// Free from 0x3A to 0x40
+
+    KEY_LESS_GREATER_THAN = 0x3A,
+
+    KEY_LEFT_ALT = 0x3B,
+    KEY_RIGHT_ALT = 0x3C,
+
+    KEY_NUMPAD_ENTER = 0x3D,
+    KEY_NUMPAD_EQUAL = 0x3E,
+
+// --------------------------------
+
+// Aliases
+
+    KEY_RETURN = KEY_ENTER,
+    KEY_MENU   = KEY_APPS,
+
+// --------------------------------
 
     UNKNOWN_INPUT_CODE = 0xFF
 };

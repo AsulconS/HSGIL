@@ -47,18 +47,14 @@ const int WindowManager::s_glxAttribs[ATTRIB_LIST_SIZE]
     0
 };
 
-int WindowManager::s_keyCodesMap[KEY_CODES_SIZE] {};
-
-Time WindowManager::s_lastKeyRelTime {};
-Time WindowManager::s_lastKeyPressTime {};
+int WindowManager::s_keyCodesMap[NUM_KEYS_SIZE] {};
+int WindowManager::s_keysPhysicState[NUM_KEYS_SIZE] {};
 
 XEvent WindowManager::s_event {};
 XkbDescPtr WindowManager::s_kbDesc {nullptr};
 Display* WindowManager::s_display {nullptr};
 Screen*  WindowManager::s_screen  {nullptr};
 int WindowManager::s_screenID {-1};
-
-bool WindowManager::s_repeatFlag {false};
 
 int WindowManager::s_fbCount {0};
 GLXFBConfig* WindowManager::s_fbConfigs {nullptr};
@@ -319,6 +315,7 @@ void WindowManager::loadKeyboardMap()
     char keyName[XkbKeyNameLength + 1];
 
     memset(s_keyCodesMap, -1, sizeof(s_keyCodesMap));
+    memset(s_keysPhysicState, 0, sizeof(s_keysPhysicState));
     for(rawCode = s_kbDesc->min_key_code; rawCode <= s_kbDesc->max_key_code; ++rawCode)
     {
         memcpy(keyName, s_kbDesc->names->keys[rawCode].name, XkbKeyNameLength);
@@ -369,12 +366,12 @@ void WindowManager::loadKeyboardMap()
         else if(strcmp(keyName, "AB06") == 0) keyCode = KEY_N;
         else if(strcmp(keyName, "AB07") == 0) keyCode = KEY_M;
         else if(strcmp(keyName, "AB08") == 0) keyCode = KEY_COMMA;
-        else if(strcmp(keyName, "AB09") == 0) keyCode = KEY_DECIMAL;
+        else if(strcmp(keyName, "AB09") == 0) keyCode = KEY_PERIOD;
         else if(strcmp(keyName, "AB10") == 0) keyCode = KEY_SLASH;
         else if(strcmp(keyName, "LSGT") == 0) keyCode = KEY_LESS_GREATER_THAN;
         else
         {
-            keyCode = UNKNOWN_INPUT_CODE;
+            keyCode = -1;
         }
 
         s_keyCodesMap[rawCode] = keyCode;
@@ -382,6 +379,119 @@ void WindowManager::loadKeyboardMap()
 
     XkbFreeNames(s_kbDesc, XkbKeyNamesMask, true);
     XkbFreeKeyboard(s_kbDesc, 0, true);
+
+    for(rawCode = 0; rawCode < 256; ++rawCode)
+    {
+        if(s_keyCodesMap[rawCode] < 0)
+        {
+            s_keyCodesMap[rawCode] = rawToStandard(rawCode);
+        }
+    }
+
+    XkbSetDetectableAutoRepeat(s_display, true, nullptr);
+}
+
+int WindowManager::rawToStandard(int rawCode)
+{
+    int keySym;
+
+    keySym = XkbKeycodeToKeysym(s_display, rawCode, 0, 0);
+    switch(keySym)
+    {
+        case XK_Escape:         return KEY_ESCAPE;
+        case XK_BackSpace:      return KEY_BACKSPACE;
+        case XK_Return:         return KEY_ENTER;
+        case XK_Tab:            return KEY_TAB;
+        case XK_space:          return KEY_SPACE;
+
+        case XK_Shift_L:        return KEY_LEFT_SHIFT;
+        case XK_Shift_R:        return KEY_RIGHT_SHIFT;
+        case XK_Control_L:      return KEY_LEFT_CONTROL;
+        case XK_Control_R:      return KEY_RIGHT_CONTROL;
+        case XK_Alt_L:          return KEY_LEFT_ALT;
+        case XK_Alt_R:          return KEY_RIGHT_ALT;
+        case XK_Super_L:        return KEY_LEFT_WINDOWS;
+        case XK_Super_R:        return KEY_RIGHT_WINDOWS;
+        case XK_Menu:           return KEY_MENU;
+
+        case XK_Num_Lock:       return KEY_NUM_LOCK;
+        case XK_Caps_Lock:      return KEY_CAPS_LOCK;
+        case XK_Scroll_Lock:    return KEY_SCROLL_LOCK;
+
+        case XK_Select:         return KEY_SELECT;
+        case XK_Print:          return KEY_PRINT_SCREEN;
+        case XK_Execute:        return KEY_EXECUTE;
+        case XK_Help:           return KEY_HELP;
+
+        case XK_Pause:          return KEY_PAUSE;
+        case XK_Clear:          return KEY_CLEAR;
+        case XK_Delete:         return KEY_DELETE;
+
+        case XK_Home:           return KEY_HOME;
+        case XK_End:            return KEY_END;
+        case XK_Page_Up:        return KEY_PAGE_UP;
+        case XK_Page_Down:      return KEY_PAGE_DOWN;
+        case XK_Insert:         return KEY_INSERT;
+
+        case XK_Left:           return KEY_LEFT;
+        case XK_Up:             return KEY_UP;
+        case XK_Right:          return KEY_RIGHT;
+        case XK_Down:           return KEY_DOWN;
+
+        case XK_F1:             return KEY_F1;
+        case XK_F2:             return KEY_F2;
+        case XK_F3:             return KEY_F3;
+        case XK_F4:             return KEY_F4;
+        case XK_F5:             return KEY_F5;
+        case XK_F6:             return KEY_F6;
+        case XK_F7:             return KEY_F7;
+        case XK_F8:             return KEY_F8;
+        case XK_F9:             return KEY_F9;
+        case XK_F10:            return KEY_F10;
+        case XK_F11:            return KEY_F11;
+        case XK_F12:            return KEY_F12;
+        case XK_F13:            return KEY_F13;
+        case XK_F14:            return KEY_F14;
+        case XK_F15:            return KEY_F15;
+        case XK_F16:            return KEY_F16;
+        case XK_F17:            return KEY_F17;
+        case XK_F18:            return KEY_F18;
+        case XK_F19:            return KEY_F19;
+        case XK_F20:            return KEY_F20;
+        case XK_F21:            return KEY_F21;
+        case XK_F22:            return KEY_F22;
+        case XK_F23:            return KEY_F23;
+        case XK_F24:            return KEY_F24;
+
+        case XK_KP_Add:         return KEY_ADD;
+        case XK_KP_Subtract:    return KEY_SUBTRACT;
+        case XK_KP_Multiply:    return KEY_MULTIPLY;
+        case XK_KP_Divide:      return KEY_DIVIDE;
+
+        default:                break;
+    }
+
+    keySym = XkbKeycodeToKeysym(s_display, rawCode, 0, 1);
+    switch(keySym)
+    {
+        case XK_KP_0:           return KEY_NUMPAD_0;
+        case XK_KP_1:           return KEY_NUMPAD_1;
+        case XK_KP_2:           return KEY_NUMPAD_2;
+        case XK_KP_3:           return KEY_NUMPAD_3;
+        case XK_KP_4:           return KEY_NUMPAD_4;
+        case XK_KP_5:           return KEY_NUMPAD_5;
+        case XK_KP_6:           return KEY_NUMPAD_6;
+        case XK_KP_7:           return KEY_NUMPAD_7;
+        case XK_KP_8:           return KEY_NUMPAD_8;
+        case XK_KP_9:           return KEY_NUMPAD_9;
+
+        case XK_KP_Separator:   return KEY_SEPARATOR;
+        case XK_KP_Decimal:     return KEY_DECIMAL;
+        case XK_KP_Enter:       return KEY_NUMPAD_ENTER;
+        case XK_KP_Equal:       return KEY_NUMPAD_EQUAL;
+
+        default:                return UNKNOWN_INPUT_CODE;
+    }
 }
 
 void WindowManager::loadGLExtensions()
@@ -499,12 +609,14 @@ void WindowManager::HSGILProc()
         case KeyPress:
             {
                 WindowManager* windowInstance = s_wmInstances[s_hwndMap[s_event.xany.window]];
-                windowInstance->mf_keyCallbackFunction(windowInstance->m_windowCallbackInstance, KEY_PRESSED, static_cast<InputCode>(s_keyCodesMap[s_event.xkey.keycode]), s_repeatFlag);
+                windowInstance->mf_keyCallbackFunction(windowInstance->m_windowCallbackInstance, KEY_PRESSED, static_cast<InputCode>(s_keyCodesMap[s_event.xkey.keycode]), s_keysPhysicState[s_event.xkey.keycode]);
+                s_keysPhysicState[s_event.xkey.keycode] = 1;
             }
             break;
 
         case KeyRelease:
             {
+                s_keysPhysicState[s_event.xkey.keycode] = 0;
                 WindowManager* windowInstance = s_wmInstances[s_hwndMap[s_event.xany.window]];
                 windowInstance->mf_keyCallbackFunction(windowInstance->m_windowCallbackInstance, KEY_RELEASED, static_cast<InputCode>(s_keyCodesMap[s_event.xkey.keycode]), false);
             }
