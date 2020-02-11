@@ -382,7 +382,6 @@ void WindowManager::loadKeyboardMap()
 
     XkbFreeNames(s_kbDesc, XkbKeyNamesMask, true);
     XkbFreeKeyboard(s_kbDesc, 0, true);
-    XAutoRepeatOff(s_display);
 }
 
 void WindowManager::loadGLExtensions()
