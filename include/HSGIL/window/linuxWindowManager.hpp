@@ -132,7 +132,7 @@ private:
     static const int s_glxAttribs[ATTRIB_LIST_SIZE];
 
     static int s_keyCodesMap[NUM_KEYS_SIZE];
-    static int s_keysPhysicState[NUM_KEYS_SIZE];
+    static int s_keyPhysicStates[NUM_KEYS_SIZE];
 
     static XEvent s_event;
     static XkbDescPtr s_kbDesc;

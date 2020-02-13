@@ -48,7 +48,7 @@ const int WindowManager::s_glxAttribs[ATTRIB_LIST_SIZE]
 };
 
 int WindowManager::s_keyCodesMap[NUM_KEYS_SIZE] {};
-int WindowManager::s_keysPhysicState[NUM_KEYS_SIZE] {};
+int WindowManager::s_keyPhysicStates[NUM_KEYS_SIZE] {};
 
 XEvent WindowManager::s_event {};
 XkbDescPtr WindowManager::s_kbDesc {nullptr};
@@ -315,7 +315,7 @@ void WindowManager::loadKeyboardMap()
     char keyName[XkbKeyNameLength + 1];
 
     memset(s_keyCodesMap, -1, sizeof(s_keyCodesMap));
-    memset(s_keysPhysicState, 0, sizeof(s_keysPhysicState));
+    memset(s_keyPhysicStates, 0, sizeof(s_keyPhysicStates));
     for(rawCode = s_kbDesc->min_key_code; rawCode <= s_kbDesc->max_key_code; ++rawCode)
     {
         memcpy(keyName, s_kbDesc->names->keys[rawCode].name, XkbKeyNameLength);
@@ -609,14 +609,14 @@ void WindowManager::HSGILProc()
         case KeyPress:
             {
                 WindowManager* windowInstance = s_wmInstances[s_hwndMap[s_event.xany.window]];
-                windowInstance->mf_keyCallbackFunction(windowInstance->m_windowCallbackInstance, KEY_PRESSED, static_cast<InputCode>(s_keyCodesMap[s_event.xkey.keycode]), s_keysPhysicState[s_event.xkey.keycode]);
-                s_keysPhysicState[s_event.xkey.keycode] = 1;
+                windowInstance->mf_keyCallbackFunction(windowInstance->m_windowCallbackInstance, KEY_PRESSED, static_cast<InputCode>(s_keyCodesMap[s_event.xkey.keycode]), s_keyPhysicStates[s_event.xkey.keycode]);
+                s_keyPhysicStates[s_event.xkey.keycode] = 1;
             }
             break;
 
         case KeyRelease:
             {
-                s_keysPhysicState[s_event.xkey.keycode] = 0;
+                s_keyPhysicStates[s_event.xkey.keycode] = 0;
                 WindowManager* windowInstance = s_wmInstances[s_hwndMap[s_event.xany.window]];
                 windowInstance->mf_keyCallbackFunction(windowInstance->m_windowCallbackInstance, KEY_RELEASED, static_cast<InputCode>(s_keyCodesMap[s_event.xkey.keycode]), false);
             }
