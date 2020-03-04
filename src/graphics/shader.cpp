@@ -133,7 +133,7 @@ void Shader::setMat4(const std::string& name, const glm::mat4& m0)
 uint32 Shader::createShader(const GLenum type)
 {
     uint32 shader = glCreateShader(type);
-    const int8* shaderSrc;
+    const char* shaderSrc;
 
     if(type == GL_VERTEX_SHADER)
     {
@@ -184,7 +184,7 @@ void Shader::loadShaderFromFile(const GLenum type)
 void Shader::checkErrors(const uint32 target, const bool isProgram)
 {
     int32 success;
-    int8 infolog[512];
+    char infolog[512];
 
     if(isProgram)
     {

@@ -38,6 +38,7 @@
 
 #include <unordered_map>
 
+#define NUM_KEYS_SIZE 256u
 #define GLDCC_NAME_SIZE 6u
 #define ATTRIB_LIST_SIZE 17u
 #define MAX_WINDOW_INSTANCES 16u
@@ -118,8 +119,9 @@ private:
     static PIXELFORMATDESCRIPTOR s_pfd;
     static const int s_attribs[ATTRIB_LIST_SIZE];
 
+    static int s_keyPhysicStates[NUM_KEYS_SIZE];
+
     static MSG s_msg;
-    static bool s_repeatFlag;
     static HINSTANCE s_procInstanceHandle;
 
     static bool s_vSyncCompat;

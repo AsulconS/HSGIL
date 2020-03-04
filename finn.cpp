@@ -75,5 +75,5 @@ int main()
         window.swapBuffers();
     }
 
-    return 0; 
+    return 0;
 }

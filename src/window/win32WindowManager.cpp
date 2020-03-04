@@ -48,8 +48,9 @@ const int WindowManager::s_attribs[ATTRIB_LIST_SIZE]
     0
 };
 
+int WindowManager::s_keyPhysicStates[NUM_KEYS_SIZE] {};
+
 MSG WindowManager::s_msg {};
-bool WindowManager::s_repeatFlag {false};
 HINSTANCE WindowManager::s_procInstanceHandle {nullptr};
 
 bool WindowManager::s_vSyncCompat {true};
@@ -449,6 +450,8 @@ LRESULT CALLBACK WindowManager::HSGILProc(HWND hWnd, UINT uMsg, WPARAM wParam, L
                     wglSwapIntervalEXT(1);
                 }
 
+                memset(s_keyPhysicStates, 0, sizeof(s_keyPhysicStates));
+
                 MessageBoxA(0, (char*)glGetString(GL_VERSION), "OpenGL Version", 0);
                 MessageBoxA(0, (char*)glGetString(GL_SHADING_LANGUAGE_VERSION), "GLSL Version", 0);
             }
@@ -476,18 +479,44 @@ LRESULT CALLBACK WindowManager::HSGILProc(HWND hWnd, UINT uMsg, WPARAM wParam, L
 
         case WM_KEYDOWN:
             {
-                s_repeatFlag = (lParam & 0x40000000) != 0;
                 WindowManager* windowInstance = s_wmInstances[s_hwndMap[hWnd]];
-                windowInstance->mf_keyCallbackFunction(windowInstance->m_windowCallbackInstance, KEY_PRESSED, static_cast<InputCode>(wParam), s_repeatFlag);
+                windowInstance->mf_keyCallbackFunction(windowInstance->m_windowCallbackInstance, KEY_PRESSED, static_cast<InputCode>(wParam), s_keyPhysicStates[wParam]);
+                s_keyPhysicStates[wParam] = 1;
             }
             break;
 
         case WM_KEYUP:
             {
+                s_keyPhysicStates[wParam] = 0;
                 WindowManager* windowInstance = s_wmInstances[s_hwndMap[hWnd]];
                 windowInstance->mf_keyCallbackFunction(windowInstance->m_windowCallbackInstance, KEY_RELEASED, static_cast<InputCode>(wParam), false);
             }
             break;
+
+        case WM_KILLFOCUS:
+            {
+                puts("Lost focus");
+                WindowManager* windowInstance = s_wmInstances[s_hwndMap[hWnd]];
+                for(std::size_t i = 0; i < NUM_KEYS_SIZE; ++i)
+                {
+                    if(s_keyPhysicStates[i])
+                    {
+                        s_keyPhysicStates[i] = 0;
+                        windowInstance->mf_keyCallbackFunction(windowInstance->m_windowCallbackInstance, KEY_RELEASED, static_cast<InputCode>(i), false);
+                    }
+                }
+            }
+            break;
+
+        case WM_SYSKEYDOWN:
+            {
+                puts("WM_SYSKEYDOWN");
+            }
+            return 0;
+
+        case WM_SYSKEYUP:
+            puts("WM_SYSKEYUP");
+            return 0;
 
         default:
             break;

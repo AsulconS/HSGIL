@@ -24,24 +24,27 @@
 #ifndef HSGIL_COMMON_HPP
 #define HSGIL_COMMON_HPP
 
+#include <cstdint>
+
 namespace gil
 {
-using int8   = char;
-using int16  = short;
-using int32  = int;
-using int64  = long long;
-using uint8  = unsigned char;
-using uint16 = unsigned short;
-using uint32 = unsigned int;
-using uint64 = unsigned long long;
+using int8   = int8_t;
+using int16  = int16_t;
+using int32  = int32_t;
+using int64  = int64_t;
+using uint8  = uint8_t;
+using uint16 = uint16_t;
+using uint32 = uint32_t;
+using uint64 = uint64_t;
 
-using byte   = unsigned char;
+using byte   = uint8_t;
 
 } // namespace gil
 
-namespace luis  = gil;
-namespace erick = gil;
-namespace yober = gil;
-namespace daryl = gil;
+namespace luis   = gil;
+namespace erick  = gil;
+namespace yober  = gil;
+namespace daryl  = gil;
+namespace anyelo = gil;
 
 #endif // HSGIL_COMMON_HPP
