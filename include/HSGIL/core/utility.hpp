@@ -21,44 +21,24 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_G_UTILS_HPP
-#define HSGIL_G_UTILS_HPP
-
-#include <HSGIL/external/glm/glm.hpp>
-
-#include <HSGIL/core/dataStructures/vector.hpp>
-
-#include <HSGIL/graphics/shader.hpp>
+#ifndef HSGIL_UTILITY_HPP
+#define HSGIL_UTILITY_HPP
 
 namespace gil
 {
-/**
- * @brief Load an OBJ file from a path and load the vertexData and indices into the parameters
- * 
- * @param path 
- * @param vertexData 
- * @param indices 
- * @return true 
- * @return false 
- */
-bool loadObj(const char* path, Vector<float>& vertexData, Vector<uint32>& indices);
+template <typename T> struct hsgil_remove_reference      { typedef T type; };
+template <typename T> struct hsgil_remove_reference<T&>  { typedef T type; };
+template <typename T> struct hsgil_remove_reference<T&&> { typedef T type; };
 
-/**
- * @brief Load a texture from a path and return the texture object created by OpenGL
- * 
- * @param path 
- * @return uint32 
- */
-uint32 loadTexture(const char* path);
+template <typename T>
+inline typename hsgil_remove_reference<T>::type&& hsgil_move(T&& t) noexcept { return static_cast<typename hsgil_remove_reference<T>::type&&>(t); }
 
-/**
- * @brief Setup the Default Lights for a shader from some view position
- * 
- * @param shader 
- * @param viewPos 
- */
-void setupDefaultLights(Shader& shader, const glm::vec3& viewPos = {2.0f, 4.0f, 2.0f});
+template <typename T>
+inline T&& hsgil_forward(typename hsgil_remove_reference<T>::type& t) noexcept { return static_cast<T&&>(t); }
+
+template <typename T>
+inline T&& hsgil_forward(typename hsgil_remove_reference<T>::type&& t) noexcept { return static_cast<T&&>(t); }
 
 } // namespace gil
 
-#endif // HSGIL_G_UTILS_HPP
+#endif // HSGIL_UTILITY_HPP

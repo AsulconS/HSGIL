@@ -497,7 +497,7 @@ LRESULT CALLBACK WindowManager::HSGILProc(HWND hWnd, UINT uMsg, WPARAM wParam, L
             {
                 puts("Lost focus");
                 WindowManager* windowInstance = s_wmInstances[s_hwndMap[hWnd]];
-                for(std::size_t i = 0; i < NUM_KEYS_SIZE; ++i)
+                for(uint32 i = 0; i < NUM_KEYS_SIZE; ++i)
                 {
                     if(s_keyPhysicStates[i])
                     {

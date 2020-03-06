@@ -26,10 +26,10 @@
 
 #include <HSGIL/external/glm/glm.hpp>
 
+#include <HSGIL/core/dataStructures/vector.hpp>
+
 #include <HSGIL/graphics/shader.hpp>
 #include <HSGIL/graphics/gUtils.hpp>
-
-#include <vector>
 
 namespace gil
 {
@@ -75,8 +75,8 @@ protected:
     uint32 m_VBO;
     uint32 m_EBO;
 
-    std::vector<uint32> m_indices;
-    std::vector<float>  m_vertexData;
+    Vector<uint32> m_indices;
+    Vector<float>  m_vertexData;
 };
 
 } // namespace gil

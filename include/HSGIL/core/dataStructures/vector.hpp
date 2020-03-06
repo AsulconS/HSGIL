@@ -21,44 +21,76 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_G_UTILS_HPP
-#define HSGIL_G_UTILS_HPP
+#ifndef HSGIL_DSTR_VECTOR_HPP
+#define HSGIL_DSTR_VECTOR_HPP
 
-#include <HSGIL/external/glm/glm.hpp>
+#include <HSGIL/core/common.hpp>
+#include <HSGIL/core/utility.hpp>
 
-#include <HSGIL/core/dataStructures/vector.hpp>
-
-#include <HSGIL/graphics/shader.hpp>
+#define INITIAL_CAPACITY 4
 
 namespace gil
 {
-/**
- * @brief Load an OBJ file from a path and load the vertexData and indices into the parameters
- * 
- * @param path 
- * @param vertexData 
- * @param indices 
- * @return true 
- * @return false 
- */
-bool loadObj(const char* path, Vector<float>& vertexData, Vector<uint32>& indices);
+template <typename T>
+class Vector
+{
+public:
+    explicit Vector();
+    virtual ~Vector();
 
-/**
- * @brief Load a texture from a path and return the texture object created by OpenGL
- * 
- * @param path 
- * @return uint32 
- */
-uint32 loadTexture(const char* path);
+    Vector<T>& operator=(const Vector<T>& o);
+    Vector<T>& operator=(Vector<T>&& o);
 
-/**
- * @brief Setup the Default Lights for a shader from some view position
- * 
- * @param shader 
- * @param viewPos 
- */
-void setupDefaultLights(Shader& shader, const glm::vec3& viewPos = {2.0f, 4.0f, 2.0f});
+    /**
+     * @brief Copies a new element at the end of the vector
+     * 
+     * @param val 
+     */
+    void push_back(const T& val);
+    /**
+     * @brief Moves a new element at the end of the vector
+     * 
+     * @param val 
+     */
+    void push_back(T&& val);
+    /**
+     * @brief Gets a direct pointer to the raw data
+     * 
+     * @return T* 
+     */
+    T* data() noexcept;
+    /**
+     * @brief Gets a direct pointer to the raw data
+     * 
+     * @return const T* 
+     */
+    const T* data() const noexcept;
+    /**
+     * @brief Gets the size of the vector
+     * 
+     * @return uint64 
+     */
+    uint64 size() const noexcept;
+    /**
+     * @brief Gets the capacity of the vector
+     * 
+     * @return uint64 
+     */
+    uint64 capacity() const noexcept;
+
+    T& operator[](uint64 n);
+    const T& operator[](uint64 n) const;
+
+private:
+    T* m_data;
+    uint64 m_size;
+    uint64 m_capacity;
+
+    void reallocate();
+};
+
+#include <HSGIL/core/dataStructures/vector.inl>
 
 } // namespace gil
 
-#endif // HSGIL_G_UTILS_HPP
+#endif // HSGIL_DSTR_VECTOR_HPP

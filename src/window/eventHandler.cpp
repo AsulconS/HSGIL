@@ -77,9 +77,9 @@ void EventHandler::updateInput(InputCode inputCode, float dir, bool repeat)
         return;
     }
 
-    for(const auto& i : inputMap[inputCode])
+    for(uint32 i = 0; i < inputMap[inputCode].size(); ++i)
     {
-        i.first->accum(i.second * dir);
+        inputMap[inputCode][i].first->accum(inputMap[inputCode][i].second * dir);
     }
 }
 

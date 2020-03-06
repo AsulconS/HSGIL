@@ -21,44 +21,85 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_G_UTILS_HPP
-#define HSGIL_G_UTILS_HPP
-
-#include <HSGIL/external/glm/glm.hpp>
-
-#include <HSGIL/core/dataStructures/vector.hpp>
-
-#include <HSGIL/graphics/shader.hpp>
-
-namespace gil
+template <typename T>
+inline Vector<T>::Vector()
+    : m_data     {nullptr},
+      m_size     {0},
+      m_capacity {INITIAL_CAPACITY}
 {
-/**
- * @brief Load an OBJ file from a path and load the vertexData and indices into the parameters
- * 
- * @param path 
- * @param vertexData 
- * @param indices 
- * @return true 
- * @return false 
- */
-bool loadObj(const char* path, Vector<float>& vertexData, Vector<uint32>& indices);
+    m_data = new T[INITIAL_CAPACITY];
+}
 
-/**
- * @brief Load a texture from a path and return the texture object created by OpenGL
- * 
- * @param path 
- * @return uint32 
- */
-uint32 loadTexture(const char* path);
+template <typename T>
+inline Vector<T>::~Vector()
+{
+    delete[] m_data;
+}
 
-/**
- * @brief Setup the Default Lights for a shader from some view position
- * 
- * @param shader 
- * @param viewPos 
- */
-void setupDefaultLights(Shader& shader, const glm::vec3& viewPos = {2.0f, 4.0f, 2.0f});
+template <typename T>
+inline void Vector<T>::push_back(const T& val)
+{
+    if(m_size >= m_capacity)
+    {
+        reallocate();
+    }
+    m_data[m_size++] = val;
+}
 
-} // namespace gil
+template <typename T>
+inline void Vector<T>::push_back(T&& val)
+{
+    if(m_size >= m_capacity)
+    {
+        reallocate();
+    }
+    m_data[m_size++] = hsgil_move(val);
+}
 
-#endif // HSGIL_G_UTILS_HPP
+template <typename T>
+inline T* Vector<T>::data() noexcept
+{
+    return m_data;
+}
+
+template <typename T>
+inline const T* Vector<T>::data() const noexcept
+{
+    return m_data;
+}
+
+template <typename T>
+inline uint64 Vector<T>::size() const noexcept
+{
+    return m_size;
+}
+
+template <typename T>
+inline uint64 Vector<T>::capacity() const noexcept
+{
+    return m_capacity;
+}
+
+template <typename T>
+inline T& Vector<T>::operator[](uint64 n)
+{
+    return m_data[n];
+}
+
+template <typename T>
+inline const T& Vector<T>::operator[](uint64 n) const
+{
+    return m_data[n];
+}
+
+template <typename T>
+inline void Vector<T>::reallocate()
+{
+    T* n_data = new T[m_capacity *= 2];
+    for(uint64 i = 0; i < m_size; ++i)
+    {
+        n_data[i] = hsgil_move(m_data[i]);
+    }
+    delete[] m_data;
+    m_data = n_data;
+}

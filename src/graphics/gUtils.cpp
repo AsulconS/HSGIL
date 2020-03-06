@@ -28,15 +28,15 @@
 
 namespace gil
 {
-bool loadObj(const char* path, std::vector<float>& vertexData, std::vector<uint32>& indices)
+bool loadObj(const char* path, Vector<float>& vertexData, Vector<uint32>& indices)
 {
-    std::vector<uint32> vertexIndices;
-    std::vector<uint32> normalIndices;
-    std::vector<uint32> UVIndices;
+    Vector<uint32> vertexIndices;
+    Vector<uint32> normalIndices;
+    Vector<uint32> UVIndices;
 
-    std::vector<glm::vec3> vertices;
-    std::vector<glm::vec3> normals;
-    std::vector<glm::vec2> UVs;
+    Vector<glm::vec3> vertices;
+    Vector<glm::vec3> normals;
+    Vector<glm::vec2> UVs;
 
     std::ifstream objFile;
 
@@ -104,7 +104,7 @@ bool loadObj(const char* path, std::vector<float>& vertexData, std::vector<uint3
         std::cerr << "Error while loading obj file:\n" << e.what() << std::endl;
     }
 
-    for(std::size_t i = 0; i < vertexIndices.size(); ++i)
+    for(uint32 i = 0; i < vertexIndices.size(); ++i)
     {
         indices.push_back(i);
 
