@@ -36,6 +36,13 @@ class Vector
 {
 public:
     explicit Vector();
+    explicit Vector(uint64 n);
+
+    Vector(uint64 n, const T& val);
+
+    Vector(const Vector<T>& o);
+    Vector(Vector<T>&& o);
+
     virtual ~Vector();
 
     Vector<T>& operator=(const Vector<T>& o);
