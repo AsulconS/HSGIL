@@ -49,13 +49,13 @@ public:
     Vector<T>& operator=(Vector<T>&& o);
 
     /**
-     * @brief Copies a new element at the end of the vector
+     * @brief C-Pushes a new element at the end of the vector
      * 
      * @param val 
      */
     void push_back(const T& val);
     /**
-     * @brief Moves a new element at the end of the vector
+     * @brief M-Pushes a new element at the end of the vector
      * 
      * @param val 
      */
