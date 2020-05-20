@@ -63,7 +63,7 @@ LIB_STRING     = $(LIB_COLOR)HSGIL - Handy Scalable Graphics Integration Library
 SUCCESS_STRING = $(OK_COLOR)Everything Built Successfully!$(NO_COLOR)
 BUILD_PRINT    = $(BUILD_COLOR)Building $@:$(NO_COLOR)
 
-SAMPLES_STRING = $(LIB_COLOR)Building Samples$(NO_COLOR)
+SAMPLES_STRING = $(LIB_COLOR)Building Examples$(NO_COLOR)
 
 # -----------------------------------------------------------------------------------------
 # -----------------------------------------------------------------------------------------
@@ -180,10 +180,10 @@ LIBS = $(LIB_ARGS) $(STATIC_LIBS)
 all: lprompt $(LIB_TARG) trash
 	@printf "\n$(SUCCESS_STRING)\n"
 
-samples: tprompt tests trash
+examples: tprompt example_files trash
 	@printf "\n$(SUCCESS_STRING)\n"
 
-full: all samples
+full: all examples
 
 # HSGIL Welcome Prompt and OS
 # -----------------------------------------------------------------------------------------
@@ -205,27 +205,27 @@ tprompt:
 	$(LINE_STRING)
 	@printf "\n$(OS_STRING)\n\n"
 
-tests: test ball finn simple
+example_files: test ball finn simple trash cp_libs_to_examples_$(C_OS)
 	@printf "$(OK_STRING)\n"
 
 test: test.o
 	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
-	$(VISIBILITY)$(CXX) $(CXX_FLAGS) test.o $(LIBRARY_PATH) $(LIBS) -o test $(CXX_LIBS)
+	$(VISIBILITY)$(CXX) $(CXX_FLAGS) test.o $(LIBRARY_PATH) $(LIBS) -o examples/test $(CXX_LIBS)
 	@printf "$(OK_STRING)\n"
 
 ball: ball.o
 	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
-	$(VISIBILITY)$(CXX) $(CXX_FLAGS) ball.o $(LIBRARY_PATH) $(LIBS) -o ball $(CXX_LIBS)
+	$(VISIBILITY)$(CXX) $(CXX_FLAGS) ball.o $(LIBRARY_PATH) $(LIBS) -o examples/ball $(CXX_LIBS)
 	@printf "$(OK_STRING)\n"
 
 finn: finn.o
 	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
-	$(VISIBILITY)$(CXX) $(CXX_FLAGS) finn.o $(LIBRARY_PATH) $(LIBS) -o finn $(CXX_LIBS)
+	$(VISIBILITY)$(CXX) $(CXX_FLAGS) finn.o $(LIBRARY_PATH) $(LIBS) -o examples/finn $(CXX_LIBS)
 	@printf "$(OK_STRING)\n"
 
 simple: simple.o
 	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
-	$(VISIBILITY)$(CXX) $(CXX_FLAGS) simple.o $(LIBRARY_PATH) $(LIBS) -o simple $(CXX_LIBS)
+	$(VISIBILITY)$(CXX) $(CXX_FLAGS) simple.o $(LIBRARY_PATH) $(LIBS) -o examples/simple $(CXX_LIBS)
 	@printf "$(OK_STRING)\n"
 
 # -----------------------------------------------------------------------------------------
@@ -233,24 +233,24 @@ simple: simple.o
 # Object Files
 # -----------------------------------------------------------------------------------------
 
-test.o: test.cpp
+test.o: examples/test.cpp
 	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
-	$(VISIBILITY)$(CXX) -c $(CXX_FLAGS) $(INCLUDE_PATH) test.cpp
+	$(VISIBILITY)$(CXX) -c $(CXX_FLAGS) $(INCLUDE_PATH) examples/test.cpp
 	@printf "$(OK_STRING)\n"
 
-ball.o: ball.cpp
+ball.o: examples/ball.cpp
 	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
-	$(VISIBILITY)$(CXX) -c $(CXX_FLAGS) $(INCLUDE_PATH) ball.cpp
+	$(VISIBILITY)$(CXX) -c $(CXX_FLAGS) $(INCLUDE_PATH) examples/ball.cpp
 	@printf "$(OK_STRING)\n"
 
-finn.o: finn.cpp
+finn.o: examples/finn.cpp
 	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
-	$(VISIBILITY)$(CXX) -c $(CXX_FLAGS) $(INCLUDE_PATH) finn.cpp
+	$(VISIBILITY)$(CXX) -c $(CXX_FLAGS) $(INCLUDE_PATH) examples/finn.cpp
 	@printf "$(OK_STRING)\n"
 
-simple.o: simple.cpp
+simple.o: examples/simple.cpp
 	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
-	$(VISIBILITY)$(CXX) -c $(CXX_FLAGS) $(INCLUDE_PATH) simple.cpp
+	$(VISIBILITY)$(CXX) -c $(CXX_FLAGS) $(INCLUDE_PATH) examples/simple.cpp
 	@printf "$(OK_STRING)\n"
 
 timer.o: src/core/timer.cpp
@@ -390,6 +390,17 @@ glad.o: external/src/glad/glad.c
 
 # -----------------------------------------------------------------------------------------
 
+# Miscelaneous Rules
+# -----------------------------------------------------------------------------------------
+
+cp_libs_to_examples_WINDOWS:
+	@cp -f *.dll examples
+
+cp_libs_to_examples_LINUX:
+	@cp -f *.so.1.0 examples
+
+# -----------------------------------------------------------------------------------------
+
 # Cleaning Rules
 # -----------------------------------------------------------------------------------------
 
@@ -397,7 +408,7 @@ trash:
 	@rm -rf *.o
 
 clean:
-	@rm -rf *.dll *.so.1.0 *.o *.exe
+	@rm -rf *.dll examples/*.dll *.so.1.0 *.o examples/*.exe
 
 # -----------------------------------------------------------------------------------------
 
