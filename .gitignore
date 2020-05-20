@@ -1,4 +1,5 @@
 .vscode
+.VSCodeCounter
 other/misc
 doc
 
@@ -6,8 +7,10 @@ doc
 *.so.1.0
 *.o
 
-*.exe
-test
-ball
-finn
-simple
+examples/*.exe
+examples/test
+examples/ball
+examples/finn
+examples/simple
+
+build.bat
