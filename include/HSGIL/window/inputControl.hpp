@@ -24,6 +24,7 @@
 #ifndef HSGIL_INPUT_CONTROL_HPP
 #define HSGIL_INPUT_CONTROL_HPP
 
+#include <HSGIL/core/config.hpp>
 #include <HSGIL/core/common.hpp>
 
 #include <HSGIL/math/mUtils.hpp>
@@ -37,7 +38,7 @@ namespace gil
  * clamped between -1.0f and 1.0f, its aimed to be some axis or direction
  * handler (i.e. movement, rotation, physics).
  */
-class InputControl : public IInputControl
+class HSGIL_API InputControl : public IInputControl
 {
 public:
     /**

@@ -24,22 +24,14 @@
 #ifndef HSGIL_WINDOW_MANAGER_HPP
 #define HSGIL_WINDOW_MANAGER_HPP
 
-#if defined(_WIN32) || (WIN32)
-    #define OS_WINDOWS
-#else
-    #if defined(__unix__) || defined(linux)
-        #define OS_LINUX
-    #endif
-#endif
+#include <HSGIL/core/config.hpp>
 
-#ifdef OS_WINDOWS
+#if defined(HSGIL_OS_WINDOWS)
     #include <HSGIL/window/win32WindowManager.hpp>
+#elif defined(HSGIL_OS_LINUX)
+    #include <HSGIL/window/linuxWindowManager.hpp>
 #else
-    #ifdef OS_LINUX
-        #include <HSGIL/window/linuxWindowManager.hpp>
-    #else
-        #error HSGIL has no support for this OS
-    #endif
+    #error HSGIL has no support for this OS
 #endif
 
 #endif // HSGIL_WINDOW_MANAGER_HPP

@@ -24,7 +24,9 @@
 #ifndef HSGIL_WINDOW_HPP
 #define HSGIL_WINDOW_HPP
 
+#include <HSGIL/core/config.hpp>
 #include <HSGIL/core/common.hpp>
+
 #include <HSGIL/exception/window/windowException.hpp>
 
 #include <HSGIL/window/inputEvents.hpp>
@@ -41,7 +43,7 @@ namespace gil
  * @brief Window Class that handle a Window of the program
  * 
  */
-class Window
+class HSGIL_API Window
 {
 public:
     /**

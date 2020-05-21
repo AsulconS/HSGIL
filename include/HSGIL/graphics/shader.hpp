@@ -29,7 +29,9 @@
 #include <HSGIL/external/glm/gtc/matrix_transform.hpp>
 #include <HSGIL/external/glm/gtc/type_ptr.hpp>
 
+#include <HSGIL/core/config.hpp>
 #include <HSGIL/core/common.hpp>
+
 #include <HSGIL/exception/graphics/graphicsException.hpp>
 
 #include <HSGIL/math/vec2.hpp>
@@ -47,7 +49,7 @@ namespace gil
  * @brief Shader Class that abstracts almost all the shader functions
  * 
  */
-class Shader
+class HSGIL_API Shader
 {
 public:
     /**

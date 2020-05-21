@@ -24,6 +24,9 @@
 #ifndef HSGIL_M_UTILS_HPP
 #define HSGIL_M_UTILS_HPP
 
+#include <HSGIL/core/config.hpp>
+#include <HSGIL/core/common.hpp>
+
 namespace gil
 {
 /**
@@ -32,7 +35,7 @@ namespace gil
  * @param val 
  * @return int 
  */
-int absolute(int val);
+HSGIL_API int absolute(int val);
 
 /**
  * @brief Function that returns the absolute value of a float
@@ -40,7 +43,7 @@ int absolute(int val);
  * @param val 
  * @return float 
  */
-float absolute(float val);
+HSGIL_API float absolute(float val);
 
 /**
  * @brief Clamping function to limit an integer value between 2 ranges
@@ -50,7 +53,7 @@ float absolute(float val);
  * @param rBound 
  * @return int 
  */
-int clamp(int val, int lBound, int rBound);
+HSGIL_API int clamp(int val, int lBound, int rBound);
 
 /**
  * @brief Clamping function to limit an unsigned integer value between 2 ranges
@@ -60,7 +63,7 @@ int clamp(int val, int lBound, int rBound);
  * @param rBound 
  * @return unsigned int 
  */
-unsigned int clamp(unsigned int val, unsigned int lBound, unsigned int rBound);
+HSGIL_API unsigned int clamp(unsigned int val, unsigned int lBound, unsigned int rBound);
 
 /**
  * @brief Clamping function to limit a float value between 2 ranges
@@ -70,7 +73,7 @@ unsigned int clamp(unsigned int val, unsigned int lBound, unsigned int rBound);
  * @param rBound 
  * @return float 
  */
-float clamp(float val, float lBound, float rBound);
+HSGIL_API float clamp(float val, float lBound, float rBound);
 
 /**
  * @brief Check if an integer value is between a range
@@ -81,7 +84,7 @@ float clamp(float val, float lBound, float rBound);
  * @return true 
  * @return false 
  */
-bool isBetween(int val, int lBound, int rBound);
+HSGIL_API bool isBetween(int val, int lBound, int rBound);
 
 /**
  * @brief Check if an unsigned integer value is between a range
@@ -92,7 +95,7 @@ bool isBetween(int val, int lBound, int rBound);
  * @return true 
  * @return false 
  */
-bool isBetween(unsigned int val, unsigned int lBound, unsigned int rBound);
+HSGIL_API bool isBetween(unsigned int val, unsigned int lBound, unsigned int rBound);
 
 /**
  * @brief Check if a float value is between a range
@@ -103,7 +106,7 @@ bool isBetween(unsigned int val, unsigned int lBound, unsigned int rBound);
  * @return true 
  * @return false 
  */
-bool isBetween(float val, float lBound, float rBound);
+HSGIL_API bool isBetween(float val, float lBound, float rBound);
 
 } // namespace gil
 

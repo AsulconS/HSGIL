@@ -24,6 +24,7 @@
 #ifndef HSGIL_INPUT_TRIGGER_HPP
 #define HSGIL_INPUT_TRIGGER_HPP
 
+#include <HSGIL/core/config.hpp>
 #include <HSGIL/core/common.hpp>
 
 #include <HSGIL/window/iInputControl.hpp>
@@ -36,7 +37,7 @@ namespace gil
  * it gets pressed again (i.e. exit key, 'once' keys).
  * 
  */
-class InputTrigger : public IInputControl
+class HSGIL_API InputTrigger : public IInputControl
 {
 public:
     /**

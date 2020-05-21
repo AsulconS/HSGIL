@@ -35,4 +35,6 @@
 #include <HSGIL/window/inputTrigger.hpp>
 #include <HSGIL/window/eventHandler.hpp>
 
+#include <HSGIL/window/wUtils.hpp>
+
 #endif // HSGIL_WINDOW_I_HPP

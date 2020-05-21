@@ -3,6 +3,7 @@
 other/misc
 doc
 
+*.lib
 *.dll
 *.so.1.0
 *.o
@@ -13,5 +14,5 @@ examples/ball
 examples/finn
 examples/simple
 
-build.bat
-autolog.bat
+build_log.txt
+dll_build.bat

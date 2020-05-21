@@ -24,6 +24,7 @@
 #ifndef HSGIL_EVENT_HANDLER_HPP
 #define HSGIL_EVENT_HANDLER_HPP
 
+#include <HSGIL/core/config.hpp>
 #include <HSGIL/core/common.hpp>
 #include <HSGIL/core/dataStructures/vector.hpp>
 
@@ -38,7 +39,7 @@ namespace gil
  * @brief Simple EventHandler Class that deals with the system events
  * 
  */
-class EventHandler : public IEventHandler
+class HSGIL_API EventHandler : public IEventHandler
 {
 public:
     /**

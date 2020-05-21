@@ -24,8 +24,10 @@
 #ifndef HSGIL_CORE_I_HPP
 #define HSGIL_CORE_I_HPP
 
+#include <HSGIL/core/config.hpp>
 #include <HSGIL/core/common.hpp>
 #include <HSGIL/core/constants.hpp>
 #include <HSGIL/core/timer.hpp>
+#include <HSGIL/core/utility.hpp>
 
 #endif // HSGIL_CORE_I_HPP

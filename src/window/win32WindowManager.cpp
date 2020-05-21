@@ -21,6 +21,7 @@
  *                                                                              *
  ********************************************************************************/
 
+#include <iostream>
 #include <HSGIL/window/win32WindowManager.hpp>
 
 namespace gil

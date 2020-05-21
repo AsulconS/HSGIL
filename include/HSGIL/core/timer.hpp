@@ -24,6 +24,7 @@
 #ifndef HSGIL_TIMER_HPP
 #define HSGIL_TIMER_HPP
 
+#include <HSGIL/core/config.hpp>
 #include <HSGIL/core/common.hpp>
 
 #include <chrono>
@@ -35,7 +36,7 @@ namespace gil
  * @brief Timer Class that measures the time intervals, calculate Delta Time and other time stuff
  * 
  */
-class Timer
+class HSGIL_API Timer
 {
 public:
     /**

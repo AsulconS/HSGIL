@@ -21,46 +21,44 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_G_UTILS_HPP
-#define HSGIL_G_UTILS_HPP
-
-#include <HSGIL/external/glm/glm.hpp>
-
-#include <HSGIL/core/config.hpp>
-#include <HSGIL/core/common.hpp>
-#include <HSGIL/core/dataStructures/vector.hpp>
-
-#include <HSGIL/graphics/shader.hpp>
-
-namespace gil
-{
-/**
- * @brief Load an OBJ file from a path and load the vertexData and indices into the parameters
- * 
- * @param path 
- * @param vertexData 
- * @param indices 
- * @return true 
- * @return false 
- */
-HSGIL_API bool loadObj(const char* path, Vector<float>& vertexData, Vector<uint32>& indices);
+#ifndef HSGIL_CONFIG_HPP
+#define HSGIL_CONFIG_HPP
 
 /**
- * @brief Load a texture from a path and return the texture object created by OpenGL
- * 
- * @param path 
- * @return uint32 
+ * This defines the OS we are working with
  */
-HSGIL_API uint32 loadTexture(const char* path);
+#if defined(_WIN32) || defined(WIN32)
+    #define HSGIL_OS_WINDOWS
+#elif defined(__unix__) || defined(linux)
+    #define HSGIL_OS_LINUX
+#endif
 
-/**
- * @brief Setup the Default Lights for a shader from some view position
- * 
- * @param shader 
- * @param viewPos 
- */
-HSGIL_API void setupDefaultLights(Shader& shader, const glm::vec3& viewPos = {2.0f, 4.0f, 2.0f});
+#if !defined(HSGIL_STATIC_BUILD)
+    #if defined(HSGIL_OS_WINDOWS)
+        #define HSGIL_API_EXPORT __declspec(dllexport)
+        #define HSGIL_API_IMPORT __declspec(dllimport)
 
-} // namespace gil
+        #if defined(_MSC_VER)
+            #pragma warning(disable : 4251)
+        #endif
+    #else
+        #if __GNU__ > 3
+            #define HSGIL_API_EXPORT __attribute__ ((__visibility__ ("default")))
+            #define HSGIL_API_IMPORT __attribute__ ((__visibility__ ("default")))
+        #else
+            #define HSGIL_API_EXPORT
+            #define HSGIL_API_IMPORT
+        #endif
+    #endif
+#else
+    #define HSGIL_API_EXPORT
+    #define HSGIL_API_IMPORT
+#endif
 
-#endif // HSGIL_G_UTILS_HPP
+#if defined(HSGIL_EXPORT)
+    #define HSGIL_API HSGIL_API_EXPORT
+#else
+    #define HSGIL_API HSGIL_API_IMPORT
+#endif
+
+#endif // HSGIL_CONFIG_HPP

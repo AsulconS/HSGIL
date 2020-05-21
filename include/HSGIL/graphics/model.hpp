@@ -26,6 +26,9 @@
 
 #include <HSGIL/external/glm/glm.hpp>
 
+#include <HSGIL/core/config.hpp>
+#include <HSGIL/core/common.hpp>
+
 #include <HSGIL/graphics/shader.hpp>
 #include <HSGIL/graphics/gUtils.hpp>
 #include <HSGIL/graphics/mesh.hpp>
@@ -36,7 +39,7 @@ namespace gil
  * @brief Model Class that allows us to load a 3D Model from a file and store it with a texture
  * 
  */
-class Model
+class HSGIL_API Model
 {
 public:
     /**

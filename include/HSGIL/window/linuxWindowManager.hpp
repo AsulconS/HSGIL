@@ -26,7 +26,9 @@
 
 #include <HSGIL/external/glad/glad.h>
 
+#include <HSGIL/core/config.hpp>
 #include <HSGIL/core/common.hpp>
+
 #include <HSGIL/math/mUtils.hpp>
 
 #include <HSGIL/window/inputEvents.hpp>
@@ -56,7 +58,7 @@ namespace gil
 class Window;
 class WindowManager;
 
-class WMLazyPtr final
+class HSGIL_API WMLazyPtr final
 {
 public:
     WMLazyPtr();
@@ -79,7 +81,7 @@ private:
 typedef void (*KeyCallbackFunction)(Window*, InputEvent, InputCode, bool);
 typedef int (*PFNGLXSWAPINTERVALPROC)(int);
 
-class WindowManager final
+class HSGIL_API WindowManager final
 {
     friend WMLazyPtr;
 public:

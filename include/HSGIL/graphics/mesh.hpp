@@ -26,6 +26,8 @@
 
 #include <HSGIL/external/glm/glm.hpp>
 
+#include <HSGIL/core/config.hpp>
+#include <HSGIL/core/common.hpp>
 #include <HSGIL/core/dataStructures/vector.hpp>
 
 #include <HSGIL/graphics/shader.hpp>
@@ -37,7 +39,7 @@ namespace gil
  * @brief Mesh Class that stores a 3D Mesh and lets us draw it dynamically
  * 
  */
-class Mesh
+class HSGIL_API Mesh
 {
 public:
     /**

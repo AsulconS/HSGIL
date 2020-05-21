@@ -24,6 +24,9 @@
 #ifndef HSGIL_W_UTILS_HPP
 #define HSGIL_W_UTILS_HPP
 
+#include <HSGIL/core/config.hpp>
+#include <HSGIL/core/common.hpp>
+
 #include <cstring>
 
 namespace gil
@@ -36,7 +39,7 @@ namespace gil
  * @return true 
  * @return false 
  */
-bool isExtensionSupported(const char* extList, const char* extension);
+HSGIL_API bool isExtensionSupported(const char* extList, const char* extension);
 
 } // namespace gil
 
