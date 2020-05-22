@@ -1,6 +1,6 @@
 #include <HSGIL/hsgil.hpp>
 
-#include <mysql/jdbc.hpp>
+#include <mysql/jdbc.h>
 
 #include <iostream>
 #include <iomanip>
@@ -38,6 +38,14 @@ int main()
     delete res;
     delete stmt;
     delete con;
+
+    gil::FormWindow window(1280, 720, "BD Testing");
+    window.addTextBox(10, 10, 400, 20);
+
+    while(window.isActive())
+    {
+        window.pollEvents();
+    }
 
     return EXIT_SUCCESS;
 }

@@ -2,7 +2,7 @@
 
 int main()
 {
-    gil::Window window(800, 600, "Key-Codes Testing");
+    gil::RenderingWindow window(800, 600, "Key-Codes Testing");
     if(!window.isReady())
     {
         return -1;

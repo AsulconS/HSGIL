@@ -9,6 +9,7 @@ doc
 *.o
 
 examples/*.exe
+examples/bd/*.exe
 examples/test
 examples/ball
 examples/finn

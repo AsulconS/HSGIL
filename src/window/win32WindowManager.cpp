@@ -33,7 +33,9 @@ WMLazyPtr WindowManager::s_wmInstances[MAX_WINDOW_INSTANCES] {};
 std::unordered_map<HWND, uint32> WindowManager::s_hwndMap {};
 
 WNDCLASSEXA WindowManager::s_gldcc {};
+WNDCLASSEXA WindowManager::s_fmdcc {};
 const char  WindowManager::s_gldccName[GLDCC_NAME_SIZE] {"GLDCC"};
+const char  WindowManager::s_fmdccName[FMDCC_NAME_SIZE] {"FMDCC"};
 
 PIXELFORMATDESCRIPTOR WindowManager::s_pfd;
 const int WindowManager::s_attribs[ATTRIB_LIST_SIZE]
@@ -130,6 +132,7 @@ WindowManager* WindowManager::createInstance()
     if(!s_wmInstanceCount)
     {
         s_procInstanceHandle = GetModuleHandleW(nullptr);
+        registerFMDCC();
         registerGLDCC();
         loadGLExtensions();
 
@@ -169,16 +172,64 @@ bool WindowManager::isActive()
     return m_active;
 }
 
+void WindowManager::createButton(int x, int y, int width, int height)
+{
+}
+
+void WindowManager::createTextBox(int x, int y, int width, int height)
+{
+    HWND textBoxHandle = CreateWindowExA
+    (
+        0L,                                // Extended Window Style
+        "EDIT",                            // Window Class Name
+        "",                                // Window Title
+        WS_BORDER | WS_CHILD | WS_VISIBLE, // Window Style
+
+        x, y, width, height,
+
+        m_mainWindowHandle,   // Parent Window Handle
+        nullptr,              // Menu Handle
+        s_procInstanceHandle, // Handle to current instance
+        nullptr               // Additional Application Data
+    );
+    m_textBoxHandles[m_activeTextBoxes++] = textBoxHandle;
+}
+
+void WindowManager::createFormWindow(const char* title, int x, int y, int width, int height)
+{
+    if(!m_active)
+    {
+        m_mainWindowHandle = CreateWindowExA
+        (
+            0L,                          // Extended Window Style
+            s_fmdcc.lpszClassName,       // Window Class Name
+            title,                       // Window Title
+            WS_OVERLAPPEDWINDOW,         // Window Style
+
+            x, y, width, height,
+
+            nullptr,              // Parent Window Handle
+            nullptr,              // Menu Handle
+            s_procInstanceHandle, // Handle to current instance
+            nullptr               // Additional Application Data
+        );
+        ShowWindow(m_mainWindowHandle, SW_SHOW);
+        m_active = true;
+        ++s_activeSessions;
+        s_hwndMap[m_mainWindowHandle] = m_index;
+    }
+}
+
 void WindowManager::createRenderingWindow(const char* title, int x, int y, int width, int height)
 {
     if(!m_active)
     {
-        m_windowHandle = CreateWindowExA
+        m_mainWindowHandle = CreateWindowExA
         (
-            0L,                                 // Extended Window Style
-            s_gldcc.lpszClassName,              // Window Class Name
-            title,                              // Window Title
-            WS_OVERLAPPEDWINDOW | WS_VISIBLE,   // Window Style
+            0L,                               // Extended Window Style
+            s_gldcc.lpszClassName,            // Window Class Name
+            title,                            // Window Title
+            WS_OVERLAPPEDWINDOW | WS_VISIBLE, // Window Style
 
             x, y, width, height,
 
@@ -189,20 +240,20 @@ void WindowManager::createRenderingWindow(const char* title, int x, int y, int w
         );
         m_active = true;
         ++s_activeSessions;
-        s_hwndMap[m_windowHandle] = m_index;
+        s_hwndMap[m_mainWindowHandle] = m_index;
     }
 }
 
-void WindowManager::destroyRenderingWindow()
+void WindowManager::destroyWindow()
 {
     if(m_active)
     {
-        DestroyWindow(m_windowHandle);
+        DestroyWindow(m_mainWindowHandle);
         m_active = false;
     }
 }
 
-void WindowManager::setKeyCallbackFunction(Window* t_windowCallbackInstance, KeyCallbackFunction tf_keyCallbackFunction)
+void WindowManager::setKeyCallbackFunction(IWindow* t_windowCallbackInstance, KeyCallbackFunction tf_keyCallbackFunction)
 {
     m_windowCallbackInstance = t_windowCallbackInstance;
     mf_keyCallbackFunction = tf_keyCallbackFunction;
@@ -212,6 +263,7 @@ void WindowManager::pollEvents()
 {
     if(PeekMessageW(&s_msg, nullptr, 0, 0, PM_REMOVE))
     {
+        TranslateMessage(&s_msg);
         DispatchMessageW(&s_msg);
     }
 }
@@ -224,7 +276,9 @@ void WindowManager::swapBuffers()
 WindowManager::WindowManager(const uint32 t_index)
     : m_active                   {false},
       m_index                    {t_index},
-      m_windowHandle             {nullptr},
+      m_activeButtons            {0u},
+      m_activeTextBoxes          {0u},
+      m_mainWindowHandle         {nullptr},
       m_deviceContextHandle      {nullptr},
       m_glRenderingContextHandle {nullptr}
 {
@@ -238,7 +292,7 @@ void WindowManager::registerGLDCC()
 {
     s_gldcc.cbSize        = sizeof(WNDCLASSEXA);
     s_gldcc.style         = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
-    s_gldcc.lpfnWndProc   = HSGILProc;
+    s_gldcc.lpfnWndProc   = GLDCCProc;
     s_gldcc.cbClsExtra    = 0;
     s_gldcc.cbWndExtra    = 0;
     s_gldcc.hInstance     = s_procInstanceHandle;
@@ -251,7 +305,28 @@ void WindowManager::registerGLDCC()
 
     if(!RegisterClassExA(&s_gldcc))
     {
-        fatalError("Failed to register Window.");
+        fatalError("Failed to register Rendering Window.");
+    }
+}
+
+void WindowManager::registerFMDCC()
+{
+    s_fmdcc.cbSize        = sizeof(WNDCLASSEXA);
+    s_fmdcc.style         = 0;
+    s_fmdcc.lpfnWndProc   = FMDCCProc;
+    s_fmdcc.cbClsExtra    = 0;
+    s_fmdcc.cbWndExtra    = 0;
+    s_fmdcc.hInstance     = s_procInstanceHandle;
+    s_fmdcc.hIcon         = LoadIconA(nullptr, IDI_APPLICATION);
+    s_fmdcc.hCursor       = LoadCursorA(nullptr, IDC_ARROW);
+    s_fmdcc.hbrBackground = (HBRUSH)(COLOR_BACKGROUND);
+    s_fmdcc.lpszMenuName  = nullptr;
+    s_fmdcc.lpszClassName = s_fmdccName;
+    s_fmdcc.hIconSm       = LoadIconA(nullptr, IDI_APPLICATION);
+
+    if(!RegisterClassExA(&s_fmdcc))
+    {
+        fatalError("Failed to register Form Window.");
     }
 }
 
@@ -399,7 +474,30 @@ void WindowManager::fatalError(const char* msg)
     exit(EXIT_FAILURE);
 }
 
-LRESULT CALLBACK WindowManager::HSGILProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+LRESULT CALLBACK WindowManager::FMDCCProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+    switch(uMsg)
+    {
+        case WM_DESTROY:
+            {
+                WindowManager* windowInstance = s_wmInstances[s_hwndMap[hWnd]];
+                --s_activeSessions;
+                windowInstance->m_active = false;
+                if(!s_activeSessions)
+                {
+                    PostQuitMessage(0);
+                }
+            }
+            break;
+
+        default:
+            break;
+    }
+
+    return DefWindowProc(hWnd, uMsg, wParam, lParam);
+}
+
+LRESULT CALLBACK WindowManager::GLDCCProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     switch(uMsg)
     {
@@ -513,11 +611,13 @@ LRESULT CALLBACK WindowManager::HSGILProc(HWND hWnd, UINT uMsg, WPARAM wParam, L
             {
                 puts("WM_SYSKEYDOWN");
             }
-            return 0;
+            break;
 
         case WM_SYSKEYUP:
-            puts("WM_SYSKEYUP");
-            return 0;
+            {
+                puts("WM_SYSKEYUP");
+            }
+            break;
 
         default:
             break;

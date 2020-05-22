@@ -101,7 +101,7 @@ void Ball::generateBallVerticesAndIndices()
 
 int main()
 {
-    gil::Window window;
+    gil::RenderingWindow window;
     if(!window.isReady())
     {
         std::cerr << "Window is not ready, something went wrong" << std::endl;

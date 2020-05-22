@@ -27,7 +27,9 @@
 #include <HSGIL/window/inputEvents.hpp>
 #include <HSGIL/window/inputBindings.hpp>
 
-#include <HSGIL/window/window.hpp>
+#include <HSGIL/window/iWindow.hpp>
+#include <HSGIL/window/renderingWindow.hpp>
+#include <HSGIL/window/formWindow.hpp>
 #include <HSGIL/window/windowManager.hpp>
 #include <HSGIL/window/iInputControl.hpp>
 #include <HSGIL/window/iEventHandler.hpp>

@@ -236,7 +236,7 @@ void WindowManager::destroyRenderingWindow()
     }
 }
 
-void WindowManager::setKeyCallbackFunction(Window* t_windowCallbackInstance, KeyCallbackFunction tf_keyCallbackFunction)
+void WindowManager::setKeyCallbackFunction(IWindow* t_windowCallbackInstance, KeyCallbackFunction tf_keyCallbackFunction)
 {
     m_windowCallbackInstance = t_windowCallbackInstance;
     mf_keyCallbackFunction = tf_keyCallbackFunction;

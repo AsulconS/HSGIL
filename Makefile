@@ -124,7 +124,7 @@ endif
 
 CORE_OBJECT_FILES     = $(EXTERNAL_DEPENDENCIES) timer.o
 MATH_OBJECT_FILES     = mUtils.o
-WINDOW_OBJECT_FILES   = window.o $(OS_DEPENDENT_WINDOW_MANAGER) eventHandler.o inputControl.o inputTrigger.o wUtils.o
+WINDOW_OBJECT_FILES   = renderingWindow.o formWindow.o $(OS_DEPENDENT_WINDOW_MANAGER) eventHandler.o inputControl.o inputTrigger.o wUtils.o
 GRAPHICS_OBJECT_FILES = shader.o mesh.o model.o gUtils.o
 
 ifeq ($(C_OS), WINDOWS)
@@ -263,9 +263,14 @@ mUtils.o: src/math/mUtils.cpp
 	$(VISIBILITY)$(CXX) -c $(CXX_FLAGS) $(INCLUDE_PATH) $(B_FPIC) src/math/mUtils.cpp
 	@printf "$(OK_STRING)\n"
 
-window.o: src/window/window.cpp
+renderingWindow.o: src/window/renderingWindow.cpp
 	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
-	$(VISIBILITY)$(CXX) -c $(CXX_FLAGS) $(INCLUDE_PATH) $(B_FPIC) src/window/window.cpp
+	$(VISIBILITY)$(CXX) -c $(CXX_FLAGS) $(INCLUDE_PATH) $(B_FPIC) src/window/renderingWindow.cpp
+	@printf "$(OK_STRING)\n"
+
+formWindow.o: src/window/formWindow.cpp
+	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
+	$(VISIBILITY)$(CXX) -c $(CXX_FLAGS) $(INCLUDE_PATH) $(B_FPIC) src/window/formWindow.cpp
 	@printf "$(OK_STRING)\n"
 
 win32WindowManager.o: src/window/win32WindowManager.cpp

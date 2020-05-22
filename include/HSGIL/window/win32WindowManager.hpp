@@ -42,12 +42,15 @@
 
 #define NUM_KEYS_SIZE 256u
 #define GLDCC_NAME_SIZE 6u
+#define FMDCC_NAME_SIZE 6u
 #define ATTRIB_LIST_SIZE 17u
 #define MAX_WINDOW_INSTANCES 16u
+#define MAX_BUTTON_INSTANCES 32u
+#define MAX_TEXT_BOX_INSTANCES 32u
 
 namespace gil
 {
-class Window;
+class IWindow;
 class WindowManager;
 
 class HSGIL_API WMLazyPtr final
@@ -70,7 +73,7 @@ private:
     WindowManager* m_wm;
 };
 
-typedef void (*KeyCallbackFunction)(Window*, InputEvent, InputCode, bool);
+typedef void (*KeyCallbackFunction)(IWindow*, InputEvent, InputCode, bool);
 
 class HSGIL_API WindowManager final
 {
@@ -80,10 +83,13 @@ public:
     static WindowManager* getInstance(const uint32 index);
 
     bool isActive();
+    void createButton(int x, int y, int width, int height);
+    void createTextBox(int x, int y, int width, int height);
+    void createFormWindow(const char* title, int x, int y, int width, int height);
     void createRenderingWindow(const char* title, int x, int y, int width, int height);
-    void destroyRenderingWindow();
+    void destroyWindow();
 
-    void setKeyCallbackFunction(Window* t_windowCallbackInstance, KeyCallbackFunction tf_keyCallbackFunction);
+    void setKeyCallbackFunction(IWindow* t_windowCallbackInstance, KeyCallbackFunction tf_keyCallbackFunction);
 
     void pollEvents();
     void swapBuffers();
@@ -92,12 +98,17 @@ private:
     bool m_active;
 
     uint32 m_index;
-    HWND m_windowHandle;
+    uint32 m_activeButtons;
+    uint32 m_activeTextBoxes;
+
+    HWND m_mainWindowHandle;
+    HWND m_buttonHandles[MAX_BUTTON_INSTANCES];
+    HWND m_textBoxHandles[MAX_TEXT_BOX_INSTANCES];
 
     HDC m_deviceContextHandle;
     HGLRC m_glRenderingContextHandle;
 
-    Window* m_windowCallbackInstance;
+    IWindow* m_windowCallbackInstance;
     KeyCallbackFunction mf_keyCallbackFunction;
 
     /* Privated constructor and destructor */
@@ -116,7 +127,9 @@ private:
     /* Satatic Win32 API Internal Data */
 
     static WNDCLASSEXA s_gldcc;
+    static WNDCLASSEXA s_fmdcc;
     static const char  s_gldccName[GLDCC_NAME_SIZE];
+    static const char  s_fmdccName[FMDCC_NAME_SIZE];
 
     static PIXELFORMATDESCRIPTOR s_pfd;
     static const int s_attribs[ATTRIB_LIST_SIZE];
@@ -131,6 +144,7 @@ private:
     static bool s_pixelFormatCompat;
 
     static void registerGLDCC();
+    static void registerFMDCC();
     static void loadGLExtensions();
     static void warning(const char* msg);
     static void fatalError(const char* msg);
@@ -142,7 +156,8 @@ private:
     static PFNWGLSWAPINTERVALEXTPROC wglSwapIntervalEXT;
     static PFNWGLGETSWAPINTERVALEXTPROC wglGetSwapIntervalEXT;
 
-    static LRESULT CALLBACK HSGILProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+    static LRESULT CALLBACK GLDCCProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+    static LRESULT CALLBACK FMDCCProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
     /* Deleted Constructors and assignment */
 

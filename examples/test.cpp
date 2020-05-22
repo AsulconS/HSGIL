@@ -4,7 +4,7 @@
 
 int main()
 {
-    gil::Window window;
+    gil::RenderingWindow window;
 
     if(!window.isReady())
     {

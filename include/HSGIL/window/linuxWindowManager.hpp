@@ -55,7 +55,7 @@ typedef XID XWND;
 
 namespace gil
 {
-class Window;
+class IWindow;
 class WindowManager;
 
 class HSGIL_API WMLazyPtr final
@@ -78,7 +78,7 @@ private:
     WindowManager* m_wm;
 };
 
-typedef void (*KeyCallbackFunction)(Window*, InputEvent, InputCode, bool);
+typedef void (*KeyCallbackFunction)(IWindow*, InputEvent, InputCode, bool);
 typedef int (*PFNGLXSWAPINTERVALPROC)(int);
 
 class HSGIL_API WindowManager final
@@ -92,7 +92,7 @@ public:
     void createRenderingWindow(const char* title, int x, int y, int width, int height);
     void destroyRenderingWindow();
 
-    void setKeyCallbackFunction(Window* t_windowCallbackInstance, KeyCallbackFunction tf_keyCallbackFunction);
+    void setKeyCallbackFunction(IWindow* t_windowCallbackInstance, KeyCallbackFunction tf_keyCallbackFunction);
 
     void pollEvents();
     void swapBuffers();
@@ -111,7 +111,7 @@ private:
     XVisualInfo* m_visual;
     XSetWindowAttributes m_windowAttributes;
 
-    Window* m_windowCallbackInstance;
+    IWindow* m_windowCallbackInstance;
     KeyCallbackFunction mf_keyCallbackFunction;
 
     void createContext();
