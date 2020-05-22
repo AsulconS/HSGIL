@@ -21,21 +21,37 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_INPUT_EVENTS_HPP
-#define HSGIL_INPUT_EVENTS_HPP
+#include <HSGIL/window/inputButton.hpp>
 
 namespace gil
 {
-enum InputEvent
+InputButton::InputButton()
+    : IInputControl {}
 {
-    KEY_RELEASED   = 0x0,
-    KEY_PRESSED    = 0x1,
+}
 
-    // Form Events
+InputButton::~InputButton()
+{
+}
 
-    BUTTON_PRESSED = 0x2
-};
+void InputButton::accum(const float amount)
+{
+    m_magnitude += amount;
+}
+
+float InputButton::getMagnitude()
+{
+    if(m_magnitude != 0.0f)
+    {
+        m_magnitude = 0.0f;
+        return 1.0f;
+    }
+    return 0.0f;
+}
+
+bool InputButton::isTriggered()
+{
+    return getMagnitude() == 1.0f;
+}
 
 } // namespace gil
-
-#endif // HSGIL_INPUT_EVENTS_HPP

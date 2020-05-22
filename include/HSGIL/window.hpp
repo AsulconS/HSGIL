@@ -35,6 +35,7 @@
 #include <HSGIL/window/iEventHandler.hpp>
 #include <HSGIL/window/inputControl.hpp>
 #include <HSGIL/window/inputTrigger.hpp>
+#include <HSGIL/window/inputButton.hpp>
 #include <HSGIL/window/eventHandler.hpp>
 
 #include <HSGIL/window/wUtils.hpp>

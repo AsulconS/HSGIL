@@ -113,8 +113,12 @@ protected:
 
 private:
     /**
-     * @brief Key Callback Function
+     * @brief Key Callback function
      * 
+     * @param window 
+     * @param event 
+     * @param keyCode 
+     * @param repeat 
      */
     static void keyCallback(IWindow* window, InputEvent event, InputCode keyCode, bool repeat);
 };

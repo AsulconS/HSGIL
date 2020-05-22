@@ -124,7 +124,7 @@ endif
 
 CORE_OBJECT_FILES     = $(EXTERNAL_DEPENDENCIES) timer.o
 MATH_OBJECT_FILES     = mUtils.o
-WINDOW_OBJECT_FILES   = renderingWindow.o formWindow.o $(OS_DEPENDENT_WINDOW_MANAGER) eventHandler.o inputControl.o inputTrigger.o wUtils.o
+WINDOW_OBJECT_FILES   = renderingWindow.o formWindow.o $(OS_DEPENDENT_WINDOW_MANAGER) eventHandler.o inputControl.o inputTrigger.o inputButton.o wUtils.o
 GRAPHICS_OBJECT_FILES = shader.o mesh.o model.o gUtils.o
 
 ifeq ($(C_OS), WINDOWS)
@@ -296,6 +296,11 @@ inputControl.o: src/window/inputControl.cpp
 inputTrigger.o: src/window/inputTrigger.cpp
 	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
 	$(VISIBILITY)$(CXX) -c $(CXX_FLAGS) $(INCLUDE_PATH) $(B_FPIC) src/window/inputTrigger.cpp
+	@printf "$(OK_STRING)\n"
+
+inputButton.o: src/window/inputButton.cpp
+	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
+	$(VISIBILITY)$(CXX) -c $(CXX_FLAGS) $(INCLUDE_PATH) $(B_FPIC) src/window/inputButton.cpp
 	@printf "$(OK_STRING)\n"
 
 wUtils.o: src/window/wUtils.cpp

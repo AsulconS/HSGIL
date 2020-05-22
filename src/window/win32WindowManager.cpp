@@ -172,11 +172,47 @@ bool WindowManager::isActive()
     return m_active;
 }
 
-void WindowManager::createButton(int x, int y, int width, int height)
+Tag WindowManager::createLabel(int x, int y, int width, int height, const char* text)
 {
+    HWND labelHandle = CreateWindowExA
+    (
+        0L,                                            // Extended Window Style
+        "STATIC",                                      // Window Class Name
+        text,                                          // Window Title
+        WS_BORDER | WS_CHILD | WS_VISIBLE | SS_CENTER, // Window Style
+
+        x, y, width, height,
+
+        m_mainWindowHandle,   // Parent Window Handle
+        nullptr,              // Menu Handle
+        s_procInstanceHandle, // Handle to current instance
+        nullptr               // Additional Application Data
+    );
+    m_labelHandles[m_activeLabels] = labelHandle;
+    return m_activeLabels++;
 }
 
-void WindowManager::createTextBox(int x, int y, int width, int height)
+Tag WindowManager::createButton(int x, int y, int width, int height, int command, const char* text)
+{
+    HWND buttonHandle = CreateWindowExA
+    (
+        0L,                                // Extended Window Style
+        "BUTTON",                          // Window Class Name
+        text,                              // Window Title
+        WS_BORDER | WS_CHILD | WS_VISIBLE, // Window Style
+
+        x, y, width, height,
+
+        m_mainWindowHandle,   // Parent Window Handle
+        (HMENU) command,      // Menu Handle
+        s_procInstanceHandle, // Handle to current instance
+        nullptr               // Additional Application Data
+    );
+    m_buttonHandles[m_activeButtons] = buttonHandle;
+    return m_activeButtons++;
+}
+
+Tag WindowManager::createTextBox(int x, int y, int width, int height)
 {
     HWND textBoxHandle = CreateWindowExA
     (
@@ -192,7 +228,53 @@ void WindowManager::createTextBox(int x, int y, int width, int height)
         s_procInstanceHandle, // Handle to current instance
         nullptr               // Additional Application Data
     );
-    m_textBoxHandles[m_activeTextBoxes++] = textBoxHandle;
+    m_textBoxHandles[m_activeTextBoxes] = textBoxHandle;
+    return m_activeTextBoxes++;
+}
+
+char* WindowManager::getLabelText(const uint32 index)
+{
+    char* buff = new char[64];
+    if(GetWindowTextA(m_labelHandles[index], buff, 64))
+    {
+        return buff;
+    }
+    return nullptr;
+}
+
+char* WindowManager::getButtonText(const uint32 index)
+{
+    char* buff = new char[64];
+    if(GetWindowTextA(m_buttonHandles[index], buff, 64))
+    {
+        return buff;
+    }
+    return nullptr;
+}
+
+char* WindowManager::getTextBoxText(const uint32 index)
+{
+    char* buff = new char[64];
+    if(GetWindowTextA(m_textBoxHandles[index], buff, 64))
+    {
+        return buff;
+    }
+    return nullptr;
+}
+
+void WindowManager::setLabelText(const uint32 index, const char* text)
+{
+    SetWindowTextA(m_labelHandles[index], text);
+}
+
+void WindowManager::setButtonText(const uint32 index, const char* text)
+{
+    SetWindowTextA(m_buttonHandles[index], text);
+}
+
+void WindowManager::setTextBoxText(const uint32 index, const char* text)
+{
+    SetWindowTextA(m_textBoxHandles[index], text);
 }
 
 void WindowManager::createFormWindow(const char* title, int x, int y, int width, int height)
@@ -276,6 +358,7 @@ void WindowManager::swapBuffers()
 WindowManager::WindowManager(const uint32 t_index)
     : m_active                   {false},
       m_index                    {t_index},
+      m_activeLabels             {0u},
       m_activeButtons            {0u},
       m_activeTextBoxes          {0u},
       m_mainWindowHandle         {nullptr},
@@ -478,6 +561,12 @@ LRESULT CALLBACK WindowManager::FMDCCProc(HWND hWnd, UINT uMsg, WPARAM wParam, L
 {
     switch(uMsg)
     {
+        case WM_CREATE:
+            {
+                // FreeConsole();
+            }
+            break;
+
         case WM_DESTROY:
             {
                 WindowManager* windowInstance = s_wmInstances[s_hwndMap[hWnd]];
@@ -486,6 +575,44 @@ LRESULT CALLBACK WindowManager::FMDCCProc(HWND hWnd, UINT uMsg, WPARAM wParam, L
                 if(!s_activeSessions)
                 {
                     PostQuitMessage(0);
+                }
+            }
+            break;
+        
+        case WM_COMMAND:
+            {
+                WindowManager* windowInstance = s_wmInstances[s_hwndMap[hWnd]];
+                windowInstance->mf_keyCallbackFunction(windowInstance->m_windowCallbackInstance, BUTTON_PRESSED, static_cast<InputCode>(static_cast<uint64>(BUTTON_000) + (static_cast<uint64>(wParam) & 0x0000FFFFull)), false);
+            }
+            break;
+
+        case WM_KEYDOWN:
+            {
+                WindowManager* windowInstance = s_wmInstances[s_hwndMap[hWnd]];
+                windowInstance->mf_keyCallbackFunction(windowInstance->m_windowCallbackInstance, KEY_PRESSED, static_cast<InputCode>(wParam), s_keyPhysicStates[wParam]);
+                s_keyPhysicStates[wParam] = 1;
+            }
+            break;
+
+        case WM_KEYUP:
+            {
+                s_keyPhysicStates[wParam] = 0;
+                WindowManager* windowInstance = s_wmInstances[s_hwndMap[hWnd]];
+                windowInstance->mf_keyCallbackFunction(windowInstance->m_windowCallbackInstance, KEY_RELEASED, static_cast<InputCode>(wParam), false);
+            }
+            break;
+
+        case WM_KILLFOCUS:
+            {
+                puts("Lost focus");
+                WindowManager* windowInstance = s_wmInstances[s_hwndMap[hWnd]];
+                for(uint32 i = 0; i < NUM_KEYS_SIZE; ++i)
+                {
+                    if(s_keyPhysicStates[i])
+                    {
+                        s_keyPhysicStates[i] = 0;
+                        windowInstance->mf_keyCallbackFunction(windowInstance->m_windowCallbackInstance, KEY_RELEASED, static_cast<InputCode>(i), false);
+                    }
                 }
             }
             break;

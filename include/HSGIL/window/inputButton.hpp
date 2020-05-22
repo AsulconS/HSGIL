@@ -21,21 +21,60 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_INPUT_EVENTS_HPP
-#define HSGIL_INPUT_EVENTS_HPP
+#ifndef HSGIL_INPUT_BUTTON_HPP
+#define HSGIL_INPUT_BUTTON_HPP
+
+#include <HSGIL/core/config.hpp>
+#include <HSGIL/core/common.hpp>
+
+#include <HSGIL/window/iInputControl.hpp>
 
 namespace gil
 {
-enum InputEvent
+/**
+ * @brief InputButton Class that is an input controller that triggers
+ * some accion once when pressed (no repeat) and can't do nothing until
+ * it gets pressed again (i.e. exit key, 'once' keys).
+ * It is similar to InputTrigger, but this one works with Form Buttons
+ * 
+ */
+class HSGIL_API InputButton : public IInputControl
 {
-    KEY_RELEASED   = 0x0,
-    KEY_PRESSED    = 0x1,
+public:
+    /**
+     * @brief Construct a new InputTrigger object
+     * 
+     */
+    InputButton();
+    /**
+     * @brief Destroy the InputTrigger object
+     * 
+     */
+    virtual ~InputButton();
 
-    // Form Events
+    /**
+     * @brief Adds an amount to its magnitude
+     * 
+     * @param amount 
+     */
+    virtual void accum(const float amount) override;
+    /**
+     * @brief Get the Magnitude of the control
+     * 
+     * @return float 
+     */
+    virtual float getMagnitude() override;
 
-    BUTTON_PRESSED = 0x2
+    /**
+     * @brief Checks once if the control has been triggered, then sets its flag to 1
+     * until its ammount makes 0 again
+     * 
+     * @return true 
+     * @return false 
+     */
+    bool isTriggered();
 };
 
 } // namespace gil
 
-#endif // HSGIL_INPUT_EVENTS_HPP
+#endif // HSGIL_INPUT_BUTTON_HPP

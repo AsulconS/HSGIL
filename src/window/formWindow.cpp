@@ -29,7 +29,7 @@ FormWindow::FormWindow(const uint32 t_width, const uint32 t_height, const char* 
     : IWindow {t_width, t_height, t_title, t_eventHandler}
 {
     m_windowManager = WindowManager::createInstance();
-    m_windowManager->setKeyCallbackFunction(this, nullptr);
+    m_windowManager->setKeyCallbackFunction(this, keyCallback);
     std::cout << "Manager at: " << m_windowManager << std::endl;
     std::cout << "Size is   : " << sizeof(WindowManager) << std::endl;
 
@@ -50,9 +50,73 @@ FormWindow::~FormWindow()
     std::cout << "Destructing Window " << m_title << std::endl;
 }
 
-void FormWindow::addTextBox(const uint32 x, const uint32 y, const uint32 t_width, const uint32 t_height)
+Tag FormWindow::addLabel(const uint32 x, const uint32 y, const uint32 t_width, const uint32 t_height, const char* text)
 {
-    m_windowManager->createTextBox(x, y, t_width, t_height);
+    return m_windowManager->createLabel(x, y, t_width, t_height, text);
+}
+
+Tag FormWindow::addButton(const uint32 x, const uint32 y, const uint32 t_width, const uint32 t_height, const uint32 command, const char* text)
+{
+    return m_windowManager->createButton(x, y, t_width, t_height, command, text);
+}
+
+Tag FormWindow::addTextBox(const uint32 x, const uint32 y, const uint32 t_width, const uint32 t_height)
+{
+    return m_windowManager->createTextBox(x, y, t_width, t_height);
+}
+
+std::string FormWindow::getLabelText(const Tag tag)
+{
+    char* text = m_windowManager->getLabelText(tag);
+    if(text != nullptr)
+    {
+        std::string retVal {text};
+        delete[] text;
+
+        return retVal;
+    }
+    return "";
+}
+
+std::string FormWindow::getButtonText(const Tag tag)
+{
+    char* text = m_windowManager->getButtonText(tag);
+    if(text != nullptr)
+    {
+        std::string retVal {text};
+        delete[] text;
+
+        return retVal;
+    }
+    return "";
+}
+
+std::string FormWindow::getTextBoxText(const Tag tag)
+{
+    char* text = m_windowManager->getTextBoxText(tag);
+    if(text != nullptr)
+    {
+        std::string retVal {text};
+        delete[] text;
+
+        return retVal;
+    }
+    return "";
+}
+
+void FormWindow::setLabelText(const Tag tag, const char* text)
+{
+    m_windowManager->setLabelText(tag, text);
+}
+
+void FormWindow::setButtonText(const Tag tag, const char* text)
+{
+    m_windowManager->setButtonText(tag, text);
+}
+
+void FormWindow::setTextBoxText(const Tag tag, const char* text)
+{
+    m_windowManager->setTextBoxText(tag, text);
 }
 
 bool FormWindow::isActive()
@@ -91,6 +155,25 @@ void FormWindow::initializeWindow()
     if(!m_windowManager->isActive())
     {
         throw WindowInitException();
+    }
+}
+
+void FormWindow::keyCallback(IWindow* window, InputEvent event, InputCode keyCode, bool repeat)
+{
+    FormWindow* fWindow = static_cast<FormWindow*>(window);
+    if(fWindow->m_eventHandler != nullptr)
+    {
+        switch(event)
+        {
+            case BUTTON_PRESSED:
+                {
+                    fWindow->m_eventHandler->onKeyDown(keyCode, repeat);
+                }
+                break;
+
+            default:
+                break;
+        }
     }
 }
 

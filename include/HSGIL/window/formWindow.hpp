@@ -62,14 +62,81 @@ public:
     virtual ~FormWindow();
 
     /**
-     * @brief Adds a Text Box in the current window
+     * @brief Adds a Label
      * 
      * @param x 
      * @param y 
      * @param t_width 
      * @param t_height 
+     * @param text 
+     * @return Tag 
      */
-    void addTextBox(const uint32 x = 0u, const uint32 y = 0u, const uint32 t_width = 400u, const uint32 t_height = 20u);
+    Tag addLabel(const uint32 x = 0u, const uint32 y = 0u, const uint32 t_width = 200u, const uint32 t_height = 20u, const char* text = "");
+    /**
+     * @brief Adds a Button
+     * 
+     * @param x 
+     * @param y 
+     * @param t_width 
+     * @param t_height 
+     * @param command 
+     * @param text 
+     * @return Tag 
+     */
+    Tag addButton(const uint32 x = 0u, const uint32 y = 0u, const uint32 t_width = 70u, const uint32 t_height = 20u, const uint32 command = 1, const char* text = "");
+    /**
+     * @brief Adds a Text Box
+     * 
+     * @param x 
+     * @param y 
+     * @param t_width 
+     * @param t_height 
+     * @return Tag 
+     */
+    Tag addTextBox(const uint32 x = 0u, const uint32 y = 0u, const uint32 t_width = 400u, const uint32 t_height = 20u);
+
+    /**
+     * @brief Get the Label Text object
+     * 
+     * @param tag 
+     * @return std::string 
+     */
+    std::string getLabelText(const Tag tag);
+    /**
+     * @brief Get the Button Text object
+     * 
+     * @param tag 
+     * @return std::string 
+     */
+    std::string getButtonText(const Tag tag);
+    /**
+     * @brief Get the Tex Box Text object
+     * 
+     * @param tag 
+     * @return char* 
+     */
+    std::string getTextBoxText(const Tag tag);
+
+    /**
+     * @brief Set the Label Text object
+     * 
+     * @param tag 
+     */
+    void setLabelText(const Tag tag, const char* text);
+    /**
+     * @brief Set the Button Text object
+     * 
+     * @param tag 
+     * @param text 
+     */
+    void setButtonText(const Tag tag, const char* text);
+    /**
+     * @brief Set the Text Box Text object
+     * 
+     * @param tag 
+     * @param text 
+     */
+    void setTextBoxText(const Tag tag, const char* text);
 
     /**
      * @brief Check if the Window shouldn't close
@@ -114,6 +181,17 @@ protected:
      * 
      */
     virtual void initializeWindow() override;
+
+private:
+    /**
+     * @brief Key Callback function
+     * 
+     * @param window 
+     * @param event 
+     * @param keyCode 
+     * @param repeat 
+     */
+    static void keyCallback(IWindow* window, InputEvent event, InputCode keyCode, bool repeat);
 };
 
 } // namespace gil

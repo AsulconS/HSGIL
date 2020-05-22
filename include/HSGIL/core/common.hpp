@@ -39,6 +39,8 @@ using uint64 = uint64_t;
 
 using byte   = uint8_t;
 
+using Tag    = uint32_t;
+
 } // namespace gil
 
 namespace luis   = gil;

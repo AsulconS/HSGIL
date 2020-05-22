@@ -45,6 +45,8 @@
 #define FMDCC_NAME_SIZE 6u
 #define ATTRIB_LIST_SIZE 17u
 #define MAX_WINDOW_INSTANCES 16u
+
+#define MAX_LABEL_INSTANCES 32u
 #define MAX_BUTTON_INSTANCES 32u
 #define MAX_TEXT_BOX_INSTANCES 32u
 
@@ -83,8 +85,19 @@ public:
     static WindowManager* getInstance(const uint32 index);
 
     bool isActive();
-    void createButton(int x, int y, int width, int height);
-    void createTextBox(int x, int y, int width, int height);
+
+    Tag createLabel(int x, int y, int width, int height, const char* text);
+    Tag createButton(int x, int y, int width, int height, int command, const char* text);
+    Tag createTextBox(int x, int y, int width, int height);
+
+    char* getLabelText(const uint32 index);
+    char* getButtonText(const uint32 index);
+    char* getTextBoxText(const uint32 index);
+
+    void  setLabelText(const uint32 index, const char* text);
+    void  setButtonText(const uint32 index, const char* text);
+    void  setTextBoxText(const uint32 index, const char* text);
+
     void createFormWindow(const char* title, int x, int y, int width, int height);
     void createRenderingWindow(const char* title, int x, int y, int width, int height);
     void destroyWindow();
@@ -98,10 +111,12 @@ private:
     bool m_active;
 
     uint32 m_index;
+    uint32 m_activeLabels;
     uint32 m_activeButtons;
     uint32 m_activeTextBoxes;
 
     HWND m_mainWindowHandle;
+    HWND m_labelHandles[MAX_LABEL_INSTANCES];
     HWND m_buttonHandles[MAX_BUTTON_INSTANCES];
     HWND m_textBoxHandles[MAX_TEXT_BOX_INSTANCES];
 
