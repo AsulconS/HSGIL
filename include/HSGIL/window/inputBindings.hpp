@@ -231,6 +231,7 @@ enum InputCode
     BUTTON_008 = 0x048,
     BUTTON_009 = 0x049,
     BUTTON_010 = 0x04A,
+    BUTTON_011 = 0x04B,
 
 // --------------------------------
 

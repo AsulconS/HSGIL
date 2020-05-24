@@ -301,6 +301,7 @@ int main(int argc, char** argv)
     gil::InputButton button08;
     gil::InputButton button09;
     gil::InputButton button10;
+    gil::InputButton button11;
 
     gil::EventHandler eventHandler;
     eventHandler.addKeyControl(gil::BUTTON_001, button01, 1.0f);
@@ -313,12 +314,14 @@ int main(int argc, char** argv)
     eventHandler.addKeyControl(gil::BUTTON_008, button08, 1.0f);
     eventHandler.addKeyControl(gil::BUTTON_009, button09, 1.0f);
     eventHandler.addKeyControl(gil::BUTTON_010, button10, 1.0f);
+    eventHandler.addKeyControl(gil::BUTTON_011, button11, 1.0f);
 
     window.setEventHandler(eventHandler);
 
     gil::Tag buttonTag01  = window.addButton( 20, 640, 120, 20, 1, "Show Contacts");
     gil::Tag buttonTag02  = window.addButton(150, 640, 140, 20, 2, "Show Full Contacts");
     gil::Tag buttonTag03  = window.addButton(300, 640, 140, 20, 3, "Show Emails");
+    gil::Tag buttonTag04  = window.addButton(450, 640, 100, 20, 4, "Exit");
 
     // Create Contact Form
     // -----------------------------------------------------------------------------------
@@ -335,7 +338,7 @@ int main(int argc, char** argv)
     gil::Tag addressTag01   = window.addTextBox(120, 100, 500, 20);
     gil::Tag birthdateTag01 = window.addTextBox(120, 130, 500, 20);
 
-    gil::Tag buttonTag04  = window.addButton(120, 160, 120, 20, 4, "Create Contact");
+    gil::Tag buttonTag05  = window.addButton(120, 160, 120, 20, 5, "Create Contact");
 
     // -----------------------------------------------------------------------------------
     
@@ -353,7 +356,7 @@ int main(int argc, char** argv)
     gil::Tag phoneTag01     = window.addTextBox(120, 270, 500, 20);
     gil::Tag phoneTypeTag01 = window.addTextBox(120, 300, 500, 20);
 
-    gil::Tag buttonTag05  = window.addButton(120, 330, 120, 20, 5, "Add Phone");
+    gil::Tag buttonTag06  = window.addButton(120, 330, 120, 20, 6, "Add Phone");
 
     // -----------------------------------------------------------------------------------
 
@@ -371,7 +374,7 @@ int main(int argc, char** argv)
     gil::Tag emailTag01     = window.addTextBox(120, 440, 500, 20);
     gil::Tag emailTypeTag01 = window.addTextBox(120, 470, 500, 20);
 
-    gil::Tag buttonTag06  = window.addButton(120, 500, 120, 20, 6, "Add Email");
+    gil::Tag buttonTag07  = window.addButton(120, 500, 120, 20, 7, "Add Email");
 
     // -----------------------------------------------------------------------------------
 
@@ -393,7 +396,7 @@ int main(int argc, char** argv)
     gil::Tag addressTag02   = window.addTextBox(740, 150, 500, 20);
     gil::Tag birthdateTag02 = window.addTextBox(740, 180, 500, 20);
 
-    gil::Tag buttonTag07  = window.addButton(740, 210, 120, 20, 7, "Update Contact");
+    gil::Tag buttonTag08  = window.addButton(740, 210, 120, 20, 8, "Update Contact");
 
     // -----------------------------------------------------------------------------------
 
@@ -407,7 +410,7 @@ int main(int argc, char** argv)
 
     gil::Tag idTag04      = window.addTextBox(740, 290, 500, 20);
 
-    gil::Tag buttonTag08  = window.addButton(740, 320, 120, 20, 8, "Remove Contact");
+    gil::Tag buttonTag09  = window.addButton(740, 320, 120, 20, 9, "Remove Contact");
 
     // -----------------------------------------------------------------------------------
 
@@ -425,7 +428,7 @@ int main(int argc, char** argv)
     gil::Tag phoneTag03     = window.addTextBox(740, 430, 500, 20);
     gil::Tag phoneTypeTag03 = window.addTextBox(740, 460, 500, 20);
 
-    gil::Tag buttonTag09  = window.addButton(740, 490, 120, 20, 9, "Update Phone");
+    gil::Tag buttonTag10  = window.addButton(740, 490, 120, 20, 10, "Update Phone");
 
     // -----------------------------------------------------------------------------------
 
@@ -443,7 +446,7 @@ int main(int argc, char** argv)
     gil::Tag emailTag03     = window.addTextBox(740, 600, 500, 20);
     gil::Tag emailTypeTag03 = window.addTextBox(740, 630, 500, 20);
 
-    gil::Tag buttonTag10  = window.addButton(740, 660, 120, 20, 10, "Update Email");
+    gil::Tag buttonTag11  = window.addButton(740, 660, 120, 20, 11, "Update Email");
 
     // -----------------------------------------------------------------------------------
 
@@ -472,6 +475,10 @@ int main(int argc, char** argv)
         }
         if(button04.isTriggered())
         {
+            window.close();
+        }
+        if(button05.isTriggered())
+        {
             insertContact(con,  window.getTextBoxText(nameTag01).c_str(),
                                 window.getTextBoxText(lastNameTag01).c_str(),
                                 window.getTextBoxText(addressTag01).c_str(),
@@ -482,7 +489,7 @@ int main(int argc, char** argv)
             window.setTextBoxText(addressTag01, "");
             window.setTextBoxText(birthdateTag01, "");
         }
-        if(button05.isTriggered())
+        if(button06.isTriggered())
         {
             insertPhone(con,    window.getTextBoxText(phoneTag01).c_str(),
                                 window.getTextBoxText(phoneTypeTag01).c_str(),
@@ -492,7 +499,7 @@ int main(int argc, char** argv)
             window.setTextBoxText(phoneTag01, "");
             window.setTextBoxText(phoneTypeTag01, "");
         }
-        if(button06.isTriggered())
+        if(button07.isTriggered())
         {
             insertEmail(con,    window.getTextBoxText(emailTag01).c_str(),
                                 window.getTextBoxText(emailTypeTag01).c_str(),
@@ -502,7 +509,7 @@ int main(int argc, char** argv)
             window.setTextBoxText(emailTag01, "");
             window.setTextBoxText(emailTypeTag01, "");
         }
-        if(button07.isTriggered())
+        if(button08.isTriggered())
         {
             updateContact(con,  window.getTextBoxText(idTag03).c_str(),
                                 window.getTextBoxText(nameTag02).c_str(),
@@ -516,12 +523,12 @@ int main(int argc, char** argv)
             window.setTextBoxText(addressTag02, "");
             window.setTextBoxText(birthdateTag02, "");
         }
-        if(button08.isTriggered())
+        if(button09.isTriggered())
         {
             removeContact(con, window.getTextBoxText(idTag04).c_str());
             window.setTextBoxText(idTag04, "");
         }
-        if(button09.isTriggered())
+        if(button10.isTriggered())
         {
             updatePhone(con,    window.getTextBoxText(phoneTag02).c_str(),
                                 window.getTextBoxText(phoneTag03).c_str(),
@@ -531,7 +538,7 @@ int main(int argc, char** argv)
             window.setTextBoxText(phoneTag03, "");
             window.setTextBoxText(phoneTypeTag03, "");
         }
-        if(button10.isTriggered())
+        if(button11.isTriggered())
         {
             updateEmail(con,    window.getTextBoxText(emailTag02).c_str(),
                                 window.getTextBoxText(emailTag03).c_str(),
