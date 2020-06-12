@@ -96,8 +96,8 @@ private:
     void reallocate();
 };
 
-#include <HSGIL/core/dataStructures/vector.inl>
-
 } // namespace gil
+
+#include <HSGIL/core/dataStructures/vector.inl>
 
 #endif // HSGIL_DSTR_VECTOR_HPP
