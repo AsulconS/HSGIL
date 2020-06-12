@@ -21,8 +21,10 @@
  *                                                                              *
  ********************************************************************************/
 
+namespace gil
+{
 template <typename T>
-inline gil::Vector<T>::Vector()
+inline Vector<T>::Vector()
     : m_data     {nullptr},
       m_size     {0},
       m_capacity {INITIAL_CAPACITY}
@@ -31,7 +33,7 @@ inline gil::Vector<T>::Vector()
 }
 
 template <typename T>
-inline gil::Vector<T>::Vector(uint64 n)
+inline Vector<T>::Vector(uint64 n)
     : m_data     {nullptr},
       m_size     {n},
       m_capacity {n}
@@ -48,7 +50,7 @@ inline gil::Vector<T>::Vector(uint64 n)
 }
 
 template <typename T>
-inline gil::Vector<T>::Vector(uint64 n, const T& val)
+inline Vector<T>::Vector(uint64 n, const T& val)
     : Vector {n}
 {
     for(uint64 i = 0; i < m_size; ++i)
@@ -58,7 +60,7 @@ inline gil::Vector<T>::Vector(uint64 n, const T& val)
 }
 
 template <typename T>
-inline gil::Vector<T>::Vector(const gil::Vector<T>& o)
+inline Vector<T>::Vector(const Vector<T>& o)
     : m_size     {o.m_size},
       m_capacity {o.m_capacity}
 {
@@ -70,7 +72,7 @@ inline gil::Vector<T>::Vector(const gil::Vector<T>& o)
 }
 
 template <typename T>
-inline gil::Vector<T>::Vector(gil::Vector<T>&& o)
+inline Vector<T>::Vector(Vector<T>&& o)
     : m_size     {o.m_size},
       m_capacity {o.m_capacity}
 {
@@ -84,13 +86,13 @@ inline gil::Vector<T>::Vector(gil::Vector<T>&& o)
 }
 
 template <typename T>
-inline gil::Vector<T>::~Vector()
+inline Vector<T>::~Vector()
 {
     delete[] m_data;
 }
 
 template <typename T>
-inline gil::Vector<T>& gil::Vector<T>::operator=(const gil::Vector<T>& o)
+inline Vector<T>& Vector<T>::operator=(const Vector<T>& o)
 {
     delete[] m_data;
 
@@ -107,7 +109,7 @@ inline gil::Vector<T>& gil::Vector<T>::operator=(const gil::Vector<T>& o)
 }
 
 template <typename T>
-inline gil::Vector<T>& gil::Vector<T>::operator=(gil::Vector<T>&& o)
+inline Vector<T>& Vector<T>::operator=(Vector<T>&& o)
 {
     delete[] m_data;
 
@@ -126,7 +128,7 @@ inline gil::Vector<T>& gil::Vector<T>::operator=(gil::Vector<T>&& o)
 }
 
 template <typename T>
-inline void gil::Vector<T>::push_back(const T& val)
+inline void Vector<T>::push_back(const T& val)
 {
     if(m_size >= m_capacity)
     {
@@ -136,7 +138,7 @@ inline void gil::Vector<T>::push_back(const T& val)
 }
 
 template <typename T>
-inline void gil::Vector<T>::push_back(T&& val)
+inline void Vector<T>::push_back(T&& val)
 {
     if(m_size >= m_capacity)
     {
@@ -146,43 +148,43 @@ inline void gil::Vector<T>::push_back(T&& val)
 }
 
 template <typename T>
-inline T* gil::Vector<T>::data() noexcept
+inline T* Vector<T>::data() noexcept
 {
     return m_data;
 }
 
 template <typename T>
-inline const T* gil::Vector<T>::data() const noexcept
+inline const T* Vector<T>::data() const noexcept
 {
     return m_data;
 }
 
 template <typename T>
-inline gil::uint64 gil::Vector<T>::size() const noexcept
+inline uint64 Vector<T>::size() const noexcept
 {
     return m_size;
 }
 
 template <typename T>
-inline gil::uint64 gil::Vector<T>::capacity() const noexcept
+inline uint64 Vector<T>::capacity() const noexcept
 {
     return m_capacity;
 }
 
 template <typename T>
-inline T& gil::Vector<T>::operator[](uint64 n)
+inline T& Vector<T>::operator[](uint64 n)
 {
     return m_data[n];
 }
 
 template <typename T>
-inline const T& gil::Vector<T>::operator[](uint64 n) const
+inline const T& Vector<T>::operator[](uint64 n) const
 {
     return m_data[n];
 }
 
 template <typename T>
-inline void gil::Vector<T>::reallocate()
+inline void Vector<T>::reallocate()
 {
     T* n_data = new T[m_capacity <<= 1];
     for(uint64 i = 0; i < m_size; ++i)
@@ -192,3 +194,5 @@ inline void gil::Vector<T>::reallocate()
     delete[] m_data;
     m_data = n_data;
 }
+
+} // namespace gil
