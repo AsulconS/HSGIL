@@ -64,7 +64,7 @@ public:
      * 
      * @param shader 
      */
-    void draw(const Shader& shader);
+    virtual void draw(const Shader& shader);
 
 protected:
     /**
