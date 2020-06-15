@@ -71,7 +71,7 @@ protected:
      * @brief Generate the VAO, VBO and EBO and setups them
      * 
      */
-    void generate();
+    virtual void generate();
 
     uint32 m_VAO;
     uint32 m_VBO;
