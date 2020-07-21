@@ -9,13 +9,20 @@ int main()
     }
 
     gil::InputControl yRot;
+    gil::InputControl xAxis;
+    gil::InputControl zAxis;
+
     gil::InputTrigger exit;
     gil::InputTrigger switcher;
 
     gil::EventHandler eventHandler01;
     eventHandler01.addKeyControl(gil::KEY_F1, switcher, 1.0f);
-    eventHandler01.addKeyControl(gil::KEY_Q, yRot, -1.0f);
-    eventHandler01.addKeyControl(gil::KEY_E, yRot,  1.0f);
+    eventHandler01.addKeyControl(gil::KEY_Q, yRot,   1.0f);
+    eventHandler01.addKeyControl(gil::KEY_E, yRot,  -1.0f);
+    eventHandler01.addKeyControl(gil::KEY_A, xAxis, -1.0f);
+    eventHandler01.addKeyControl(gil::KEY_D, xAxis,  1.0f);
+    eventHandler01.addKeyControl(gil::KEY_W, zAxis, -1.0f);
+    eventHandler01.addKeyControl(gil::KEY_S, zAxis,  1.0f);
     eventHandler01.addKeyControl(gil::KEY_ESCAPE, exit, 1.0f);
 
     gil::EventHandler eventHandler02;
@@ -32,16 +39,24 @@ int main()
     gil::Shader shader("3default");
     gil::setupDefaultLights(shader, position);
 
-    gil::Model finn("finn.obj", "finn.png");
-    glm::mat4 rTransform = glm::mat4(1.0f);
+    gil::Model finn01("finn.obj", "finn.png");
+    gil::Model finn02("finn.obj", "finn.png");
 
+    glm::vec3 finn01Pos {-32.0f, -32.0f, 0.0f};
+    glm::vec3 finn02Pos {32.0f, -32.0f, 0.0f};
+    float moveWeight {32.0f};
+    float yRotationAngle {-gil::constants::PI};
+    float yRotationWeight {1.5f};
+
+    gil::Timer timer {};
     glEnable(GL_DEPTH_TEST);
     while(window.isActive())
     {
         window.pollEvents();
         if(exit.isTriggered())
         {
-            break;
+            window.close();
+            continue;
         }
         if(switcher.isTriggered())
         {
@@ -62,15 +77,27 @@ int main()
 
         shader.use();
 
-        rTransform = glm::rotate(rTransform, glm::radians(yRot.getMagnitude() * 2.0f), glm::vec3{0.0f, 1.0f, 0.0f});
-        glm::mat4 model = glm::translate(rTransform, glm::vec3{0.0f, -32.0f, 0.0f});
+        float deltaTime = timer.getDeltaTime();
+        finn01Pos.x += xAxis.getMagnitude() * moveWeight * deltaTime;
+        finn01Pos.z += zAxis.getMagnitude() * moveWeight * deltaTime;
+        finn02Pos.x += xAxis.getMagnitude() * moveWeight * deltaTime;
+        finn02Pos.z += zAxis.getMagnitude() * moveWeight * deltaTime;
+        yRotationAngle += yRot.getMagnitude() * yRotationWeight * deltaTime;
+
         glm::mat4 view = glm::lookAt(64.0f * position, glm::vec3{0.0f, 0.0f, 0.0f}, glm::vec3{0.0f, 1.0f, 0.0f});
         glm::mat4 projection = glm::perspective(45.0f, window.getAspectRatio(), 0.1f, 256.0f);
-        shader.setMat4("model", model);
         shader.setMat4("view", view);
         shader.setMat4("projection", projection);
 
-        finn.draw(shader);
+        glm::mat4   model01 = glm::translate(glm::mat4(1.0f), finn01Pos);
+                    model01 = glm::rotate(model01, yRotationAngle, glm::vec3{0.0f, 1.0f, 0.0f});
+        shader.setMat4("model", model01);
+        finn01.draw(shader);
+
+        glm::mat4   model02 = glm::translate(glm::mat4(1.0f), finn02Pos);
+                    model02 = glm::rotate(model02, yRotationAngle, glm::vec3{0.0f, 1.0f, 0.0f});
+        shader.setMat4("model", model02);
+        finn02.draw(shader);
 
         window.swapBuffers();
     }

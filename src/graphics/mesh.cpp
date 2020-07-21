@@ -34,14 +34,14 @@ Mesh::Mesh()
 {
 }
 
-Mesh::Mesh(const char* path)
+Mesh::Mesh(const char* path, bool hasNormals, bool hasUVs)
     : m_VAO        {0},
       m_VBO        {0},
       m_EBO        {0},
       m_indices    {},
       m_vertexData {}
 {
-    loadObj(path, m_vertexData, m_indices);
+    loadObj(path, m_vertexData, m_indices, hasNormals, hasUVs);
     generate();
 }
 
@@ -73,12 +73,15 @@ void Mesh::generate()
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indices.size() * sizeof(uint32), m_indices.data(), GL_STATIC_DRAW);
 
+    // Position Attrib
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
+    // Normal Attrib
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
 
+    // UV Attrib
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
     glEnableVertexAttribArray(2);
 

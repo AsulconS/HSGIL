@@ -40,10 +40,11 @@ namespace gil
  * @param path 
  * @param vertexData 
  * @param indices 
- * @return true 
- * @return false 
+ * @param hasNormals 
+ * @param hasUVs 
+ * @return bool 
  */
-HSGIL_API bool loadObj(const char* path, Vector<float>& vertexData, Vector<uint32>& indices);
+HSGIL_API bool loadObj(const char* path, Vector<float>& vertexData, Vector<uint32>& indices, bool hasNormals = true, bool hasUVs = true);
 
 /**
  * @brief Load a texture from a path and return the texture object created by OpenGL

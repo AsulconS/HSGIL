@@ -52,8 +52,10 @@ public:
      * 
      * @param path 
      * @param texturePath 
+     * @param hasNormals 
+     * @param hasUVs 
      */
-    Model(const char* path, const char* texturePath);
+    Model(const char* path, const char* texturePath = nullptr, bool hasNormals = true, bool hasUVs = true);
     /**
      * @brief Destroy the Model object
      * 

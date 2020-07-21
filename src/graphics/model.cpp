@@ -31,11 +31,18 @@ Model::Model()
 {
 }
 
-Model::Model(const char* path, const char* texturePath)
-    : m_mesh       {path},
+Model::Model(const char* path, const char* texturePath, bool hasNormals, bool hasUVs)
+    : m_mesh       {path, hasNormals, hasUVs},
       m_diffuseMap {0}
 {
-    m_diffuseMap = loadTexture(texturePath);
+    if(texturePath != nullptr)
+    {
+        m_diffuseMap = loadTexture(texturePath);
+    }
+    else
+    {
+        m_diffuseMap = loadTexture("default.png");
+    }
 }
 
 Model::~Model()

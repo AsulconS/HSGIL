@@ -28,7 +28,7 @@
 
 namespace gil
 {
-bool loadObj(const char* path, Vector<float>& vertexData, Vector<uint32>& indices)
+bool loadObj(const char* path, Vector<float>& vertexData, Vector<uint32>& indices, bool hasNormals, bool hasUVs)
 {
     Vector<uint32> vertexIndices;
     Vector<uint32> normalIndices;
@@ -37,6 +37,15 @@ bool loadObj(const char* path, Vector<float>& vertexData, Vector<uint32>& indice
     Vector<glm::vec3> vertices;
     Vector<glm::vec3> normals;
     Vector<glm::vec2> UVs;
+
+    if(!hasNormals)
+    {
+        normals.push_back(glm::vec3{0.0f, 0.0f, 0.0f});
+    }
+    if(!hasUVs)
+    {
+        UVs.push_back(glm::vec2{0.0f, 0.0f});
+    }
 
     std::ifstream objFile;
 
@@ -79,16 +88,58 @@ bool loadObj(const char* path, Vector<float>& vertexData, Vector<uint32>& indice
                 uint32 faceVertexIndices[3];
                 uint32 faceNormalIndices[3];
                 uint32 faceUVIndices[3];
-                sscanf(buffer, "%s %u/%u/%u %u/%u/%u %u/%u/%u", type,
-                                                                &faceVertexIndices[0], &faceUVIndices[0], &faceNormalIndices[0],
-                                                                &faceVertexIndices[1], &faceUVIndices[1], &faceNormalIndices[1],
-                                                                &faceVertexIndices[2], &faceUVIndices[2], &faceNormalIndices[2]);
+                if(hasNormals)
+                {
+                    if(hasUVs)
+                    {
+                        sscanf(buffer, "%s %u/%u/%u %u/%u/%u %u/%u/%u", type,
+                                                                        &faceVertexIndices[0], &faceUVIndices[0], &faceNormalIndices[0],
+                                                                        &faceVertexIndices[1], &faceUVIndices[1], &faceNormalIndices[1],
+                                                                        &faceVertexIndices[2], &faceUVIndices[2], &faceNormalIndices[2]);
+                    }
+                    else
+                    {
+                        sscanf(buffer, "%s %u//%u %u//%u %u//%u",   type,
+                                                                    &faceVertexIndices[0], &faceNormalIndices[0],
+                                                                    &faceVertexIndices[1], &faceNormalIndices[1],
+                                                                    &faceVertexIndices[2], &faceNormalIndices[2]);
+                    }
+                }
+                else if(hasUVs)
+                {
+                    sscanf(buffer, "%s %u/%u/ %u/%u/ %u/%u/",   type,
+                                                                &faceVertexIndices[0], &faceUVIndices[0],
+                                                                &faceVertexIndices[1], &faceUVIndices[1],
+                                                                &faceVertexIndices[2], &faceUVIndices[2]);
+                }
+                else
+                {
+                    sscanf(buffer, "%s %u// %u// %u//", type,
+                                                        &faceVertexIndices[0],
+                                                        &faceVertexIndices[1],
+                                                        &faceVertexIndices[2]);
+                }
 
                 for(uint8 i = 0; i < 3; ++i)
                 {
                     vertexIndices.push_back(faceVertexIndices[i] - 1);
-                    normalIndices.push_back(faceNormalIndices[i] - 1);
-                    UVIndices.push_back(faceUVIndices[i] - 1);
+                    if(hasNormals)
+                    {
+                        normalIndices.push_back(faceNormalIndices[i] - 1);
+                    }
+                    else
+                    {
+                        normalIndices.push_back(0);
+                    }
+                    
+                    if(hasUVs)
+                    {
+                        UVIndices.push_back(faceUVIndices[i] - 1);
+                    }
+                    else
+                    {
+                        UVIndices.push_back(0);
+                    }
                 }
             }
             else

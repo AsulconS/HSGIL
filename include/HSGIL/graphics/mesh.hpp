@@ -51,8 +51,10 @@ public:
      * @brief Construct a new Mesh object from a path to the OBJ file
      * 
      * @param path 
+     * @param hasNormals 
+     * @param hasUVs 
      */
-    Mesh(const char* path);
+    Mesh(const char* path, bool hasNormals = true, bool hasUVs = true);
     /**
      * @brief Destroy the Mesh object
      * 

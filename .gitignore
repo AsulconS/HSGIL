@@ -17,3 +17,7 @@ examples/simple
 
 build_log.txt
 dll_build.bat
+
+test
+test.cpp
+test.exe

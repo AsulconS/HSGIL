@@ -40,6 +40,7 @@ SET RTMLIBS=user32.lib opengl32.lib gdi32.lib
 %CXX% %CXX_FLAGS% %INCLUDE_PATH% /D HSGIL_STATIC_BUILD /c examples/simple.cpp
 %CXX% %CXX_FLAGS% %INCLUDE_PATH% /D HSGIL_STATIC_BUILD /c examples/bd/bd.cpp
 
+%CXX% %CXX_FLAGS% head.obj   hsgil-core.lib hsgil-math.lib hsgil-window.lib hsgil-graphics.lib /link /out:examples/head.exe
 %CXX% %CXX_FLAGS% test.obj   hsgil-core.lib hsgil-math.lib hsgil-window.lib hsgil-graphics.lib /link /out:examples/test.exe
 %CXX% %CXX_FLAGS% ball.obj   hsgil-core.lib hsgil-math.lib hsgil-window.lib hsgil-graphics.lib /link /out:examples/ball.exe
 %CXX% %CXX_FLAGS% finn.obj   hsgil-core.lib hsgil-math.lib hsgil-window.lib hsgil-graphics.lib /link /out:examples/finn.exe
