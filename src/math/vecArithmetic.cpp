@@ -25,6 +25,36 @@
 
 namespace gil
 {
+bool operator==(const Vec2f& l, const Vec2f& r)
+{
+    return (l.x == r.x) && (l.y == r.y);
+}
+
+bool operator==(const Vec3f& l, const Vec3f& r)
+{
+    return (l.x == r.x) && (l.y == r.y) && (l.z == r.z);
+}
+
+bool operator==(const Vec4f& l, const Vec4f& r)
+{
+    return (l.x == r.x) && (l.y == r.y) && (l.z == r.z) && (l.w == r.w);
+}
+
+bool operator!=(const Vec2f& l, const Vec2f& r)
+{
+    return (l.x != r.x) && (l.y != r.y);
+}
+
+bool operator!=(const Vec3f& l, const Vec3f& r)
+{
+    return (l.x != r.x) && (l.y != r.y) && (l.z != r.z);
+}
+
+bool operator!=(const Vec4f& l, const Vec4f& r)
+{
+    return (l.x != r.x) && (l.y != r.y) && (l.z != r.z) && (l.w != r.w);
+}
+
 Vec2f operator+(const Vec2f& l, const Vec2f& r)
 {
     return {l.x + r.x, l.y + r.y};

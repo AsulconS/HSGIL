@@ -36,6 +36,60 @@
 namespace gil
 {
 /**
+ * @brief Compares 2-Dimensional Vectors
+ * 
+ * @param l 
+ * @param r 
+ * @return bool 
+ */
+HSGIL_API bool operator==(const Vec2f& l, const Vec2f& r);
+
+/**
+ * @brief Compares 3-Dimensional Vectors
+ * 
+ * @param l 
+ * @param r 
+ * @return bool 
+ */
+HSGIL_API bool operator==(const Vec3f& l, const Vec3f& r);
+
+/**
+ * @brief Compares 4-Dimensional Vectors
+ * 
+ * @param l 
+ * @param r 
+ * @return bool 
+ */
+HSGIL_API bool operator==(const Vec4f& l, const Vec4f& r);
+
+/**
+ * @brief Compares 2-Dimensional Vectors
+ * 
+ * @param l 
+ * @param r 
+ * @return bool 
+ */
+HSGIL_API bool operator!=(const Vec2f& l, const Vec2f& r);
+
+/**
+ * @brief Compares 3-Dimensional Vectors
+ * 
+ * @param l 
+ * @param r 
+ * @return bool 
+ */
+HSGIL_API bool operator!=(const Vec3f& l, const Vec3f& r);
+
+/**
+ * @brief Compares 4-Dimensional Vectors
+ * 
+ * @param l 
+ * @param r 
+ * @return bool 
+ */
+HSGIL_API bool operator!=(const Vec4f& l, const Vec4f& r);
+
+/**
  * @brief Adds 2-Dimensional Vectors
  * 
  * @param l 
