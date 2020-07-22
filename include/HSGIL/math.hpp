@@ -28,5 +28,6 @@
 #include <HSGIL/math/vec3.hpp>
 #include <HSGIL/math/vec4.hpp>
 #include <HSGIL/math/mUtils.hpp>
+#include <HSGIL/math/vecArithmetic.hpp>
 
 #endif // HSGIL_MATH_I_HPP
