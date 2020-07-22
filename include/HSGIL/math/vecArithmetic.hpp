@@ -99,6 +99,24 @@ HSGIL_API bool operator!=(const Vec4f& l, const Vec4f& r);
 HSGIL_API Vec2f operator+(const Vec2f& l, const Vec2f& r);
 
 /**
+ * @brief Adds Scalar to a 2-Dimensional Vector
+ * 
+ * @param l 
+ * @param r 
+ * @return Vec2f 
+ */
+HSGIL_API Vec2f operator+(const Vec2f& l, const float r);
+
+/**
+ * @brief Adds Scalar to a 2-Dimensional Vector
+ * 
+ * @param l 
+ * @param r 
+ * @return Vec2f 
+ */
+HSGIL_API Vec2f operator+(const float l, const Vec2f& r);
+
+/**
  * @brief Substracts 2-Dimensional Vectors
  * 
  * @param l 
@@ -106,6 +124,24 @@ HSGIL_API Vec2f operator+(const Vec2f& l, const Vec2f& r);
  * @return Vec2f 
  */
 HSGIL_API Vec2f operator-(const Vec2f& l, const Vec2f& r);
+
+/**
+ * @brief Substracts Scalar to a 2-Dimensional Vector
+ * 
+ * @param l 
+ * @param r 
+ * @return Vec2f 
+ */
+HSGIL_API Vec2f operator-(const Vec2f& l, const float r);
+
+/**
+ * @brief Substracts Scalar to a 2-Dimensional Vector
+ * 
+ * @param l 
+ * @param r 
+ * @return Vec2f 
+ */
+HSGIL_API Vec2f operator-(const float l, const Vec2f& r);
 
 /**
  * @brief Adds 3-Dimensional Vectors
@@ -117,6 +153,24 @@ HSGIL_API Vec2f operator-(const Vec2f& l, const Vec2f& r);
 HSGIL_API Vec3f operator+(const Vec3f& l, const Vec3f& r);
 
 /**
+ * @brief Adds Scalar to a 3-Dimensional Vector
+ * 
+ * @param l 
+ * @param r 
+ * @return Vec3f 
+ */
+HSGIL_API Vec3f operator+(const Vec3f& l, const float r);
+
+/**
+ * @brief Adds Scalar to a 3-Dimensional Vector
+ * 
+ * @param l 
+ * @param r 
+ * @return Vec3f 
+ */
+HSGIL_API Vec3f operator+(const float l, const Vec3f& r);
+
+/**
  * @brief Substracts 3-Dimensional Vectors
  * 
  * @param l 
@@ -124,6 +178,24 @@ HSGIL_API Vec3f operator+(const Vec3f& l, const Vec3f& r);
  * @return Vec3f 
  */
 HSGIL_API Vec3f operator-(const Vec3f& l, const Vec3f& r);
+
+/**
+ * @brief Substracts Scalar to a 3-Dimensional Vector
+ * 
+ * @param l 
+ * @param r 
+ * @return Vec3f 
+ */
+HSGIL_API Vec3f operator-(const Vec3f& l, const float r);
+
+/**
+ * @brief Substracts Scalar to a 3-Dimensional Vector
+ * 
+ * @param l 
+ * @param r 
+ * @return Vec3f 
+ */
+HSGIL_API Vec3f operator-(const float l, const Vec3f& r);
 
 /**
  * @brief Adds 4-Dimensional Vectors
@@ -135,6 +207,24 @@ HSGIL_API Vec3f operator-(const Vec3f& l, const Vec3f& r);
 HSGIL_API Vec4f operator+(const Vec4f& l, const Vec4f& r);
 
 /**
+ * @brief Adds Scalar to a 4-Dimensional Vector
+ * 
+ * @param l 
+ * @param r 
+ * @return Vec4f 
+ */
+HSGIL_API Vec4f operator+(const Vec4f& l, const float r);
+
+/**
+ * @brief Adds Scalar to a 4-Dimensional Vector
+ * 
+ * @param l 
+ * @param r 
+ * @return Vec4f 
+ */
+HSGIL_API Vec4f operator+(const float l, const Vec4f& r);
+
+/**
  * @brief Substracts 4-Dimensional Vectors
  * 
  * @param l 
@@ -142,6 +232,78 @@ HSGIL_API Vec4f operator+(const Vec4f& l, const Vec4f& r);
  * @return Vec4f 
  */
 HSGIL_API Vec4f operator-(const Vec4f& l, const Vec4f& r);
+
+/**
+ * @brief Substracts Scalar to a 4-Dimensional Vector
+ * 
+ * @param l 
+ * @param r 
+ * @return Vec4f 
+ */
+HSGIL_API Vec4f operator-(const Vec4f& l, const float r);
+
+/**
+ * @brief Substracts Scalar to a 4-Dimensional Vector
+ * 
+ * @param l 
+ * @param r 
+ * @return Vec4f 
+ */
+HSGIL_API Vec4f operator-(const float l, const Vec4f& r);
+
+/**
+ * @brief Scales a 2-Dimensional Vector
+ * 
+ * @param l 
+ * @param r 
+ * @return Vec2f 
+ */
+HSGIL_API Vec2f operator*(const Vec2f& l, const float r);
+
+/**
+ * @brief Scales a 2-Dimensional Vector
+ * 
+ * @param l 
+ * @param r 
+ * @return Vec2f 
+ */
+HSGIL_API Vec2f operator*(const float l, const Vec2f& r);
+
+/**
+ * @brief Scales a 3-Dimensional Vector
+ * 
+ * @param l 
+ * @param r 
+ * @return Vec3f 
+ */
+HSGIL_API Vec3f operator*(const Vec3f& l, const float r);
+
+/**
+ * @brief Scales a 3-Dimensional Vector
+ * 
+ * @param l 
+ * @param r 
+ * @return Vec3f 
+ */
+HSGIL_API Vec3f operator*(const float l, const Vec3f& r);
+
+/**
+ * @brief Scales a 4-Dimensional Vector
+ * 
+ * @param l 
+ * @param r 
+ * @return Vec4f 
+ */
+HSGIL_API Vec4f operator*(const Vec4f& l, const float r);
+
+/**
+ * @brief Scales a 4-Dimensional Vector
+ * 
+ * @param l 
+ * @param r 
+ * @return Vec4f 
+ */
+HSGIL_API Vec4f operator*(const float l, const Vec4f& r);
 
 /**
  * @brief Computes the module of a 2-Dimensional Vector
