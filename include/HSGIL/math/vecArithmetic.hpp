@@ -306,6 +306,276 @@ HSGIL_API Vec4f operator*(const Vec4f& l, const float r);
 HSGIL_API Vec4f operator*(const float l, const Vec4f& r);
 
 /**
+ * @brief Scales a 2-Dimensional Vector
+ * 
+ * @param l 
+ * @param r 
+ * @return Vec2f 
+ */
+HSGIL_API Vec2f operator/(const Vec2f& l, const float r);
+
+/**
+ * @brief Scales a 2-Dimensional Vector
+ * 
+ * @param l 
+ * @param r 
+ * @return Vec2f 
+ */
+HSGIL_API Vec2f operator/(const float l, const Vec2f& r);
+
+/**
+ * @brief Scales a 3-Dimensional Vector
+ * 
+ * @param l 
+ * @param r 
+ * @return Vec3f 
+ */
+HSGIL_API Vec3f operator/(const Vec3f& l, const float r);
+
+/**
+ * @brief Scales a 3-Dimensional Vector
+ * 
+ * @param l 
+ * @param r 
+ * @return Vec3f 
+ */
+HSGIL_API Vec3f operator/(const float l, const Vec3f& r);
+
+/**
+ * @brief Scales a 4-Dimensional Vector
+ * 
+ * @param l 
+ * @param r 
+ * @return Vec4f 
+ */
+HSGIL_API Vec4f operator/(const Vec4f& l, const float r);
+
+/**
+ * @brief Scales a 4-Dimensional Vector
+ * 
+ * @param l 
+ * @param r 
+ * @return Vec4f 
+ */
+HSGIL_API Vec4f operator/(const float l, const Vec4f& r);
+
+/**
+ * @brief Add-Assigns a 2-Dimensional Vector
+ * 
+ * @param l 
+ * @param r 
+ * @return Vec2f& 
+ */
+HSGIL_API Vec2f& operator+=(Vec2f& l, const Vec2f& r);
+
+/**
+ * @brief Add-Assigns a 2-Dimensional Vector
+ * 
+ * @param l 
+ * @param r 
+ * @return Vec2f& 
+ */
+HSGIL_API Vec2f& operator+=(Vec2f& l, const float r);
+
+/**
+ * @brief Substract-Assigns a 2-Dimensional Vector
+ * 
+ * @param l 
+ * @param r 
+ * @return Vec2f& 
+ */
+HSGIL_API Vec2f& operator-=(Vec2f& l, const Vec2f& r);
+
+/**
+ * @brief Substract-Assigns a 2-Dimensional Vector
+ * 
+ * @param l 
+ * @param r 
+ * @return Vec2f& 
+ */
+HSGIL_API Vec2f& operator-=(Vec2f& l, const float r);
+
+/**
+ * @brief Multiply-Assigns a 2-Dimensional Vector
+ * 
+ * @param l 
+ * @param r 
+ * @return Vec2f& 
+ */
+HSGIL_API Vec2f& operator*=(Vec2f& l, const Vec2f& r);
+
+/**
+ * @brief Multiply-Assigns a 2-Dimensional Vector
+ * 
+ * @param l 
+ * @param r 
+ * @return Vec2f& 
+ */
+HSGIL_API Vec2f& operator*=(Vec2f& l, const float r);
+
+/**
+ * @brief Divide-Assigns a 2-Dimensional Vector
+ * 
+ * @param l 
+ * @param r 
+ * @return Vec2f& 
+ */
+HSGIL_API Vec2f& operator/=(Vec2f& l, const Vec2f& r);
+
+/**
+ * @brief Divide-Assigns a 2-Dimensional Vector
+ * 
+ * @param l 
+ * @param r 
+ * @return Vec2f& 
+ */
+HSGIL_API Vec2f& operator/=(Vec2f& l, const float r);
+
+/**
+ * @brief Add-Assigns a 3-Dimensional Vector
+ * 
+ * @param l 
+ * @param r 
+ * @return Vec3f& 
+ */
+HSGIL_API Vec3f& operator+=(Vec3f& l, const Vec3f& r);
+
+/**
+ * @brief Add-Assigns a 3-Dimensional Vector
+ * 
+ * @param l 
+ * @param r 
+ * @return Vec3f& 
+ */
+HSGIL_API Vec3f& operator+=(Vec3f& l, const float r);
+
+/**
+ * @brief Substract-Assigns a 3-Dimensional Vector
+ * 
+ * @param l 
+ * @param r 
+ * @return Vec3f& 
+ */
+HSGIL_API Vec3f& operator-=(Vec3f& l, const Vec3f& r);
+
+/**
+ * @brief Substract-Assigns a 3-Dimensional Vector
+ * 
+ * @param l 
+ * @param r 
+ * @return Vec3f& 
+ */
+HSGIL_API Vec3f& operator-=(Vec3f& l, const float r);
+
+/**
+ * @brief Multiply-Assigns a 3-Dimensional Vector
+ * 
+ * @param l 
+ * @param r 
+ * @return Vec3f& 
+ */
+HSGIL_API Vec3f& operator*=(Vec3f& l, const Vec3f& r);
+
+/**
+ * @brief Multiply-Assigns a 3-Dimensional Vector
+ * 
+ * @param l 
+ * @param r 
+ * @return Vec3f& 
+ */
+HSGIL_API Vec3f& operator*=(Vec3f& l, const float r);
+
+/**
+ * @brief Divide-Assigns a 3-Dimensional Vector
+ * 
+ * @param l 
+ * @param r 
+ * @return Vec3f& 
+ */
+HSGIL_API Vec3f& operator/=(Vec3f& l, const Vec3f& r);
+
+/**
+ * @brief Divide-Assigns a 3-Dimensional Vector
+ * 
+ * @param l 
+ * @param r 
+ * @return Vec3f& 
+ */
+HSGIL_API Vec3f& operator/=(Vec3f& l, const float r);
+
+/**
+ * @brief Add-Assigns a 4-Dimensional Vector
+ * 
+ * @param l 
+ * @param r 
+ * @return Vec4f& 
+ */
+HSGIL_API Vec4f& operator+=(Vec4f& l, const Vec4f& r);
+
+/**
+ * @brief Add-Assigns a 4-Dimensional Vector
+ * 
+ * @param l 
+ * @param r 
+ * @return Vec4f& 
+ */
+HSGIL_API Vec4f& operator+=(Vec4f& l, const float r);
+
+/**
+ * @brief Substract-Assigns a 4-Dimensional Vector
+ * 
+ * @param l 
+ * @param r 
+ * @return Vec4f& 
+ */
+HSGIL_API Vec4f& operator-=(Vec4f& l, const Vec4f& r);
+
+/**
+ * @brief Substract-Assigns a 4-Dimensional Vector
+ * 
+ * @param l 
+ * @param r 
+ * @return Vec4f& 
+ */
+HSGIL_API Vec4f& operator-=(Vec4f& l, const float r);
+
+/**
+ * @brief Multiply-Assigns a 4-Dimensional Vector
+ * 
+ * @param l 
+ * @param r 
+ * @return Vec4f& 
+ */
+HSGIL_API Vec4f& operator*=(Vec4f& l, const Vec4f& r);
+
+/**
+ * @brief Multiply-Assigns a 4-Dimensional Vector
+ * 
+ * @param l 
+ * @param r 
+ * @return Vec4f& 
+ */
+HSGIL_API Vec4f& operator*=(Vec4f& l, const float r);
+
+/**
+ * @brief Divide-Assigns a 4-Dimensional Vector
+ * 
+ * @param l 
+ * @param r 
+ * @return Vec4f& 
+ */
+HSGIL_API Vec4f& operator/=(Vec4f& l, const Vec4f& r);
+
+/**
+ * @brief Divide-Assigns a 4-Dimensional Vector
+ * 
+ * @param l 
+ * @param r 
+ * @return Vec4f& 
+ */
+HSGIL_API Vec4f& operator/=(Vec4f& l, const float r);
+
+/**
  * @brief Computes the module of a 2-Dimensional Vector
  * 
  * @param v 

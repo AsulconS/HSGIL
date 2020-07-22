@@ -175,6 +175,228 @@ Vec4f operator*(const float l, const Vec4f& r)
     return {l * r.x, l * r.y, l * r.z, l * r.w};
 }
 
+Vec2f operator/(const Vec2f& l, const float r)
+{
+    return {l.x / r, l.y / r};
+}
+
+Vec2f operator/(const float l, const Vec2f& r)
+{
+    return {l / r.x, l / r.y};
+}
+
+Vec3f operator/(const Vec3f& l, const float r)
+{
+    return {l.x / r, l.y / r, l.z / r};
+}
+
+Vec3f operator/(const float l, const Vec3f& r)
+{
+    return {l / r.x, l / r.y, l / r.z};
+}
+
+Vec4f operator/(const Vec4f& l, const float r)
+{
+    return {l.x / r, l.y / r, l.z / r, l.w / r};
+}
+
+Vec4f operator/(const float l, const Vec4f& r)
+{
+    return {l / r.x, l / r.y, l / r.z, l / r.w};
+}
+
+Vec2f& operator+=(Vec2f& l, const Vec2f& r)
+{
+    l.x += r.x;
+    l.y += r.y;
+    return l;
+}
+
+Vec2f& operator+=(Vec2f& l, const float r)
+{
+    l.x += r;
+    l.y += r;
+    return l;
+}
+
+Vec2f& operator-=(Vec2f& l, const Vec2f& r)
+{
+    l.x -= r.x;
+    l.y -= r.y;
+    return l;
+}
+
+Vec2f& operator-=(Vec2f& l, const float r)
+{
+    l.x -= r;
+    l.y -= r;
+    return l;
+}
+
+Vec2f& operator*=(Vec2f& l, const Vec2f& r)
+{
+    l.x *= r.x;
+    l.y *= r.y;
+    return l;
+}
+
+Vec2f& operator*=(Vec2f& l, const float r)
+{
+    l.x *= r;
+    l.y *= r;
+    return l;
+}
+
+Vec2f& operator/=(Vec2f& l, const Vec2f& r)
+{
+    l.x /= r.x;
+    l.y /= r.y;
+    return l;
+}
+
+Vec2f& operator/=(Vec2f& l, const float r)
+{
+    l.x /= r;
+    l.y /= r;
+    return l;
+}
+
+Vec3f& operator+=(Vec3f& l, const Vec3f& r)
+{
+    l.x += r.x;
+    l.y += r.y;
+    l.z += r.z;
+    return l;
+}
+
+Vec3f& operator+=(Vec3f& l, const float r)
+{
+    l.x += r;
+    l.y += r;
+    l.z += r;
+    return l;
+}
+
+Vec3f& operator-=(Vec3f& l, const Vec3f& r)
+{
+    l.x -= r.x;
+    l.y -= r.y;
+    l.z -= r.z;
+    return l;
+}
+
+Vec3f& operator-=(Vec3f& l, const float r)
+{
+    l.x -= r;
+    l.y -= r;
+    l.z -= r;
+    return l;
+}
+
+Vec3f& operator*=(Vec3f& l, const Vec3f& r)
+{
+    l.x *= r.x;
+    l.y *= r.y;
+    l.z *= r.z;
+    return l;
+}
+
+Vec3f& operator*=(Vec3f& l, const float r)
+{
+    l.x *= r;
+    l.y *= r;
+    l.z *= r;
+    return l;
+}
+
+Vec3f& operator/=(Vec3f& l, const Vec3f& r)
+{
+    l.x /= r.x;
+    l.y /= r.y;
+    l.z /= r.z;
+    return l;
+}
+
+Vec3f& operator/=(Vec3f& l, const float r)
+{
+    l.x /= r;
+    l.y /= r;
+    l.z /= r;
+    return l;
+}
+
+Vec4f& operator+=(Vec4f& l, const Vec4f& r)
+{
+    l.x += r.x;
+    l.y += r.y;
+    l.z += r.z;
+    l.w += r.w;
+    return l;
+}
+
+Vec4f& operator+=(Vec4f& l, const float r)
+{
+    l.x += r;
+    l.y += r;
+    l.z += r;
+    l.w += r;
+    return l;
+}
+
+Vec4f& operator-=(Vec4f& l, const Vec4f& r)
+{
+    l.x -= r.x;
+    l.y -= r.y;
+    l.z -= r.z;
+    l.w -= r.w;
+    return l;
+}
+
+Vec4f& operator-=(Vec4f& l, const float r)
+{
+    l.x -= r;
+    l.y -= r;
+    l.z -= r;
+    l.w -= r;
+    return l;
+}
+
+Vec4f& operator*=(Vec4f& l, const Vec4f& r)
+{
+    l.x *= r.x;
+    l.y *= r.y;
+    l.z *= r.z;
+    l.w *= r.w;
+    return l;
+}
+
+Vec4f& operator*=(Vec4f& l, const float r)
+{
+    l.x *= r;
+    l.y *= r;
+    l.z *= r;
+    l.w *= r;
+    return l;
+}
+
+Vec4f& operator/=(Vec4f& l, const Vec4f& r)
+{
+    l.x /= r.x;
+    l.y /= r.y;
+    l.z /= r.z;
+    l.w /= r.w;
+    return l;
+}
+
+Vec4f& operator/=(Vec4f& l, const float r)
+{
+    l.x /= r;
+    l.y /= r;
+    l.z /= r;
+    l.w /= r;
+    return l;
+}
+
 float module(const Vec2f& v)
 {
     return static_cast<float>(sqrt((v.x * v.x) + (v.y * v.y)));
