@@ -415,19 +415,40 @@ float module(const Vec4f& v)
 Vec2f normalize(const Vec2f& v)
 {
     float vModule {module(v)};
-    return {v.x / vModule, v.y / vModule};
+    if(vModule != 0)
+    {
+        return {v.x / vModule, v.y / vModule};
+    }
+    else
+    {
+        return {0.0f, 0.0f};
+    }
 }
 
 Vec3f normalize(const Vec3f& v)
 {
     float vModule {module(v)};
-    return {v.x / vModule, v.y / vModule, v.z / vModule};
+    if(vModule != 0)
+    {
+        return {v.x / vModule, v.y / vModule, v.z / vModule};
+    }
+    else
+    {
+        return {0.0f, 0.0f, 0.0f};
+    }
 }
 
 Vec4f normalize(const Vec4f& v)
 {
     float vModule {module(v)};
-    return {v.x / vModule, v.y / vModule, v.z / vModule, v.w / vModule};
+    if(vModule != 0)
+    {
+        return {v.x / vModule, v.y / vModule, v.z / vModule, v.w / vModule};
+    }
+    else
+    {
+        return {0.0f, 0.0f, 0.0f, 0.0f};
+    }
 }
 
 } // namespace gil
