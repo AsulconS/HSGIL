@@ -412,4 +412,22 @@ float module(const Vec4f& v)
     return static_cast<float>(sqrt((v.x * v.x) + (v.y * v.y) + (v.z * v.z) + (v.w * v.w)));
 }
 
+Vec2f normalize(const Vec2f& v)
+{
+    float vModule {module(v)};
+    return {v.x / vModule, v.y / vModule};
+}
+
+Vec3f normalize(const Vec3f& v)
+{
+    float vModule {module(v)};
+    return {v.x / vModule, v.y / vModule, v.z / vModule};
+}
+
+Vec4f normalize(const Vec4f& v)
+{
+    float vModule {module(v)};
+    return {v.x / vModule, v.y / vModule, v.z / vModule, v.w / vModule};
+}
+
 } // namespace gil

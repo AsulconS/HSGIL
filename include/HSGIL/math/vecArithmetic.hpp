@@ -579,7 +579,7 @@ HSGIL_API Vec4f& operator/=(Vec4f& l, const float r);
  * @brief Computes the module of a 2-Dimensional Vector
  * 
  * @param v 
- * @return Vec2f 
+ * @return float 
  */
 HSGIL_API float module(const Vec2f& v);
 
@@ -587,7 +587,7 @@ HSGIL_API float module(const Vec2f& v);
  * @brief Computes the module of a 3-Dimensional Vector
  * 
  * @param v 
- * @return Vec3f 
+ * @return float 
  */
 HSGIL_API float module(const Vec3f& v);
 
@@ -595,9 +595,33 @@ HSGIL_API float module(const Vec3f& v);
  * @brief Computes the module of a 4-Dimensional Vector
  * 
  * @param v 
- * @return Vec4f 
+ * @return float 
  */
 HSGIL_API float module(const Vec4f& v);
+
+/**
+ * @brief Normalizes a 2-Dimensional Vector
+ * 
+ * @param v 
+ * @return Vec2f 
+ */
+HSGIL_API Vec2f normalize(const Vec2f& v);
+
+/**
+ * @brief Normalizes a 3-Dimensional Vector
+ * 
+ * @param v 
+ * @return Vec3f 
+ */
+HSGIL_API Vec3f normalize(const Vec3f& v);
+
+/**
+ * @brief Normalizes a 4-Dimensional Vector
+ * 
+ * @param v 
+ * @return Vec4f 
+ */
+HSGIL_API Vec4f normalize(const Vec4f& v);
 
 } // namespace gil
 
