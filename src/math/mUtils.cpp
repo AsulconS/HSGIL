@@ -35,6 +35,36 @@ float absolute(float val)
     return (val < 0.0f) ? -val : val;
 }
 
+int npow(int val, unsigned int exp)
+{
+    int res {1};
+    while(exp--)
+    {
+        res *= val;
+    }
+    return res;
+}
+
+unsigned int npow(unsigned int val, unsigned int exp)
+{
+    unsigned int res {1};
+    while(exp--)
+    {
+        res *= val;
+    }
+    return res;
+}
+
+float npow(float val, unsigned int exp)
+{
+    float res {1};
+    while(exp--)
+    {
+        res *= val;
+    }
+    return res;
+}
+
 int clamp(int val, int lBound, int rBound)
 {
     if(val < lBound)

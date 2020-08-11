@@ -46,6 +46,30 @@ HSGIL_API int absolute(int val);
 HSGIL_API float absolute(float val);
 
 /**
+ * @brief Function that returns the power of an integer value with an exponent
+ * 
+ * @param val 
+ * @return float 
+ */
+HSGIL_API int npow(int val, unsigned int exp);
+
+/**
+ * @brief Function that returns the power of an unsigned integer value with an exponent
+ * 
+ * @param val 
+ * @return float 
+ */
+HSGIL_API unsigned int npow(unsigned int val, unsigned int exp);
+
+/**
+ * @brief Function that returns the power of a floating point value with an exponent
+ * 
+ * @param val 
+ * @return float 
+ */
+HSGIL_API float npow(float val, unsigned int exp);
+
+/**
  * @brief Clamping function to limit an integer value between 2 ranges
  * 
  * @param val 

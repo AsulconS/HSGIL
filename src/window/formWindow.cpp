@@ -144,7 +144,7 @@ void FormWindow::pollEvents()
     m_windowManager->pollEvents();
 }
 
-float FormWindow::getAspectRatio()
+float FormWindow::getAspectRatio() const
 {
     return static_cast<float>(m_width) / static_cast<float>(m_height);
 }

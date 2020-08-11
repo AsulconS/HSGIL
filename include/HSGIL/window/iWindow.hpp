@@ -91,7 +91,7 @@ public:
      * 
      * @return float 
      */
-    virtual float getAspectRatio() = 0;
+    virtual float getAspectRatio() const = 0;
 
 protected:
     /**

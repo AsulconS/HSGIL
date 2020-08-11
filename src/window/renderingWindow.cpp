@@ -80,7 +80,7 @@ void RenderingWindow::swapBuffers()
     m_windowManager->swapBuffers();
 }
 
-float RenderingWindow::getAspectRatio()
+float RenderingWindow::getAspectRatio() const
 {
     return static_cast<float>(m_width) / static_cast<float>(m_height);
 }

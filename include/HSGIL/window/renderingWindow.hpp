@@ -102,7 +102,7 @@ public:
      * 
      * @return float 
      */
-    virtual float getAspectRatio() override;
+    virtual float getAspectRatio() const override;
 
 protected:
     /**
