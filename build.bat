@@ -35,17 +35,5 @@ SET RTMLIBS=user32.lib opengl32.lib gdi32.lib
 %LIBMKR% /out:hsgil-window.lib renderingWindow.obj formWindow.obj win32WindowManager.obj eventHandler.obj inputControl.obj inputTrigger.obj inputButton.obj wUtils.obj
 %LIBMKR% /out:hsgil-graphics.lib shader.obj mesh.obj model.obj gUtils.obj
 
-%CXX% %CXX_FLAGS% %INCLUDE_PATH% /D HSGIL_STATIC_BUILD /c examples/test.cpp
-%CXX% %CXX_FLAGS% %INCLUDE_PATH% /D HSGIL_STATIC_BUILD /c examples/ball.cpp
-%CXX% %CXX_FLAGS% %INCLUDE_PATH% /D HSGIL_STATIC_BUILD /c examples/finn.cpp
-%CXX% %CXX_FLAGS% %INCLUDE_PATH% /D HSGIL_STATIC_BUILD /c examples/simple.cpp
-%CXX% %CXX_FLAGS% %INCLUDE_PATH% /D HSGIL_STATIC_BUILD /c examples/bd/bd.cpp
-
-%CXX% %CXX_FLAGS% head.obj   hsgil-core.lib hsgil-math.lib hsgil-window.lib hsgil-graphics.lib /link /out:examples/head.exe
-%CXX% %CXX_FLAGS% test.obj   hsgil-core.lib hsgil-math.lib hsgil-window.lib hsgil-graphics.lib /link /out:examples/test.exe
-%CXX% %CXX_FLAGS% ball.obj   hsgil-core.lib hsgil-math.lib hsgil-window.lib hsgil-graphics.lib /link /out:examples/ball.exe
-%CXX% %CXX_FLAGS% finn.obj   hsgil-core.lib hsgil-math.lib hsgil-window.lib hsgil-graphics.lib /link /out:examples/finn.exe
-%CXX% %CXX_FLAGS% simple.obj hsgil-core.lib hsgil-math.lib hsgil-window.lib hsgil-graphics.lib /link /out:examples/simple.exe
-%CXX% %CXX_FLAGS% bd.obj     hsgil-core.lib hsgil-math.lib hsgil-window.lib hsgil-graphics.lib mysqlcppconn.lib /link /out:examples/bd/bd.exe
-
+examples_build.bat
 clean.bat
