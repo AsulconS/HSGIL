@@ -228,7 +228,7 @@ void WindowManager::createRenderingWindow(const char* title, int x, int y, int w
     }
 }
 
-void WindowManager::destroyRenderingWindow()
+void WindowManager::destroyWindow()
 {
     if(m_active)
     {
@@ -594,7 +594,7 @@ void WindowManager::HSGILProc()
                 WindowManager* windowInstance = s_wmInstances[s_hwndMap[s_event.xany.window]];
                 if(s_event.xclient.data.l[0] == windowInstance->m_atomWmDeleteWindow)
                 {
-                    windowInstance->destroyRenderingWindow();
+                    windowInstance->destroyWindow();
                 }
             }
             break;
@@ -602,7 +602,7 @@ void WindowManager::HSGILProc()
         case DestroyNotify:
             {
                 WindowManager* windowInstance = s_wmInstances[s_hwndMap[s_event.xany.window]];
-                windowInstance->destroyRenderingWindow();
+                windowInstance->destroyWindow();
             }
             break;
 

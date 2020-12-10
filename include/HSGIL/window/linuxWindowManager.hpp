@@ -90,7 +90,7 @@ public:
 
     bool isActive();
     void createRenderingWindow(const char* title, int x, int y, int width, int height);
-    void destroyRenderingWindow();
+    void destroyWindow();
 
     void setKeyCallbackFunction(IWindow* t_windowCallbackInstance, KeyCallbackFunction tf_keyCallbackFunction);
 

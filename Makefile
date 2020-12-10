@@ -115,8 +115,10 @@ INCLUDE_PATH = -Iinclude -Iinclude/HSGIL/external
 
 EXTERNAL_DEPENDENCIES = glad.o
 
+OS_DEPENDENT_FORM_WINDOW =
 OS_DEPENDENT_WINDOW_MANAGER =
 ifeq ($(C_OS), WINDOWS)
+    OS_DEPENDENT_FORM_WINDOW = formWindow.o
     OS_DEPENDENT_WINDOW_MANAGER = win32WindowManager.o
 else
     OS_DEPENDENT_WINDOW_MANAGER = linuxWindowManager.o
@@ -124,7 +126,7 @@ endif
 
 CORE_OBJECT_FILES     = $(EXTERNAL_DEPENDENCIES) timer.o
 MATH_OBJECT_FILES     = mUtils.o
-WINDOW_OBJECT_FILES   = renderingWindow.o formWindow.o $(OS_DEPENDENT_WINDOW_MANAGER) eventHandler.o inputControl.o inputTrigger.o inputButton.o wUtils.o
+WINDOW_OBJECT_FILES   = renderingWindow.o $(OS_DEPENDENT_FORM_WINDOW) $(OS_DEPENDENT_WINDOW_MANAGER) eventHandler.o inputControl.o inputTrigger.o inputButton.o wUtils.o
 GRAPHICS_OBJECT_FILES = shader.o mesh.o model.o gUtils.o
 
 ifeq ($(C_OS), WINDOWS)
