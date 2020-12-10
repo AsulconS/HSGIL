@@ -24,6 +24,8 @@
 #ifndef HSGIL_MATH_I_HPP
 #define HSGIL_MATH_I_HPP
 
+#include <HSGIL/core/config.hpp>
+
 #include <HSGIL/math/vec2.hpp>
 #include <HSGIL/math/vec3.hpp>
 #include <HSGIL/math/vec4.hpp>
