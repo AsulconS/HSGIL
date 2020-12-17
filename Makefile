@@ -125,7 +125,7 @@ else
 endif
 
 CORE_OBJECT_FILES     = $(EXTERNAL_DEPENDENCIES) timer.o
-MATH_OBJECT_FILES     = mUtils.o
+MATH_OBJECT_FILES     = mUtils.o vecArithmetic.o
 WINDOW_OBJECT_FILES   = renderingWindow.o $(OS_DEPENDENT_FORM_WINDOW) $(OS_DEPENDENT_WINDOW_MANAGER) eventHandler.o inputControl.o inputTrigger.o inputButton.o wUtils.o
 GRAPHICS_OBJECT_FILES = shader.o mesh.o model.o gUtils.o
 
@@ -263,6 +263,11 @@ timer.o: src/core/timer.cpp
 mUtils.o: src/math/mUtils.cpp
 	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
 	$(VISIBILITY)$(CXX) -c $(CXX_FLAGS) $(INCLUDE_PATH) $(B_FPIC) src/math/mUtils.cpp
+	@printf "$(OK_STRING)\n"
+
+vecArithmetic.o: src/math/vecArithmetic.cpp
+	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
+	$(VISIBILITY)$(CXX) -c $(CXX_FLAGS) $(INCLUDE_PATH) $(B_FPIC) src/math/vecArithmetic.cpp
 	@printf "$(OK_STRING)\n"
 
 renderingWindow.o: src/window/renderingWindow.cpp
