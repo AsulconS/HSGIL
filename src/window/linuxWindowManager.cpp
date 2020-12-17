@@ -64,7 +64,9 @@ bool WindowManager::s_attribCtxCompat {true};
 
 PFNGLXCREATECONTEXTATTRIBSARBPROC WindowManager::glXCreateContextAttribsARB {nullptr};
 
-PFNGLXSWAPINTERVALPROC WindowManager::glXSwapInterval {nullptr};
+bool WindowManager::glXSwapIntervalEXTMode {false};
+PFNGLXSWAPINTERVALPROC1 WindowManager::glXSwapInterval1 {nullptr};
+PFNGLXSWAPINTERVALPROC2 WindowManager::glXSwapInterval2 {nullptr};
 
 // Lazy Pointer Stuff
 
@@ -301,8 +303,12 @@ void WindowManager::createContext()
 
     if(s_vSyncCompat)
     {
-        glXSwapInterval(1);
+        if(glXSwapIntervalEXTMode)
+            glXSwapInterval1(glXGetCurrentDisplay(), glXGetCurrentDrawable(), 1);
+        else
+            glXSwapInterval2(1);
     }
+    std::cout << "Context Created" << std::endl;
 }
 
 void WindowManager::loadKeyboardMap()
@@ -520,19 +526,20 @@ void WindowManager::loadGLExtensions()
             }
             else
             {
-                glXSwapInterval = (PFNGLXSWAPINTERVALPROC)glXGetProcAddressARB((const GLubyte*)"glXSwapIntervalMESA");
+                glXSwapInterval2 = (PFNGLXSWAPINTERVALPROC2)glXGetProcAddressARB((const GLubyte*)"glXSwapIntervalMESA");
                 std::cout << "MESA Swap Control supported\n\n";
             }
         }
         else
         {
-            glXSwapInterval = (PFNGLXSWAPINTERVALPROC)glXGetProcAddressARB((const GLubyte*)"glXSwapIntervalSGI");
+            glXSwapInterval2 = (PFNGLXSWAPINTERVALPROC2)glXGetProcAddressARB((const GLubyte*)"glXSwapIntervalSGI");
             std::cout << "SGI Swap Control supported\n\n";
         }
 	}
 	else
     {
-        glXSwapInterval = (PFNGLXSWAPINTERVALPROC)glXGetProcAddressARB((const GLubyte*)"glXSwapIntervalEXT");
+        glXSwapIntervalEXTMode = true;
+        glXSwapInterval1 = (PFNGLXSWAPINTERVALPROC1)glXGetProcAddressARB((const GLubyte*)"glXSwapIntervalEXT");
         std::cout << "EXT Swap Control supported\n\n";
 	}
 }

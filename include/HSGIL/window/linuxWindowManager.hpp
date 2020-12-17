@@ -79,7 +79,8 @@ private:
 };
 
 typedef void (*KeyCallbackFunction)(IWindow*, InputEvent, InputCode, bool);
-typedef int (*PFNGLXSWAPINTERVALPROC)(int);
+typedef void (*PFNGLXSWAPINTERVALPROC1)(Display*, GLXDrawable, int);
+typedef int  (*PFNGLXSWAPINTERVALPROC2)(int);
 
 class HSGIL_API WindowManager final
 {
@@ -150,7 +151,9 @@ private:
 
     static PFNGLXCREATECONTEXTATTRIBSARBPROC glXCreateContextAttribsARB;
 
-    static PFNGLXSWAPINTERVALPROC glXSwapInterval;
+    static bool glXSwapIntervalEXTMode;
+    static PFNGLXSWAPINTERVALPROC1 glXSwapInterval1;
+    static PFNGLXSWAPINTERVALPROC2 glXSwapInterval2;
 
     static void loadKeyboardMap();
     static int rawToStandard(int rawCode);
