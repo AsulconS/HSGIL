@@ -100,7 +100,6 @@ public:
 
 private:
     bool m_active;
-    bool m_shouldClose;
 
     uint32 m_index;
     XWND m_windowHandle;

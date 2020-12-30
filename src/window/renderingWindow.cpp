@@ -48,6 +48,11 @@ RenderingWindow::RenderingWindow(const uint32 t_width, const uint32 t_height, co
 RenderingWindow::~RenderingWindow()
 {
     std::cout << "Destructing Window " << m_title << std::endl;
+    if(this->isActive())
+    {
+        this->close();
+    }
+    std::cout << "Window " << m_title << " destroyed" << std::endl;
 }
 
 bool RenderingWindow::isActive()

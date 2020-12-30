@@ -172,23 +172,6 @@ WindowManager* WindowManager::getInstance(const uint32 index)
 
 bool WindowManager::isActive()
 {
-    if(m_active && m_shouldClose)
-    {
-        glXDestroyContext(s_display, m_context);
-
-        XFree(m_visual);
-        XFreeColormap(s_display, m_windowAttributes.colormap);
-        XDestroyWindow(s_display, m_windowHandle);
-
-        --s_activeSessions;
-        m_active = false;
-        m_shouldClose = false;
-
-        if(!s_activeSessions)
-        {
-            XCloseDisplay(s_display);
-        }
-    }
     return m_active;
 }
 
@@ -234,7 +217,19 @@ void WindowManager::destroyWindow()
 {
     if(m_active)
     {
-        m_shouldClose = true;
+        glXDestroyContext(s_display, m_context);
+
+        XFree(m_visual);
+        XFreeColormap(s_display, m_windowAttributes.colormap);
+        XDestroyWindow(s_display, m_windowHandle);
+
+        --s_activeSessions;
+        m_active = false;
+
+        if(!s_activeSessions)
+        {
+            XCloseDisplay(s_display);
+        }
     }
 }
 
@@ -246,7 +241,7 @@ void WindowManager::setKeyCallbackFunction(IWindow* t_windowCallbackInstance, Ke
 
 void WindowManager::pollEvents()
 {
-    if(XPending(s_display) > 0)
+    if(s_activeSessions && XPending(s_display) > 0)
     {
         XNextEvent(s_display, &s_event);
         HSGILProc();
@@ -255,12 +250,14 @@ void WindowManager::pollEvents()
 
 void WindowManager::swapBuffers()
 {
-    glXSwapBuffers(s_display, m_windowHandle);
+    if(m_active)
+    {
+        glXSwapBuffers(s_display, m_windowHandle);
+    }
 }
 
 WindowManager::WindowManager(const uint32 t_index)
     : m_active      {false},
-      m_shouldClose {false},
       m_index       {t_index}
 {
 }
@@ -601,6 +598,7 @@ void WindowManager::HSGILProc()
                 WindowManager* windowInstance = s_wmInstances[s_hwndMap[s_event.xany.window]];
                 if(s_event.xclient.data.l[0] == windowInstance->m_atomWmDeleteWindow)
                 {
+                    std::cout << "CInternal Window Destroy Request" << std::endl;
                     windowInstance->destroyWindow();
                 }
             }
@@ -609,6 +607,7 @@ void WindowManager::HSGILProc()
         case DestroyNotify:
             {
                 WindowManager* windowInstance = s_wmInstances[s_hwndMap[s_event.xany.window]];
+                std::cout << "DInternal Window Destroy Request" << std::endl;
                 windowInstance->destroyWindow();
             }
             break;

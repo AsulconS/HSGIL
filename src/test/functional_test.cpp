@@ -7,6 +7,7 @@ TEST(WindowIntegrity, Construction)
     ASSERT_EQ(true, window.isReady());
     ASSERT_EQ(true, window.isActive());
     ASSERT_EQ(800.0f / 600.0f, window.getAspectRatio());
+    window.close();
 }
 
 int main(int argc, char** argv)
