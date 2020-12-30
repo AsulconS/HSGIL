@@ -10,7 +10,7 @@ doc
 
 examples/*.exe
 examples/bd/*.exe
-examples/test
+examples/etest
 examples/ball
 examples/finn
 examples/simple
@@ -18,6 +18,4 @@ examples/simple
 build_log.txt
 dll_build.bat
 
-test
-test.cpp
-test.exe
+run_tests

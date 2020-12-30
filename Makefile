@@ -63,6 +63,7 @@ LIB_STRING     = $(LIB_COLOR)HSGIL - Handy Scalable Graphics Integration Library
 SUCCESS_STRING = $(OK_COLOR)Everything Built Successfully!$(NO_COLOR)
 BUILD_PRINT    = $(BUILD_COLOR)Building $@:$(NO_COLOR)
 
+TEST_STRING    = $(LIB_COLOR)Building Tests$(NO_COLOR)
 SAMPLES_STRING = $(LIB_COLOR)Building Examples$(NO_COLOR)
 
 # -----------------------------------------------------------------------------------------
@@ -182,7 +183,10 @@ LIBS = $(LIB_ARGS) $(STATIC_LIBS)
 all: lprompt $(LIB_TARG) trash
 	@printf "\n$(SUCCESS_STRING)\n"
 
-examples: tprompt example_files trash
+examples: lprompt eprompt example_files trash
+	@printf "\n$(SUCCESS_STRING)\n"
+
+test: lprompt tprompt _test trash
 	@printf "\n$(SUCCESS_STRING)\n"
 
 full: all examples
@@ -203,16 +207,32 @@ lprompt:
 
 tprompt:
 	$(LINE_STRING)
+	@printf "\n$(TEST_STRING)\n"
+	$(LINE_STRING)
+	@printf "\n$(OS_STRING)\n\n"
+
+_test: test.o
+	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
+	$(VISIBILITY)$(CXX) $(CXX_FLAGS) test.o $(LIBRARY_PATH) $(LIBS) -lgtest -o run_tests $(CXX_LIBS)
+	@printf "$(OK_STRING)\n"
+
+# -----------------------------------------------------------------------------------------
+
+# Example Building
+# -----------------------------------------------------------------------------------------
+
+eprompt:
+	$(LINE_STRING)
 	@printf "\n$(SAMPLES_STRING)\n"
 	$(LINE_STRING)
 	@printf "\n$(OS_STRING)\n\n"
 
-example_files: test ball finn simple trash cp_libs_to_examples_$(C_OS)
+example_files: etest ball finn simple trash cp_libs_to_examples_$(C_OS)
 	@printf "$(OK_STRING)\n"
 
-test: test.o
+etest: etest.o
 	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
-	$(VISIBILITY)$(CXX) $(CXX_FLAGS) test.o $(LIBRARY_PATH) $(LIBS) -o examples/test $(CXX_LIBS)
+	$(VISIBILITY)$(CXX) $(CXX_FLAGS) etest.o $(LIBRARY_PATH) $(LIBS) -o examples/etest $(CXX_LIBS)
 	@printf "$(OK_STRING)\n"
 
 ball: ball.o
@@ -235,9 +255,14 @@ simple: simple.o
 # Object Files
 # -----------------------------------------------------------------------------------------
 
-test.o: examples/test.cpp
+test.o: src/test/test.cpp
 	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
-	$(VISIBILITY)$(CXX) -c $(CXX_FLAGS) $(INCLUDE_PATH) examples/test.cpp
+	$(VISIBILITY)$(CXX) -c $(CXX_FLAGS) $(INCLUDE_PATH) src/test/test.cpp
+	@printf "$(OK_STRING)\n"
+
+etest.o: examples/etest.cpp
+	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
+	$(VISIBILITY)$(CXX) -c $(CXX_FLAGS) $(INCLUDE_PATH) examples/etest.cpp
 	@printf "$(OK_STRING)\n"
 
 ball.o: examples/ball.cpp
@@ -414,7 +439,7 @@ cp_libs_to_examples_WINDOWS:
 	@cp -f *.dll examples
 
 cp_libs_to_examples_LINUX:
-	@cp -f *.so.1.0 examples
+	@true
 
 # -----------------------------------------------------------------------------------------
 
