@@ -228,7 +228,7 @@ eprompt:
 	$(LINE_STRING)
 	@printf "\n$(OS_STRING)\n\n"
 
-example_files: etest ball finn simple cp_libs_to_examples_$(C_OS)
+example_files: etest ball finn simple doubleWindow cp_libs_to_examples_$(C_OS)
 	@printf "$(OK_STRING)\n"
 
 etest: etest.o
@@ -249,6 +249,11 @@ finn: finn.o
 simple: simple.o
 	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
 	$(VISIBILITY)$(CXX) $(CXX_FLAGS) simple.o $(LIBRARY_PATH) $(LIBS) -o examples/simple $(CXX_LIBS)
+	@printf "$(OK_STRING)\n"
+
+doubleWindow: doubleWindow.o
+	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
+	$(VISIBILITY)$(CXX) $(CXX_FLAGS) doubleWindow.o $(LIBRARY_PATH) $(LIBS) -o examples/doubleWindow $(CXX_LIBS)
 	@printf "$(OK_STRING)\n"
 
 # -----------------------------------------------------------------------------------------
@@ -284,6 +289,11 @@ finn.o: examples/finn.cpp
 simple.o: examples/simple.cpp
 	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
 	$(VISIBILITY)$(CXX) -c $(CXX_FLAGS) $(INCLUDE_PATH) examples/simple.cpp
+	@printf "$(OK_STRING)\n"
+
+doubleWindow.o: examples/doubleWindow.cpp
+	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
+	$(VISIBILITY)$(CXX) -c $(CXX_FLAGS) $(INCLUDE_PATH) examples/doubleWindow.cpp
 	@printf "$(OK_STRING)\n"
 
 timer.o: src/core/timer.cpp
