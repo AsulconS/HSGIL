@@ -14,6 +14,7 @@ examples/etest
 examples/ball
 examples/finn
 examples/simple
+examples/doubleWindow
 
 build_log.txt
 dll_build.bat
