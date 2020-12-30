@@ -189,7 +189,7 @@ examples: lprompt eprompt example_files trash
 test: lprompt tprompt _test trash
 	@printf "\n$(SUCCESS_STRING)\n"
 
-full: all examples
+full: all examples test
 
 # HSGIL Welcome Prompt and OS
 # -----------------------------------------------------------------------------------------
