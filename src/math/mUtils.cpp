@@ -81,6 +81,22 @@ int clamp(int val, int lBound, int rBound)
     }
 }
 
+unsigned int clamp(unsigned int val, unsigned int lBound, unsigned int rBound)
+{
+    if(val < lBound)
+    {
+        return lBound;
+    }
+    else if(val > rBound)
+    {
+        return rBound;
+    }
+    else
+    {
+        return val;
+    }
+}
+
 float clamp(float val, float lBound, float rBound)
 {
     if(val < lBound)
