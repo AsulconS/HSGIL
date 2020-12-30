@@ -211,9 +211,10 @@ tprompt:
 	$(LINE_STRING)
 	@printf "\n$(OS_STRING)\n\n"
 
-_test: test.o
+_test: unit_test.o functional_test.o
 	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
-	$(VISIBILITY)$(CXX) $(CXX_FLAGS) test.o $(LIBRARY_PATH) $(LIBS) -lgtest -o run_tests $(CXX_LIBS)
+	$(VISIBILITY)$(CXX) $(CXX_FLAGS) unit_test.o $(LIBRARY_PATH) $(LIBS) -lgtest -o run_unit_tests $(CXX_LIBS)
+	$(VISIBILITY)$(CXX) $(CXX_FLAGS) functional_test.o $(LIBRARY_PATH) $(LIBS) -lgtest -o run_functional_tests $(CXX_LIBS)
 	@printf "$(OK_STRING)\n"
 
 # -----------------------------------------------------------------------------------------
@@ -255,9 +256,14 @@ simple: simple.o
 # Object Files
 # -----------------------------------------------------------------------------------------
 
-test.o: src/test/test.cpp
+unit_test.o: src/test/unit_test.cpp
 	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
-	$(VISIBILITY)$(CXX) -c $(CXX_FLAGS) $(INCLUDE_PATH) src/test/test.cpp
+	$(VISIBILITY)$(CXX) -c $(CXX_FLAGS) $(INCLUDE_PATH) src/test/unit_test.cpp
+	@printf "$(OK_STRING)\n"
+
+functional_test.o: src/test/functional_test.cpp
+	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
+	$(VISIBILITY)$(CXX) -c $(CXX_FLAGS) $(INCLUDE_PATH) src/test/functional_test.cpp
 	@printf "$(OK_STRING)\n"
 
 etest.o: examples/etest.cpp

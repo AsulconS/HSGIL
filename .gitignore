@@ -18,4 +18,5 @@ examples/simple
 build_log.txt
 dll_build.bat
 
-run_tests
+run_unit_tests
+run_functional_tests
