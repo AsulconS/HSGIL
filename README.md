@@ -69,7 +69,8 @@ pipeline {
         stage('Tests'){
             steps{
                 sh "sudo make test"
-                sh "./run_tests"
+                sh "./run_unit_tests"
+                sh "./run_functional_tests"
             }
         }
     }
