@@ -189,7 +189,7 @@ examples: lprompt eprompt example_files trash
 test: lprompt tprompt _test trash
 	@printf "\n$(SUCCESS_STRING)\n"
 
-full: all examples test
+full: lprompt $(LIB_TARG) eprompt example_files tprompt _test trash
 
 # HSGIL Welcome Prompt and OS
 # -----------------------------------------------------------------------------------------
@@ -228,7 +228,7 @@ eprompt:
 	$(LINE_STRING)
 	@printf "\n$(OS_STRING)\n\n"
 
-example_files: etest ball finn simple trash cp_libs_to_examples_$(C_OS)
+example_files: etest ball finn simple cp_libs_to_examples_$(C_OS)
 	@printf "$(OK_STRING)\n"
 
 etest: etest.o
