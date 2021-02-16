@@ -55,7 +55,7 @@
     #define HSGIL_API_IMPORT
 #endif
 
-#if defined(HSGIL_EXPORT)
+#if defined(HSGIL_API_EXPORT)
     #define HSGIL_API HSGIL_API_EXPORT
 #else
     #define HSGIL_API HSGIL_API_IMPORT
