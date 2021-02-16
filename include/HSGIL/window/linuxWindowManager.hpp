@@ -49,7 +49,7 @@
 
 #define NUM_KEYS_SIZE 256
 #define ATTRIB_LIST_SIZE 23u
-#define MAX_WINDOW_INSTANCES 16u
+#define MAX_WINDOW_INSTANCES 4u
 
 typedef XID XWND;
 
