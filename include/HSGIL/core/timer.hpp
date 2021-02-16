@@ -56,16 +56,17 @@ public:
      */
     void tick();
     /**
-     * @brief Moves forward the second section of the timer
-     * 
-     */
-    void advance();
-    /**
      * @brief Restart the timer
      * 
      */
     void restart();
 
+    /**
+     * @brief Get the Delta Time
+     * 
+     * @return float 
+     */
+    float getDeltaTime();
     /**
      * @brief Get the Total Frame count
      * 
@@ -78,30 +79,18 @@ public:
      * @return uint32 
      */
     uint32 getFramesPerSecond();
-    /**
-     * @brief Get the Elapsed Time
-     * 
-     * @return float 
-     */
-    float getTotalElapsedTime();
-    /**
-     * @brief Get the Current Elapsed Time (relative to the current state)
-     * 
-     * @return float 
-     */
-    float getCurrentElapsedTime();
-    /**
-     * @brief Get the Delta Time object
-     * 
-     * @return float 
-     */
-    float getDeltaTime();
 
 private:
+    float procDeltaTime();
+    float procTotalElapsedTime();
+    float procCurrentElapsedTime();
+
     std::chrono::time_point<std::chrono::steady_clock> m_start;
     std::chrono::time_point<std::chrono::steady_clock> m_currentStart;
     std::chrono::time_point<std::chrono::steady_clock> m_lastTime;
 
+    float m_deltaTime;
+    float m_currentTime;
     uint32 m_totalFrames;
     uint32 m_framesPerSecond;
 
