@@ -21,7 +21,6 @@
  *                                                                              *
  ********************************************************************************/
 
-#include <iostream>
 #include <HSGIL/window/win32WindowManager.hpp>
 
 namespace gil
@@ -66,66 +65,6 @@ PFNWGLCREATECONTEXTATTRIBSARBPROC WindowManager::wglCreateContextAttribsARB {nul
 
 PFNWGLSWAPINTERVALEXTPROC WindowManager::wglSwapIntervalEXT {nullptr};
 PFNWGLGETSWAPINTERVALEXTPROC WindowManager::wglGetSwapIntervalEXT {nullptr};
-
-// Lazy Pointer Stuff
-
-WMLazyPtr::WMLazyPtr()
-    : m_wm {nullptr}
-{
-}
-
-WMLazyPtr::~WMLazyPtr()
-{
-    if(m_wm != nullptr)
-    {
-        delete m_wm;
-    }
-}
-
-void WMLazyPtr::init(const uint32 index)
-{
-    if(m_wm == nullptr)
-    {
-        m_wm = new WindowManager(index);
-    }
-}
-
-WindowManager& WMLazyPtr::operator*()
-{
-    return *m_wm;
-}
-
-WindowManager* WMLazyPtr::operator->()
-{
-    return m_wm;
-}
-
-bool WMLazyPtr::operator==(const WMLazyPtr& o)
-{
-    return this->m_wm == o.m_wm;
-}
-
-bool WMLazyPtr::operator!=(const WMLazyPtr& o)
-{
-    return this->m_wm != o.m_wm;
-}
-
-bool WMLazyPtr::operator==(const std::nullptr_t nullPtr)
-{
-    return this->m_wm == nullPtr;
-}
-
-bool WMLazyPtr::operator!=(const std::nullptr_t nullPtr)
-{
-    return this->m_wm != nullPtr;
-}
-
-WMLazyPtr::operator WindowManager*()
-{
-    return m_wm;
-}
-
-// Window Manager Stuff
 
 WindowManager* WindowManager::createInstance()
 {

@@ -33,6 +33,7 @@
 
 #include <HSGIL/window/inputEvents.hpp>
 #include <HSGIL/window/inputBindings.hpp>
+#include <HSGIL/window/wmLazyPtr.hpp>
 #include <HSGIL/window/wUtils.hpp>
 
 #include <windows.h>
@@ -53,27 +54,6 @@
 namespace gil
 {
 class IWindow;
-class WindowManager;
-
-class HSGIL_API WMLazyPtr final
-{
-public:
-    WMLazyPtr();
-    ~WMLazyPtr();
-
-    void init(const uint32 t_index);
-
-    WindowManager& operator*();
-    WindowManager* operator->();
-    bool operator==(const WMLazyPtr& o);
-    bool operator!=(const WMLazyPtr& o);
-    bool operator==(const std::nullptr_t nullPtr);
-    bool operator!=(const std::nullptr_t nullPtr);
-    operator WindowManager*();
-
-private:
-    WindowManager* m_wm;
-};
 
 typedef void (*KeyCallbackFunction)(IWindow*, InputEvent, InputCode, bool);
 

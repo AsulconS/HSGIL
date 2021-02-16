@@ -127,7 +127,7 @@ endif
 
 CORE_OBJECT_FILES     = $(EXTERNAL_DEPENDENCIES) timer.o
 MATH_OBJECT_FILES     = mUtils.o vecArithmetic.o
-WINDOW_OBJECT_FILES   = renderingWindow.o $(OS_DEPENDENT_FORM_WINDOW) $(OS_DEPENDENT_WINDOW_MANAGER) eventHandler.o inputControl.o inputTrigger.o inputButton.o wUtils.o
+WINDOW_OBJECT_FILES   = renderingWindow.o $(OS_DEPENDENT_FORM_WINDOW) $(OS_DEPENDENT_WINDOW_MANAGER) eventHandler.o inputControl.o inputTrigger.o inputButton.o wmLazyPtr.o wUtils.o
 GRAPHICS_OBJECT_FILES = shader.o mesh.o model.o gUtils.o
 
 ifeq ($(C_OS), WINDOWS)
@@ -349,6 +349,11 @@ inputTrigger.o: src/window/inputTrigger.cpp
 inputButton.o: src/window/inputButton.cpp
 	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
 	$(VISIBILITY)$(CXX) -c $(CXX_FLAGS) $(INCLUDE_PATH) $(B_FPIC) src/window/inputButton.cpp
+	@printf "$(OK_STRING)\n"
+
+wmLazyPtr.o: src/window/wmLazyPtr.cpp
+	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
+	$(VISIBILITY)$(CXX) -c $(CXX_FLAGS) $(INCLUDE_PATH) $(B_FPIC) src/window/wmLazyPtr.cpp
 	@printf "$(OK_STRING)\n"
 
 wUtils.o: src/window/wUtils.cpp
