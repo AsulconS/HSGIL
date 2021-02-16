@@ -46,7 +46,7 @@ using Tag    = uint32_t;
 namespace luis   = gil;
 namespace erick  = gil;
 namespace yober  = gil;
-namespace daryl  = gil;
+namespace pogdo  = gil;
 namespace anyelo = gil;
 
 #endif // HSGIL_COMMON_HPP
