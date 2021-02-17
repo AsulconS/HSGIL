@@ -146,7 +146,6 @@ void WindowManager::createRenderingWindow(const char* title, int x, int y, int w
 
         XClearWindow(s_display, m_windowHandle);
         XMapRaised(s_display, m_windowHandle);
-        XFlush(s_display);
 
         m_active = true;
         ++s_activeSessions;
