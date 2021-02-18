@@ -92,7 +92,7 @@ WindowManager* WindowManager::createInstance()
 
 WindowManager* WindowManager::getInstance(const uint32 index)
 {
-    if(isBetween(index, 0u, MAX_WINDOW_INSTANCES - 1u))
+    if(index > 0 && index < (MAX_WINDOW_INSTANCES - 1))
     {
         if(s_wmInstances[index] != nullptr)
         {

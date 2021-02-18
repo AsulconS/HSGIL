@@ -29,8 +29,6 @@
 #include <HSGIL/core/config.hpp>
 #include <HSGIL/core/common.hpp>
 
-#include <HSGIL/math/mUtils.hpp>
-
 #include <HSGIL/window/inputEvents.hpp>
 #include <HSGIL/window/inputBindings.hpp>
 #include <HSGIL/window/wmLazyPtr.hpp>
