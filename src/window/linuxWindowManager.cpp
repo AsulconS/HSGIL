@@ -124,9 +124,10 @@ void WindowManager::createRenderingWindow(const char* title, int x, int y, int w
 
         m_windowAttributes.border_pixel = BlackPixel(s_display, s_screenID);
         m_windowAttributes.background_pixel = WhitePixel(s_display, s_screenID);
-        m_windowAttributes.override_redirect = true;
         m_windowAttributes.colormap = XCreateColormap(s_display, RootWindow(s_display, s_screenID), m_visual->visual, AllocNone);
-        m_windowAttributes.event_mask = ExposureMask | KeyPressMask | KeyReleaseMask;
+        m_windowAttributes.event_mask = ExposureMask    | FocusChangeMask   | PointerMotionMask |
+                                        KeyPressMask    | KeyReleaseMask    |
+                                        ButtonPressMask | ButtonReleaseMask;
 
         m_windowHandle = XCreateWindow
         (
@@ -181,11 +182,12 @@ void WindowManager::setKeyCallbackFunction(IWindow* t_windowCallbackInstance, Ke
 
 void WindowManager::pollEvents()
 {
-    if(s_activeSessions && XPending(s_display) > 0)
+    while(s_activeSessions && QLength(s_display))
     {
         XNextEvent(s_display, &s_event);
         HSGILProc();
     }
+    XFlush(s_display);
 }
 
 void WindowManager::swapBuffers()
@@ -549,6 +551,39 @@ void WindowManager::HSGILProc()
                 WindowManager* windowInstance = s_wmInstances[s_hwndMap[s_event.xany.window]];
                 std::cout << "DInternal Window Destroy Request" << std::endl;
                 windowInstance->destroyWindow();
+            }
+            break;
+
+        case FocusOut:
+            {
+                printf("Lost focus\n");
+                WindowManager* windowInstance = s_wmInstances[s_hwndMap[s_event.xfocus.window]];
+                for(uint32 i = 0; i < NUM_KEYS_SIZE; ++i)
+                {
+                    if(s_keyPhysicStates[i])
+                    {
+                        s_keyPhysicStates[i] = 0;
+                        windowInstance->mf_keyCallbackFunction(windowInstance->m_windowCallbackInstance, KEY_RELEASED, static_cast<InputCode>(s_keyCodesMap[i]), false);
+                    }
+                }
+            }
+            break;
+
+        case MotionNotify:
+            {
+                printf("Mouse move     : [%d, %d]\n", s_event.xmotion.x_root, s_event.xmotion.y_root);
+            }
+            break;
+
+        case ButtonPress:
+            {
+                printf("Button pressed : %u\n", s_event.xbutton.button - 1);
+            }
+            break;
+
+        case ButtonRelease:
+            {
+                printf("Button released: %u\n", s_event.xbutton.button - 1);
             }
             break;
 
