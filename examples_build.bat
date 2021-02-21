@@ -12,11 +12,12 @@ SET INCLUDE_PATH=/I ".\include" /I ".\include\HSGIL\external"
 %CXX% %CXX_FLAGS% %INCLUDE_PATH% /D HSGIL_STATIC_BUILD /c examples/volcano.cpp
 %CXX% %CXX_FLAGS% %INCLUDE_PATH% /D HSGIL_STATIC_BUILD /c examples/doubleWindow.cpp
 
-%CXX% %CXX_FLAGS% head.obj    hsgil-core.lib hsgil-math.lib hsgil-window.lib hsgil-graphics.lib /link /out:examples/head.exe
-%CXX% %CXX_FLAGS% test.obj    hsgil-core.lib hsgil-math.lib hsgil-window.lib hsgil-graphics.lib /link /out:examples/test.exe
-%CXX% %CXX_FLAGS% ball.obj    hsgil-core.lib hsgil-math.lib hsgil-window.lib hsgil-graphics.lib /link /out:examples/ball.exe
-%CXX% %CXX_FLAGS% finn.obj    hsgil-core.lib hsgil-math.lib hsgil-window.lib hsgil-graphics.lib /link /out:examples/finn.exe
-%CXX% %CXX_FLAGS% simple.obj  hsgil-core.lib hsgil-math.lib hsgil-window.lib hsgil-graphics.lib /link /out:examples/simple.exe
-%CXX% %CXX_FLAGS% volcano.obj hsgil-core.lib hsgil-math.lib hsgil-window.lib hsgil-graphics.lib /link /out:examples/volcano.exe
+%CXX% %CXX_FLAGS% etest.obj         hsgil-core.lib hsgil-math.lib hsgil-window.lib hsgil-graphics.lib /link /out:examples/etest.exe
+%CXX% %CXX_FLAGS% ball.obj          hsgil-core.lib hsgil-math.lib hsgil-window.lib hsgil-graphics.lib /link /out:examples/ball.exe
+%CXX% %CXX_FLAGS% finn.obj          hsgil-core.lib hsgil-math.lib hsgil-window.lib hsgil-graphics.lib /link /out:examples/finn.exe
+%CXX% %CXX_FLAGS% simple.obj        hsgil-core.lib hsgil-math.lib hsgil-window.lib hsgil-graphics.lib /link /out:examples/simple.exe
+%CXX% %CXX_FLAGS% head.obj          hsgil-core.lib hsgil-math.lib hsgil-window.lib hsgil-graphics.lib /link /out:examples/head.exe
+%CXX% %CXX_FLAGS% volcano.obj       hsgil-core.lib hsgil-math.lib hsgil-window.lib hsgil-graphics.lib /link /out:examples/volcano.exe
+%CXX% %CXX_FLAGS% doubleWindow.obj  hsgil-core.lib hsgil-math.lib hsgil-window.lib hsgil-graphics.lib /link /out:examples/doubleWindow.exe
 
 clean.bat
