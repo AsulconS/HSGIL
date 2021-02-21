@@ -28,12 +28,13 @@ namespace gil
 {
 enum InputEvent
 {
-    KEY_RELEASED   = 0x0,
-    KEY_PRESSED    = 0x1,
+    KEY_RELEASED    = 0x0,
+    KEY_PRESSED     = 0x1,
+    BUTTON_PRESSED  = 0x2,
+    BUTTON_RELEASED = 0x3,
 
     // Form Events
-
-    BUTTON_PRESSED = 0x2
+    FORM_BUTTON_PRESSED = 0x4
 };
 
 } // namespace gil
