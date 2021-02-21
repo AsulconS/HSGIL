@@ -9,7 +9,6 @@ doc
 *.o
 
 examples/*.exe
-examples/bd/*.exe
 examples/etest
 examples/ball
 examples/finn
@@ -17,9 +16,6 @@ examples/simple
 examples/head
 examples/volcano
 examples/doubleWindow
-
-build_log.txt
-dll_build.bat
 
 run_unit_tests
 run_functional_tests
