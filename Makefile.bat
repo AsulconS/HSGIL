@@ -1,4 +1,4 @@
-@ECHO off
+@ECHO OFF
 
 SET CXX=cl
 SET CXX_FLAGS=/EHsc
@@ -8,6 +8,8 @@ SET LIBMKR=lib
 SET LINKER=link
 
 SET RTMLIBS=user32.lib opengl32.lib gdi32.lib
+
+REM Libary Building:
 
 %CXX% %CXX_FLAGS% %INCLUDE_PATH% /D HSGIL_STATIC_BUILD /c src/core/timer.cpp
 
@@ -35,5 +37,22 @@ SET RTMLIBS=user32.lib opengl32.lib gdi32.lib
 %LIBMKR% /out:hsgil-window.lib renderingWindow.obj win32WindowManager.obj eventHandler.obj inputControl.obj inputTrigger.obj inputButton.obj wmLazyPtr.obj wUtils.obj
 %LIBMKR% /out:hsgil-graphics.lib shader.obj mesh.obj model.obj gUtils.obj
 
-examples_build.bat
-clean.bat
+REM Example Building:
+
+%CXX% %CXX_FLAGS% %INCLUDE_PATH% /D HSGIL_STATIC_BUILD /c examples/etest.cpp
+%CXX% %CXX_FLAGS% %INCLUDE_PATH% /D HSGIL_STATIC_BUILD /c examples/ball.cpp
+%CXX% %CXX_FLAGS% %INCLUDE_PATH% /D HSGIL_STATIC_BUILD /c examples/finn.cpp
+%CXX% %CXX_FLAGS% %INCLUDE_PATH% /D HSGIL_STATIC_BUILD /c examples/simple.cpp
+%CXX% %CXX_FLAGS% %INCLUDE_PATH% /D HSGIL_STATIC_BUILD /c examples/head.cpp
+%CXX% %CXX_FLAGS% %INCLUDE_PATH% /D HSGIL_STATIC_BUILD /c examples/volcano.cpp
+%CXX% %CXX_FLAGS% %INCLUDE_PATH% /D HSGIL_STATIC_BUILD /c examples/doubleWindow.cpp
+
+%CXX% %CXX_FLAGS% etest.obj         hsgil-core.lib hsgil-math.lib hsgil-window.lib hsgil-graphics.lib /link /out:examples/etest.exe
+%CXX% %CXX_FLAGS% ball.obj          hsgil-core.lib hsgil-math.lib hsgil-window.lib hsgil-graphics.lib /link /out:examples/ball.exe
+%CXX% %CXX_FLAGS% finn.obj          hsgil-core.lib hsgil-math.lib hsgil-window.lib hsgil-graphics.lib /link /out:examples/finn.exe
+%CXX% %CXX_FLAGS% simple.obj        hsgil-core.lib hsgil-math.lib hsgil-window.lib hsgil-graphics.lib /link /out:examples/simple.exe
+%CXX% %CXX_FLAGS% head.obj          hsgil-core.lib hsgil-math.lib hsgil-window.lib hsgil-graphics.lib /link /out:examples/head.exe
+%CXX% %CXX_FLAGS% volcano.obj       hsgil-core.lib hsgil-math.lib hsgil-window.lib hsgil-graphics.lib /link /out:examples/volcano.exe
+%CXX% %CXX_FLAGS% doubleWindow.obj  hsgil-core.lib hsgil-math.lib hsgil-window.lib hsgil-graphics.lib /link /out:examples/doubleWindow.exe
+
+DEL *.obj

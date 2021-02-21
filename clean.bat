@@ -1,3 +1,0 @@
-@ECHO off
-
-del *.obj

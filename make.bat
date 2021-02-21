@@ -1,2 +1,0 @@
-@ECHO off
-autolog.bat
