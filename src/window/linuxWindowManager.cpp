@@ -183,13 +183,14 @@ void WindowManager::setEventCallbackFunction(IWindow* t_windowCallbackInstance, 
 
 void WindowManager::pollEvents()
 {
-    while(s_activeSessions && QLength(s_display))
-    {
-        XNextEvent(s_display, &s_event);
-        HSGILProc();
-    }
     if(s_activeSessions)
     {
+        XPending(s_display);
+        while(QLength(s_display))
+        {
+            XNextEvent(s_display, &s_event);
+            HSGILProc();
+        }
         XFlush(s_display);
     }
 }
@@ -571,7 +572,7 @@ void WindowManager::HSGILProc()
 
         case FocusOut:
             {
-                printf("Lost focus\n");
+                std::cout << "Lost focus" << std::endl;
                 WindowManager* windowInstance = s_wmInstances[s_hwndMap[s_event.xfocus.window]];
                 for(uint32 i = 0; i < NUM_KEYS_SIZE; ++i)
                 {
@@ -586,7 +587,7 @@ void WindowManager::HSGILProc()
 
         case MotionNotify:
             {
-                printf("Mouse move     : [%d, %d]\n", s_event.xmotion.x_root, s_event.xmotion.y_root);
+                printf("Mouse move: [%d, %d]\n", s_event.xmotion.x, s_event.xmotion.y);
             }
             break;
 
