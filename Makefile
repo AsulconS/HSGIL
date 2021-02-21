@@ -116,10 +116,8 @@ INCLUDE_PATH = -Iinclude -Iinclude/HSGIL/external
 
 EXTERNAL_DEPENDENCIES = glad.o
 
-OS_DEPENDENT_FORM_WINDOW =
 OS_DEPENDENT_WINDOW_MANAGER =
 ifeq ($(C_OS), WINDOWS)
-    OS_DEPENDENT_FORM_WINDOW = formWindow.o
     OS_DEPENDENT_WINDOW_MANAGER = win32WindowManager.o
 else
     OS_DEPENDENT_WINDOW_MANAGER = linuxWindowManager.o
@@ -127,7 +125,7 @@ endif
 
 CORE_OBJECT_FILES     = $(EXTERNAL_DEPENDENCIES) timer.o
 MATH_OBJECT_FILES     = mUtils.o vecArithmetic.o
-WINDOW_OBJECT_FILES   = renderingWindow.o $(OS_DEPENDENT_FORM_WINDOW) $(OS_DEPENDENT_WINDOW_MANAGER) eventHandler.o inputControl.o inputTrigger.o inputButton.o wmLazyPtr.o wUtils.o
+WINDOW_OBJECT_FILES   = renderingWindow.o $(OS_DEPENDENT_WINDOW_MANAGER) eventHandler.o inputControl.o inputTrigger.o inputButton.o wmLazyPtr.o wUtils.o
 GRAPHICS_OBJECT_FILES = shader.o mesh.o model.o gUtils.o
 
 ifeq ($(C_OS), WINDOWS)
@@ -228,7 +226,7 @@ eprompt:
 	$(LINE_STRING)
 	@printf "\n$(OS_STRING)\n\n"
 
-example_files: etest ball finn simple doubleWindow cp_libs_to_examples_$(C_OS)
+example_files: etest ball finn simple head volcano doubleWindow cp_libs_to_examples_$(C_OS)
 	@printf "$(OK_STRING)\n"
 
 etest: etest.o
@@ -249,6 +247,16 @@ finn: finn.o
 simple: simple.o
 	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
 	$(VISIBILITY)$(CXX) $(CXX_FLAGS) simple.o $(LIBRARY_PATH) $(LIBS) -o examples/simple $(CXX_LIBS)
+	@printf "$(OK_STRING)\n"
+
+head: head.o
+	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
+	$(VISIBILITY)$(CXX) $(CXX_FLAGS) head.o $(LIBRARY_PATH) $(LIBS) -o examples/head $(CXX_LIBS)
+	@printf "$(OK_STRING)\n"
+
+volcano: volcano.o
+	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
+	$(VISIBILITY)$(CXX) $(CXX_FLAGS) volcano.o $(LIBRARY_PATH) $(LIBS) -o examples/volcano $(CXX_LIBS)
 	@printf "$(OK_STRING)\n"
 
 doubleWindow: doubleWindow.o
@@ -291,6 +299,16 @@ simple.o: examples/simple.cpp
 	$(VISIBILITY)$(CXX) -c $(CXX_FLAGS) $(INCLUDE_PATH) examples/simple.cpp
 	@printf "$(OK_STRING)\n"
 
+head.o: examples/head.cpp
+	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
+	$(VISIBILITY)$(CXX) -c $(CXX_FLAGS) $(INCLUDE_PATH) examples/head.cpp
+	@printf "$(OK_STRING)\n"
+
+volcano.o: examples/volcano.cpp
+	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
+	$(VISIBILITY)$(CXX) -c $(CXX_FLAGS) $(INCLUDE_PATH) examples/volcano.cpp
+	@printf "$(OK_STRING)\n"
+
 doubleWindow.o: examples/doubleWindow.cpp
 	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
 	$(VISIBILITY)$(CXX) -c $(CXX_FLAGS) $(INCLUDE_PATH) examples/doubleWindow.cpp
@@ -314,11 +332,6 @@ vecArithmetic.o: src/math/vecArithmetic.cpp
 renderingWindow.o: src/window/renderingWindow.cpp
 	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
 	$(VISIBILITY)$(CXX) -c $(CXX_FLAGS) $(INCLUDE_PATH) $(B_FPIC) src/window/renderingWindow.cpp
-	@printf "$(OK_STRING)\n"
-
-formWindow.o: src/window/formWindow.cpp
-	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
-	$(VISIBILITY)$(CXX) -c $(CXX_FLAGS) $(INCLUDE_PATH) $(B_FPIC) src/window/formWindow.cpp
 	@printf "$(OK_STRING)\n"
 
 win32WindowManager.o: src/window/win32WindowManager.cpp

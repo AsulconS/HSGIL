@@ -69,6 +69,7 @@ int main()
         head.draw(shader);
 
         window.swapBuffers();
+        timer.tick();
     }
 
     return 0;

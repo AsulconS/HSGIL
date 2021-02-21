@@ -99,8 +99,8 @@ int main()
         shader.setMat4("model", model02);
         finn02.draw(shader);
 
-        timer.tick();
         window.swapBuffers();
+        timer.tick();
     }
 
     return 0;

@@ -77,7 +77,6 @@ int main()
         glDisable(GL_SCISSOR_TEST);
 
         window.swapBuffers();
-
         timer.tick();
     }
 
