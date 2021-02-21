@@ -37,23 +37,19 @@
 #include <windows.h>
 #include <GL/wglext.h>
 
+#include <iostream>
 #include <unordered_map>
 
 #define NUM_KEYS_SIZE 256u
 #define GLDCC_NAME_SIZE 6u
-#define FMDCC_NAME_SIZE 6u
 #define ATTRIB_LIST_SIZE 17u
 #define MAX_WINDOW_INSTANCES 4u
-
-#define MAX_LABEL_INSTANCES 32u
-#define MAX_BUTTON_INSTANCES 32u
-#define MAX_TEXT_BOX_INSTANCES 32u
 
 namespace gil
 {
 class IWindow;
 
-typedef void (*KeyCallbackFunction)(IWindow*, InputEvent, InputCode, bool);
+typedef void (*EventCallbackFunction)(IWindow*, InputEvent, InputCode, bool);
 
 class HSGIL_API WindowManager final
 {
@@ -63,24 +59,10 @@ public:
     static WindowManager* getInstance(const uint32 index);
 
     bool isActive();
-
-    Tag createLabel(int x, int y, int width, int height, const char* text);
-    Tag createButton(int x, int y, int width, int height, int command, const char* text);
-    Tag createTextBox(int x, int y, int width, int height);
-
-    char* getLabelText(const uint32 index);
-    char* getButtonText(const uint32 index);
-    char* getTextBoxText(const uint32 index);
-
-    void  setLabelText(const uint32 index, const char* text);
-    void  setButtonText(const uint32 index, const char* text);
-    void  setTextBoxText(const uint32 index, const char* text);
-
-    void createFormWindow(const char* title, int x, int y, int width, int height);
     void createRenderingWindow(const char* title, int x, int y, int width, int height);
     void destroyWindow();
 
-    void setKeyCallbackFunction(IWindow* t_windowCallbackInstance, KeyCallbackFunction tf_keyCallbackFunction);
+    void setEventCallbackFunction(IWindow* t_windowCallbackInstance, EventCallbackFunction tf_eventCallbackFunction);
 
     void pollEvents();
     void swapBuffers();
@@ -89,20 +71,13 @@ private:
     bool m_active;
 
     uint32 m_index;
-    uint32 m_activeLabels;
-    uint32 m_activeButtons;
-    uint32 m_activeTextBoxes;
-
-    HWND m_mainWindowHandle;
-    HWND m_labelHandles[MAX_LABEL_INSTANCES];
-    HWND m_buttonHandles[MAX_BUTTON_INSTANCES];
-    HWND m_textBoxHandles[MAX_TEXT_BOX_INSTANCES];
+    HWND m_windowHandle;
 
     HDC m_deviceContextHandle;
     HGLRC m_glRenderingContextHandle;
 
     IWindow* m_windowCallbackInstance;
-    KeyCallbackFunction mf_keyCallbackFunction;
+    EventCallbackFunction mf_eventCallbackFunction;
 
     /* Privated constructor and destructor */
 
@@ -115,14 +90,15 @@ private:
     static uint32 s_wmInstanceCount;
     static WMLazyPtr s_wmInstances[MAX_WINDOW_INSTANCES];
 
+    /**
+     * @brief   Window Hash Table <Window Handler, Instance ID>
+     */
     static std::unordered_map<HWND, uint32> s_hwndMap;
 
     /* Satatic Win32 API Internal Data */
 
     static WNDCLASSEXA s_gldcc;
-    static WNDCLASSEXA s_fmdcc;
     static const char  s_gldccName[GLDCC_NAME_SIZE];
-    static const char  s_fmdccName[FMDCC_NAME_SIZE];
 
     static PIXELFORMATDESCRIPTOR s_pfd;
     static const int s_attribs[ATTRIB_LIST_SIZE];
@@ -137,7 +113,6 @@ private:
     static bool s_pixelFormatCompat;
 
     static void registerGLDCC();
-    static void registerFMDCC();
     static void loadGLExtensions();
     static void warning(const char* msg);
     static void fatalError(const char* msg);
@@ -149,8 +124,7 @@ private:
     static PFNWGLSWAPINTERVALEXTPROC wglSwapIntervalEXT;
     static PFNWGLGETSWAPINTERVALEXTPROC wglGetSwapIntervalEXT;
 
-    static LRESULT CALLBACK GLDCCProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
-    static LRESULT CALLBACK FMDCCProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+    static LRESULT CALLBACK HSGILProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
     /* Deleted Constructors and assignment */
 

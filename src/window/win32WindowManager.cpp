@@ -32,9 +32,7 @@ WMLazyPtr WindowManager::s_wmInstances[MAX_WINDOW_INSTANCES] {};
 std::unordered_map<HWND, uint32> WindowManager::s_hwndMap {};
 
 WNDCLASSEXA WindowManager::s_gldcc {};
-WNDCLASSEXA WindowManager::s_fmdcc {};
 const char  WindowManager::s_gldccName[GLDCC_NAME_SIZE] {"GLDCC"};
-const char  WindowManager::s_fmdccName[FMDCC_NAME_SIZE] {"FMDCC"};
 
 PIXELFORMATDESCRIPTOR WindowManager::s_pfd;
 const int WindowManager::s_attribs[ATTRIB_LIST_SIZE]
@@ -71,7 +69,6 @@ WindowManager* WindowManager::createInstance()
     if(!s_wmInstanceCount)
     {
         s_procInstanceHandle = GetModuleHandleW(nullptr);
-        registerFMDCC();
         registerGLDCC();
         loadGLExtensions();
 
@@ -111,141 +108,11 @@ bool WindowManager::isActive()
     return m_active;
 }
 
-Tag WindowManager::createLabel(int x, int y, int width, int height, const char* text)
-{
-    HWND labelHandle = CreateWindowExA
-    (
-        0L,                                            // Extended Window Style
-        "STATIC",                                      // Window Class Name
-        text,                                          // Window Title
-        WS_BORDER | WS_CHILD | WS_VISIBLE | SS_CENTER, // Window Style
-
-        x, y, width, height,
-
-        m_mainWindowHandle,   // Parent Window Handle
-        nullptr,              // Menu Handle
-        s_procInstanceHandle, // Handle to current instance
-        nullptr               // Additional Application Data
-    );
-    m_labelHandles[m_activeLabels] = labelHandle;
-    return m_activeLabels++;
-}
-
-Tag WindowManager::createButton(int x, int y, int width, int height, int command, const char* text)
-{
-    HWND buttonHandle = CreateWindowExA
-    (
-        0L,                                // Extended Window Style
-        "BUTTON",                          // Window Class Name
-        text,                              // Window Title
-        WS_BORDER | WS_CHILD | WS_VISIBLE, // Window Style
-
-        x, y, width, height,
-
-        m_mainWindowHandle,   // Parent Window Handle
-        (HMENU) command,      // Menu Handle
-        s_procInstanceHandle, // Handle to current instance
-        nullptr               // Additional Application Data
-    );
-    m_buttonHandles[m_activeButtons] = buttonHandle;
-    return m_activeButtons++;
-}
-
-Tag WindowManager::createTextBox(int x, int y, int width, int height)
-{
-    HWND textBoxHandle = CreateWindowExA
-    (
-        0L,                                // Extended Window Style
-        "EDIT",                            // Window Class Name
-        "",                                // Window Title
-        WS_BORDER | WS_CHILD | WS_VISIBLE, // Window Style
-
-        x, y, width, height,
-
-        m_mainWindowHandle,   // Parent Window Handle
-        nullptr,              // Menu Handle
-        s_procInstanceHandle, // Handle to current instance
-        nullptr               // Additional Application Data
-    );
-    m_textBoxHandles[m_activeTextBoxes] = textBoxHandle;
-    return m_activeTextBoxes++;
-}
-
-char* WindowManager::getLabelText(const uint32 index)
-{
-    char* buff = new char[64];
-    if(GetWindowTextA(m_labelHandles[index], buff, 64))
-    {
-        return buff;
-    }
-    return nullptr;
-}
-
-char* WindowManager::getButtonText(const uint32 index)
-{
-    char* buff = new char[64];
-    if(GetWindowTextA(m_buttonHandles[index], buff, 64))
-    {
-        return buff;
-    }
-    return nullptr;
-}
-
-char* WindowManager::getTextBoxText(const uint32 index)
-{
-    char* buff = new char[64];
-    if(GetWindowTextA(m_textBoxHandles[index], buff, 64))
-    {
-        return buff;
-    }
-    return nullptr;
-}
-
-void WindowManager::setLabelText(const uint32 index, const char* text)
-{
-    SetWindowTextA(m_labelHandles[index], text);
-}
-
-void WindowManager::setButtonText(const uint32 index, const char* text)
-{
-    SetWindowTextA(m_buttonHandles[index], text);
-}
-
-void WindowManager::setTextBoxText(const uint32 index, const char* text)
-{
-    SetWindowTextA(m_textBoxHandles[index], text);
-}
-
-void WindowManager::createFormWindow(const char* title, int x, int y, int width, int height)
-{
-    if(!m_active)
-    {
-        m_mainWindowHandle = CreateWindowExA
-        (
-            0L,                          // Extended Window Style
-            s_fmdcc.lpszClassName,       // Window Class Name
-            title,                       // Window Title
-            WS_OVERLAPPEDWINDOW,         // Window Style
-
-            x, y, width, height,
-
-            nullptr,              // Parent Window Handle
-            nullptr,              // Menu Handle
-            s_procInstanceHandle, // Handle to current instance
-            nullptr               // Additional Application Data
-        );
-        ShowWindow(m_mainWindowHandle, SW_SHOW);
-        m_active = true;
-        ++s_activeSessions;
-        s_hwndMap[m_mainWindowHandle] = m_index;
-    }
-}
-
 void WindowManager::createRenderingWindow(const char* title, int x, int y, int width, int height)
 {
     if(!m_active)
     {
-        m_mainWindowHandle = CreateWindowExA
+        m_windowHandle = CreateWindowExA
         (
             0L,                               // Extended Window Style
             s_gldcc.lpszClassName,            // Window Class Name
@@ -261,7 +128,7 @@ void WindowManager::createRenderingWindow(const char* title, int x, int y, int w
         );
         m_active = true;
         ++s_activeSessions;
-        s_hwndMap[m_mainWindowHandle] = m_index;
+        s_hwndMap[m_windowHandle] = m_index;
     }
 }
 
@@ -269,15 +136,15 @@ void WindowManager::destroyWindow()
 {
     if(m_active)
     {
-        DestroyWindow(m_mainWindowHandle);
+        DestroyWindow(m_windowHandle);
         m_active = false;
     }
 }
 
-void WindowManager::setKeyCallbackFunction(IWindow* t_windowCallbackInstance, KeyCallbackFunction tf_keyCallbackFunction)
+void WindowManager::setEventCallbackFunction(IWindow* t_windowCallbackInstance, EventCallbackFunction tf_eventCallbackFunction)
 {
     m_windowCallbackInstance = t_windowCallbackInstance;
-    mf_keyCallbackFunction = tf_keyCallbackFunction;
+    mf_eventCallbackFunction = tf_eventCallbackFunction;
 }
 
 void WindowManager::pollEvents()
@@ -297,10 +164,7 @@ void WindowManager::swapBuffers()
 WindowManager::WindowManager(const uint32 t_index)
     : m_active                   {false},
       m_index                    {t_index},
-      m_activeLabels             {0u},
-      m_activeButtons            {0u},
-      m_activeTextBoxes          {0u},
-      m_mainWindowHandle         {nullptr},
+      m_windowHandle             {nullptr},
       m_deviceContextHandle      {nullptr},
       m_glRenderingContextHandle {nullptr}
 {
@@ -314,7 +178,7 @@ void WindowManager::registerGLDCC()
 {
     s_gldcc.cbSize        = sizeof(WNDCLASSEXA);
     s_gldcc.style         = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
-    s_gldcc.lpfnWndProc   = GLDCCProc;
+    s_gldcc.lpfnWndProc   = HSGILProc;
     s_gldcc.cbClsExtra    = 0;
     s_gldcc.cbWndExtra    = 0;
     s_gldcc.hInstance     = s_procInstanceHandle;
@@ -328,27 +192,6 @@ void WindowManager::registerGLDCC()
     if(!RegisterClassExA(&s_gldcc))
     {
         fatalError("Failed to register Rendering Window.");
-    }
-}
-
-void WindowManager::registerFMDCC()
-{
-    s_fmdcc.cbSize        = sizeof(WNDCLASSEXA);
-    s_fmdcc.style         = 0;
-    s_fmdcc.lpfnWndProc   = FMDCCProc;
-    s_fmdcc.cbClsExtra    = 0;
-    s_fmdcc.cbWndExtra    = 0;
-    s_fmdcc.hInstance     = s_procInstanceHandle;
-    s_fmdcc.hIcon         = LoadIconA(nullptr, IDI_APPLICATION);
-    s_fmdcc.hCursor       = LoadCursorA(nullptr, IDC_ARROW);
-    s_fmdcc.hbrBackground = (HBRUSH)(COLOR_BACKGROUND);
-    s_fmdcc.lpszMenuName  = nullptr;
-    s_fmdcc.lpszClassName = s_fmdccName;
-    s_fmdcc.hIconSm       = LoadIconA(nullptr, IDI_APPLICATION);
-
-    if(!RegisterClassExA(&s_fmdcc))
-    {
-        fatalError("Failed to register Form Window.");
     }
 }
 
@@ -496,74 +339,7 @@ void WindowManager::fatalError(const char* msg)
     exit(EXIT_FAILURE);
 }
 
-LRESULT CALLBACK WindowManager::FMDCCProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
-{
-    switch(uMsg)
-    {
-        case WM_CREATE:
-            {
-                // FreeConsole();
-            }
-            break;
-
-        case WM_DESTROY:
-            {
-                WindowManager* windowInstance = s_wmInstances[s_hwndMap[hWnd]];
-                --s_activeSessions;
-                windowInstance->m_active = false;
-                if(!s_activeSessions)
-                {
-                    PostQuitMessage(0);
-                }
-            }
-            break;
-        
-        case WM_COMMAND:
-            {
-                WindowManager* windowInstance = s_wmInstances[s_hwndMap[hWnd]];
-                windowInstance->mf_keyCallbackFunction(windowInstance->m_windowCallbackInstance, BUTTON_PRESSED, static_cast<InputCode>(static_cast<uint64>(BUTTON_000) + (static_cast<uint64>(wParam) & 0x0000FFFFull)), false);
-            }
-            break;
-
-        case WM_KEYDOWN:
-            {
-                WindowManager* windowInstance = s_wmInstances[s_hwndMap[hWnd]];
-                windowInstance->mf_keyCallbackFunction(windowInstance->m_windowCallbackInstance, KEY_PRESSED, static_cast<InputCode>(wParam), s_keyPhysicStates[wParam]);
-                s_keyPhysicStates[wParam] = 1;
-            }
-            break;
-
-        case WM_KEYUP:
-            {
-                s_keyPhysicStates[wParam] = 0;
-                WindowManager* windowInstance = s_wmInstances[s_hwndMap[hWnd]];
-                windowInstance->mf_keyCallbackFunction(windowInstance->m_windowCallbackInstance, KEY_RELEASED, static_cast<InputCode>(wParam), false);
-            }
-            break;
-
-        case WM_KILLFOCUS:
-            {
-                puts("Lost focus");
-                WindowManager* windowInstance = s_wmInstances[s_hwndMap[hWnd]];
-                for(uint32 i = 0; i < NUM_KEYS_SIZE; ++i)
-                {
-                    if(s_keyPhysicStates[i])
-                    {
-                        s_keyPhysicStates[i] = 0;
-                        windowInstance->mf_keyCallbackFunction(windowInstance->m_windowCallbackInstance, KEY_RELEASED, static_cast<InputCode>(i), false);
-                    }
-                }
-            }
-            break;
-
-        default:
-            break;
-    }
-
-    return DefWindowProc(hWnd, uMsg, wParam, lParam);
-}
-
-LRESULT CALLBACK WindowManager::GLDCCProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+LRESULT CALLBACK WindowManager::HSGILProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     switch(uMsg)
     {
@@ -645,7 +421,7 @@ LRESULT CALLBACK WindowManager::GLDCCProc(HWND hWnd, UINT uMsg, WPARAM wParam, L
         case WM_KEYDOWN:
             {
                 WindowManager* windowInstance = s_wmInstances[s_hwndMap[hWnd]];
-                windowInstance->mf_keyCallbackFunction(windowInstance->m_windowCallbackInstance, KEY_PRESSED, static_cast<InputCode>(wParam), s_keyPhysicStates[wParam]);
+                windowInstance->mf_eventCallbackFunction(windowInstance->m_windowCallbackInstance, KEY_PRESSED, static_cast<InputCode>(wParam), s_keyPhysicStates[wParam]);
                 s_keyPhysicStates[wParam] = 1;
             }
             break;
@@ -654,20 +430,20 @@ LRESULT CALLBACK WindowManager::GLDCCProc(HWND hWnd, UINT uMsg, WPARAM wParam, L
             {
                 s_keyPhysicStates[wParam] = 0;
                 WindowManager* windowInstance = s_wmInstances[s_hwndMap[hWnd]];
-                windowInstance->mf_keyCallbackFunction(windowInstance->m_windowCallbackInstance, KEY_RELEASED, static_cast<InputCode>(wParam), false);
+                windowInstance->mf_eventCallbackFunction(windowInstance->m_windowCallbackInstance, KEY_RELEASED, static_cast<InputCode>(wParam), false);
             }
             break;
 
         case WM_KILLFOCUS:
             {
-                puts("Lost focus");
+                std::cout << "Lost focus" << std::endl;
                 WindowManager* windowInstance = s_wmInstances[s_hwndMap[hWnd]];
                 for(uint32 i = 0; i < NUM_KEYS_SIZE; ++i)
                 {
                     if(s_keyPhysicStates[i])
                     {
                         s_keyPhysicStates[i] = 0;
-                        windowInstance->mf_keyCallbackFunction(windowInstance->m_windowCallbackInstance, KEY_RELEASED, static_cast<InputCode>(i), false);
+                        windowInstance->mf_eventCallbackFunction(windowInstance->m_windowCallbackInstance, KEY_RELEASED, static_cast<InputCode>(i), false);
                     }
                 }
             }
@@ -675,13 +451,13 @@ LRESULT CALLBACK WindowManager::GLDCCProc(HWND hWnd, UINT uMsg, WPARAM wParam, L
 
         case WM_SYSKEYDOWN:
             {
-                puts("WM_SYSKEYDOWN");
+                std::cout << "WM_SYSKEYDOWN" << std::endl;
             }
             break;
 
         case WM_SYSKEYUP:
             {
-                puts("WM_SYSKEYUP");
+                std::cout << "WM_SYSKEYUP" << std::endl;
             }
             break;
 
