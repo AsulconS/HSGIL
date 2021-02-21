@@ -29,7 +29,7 @@ RenderingWindow::RenderingWindow(const uint32 t_width, const uint32 t_height, co
     : IWindow {t_width, t_height, t_title, t_eventHandler}
 {
     m_windowManager = WindowManager::createInstance();
-    m_windowManager->setKeyCallbackFunction(this, keyCallback);
+    m_windowManager->setEventCallbackFunction(this, eventCallback);
     std::cout << "Manager at: " << m_windowManager << std::endl;
     std::cout << "Size is   : " << sizeof(WindowManager) << std::endl;
 
@@ -99,7 +99,7 @@ void RenderingWindow::initializeWindow()
     }
 }
 
-void RenderingWindow::keyCallback(IWindow* window, InputEvent event, InputCode keyCode, bool repeat)
+void RenderingWindow::eventCallback(IWindow* window, InputEvent event, InputCode inputCode, bool repeat)
 {
     RenderingWindow* rWindow = static_cast<RenderingWindow*>(window);
     if(rWindow->m_eventHandler != nullptr)
@@ -108,15 +108,29 @@ void RenderingWindow::keyCallback(IWindow* window, InputEvent event, InputCode k
         {
             case KEY_PRESSED:
                 {
-                    std::cout << "Pressed Key " << keyCode << " Repeated? " << repeat << '\n';
-                    rWindow->m_eventHandler->onKeyDown(keyCode, repeat);
+                    std::cout << "Pressed Key " << inputCode << " Repeated? " << repeat << '\n';
+                    rWindow->m_eventHandler->onKeyDown(inputCode, repeat);
                 }
                 break;
 
             case KEY_RELEASED:
                 {
-                    std::cout << "Released Key " << keyCode << " Repeated? " << repeat << '\n';
-                    rWindow->m_eventHandler->onKeyUp(keyCode, repeat);
+                    std::cout << "Released Key " << inputCode << " Repeated? " << repeat << '\n';
+                    rWindow->m_eventHandler->onKeyUp(inputCode, repeat);
+                }
+                break;
+
+            case BUTTON_PRESSED:
+                {
+                    std::cout << "Pressed Button " << inputCode << '\n';
+                    rWindow->m_eventHandler->onMouseDown(inputCode, 1);
+                }
+                break;
+
+            case BUTTON_RELEASED:
+                {
+                    std::cout << "Released Button " << inputCode << '\n';
+                    rWindow->m_eventHandler->onMouseUp(inputCode, 1);
                 }
                 break;
 

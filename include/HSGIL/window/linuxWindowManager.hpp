@@ -47,6 +47,8 @@
 #include <unordered_map>
 
 #define NUM_KEYS_SIZE 256
+#define NUM_BUTTONS_SIZE 10
+
 #define ATTRIB_LIST_SIZE 23u
 #define MAX_WINDOW_INSTANCES 4u
 
@@ -56,7 +58,7 @@ namespace gil
 {
 class IWindow;
 
-typedef void (*KeyCallbackFunction)(IWindow*, InputEvent, InputCode, bool);
+typedef void (*EventCallbackFunction)(IWindow*, InputEvent, InputCode, bool);
 typedef void (*PFNGLXSWAPINTERVALPROC1)(Display*, GLXDrawable, int);
 typedef int  (*PFNGLXSWAPINTERVALPROC2)(int);
 
@@ -71,7 +73,7 @@ public:
     void createRenderingWindow(const char* title, int x, int y, int width, int height);
     void destroyWindow();
 
-    void setKeyCallbackFunction(IWindow* t_windowCallbackInstance, KeyCallbackFunction tf_keyCallbackFunction);
+    void setEventCallbackFunction(IWindow* t_windowCallbackInstance, EventCallbackFunction tf_eventCallbackFunction);
 
     void pollEvents();
     void swapBuffers();
@@ -90,7 +92,7 @@ private:
     XSetWindowAttributes m_windowAttributes;
 
     IWindow* m_windowCallbackInstance;
-    KeyCallbackFunction mf_keyCallbackFunction;
+    EventCallbackFunction mf_eventCallbackFunction;
 
     void createContext();
 
@@ -99,12 +101,17 @@ private:
     WindowManager(const uint32 t_index);
     ~WindowManager();
 
-    /* Static Instances */
+    /* ---- Static Instances ---- */
+
+    /* Instance Tracking variables */
 
     static uint32 s_activeSessions;
     static uint32 s_wmInstanceCount;
     static WMLazyPtr s_wmInstances[MAX_WINDOW_INSTANCES];
 
+    /**
+     * @brief   Window Hash Table <Window Handler, Instance ID>
+     */
     static std::unordered_map<XWND, uint32> s_hwndMap;
 
     /* Static Internal Data */
@@ -113,6 +120,7 @@ private:
 
     static int s_keyCodesMap[NUM_KEYS_SIZE];
     static int s_keyPhysicStates[NUM_KEYS_SIZE];
+    static int s_mouseButtonsMap[NUM_BUTTONS_SIZE];
 
     static XEvent s_event;
     static XkbDescPtr s_kbDesc;
@@ -132,7 +140,7 @@ private:
     static PFNGLXSWAPINTERVALPROC1 glXSwapInterval1;
     static PFNGLXSWAPINTERVALPROC2 glXSwapInterval2;
 
-    static void loadKeyboardMap();
+    static void loadInputMap();
     static int rawToStandard(int rawCode);
 
     static void loadGLExtensions();

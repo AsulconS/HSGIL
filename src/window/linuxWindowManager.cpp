@@ -49,6 +49,7 @@ const int WindowManager::s_glxAttribs[ATTRIB_LIST_SIZE]
 
 int WindowManager::s_keyCodesMap[NUM_KEYS_SIZE] {};
 int WindowManager::s_keyPhysicStates[NUM_KEYS_SIZE] {};
+int WindowManager::s_mouseButtonsMap[NUM_BUTTONS_SIZE] {};
 
 XEvent WindowManager::s_event {};
 XkbDescPtr WindowManager::s_kbDesc {nullptr};
@@ -76,7 +77,7 @@ WindowManager* WindowManager::createInstance()
         s_screen = DefaultScreenOfDisplay(s_display);
         s_screenID = DefaultScreen(s_display);
 
-        loadKeyboardMap();
+        loadInputMap();
         loadGLExtensions();
 
         s_wmInstances[0u].init(0u);
@@ -174,10 +175,10 @@ void WindowManager::destroyWindow()
     }
 }
 
-void WindowManager::setKeyCallbackFunction(IWindow* t_windowCallbackInstance, KeyCallbackFunction tf_keyCallbackFunction)
+void WindowManager::setEventCallbackFunction(IWindow* t_windowCallbackInstance, EventCallbackFunction tf_eventCallbackFunction)
 {
     m_windowCallbackInstance = t_windowCallbackInstance;
-    mf_keyCallbackFunction = tf_keyCallbackFunction;
+    mf_eventCallbackFunction = tf_eventCallbackFunction;
 }
 
 void WindowManager::pollEvents()
@@ -253,7 +254,7 @@ void WindowManager::createContext()
     std::cout << "Context Created" << std::endl;
 }
 
-void WindowManager::loadKeyboardMap()
+void WindowManager::loadInputMap()
 {
     s_kbDesc = XkbGetMap(s_display, 0, XkbUseCoreKbd);
     XkbGetNames(s_display, XkbKeyNamesMask, s_kbDesc);
@@ -337,6 +338,17 @@ void WindowManager::loadKeyboardMap()
     }
 
     XkbSetDetectableAutoRepeat(s_display, true, nullptr);
+
+    memset(s_mouseButtonsMap, -1, sizeof(s_mouseButtonsMap));
+    s_mouseButtonsMap[1] = MOUSE_BUTTON_LEFT;
+    s_mouseButtonsMap[2] = MOUSE_BUTTON_MIDDLE;
+    s_mouseButtonsMap[3] = MOUSE_BUTTON_RIGHT;
+    s_mouseButtonsMap[4] = MOUSE_BUTTON_TURN_WHEEL_UP;
+    s_mouseButtonsMap[5] = MOUSE_BUTTON_TURN_WHEEL_DOWN;
+    s_mouseButtonsMap[6] = MOUSE_BUTTON_PUSH_WHEEL_LEFT;
+    s_mouseButtonsMap[7] = MOUSE_BUTTON_PUSH_WHEEL_RIGHT;
+    s_mouseButtonsMap[8] = MOUSE_BUTTON_04;
+    s_mouseButtonsMap[9] = MOUSE_BUTTON_05;
 }
 
 int WindowManager::rawToStandard(int rawCode)
@@ -566,7 +578,7 @@ void WindowManager::HSGILProc()
                     if(s_keyPhysicStates[i])
                     {
                         s_keyPhysicStates[i] = 0;
-                        windowInstance->mf_keyCallbackFunction(windowInstance->m_windowCallbackInstance, KEY_RELEASED, static_cast<InputCode>(s_keyCodesMap[i]), false);
+                        windowInstance->mf_eventCallbackFunction(windowInstance->m_windowCallbackInstance, KEY_RELEASED, static_cast<InputCode>(s_keyCodesMap[i]), false);
                     }
                 }
             }
@@ -578,22 +590,10 @@ void WindowManager::HSGILProc()
             }
             break;
 
-        case ButtonPress:
-            {
-                printf("Button pressed : %u\n", s_event.xbutton.button - 1);
-            }
-            break;
-
-        case ButtonRelease:
-            {
-                printf("Button released: %u\n", s_event.xbutton.button - 1);
-            }
-            break;
-
         case KeyPress:
             {
                 WindowManager* windowInstance = s_wmInstances[s_hwndMap[s_event.xany.window]];
-                windowInstance->mf_keyCallbackFunction(windowInstance->m_windowCallbackInstance, KEY_PRESSED, static_cast<InputCode>(s_keyCodesMap[s_event.xkey.keycode]), s_keyPhysicStates[s_event.xkey.keycode]);
+                windowInstance->mf_eventCallbackFunction(windowInstance->m_windowCallbackInstance, KEY_PRESSED, static_cast<InputCode>(s_keyCodesMap[s_event.xkey.keycode]), s_keyPhysicStates[s_event.xkey.keycode]);
                 s_keyPhysicStates[s_event.xkey.keycode] = 1;
             }
             break;
@@ -602,7 +602,21 @@ void WindowManager::HSGILProc()
             {
                 s_keyPhysicStates[s_event.xkey.keycode] = 0;
                 WindowManager* windowInstance = s_wmInstances[s_hwndMap[s_event.xany.window]];
-                windowInstance->mf_keyCallbackFunction(windowInstance->m_windowCallbackInstance, KEY_RELEASED, static_cast<InputCode>(s_keyCodesMap[s_event.xkey.keycode]), false);
+                windowInstance->mf_eventCallbackFunction(windowInstance->m_windowCallbackInstance, KEY_RELEASED, static_cast<InputCode>(s_keyCodesMap[s_event.xkey.keycode]), false);
+            }
+            break;
+
+        case ButtonPress:
+            {
+                WindowManager* windowInstance = s_wmInstances[s_hwndMap[s_event.xany.window]];
+                windowInstance->mf_eventCallbackFunction(windowInstance->m_windowCallbackInstance, BUTTON_PRESSED, static_cast<InputCode>(s_mouseButtonsMap[s_event.xbutton.button]), false);
+            }
+            break;
+
+        case ButtonRelease:
+            {
+                WindowManager* windowInstance = s_wmInstances[s_hwndMap[s_event.xany.window]];
+                windowInstance->mf_eventCallbackFunction(windowInstance->m_windowCallbackInstance, BUTTON_RELEASED, static_cast<InputCode>(s_mouseButtonsMap[s_event.xbutton.button]), false);
             }
             break;
 
