@@ -117,10 +117,10 @@ private:
      * 
      * @param window 
      * @param event 
-     * @param keyCode 
+     * @param inputCode 
      * @param repeat 
      */
-    static void keyCallback(IWindow* window, InputEvent event, InputCode keyCode, bool repeat);
+    static void eventCallback(IWindow* window, InputEvent event, InputCode inputCode, bool repeat);
 };
 
 } // namespace gil
