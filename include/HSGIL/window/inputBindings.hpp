@@ -225,8 +225,8 @@ enum InputCode
     MOUSE_BUTTON_PUSH_WHEEL_LEFT  = 0x142,
     MOUSE_BUTTON_PUSH_WHEEL_RIGHT = 0x143,
 
-    MOUSE_BUTTON_04 = 0x154,
-    MOUSE_BUTTON_05 = 0x155,
+    MOUSE_BUTTON_04 = 0x144,
+    MOUSE_BUTTON_05 = 0x145,
 
 // --------------------------------
 
