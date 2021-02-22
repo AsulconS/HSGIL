@@ -26,6 +26,7 @@
 
 /**
  * This defines the OS we are working with
+ * Currently: Linux and Windows
  */
 #if defined(_WIN32) || defined(WIN32)
     #define HSGIL_OS_WINDOWS
