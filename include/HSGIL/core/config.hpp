@@ -33,32 +33,6 @@
     #define HSGIL_OS_LINUX
 #endif
 
-#if !defined(HSGIL_STATIC_BUILD)
-    #if defined(HSGIL_OS_WINDOWS)
-        #define HSGIL_API_EXPORT __declspec(dllexport)
-        #define HSGIL_API_IMPORT __declspec(dllimport)
-
-        #if defined(_MSC_VER)
-            #pragma warning(disable : 4251)
-        #endif
-    #else
-        #if __GNU__ > 3
-            #define HSGIL_API_EXPORT __attribute__ ((__visibility__ ("default")))
-            #define HSGIL_API_IMPORT __attribute__ ((__visibility__ ("default")))
-        #else
-            #define HSGIL_API_EXPORT
-            #define HSGIL_API_IMPORT
-        #endif
-    #endif
-#else
-    #define HSGIL_API_EXPORT
-    #define HSGIL_API_IMPORT
-#endif
-
-#if defined(HSGIL_API_EXPORT)
-    #define HSGIL_API HSGIL_API_EXPORT
-#else
-    #define HSGIL_API HSGIL_API_IMPORT
-#endif
+#define HSGIL_API
 
 #endif // HSGIL_CONFIG_HPP

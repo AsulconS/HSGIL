@@ -201,7 +201,11 @@ examples: lprompt eprompt example_files trash
 test: lprompt tprompt _test trash
 	@printf "\n$(SUCCESS_STRING)\n"
 
+ifdef TARGET
+full: lprompt $(LIB_TARG) eprompt example_files trash cp_libs_to_examples
+else
 full: lprompt $(LIB_TARG) eprompt example_files tprompt _test trash
+endif
 
 # HSGIL Welcome Prompt and OS
 # -----------------------------------------------------------------------------------------
@@ -240,7 +244,7 @@ eprompt:
 	$(LINE_STRING)
 	@printf "\n$(OS_STRING)\n\n"
 
-example_files: etest ball finn simple head volcano doubleWindow cp_libs_to_examples_$(C_OS)
+example_files: etest ball finn simple head volcano doubleWindow
 	@printf "$(OK_STRING)\n"
 
 etest: etest.o
@@ -478,11 +482,8 @@ glad.o: external/src/glad/glad.c
 # Miscelaneous Rules
 # -----------------------------------------------------------------------------------------
 
-cp_libs_to_examples_WINDOWS:
+cp_libs_to_examples:
 	@cp -f *.dll examples
-
-cp_libs_to_examples_LINUX:
-	@true
 
 # -----------------------------------------------------------------------------------------
 
