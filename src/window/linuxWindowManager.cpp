@@ -191,7 +191,10 @@ void WindowManager::pollEvents()
             XNextEvent(s_display, &s_event);
             HSGILProc();
         }
-        XFlush(s_display);
+        if(s_activeSessions)
+        {
+            XFlush(s_display);
+        }
     }
 }
 
