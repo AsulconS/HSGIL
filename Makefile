@@ -79,6 +79,20 @@ SAMPLES_STRING = $(LIB_COLOR)Building Examples$(NO_COLOR)
 AR  = ar
 CC  = gcc
 CXX = g++
+ifdef TARGET
+    ifeq ($(TARGET), W64)
+        ifeq ($(C_OS), LINUX)
+            $(info W64 target)
+            AR  = x86_64-w64-mingw32-ar
+            CC  = x86_64-w64-mingw32-gcc
+            CXX = x86_64-w64-mingw32-g++
+		else
+            $(error Makefile not supported for this OS yet)
+        endif
+    else
+        $(error TARGET must be either empty or W64)
+    endif
+endif
 
 CC_CXX_MODE =
 MODE_STRING = $(MODE_COLOR)[RELEASE]$(NO_COLOR)
@@ -96,7 +110,7 @@ CXX_WARNING_FLAGS = $(CXX_WSTD_FLAGS) $(CXX_EXTRA_FLAGS)
 CC_FLAGS   = $(CC_STANDARD) $(CC_CXX_MODE)
 CXX_FLAGS  = $(CXX_STANDARD) $(CC_CXX_MODE) $(CXX_WARNING_FLAGS)
 
-ifeq ($(C_OS), WINDOWS)
+ifeq ($(TARGET), W64)
     CXX_LIBS = -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread
 else
     CXX_LIBS =
@@ -117,7 +131,7 @@ INCLUDE_PATH = -Iinclude -Iinclude/HSGIL/external
 EXTERNAL_DEPENDENCIES = glad.o
 
 OS_DEPENDENT_WINDOW_MANAGER =
-ifeq ($(C_OS), WINDOWS)
+ifeq ($(TARGET), W64)
     OS_DEPENDENT_WINDOW_MANAGER = win32WindowManager.o
 else
     OS_DEPENDENT_WINDOW_MANAGER = linuxWindowManager.o
@@ -128,7 +142,7 @@ MATH_OBJECT_FILES     = mUtils.o vecArithmetic.o
 WINDOW_OBJECT_FILES   = renderingWindow.o $(OS_DEPENDENT_WINDOW_MANAGER) eventHandler.o inputControl.o inputTrigger.o inputButton.o wmLazyPtr.o wUtils.o
 GRAPHICS_OBJECT_FILES = shader.o mesh.o model.o gUtils.o
 
-ifeq ($(C_OS), WINDOWS)
+ifeq ($(TARGET), W64)
     LIB_TARG = win32_hsgil-core win32_hsgil-math win32_hsgil-window win32_hsgil-graphics
 else
     LIB_TARG = linux_hsgil-core linux_hsgil-math linux_hsgil-window linux_hsgil-graphics
@@ -145,7 +159,7 @@ LIB_ARGS = -lhsgil-core -lhsgil-math -lhsgil-window -lhsgil-graphics
 # Libraries and Building Flags depending on the OS ----------------------------------------
 # -----------------------------------------------------------------------------------------
 
-ifeq ($(C_OS), WINDOWS)
+ifeq ($(TARGET), W64)
     STATIC_LIBS = -lgdi32 -lopengl32
     LIBRARY_PATH = -L.
     B_FPIC = -fPIC
