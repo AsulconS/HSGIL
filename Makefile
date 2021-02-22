@@ -87,7 +87,7 @@ ifdef TARGET
             CC  = x86_64-w64-mingw32-gcc
             CXX = x86_64-w64-mingw32-g++
 		else
-            $(error Makefile not supported for this OS yet)
+            $(error Makefile not supported for this OS yet [Currently: Linux and Windows])
         endif
     else
         $(error TARGET must be either empty or W64)
