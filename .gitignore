@@ -3,6 +3,8 @@
 other/misc
 doc
 
+.priv
+
 *.lib
 *.dll
 *.so.1.0
