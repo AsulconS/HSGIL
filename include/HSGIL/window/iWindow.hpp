@@ -1,7 +1,7 @@
 /********************************************************************************
  *                                                                              *
  * HSGIL - Handy Scalable Graphics Integration Library                          *
- * Copyright (c) 2021 Adrian Bedregal and Gabriela Chipana                      *
+ * Copyright (c) 2021 Adrian Bedregal                                           *
  *                                                                              *
  * This software is provided 'as-is', without any express or implied            *
  * warranty. In no event will the authors be held liable for any damages        *
@@ -43,11 +43,12 @@ class HSGIL_API IWindow
 {
 public:
     /**
-     * @brief Construct a new Window object
+     * @brief Construct a new IWindow object
      * 
-     * @param t_title 
      * @param t_width 
      * @param t_height 
+     * @param t_title 
+     * @param t_eventHandler 
      */
     IWindow(const uint32 t_width, const uint32 t_height, const char* t_title, IEventHandler* t_eventHandler) : m_width {t_width}, m_height {t_height}, m_title {t_title}, m_ready {false}, m_eventHandler {t_eventHandler} {}
     /**
@@ -60,14 +61,14 @@ public:
      * @brief Check if the Window shouldn't close
      * 
      * @return true if the Window is active
-     * @return false if not
+     * @return false if the Windows is not active
      */
     virtual bool isActive() = 0;
     /**
      * @brief Check if the Window is able to start rendering
      * 
-     * @return true if right
-     * @return false if not
+     * @return true if the Window is able
+     * @return false if the Window is not able
      */
     virtual bool isReady() = 0;
     /**
@@ -89,7 +90,7 @@ public:
     /**
      * @brief Get the Aspect Ratio
      * 
-     * @return float 
+     * @return float value containing the current aspect ratio
      */
     virtual float getAspectRatio() const = 0;
 
