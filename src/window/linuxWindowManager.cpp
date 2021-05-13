@@ -590,7 +590,8 @@ void WindowManager::HSGILProc()
 
         case MotionNotify:
             {
-                printf("Mouse move: [%d, %d]\n", s_event.xmotion.x, s_event.xmotion.y);
+                // This works, but disabled temporarily
+                // printf("Mouse move: [%d, %d]\n", s_event.xmotion.x, s_event.xmotion.y);
             }
             break;
 
