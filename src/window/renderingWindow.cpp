@@ -36,6 +36,7 @@ RenderingWindow::RenderingWindow(const uint32 t_width, const uint32 t_height, co
     try
     {
         initializeWindow();
+        m_windowManager->pollEvents();
         m_ready = true;
     }
     catch(const GenericException& e)
