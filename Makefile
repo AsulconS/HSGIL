@@ -141,13 +141,16 @@ CORE_OBJECT_FILES     = $(EXTERNAL_DEPENDENCIES) timer.o
 MATH_OBJECT_FILES     = mUtils.o vecArithmetic.o
 WINDOW_OBJECT_FILES   = renderingWindow.o $(OS_DEPENDENT_WINDOW_MANAGER) eventHandler.o inputControl.o inputTrigger.o wmLazyPtr.o wUtils.o
 GRAPHICS_OBJECT_FILES = shader.o mesh.o model.o gUtils.o
+HSGIL_OBJECT_FILES    = $(CORE_OBJECT_FILES) $(MATH_OBJECT_FILES) $(WINDOW_OBJECT_FILES) $(GRAPHICS_OBJECT_FILES)
 
 ifeq ($(TARGET), W64)
     LIB_TARG = win32_hsgil-core win32_hsgil-math win32_hsgil-window win32_hsgil-graphics
+	LIB_ARGS = -lhsgil-core -lhsgil-math -lhsgil-window -lhsgil-graphics
 else
-    LIB_TARG = linux_hsgil-core linux_hsgil-math linux_hsgil-window linux_hsgil-graphics
+    #LIB_TARG = linux_hsgil-core linux_hsgil-math linux_hsgil-window linux_hsgil-graphics
+	LIB_TARG = linux_hsgil
+	LIB_ARGS = -lhsgil
 endif
-LIB_ARGS = -lhsgil-core -lhsgil-math -lhsgil-window -lhsgil-graphics
 
 # -----------------------------------------------------------------------------------------
 # -----------------------------------------------------------------------------------------
@@ -434,6 +437,14 @@ win32_hsgil-graphics: $(GRAPHICS_OBJECT_FILES)
 
 # Static Files
 # -----------------------------------------------------------------------------------------
+
+linux_hsgil: $(HSGIL_OBJECT_FILES)
+	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
+	$(VISIBILITY)$(CXX) -shared $(CXX_FLAGS) -Wl,-soname,libhsgil.so.1 $(HSGIL_OBJECT_FILES) -o libhsgil.so.1.0
+	@mv libhsgil.so.1.0 $(LIB_DIR_LINK)
+	@ln -sf $(LIB_DIR_LINK)/libhsgil.so.1.0 $(LIB_DIR_LINK)/libhsgil.so.1
+	@ln -sf $(LIB_DIR_LINK)/libhsgil.so.1.0 $(LIB_DIR_LINK)/libhsgil.so
+	@printf "$(OK_STRING)\n"
 
 linux_hsgil-core: $(CORE_OBJECT_FILES)
 	@printf "$(BUILD_PRINT)\n$(WARN_COLOR)"
