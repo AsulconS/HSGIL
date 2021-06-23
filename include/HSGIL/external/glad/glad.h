@@ -86,8 +86,7 @@ GLAPI int gladLoadGL(void);
 
 GLAPI int gladLoadGLLoader(GLADloadproc);
 
-// Including KHR insinde HSGIL in order to get better portabilty
-#include <HSGIL/external/KHR/khrplatform.h>
+#include <KHR/khrplatform.h>
 typedef unsigned int GLenum;
 typedef unsigned char GLboolean;
 typedef unsigned int GLbitfield;

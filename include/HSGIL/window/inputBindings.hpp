@@ -61,7 +61,7 @@ enum InputCode
 
     KEY_SELECT       = 0x029,
     KEY_PRINT        = 0x02A,
-    KEY_EXECUTE      = 0x02B,
+    //KEY_EXECUTE      = 0x02B,
     KEY_PRINT_SCREEN = 0x02C,
 
     KEY_INSERT = 0x02D,

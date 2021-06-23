@@ -24,7 +24,9 @@
 #ifndef HSGIL_WIN32_WINDOW_MANAGER_HPP
 #define HSGIL_WIN32_WINDOW_MANAGER_HPP
 
+#include <windows.h>
 #include <HSGIL/external/glad/glad.h>
+#include <HSGIL/external/GL/wglext.h>
 
 #include <HSGIL/core/config.hpp>
 #include <HSGIL/core/common.hpp>
@@ -33,9 +35,6 @@
 #include <HSGIL/window/inputBindings.hpp>
 #include <HSGIL/window/wmLazyPtr.hpp>
 #include <HSGIL/window/wUtils.hpp>
-
-#include <windows.h>
-#include <GL/wglext.h>
 
 #include <iostream>
 #include <unordered_map>
