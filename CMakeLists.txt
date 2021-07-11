@@ -11,15 +11,11 @@ include(GNUInstallDirs)
 if(WIN32)
     set(WINDOWS_MANAGER win32WindowManager)
 else()
-    if(LINUX)
-        set(WINDOWS_MANAGER linuxWindowManager)
-    else()
-        message(FATAL_ERROR "Not Supported OS.")
-    endif()
+    set(WINDOWS_MANAGER linuxWindowManager)
 endif()
 add_library(HSGIL STATIC
     external/src/glad/glad.c
-    src/core/timer.cpp
+    src/system/timer.cpp
     src/graphics/gUtils.cpp
     src/graphics/mesh.cpp
     src/graphics/model.cpp

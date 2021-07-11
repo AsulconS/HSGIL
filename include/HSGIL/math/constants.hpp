@@ -21,26 +21,31 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_W_UTILS_HPP
-#define HSGIL_W_UTILS_HPP
-
-#include <HSGIL/config/config.hpp>
-#include <HSGIL/config/common.hpp>
-
-#include <cstring>
+#ifndef HSGIL_CONSTANTS_HPP
+#define HSGIL_CONSTANTS_HPP
 
 namespace gil
 {
-/**
- * @brief Function that checks if an OpenGL extension is supported
- * 
- * @param extList 
- * @param extension 
- * @return true 
- * @return false 
- */
-HSGIL_API bool isExtensionSupported(const char* extList, const char* extension);
+namespace constants
+{
+constexpr unsigned int FLOAT_PRECISION  { 7u };
+constexpr unsigned int DOUBLE_PRECISION { 15u };
 
+// Float constants
+
+constexpr float PI  { 3.1415927f };
+constexpr float E   { 2.7182818f };
+
+constexpr float GAL { 9.8066500f };
+
+// Double constants
+
+constexpr double PId  { 3.141592653589793 };
+constexpr double Ed   { 2.718281828459045 };
+
+constexpr double GALd { 9.806650000000000 };
+
+} // namespace constants
 } // namespace gil
 
-#endif // HSGIL_W_UTILS_HPP
+#endif // HSGIL_CONSTANTS_HPP

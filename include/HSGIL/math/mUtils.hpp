@@ -24,8 +24,8 @@
 #ifndef HSGIL_M_UTILS_HPP
 #define HSGIL_M_UTILS_HPP
 
-#include <HSGIL/core/config.hpp>
-#include <HSGIL/core/common.hpp>
+#include <HSGIL/config/config.hpp>
+#include <HSGIL/config/common.hpp>
 
 namespace gil
 {

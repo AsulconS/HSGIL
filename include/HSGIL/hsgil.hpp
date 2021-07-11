@@ -24,7 +24,7 @@
 #ifndef HSGIL_I_HPP
 #define HSGIL_I_HPP
 
-#include <HSGIL/core.hpp>
+#include <HSGIL/system.hpp>
 #include <HSGIL/math.hpp>
 #include <HSGIL/window.hpp>
 #include <HSGIL/graphics.hpp>

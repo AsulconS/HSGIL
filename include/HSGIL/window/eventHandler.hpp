@@ -24,9 +24,9 @@
 #ifndef HSGIL_EVENT_HANDLER_HPP
 #define HSGIL_EVENT_HANDLER_HPP
 
-#include <HSGIL/core/config.hpp>
-#include <HSGIL/core/common.hpp>
-#include <HSGIL/core/dataStructures/vector.hpp>
+#include <HSGIL/config/config.hpp>
+#include <HSGIL/config/common.hpp>
+#include <HSGIL/system/dstr/vector.hpp>
 
 #include <HSGIL/window/iEventHandler.hpp>
 #include <HSGIL/window/iInputControl.hpp>

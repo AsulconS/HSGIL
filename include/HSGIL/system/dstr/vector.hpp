@@ -21,26 +21,83 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_W_UTILS_HPP
-#define HSGIL_W_UTILS_HPP
+#ifndef HSGIL_DSTR_VECTOR_HPP
+#define HSGIL_DSTR_VECTOR_HPP
 
-#include <HSGIL/config/config.hpp>
 #include <HSGIL/config/common.hpp>
+#include <HSGIL/system/utility.hpp>
 
-#include <cstring>
+#define INITIAL_CAPACITY 4
 
 namespace gil
 {
-/**
- * @brief Function that checks if an OpenGL extension is supported
- * 
- * @param extList 
- * @param extension 
- * @return true 
- * @return false 
- */
-HSGIL_API bool isExtensionSupported(const char* extList, const char* extension);
+template <typename T>
+class Vector
+{
+public:
+    explicit Vector();
+    explicit Vector(uint64 n);
+
+    Vector(uint64 n, const T& val);
+
+    Vector(const Vector<T>& o);
+    Vector(Vector<T>&& o);
+
+    virtual ~Vector();
+
+    Vector<T>& operator=(const Vector<T>& o);
+    Vector<T>& operator=(Vector<T>&& o);
+
+    /**
+     * @brief C-Pushes a new element at the end of the vector
+     * 
+     * @param val 
+     */
+    void push_back(const T& val);
+    /**
+     * @brief M-Pushes a new element at the end of the vector
+     * 
+     * @param val 
+     */
+    void push_back(T&& val);
+    /**
+     * @brief Gets a direct pointer to the raw data
+     * 
+     * @return T* 
+     */
+    T* data() noexcept;
+    /**
+     * @brief Gets a direct pointer to the raw data
+     * 
+     * @return const T* 
+     */
+    const T* data() const noexcept;
+    /**
+     * @brief Gets the size of the vector
+     * 
+     * @return uint64 
+     */
+    uint64 size() const noexcept;
+    /**
+     * @brief Gets the capacity of the vector
+     * 
+     * @return uint64 
+     */
+    uint64 capacity() const noexcept;
+
+    T& operator[](uint64 n);
+    const T& operator[](uint64 n) const;
+
+private:
+    T* m_data;
+    uint64 m_size;
+    uint64 m_capacity;
+
+    void reallocate();
+};
 
 } // namespace gil
 
-#endif // HSGIL_W_UTILS_HPP
+#include <HSGIL/system/dstr/vector.inl>
+
+#endif // HSGIL_DSTR_VECTOR_HPP

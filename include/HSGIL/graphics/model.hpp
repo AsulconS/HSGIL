@@ -26,8 +26,8 @@
 
 #include <HSGIL/external/glm/glm.hpp>
 
-#include <HSGIL/core/config.hpp>
-#include <HSGIL/core/common.hpp>
+#include <HSGIL/config/config.hpp>
+#include <HSGIL/config/common.hpp>
 
 #include <HSGIL/graphics/shader.hpp>
 #include <HSGIL/graphics/gUtils.hpp>

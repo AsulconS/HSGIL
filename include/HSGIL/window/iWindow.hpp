@@ -24,8 +24,8 @@
 #ifndef HSGIL_I_WINDOW_HPP
 #define HSGIL_I_WINDOW_HPP
 
-#include <HSGIL/core/config.hpp>
-#include <HSGIL/core/common.hpp>
+#include <HSGIL/config/config.hpp>
+#include <HSGIL/config/common.hpp>
 
 #include <HSGIL/window/windowManager.hpp>
 #include <HSGIL/window/iEventHandler.hpp>

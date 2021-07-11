@@ -21,83 +21,83 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_DSTR_VECTOR_HPP
-#define HSGIL_DSTR_VECTOR_HPP
+#ifndef HSGIL_TIMER_HPP
+#define HSGIL_TIMER_HPP
 
-#include <HSGIL/core/common.hpp>
-#include <HSGIL/core/utility.hpp>
+#include <HSGIL/config/config.hpp>
+#include <HSGIL/config/common.hpp>
 
-#define INITIAL_CAPACITY 4
+#include <chrono>
+#include <iostream>
 
 namespace gil
 {
-template <typename T>
-class Vector
+/**
+ * @brief Timer Class that measures the time intervals, calculate Delta Time and other time stuff
+ * 
+ */
+class HSGIL_API Timer
 {
 public:
-    explicit Vector();
-    explicit Vector(uint64 n);
-
-    Vector(uint64 n, const T& val);
-
-    Vector(const Vector<T>& o);
-    Vector(Vector<T>&& o);
-
-    virtual ~Vector();
-
-    Vector<T>& operator=(const Vector<T>& o);
-    Vector<T>& operator=(Vector<T>&& o);
+    /**
+     * @brief Construct a new Timer object
+     * 
+     */
+    explicit Timer(const bool t_debugMode = false, const float t_period = 1.0f);
+    /**
+     * @brief Destroy the Timer object
+     * 
+     */
+    virtual ~Timer();
 
     /**
-     * @brief C-Pushes a new element at the end of the vector
+     * @brief Update the timer
      * 
-     * @param val 
      */
-    void push_back(const T& val);
+    void tick();
     /**
-     * @brief M-Pushes a new element at the end of the vector
+     * @brief Restart the timer
      * 
-     * @param val 
      */
-    void push_back(T&& val);
-    /**
-     * @brief Gets a direct pointer to the raw data
-     * 
-     * @return T* 
-     */
-    T* data() noexcept;
-    /**
-     * @brief Gets a direct pointer to the raw data
-     * 
-     * @return const T* 
-     */
-    const T* data() const noexcept;
-    /**
-     * @brief Gets the size of the vector
-     * 
-     * @return uint64 
-     */
-    uint64 size() const noexcept;
-    /**
-     * @brief Gets the capacity of the vector
-     * 
-     * @return uint64 
-     */
-    uint64 capacity() const noexcept;
+    void restart();
 
-    T& operator[](uint64 n);
-    const T& operator[](uint64 n) const;
+    /**
+     * @brief Get the Delta Time
+     * 
+     * @return float 
+     */
+    float getDeltaTime();
+    /**
+     * @brief Get the Total Frame count
+     * 
+     * @return uint32 
+     */
+    uint32 getTotalFrames();
+    /**
+     * @brief Get the Frames Per Second count
+     * 
+     * @return uint32 
+     */
+    uint32 getFramesPerSecond();
 
 private:
-    T* m_data;
-    uint64 m_size;
-    uint64 m_capacity;
+    float procDeltaTime();
+    float procTotalElapsedTime();
+    float procCurrentElapsedTime();
 
-    void reallocate();
+    std::chrono::time_point<std::chrono::steady_clock> m_start;
+    std::chrono::time_point<std::chrono::steady_clock> m_currentStart;
+    std::chrono::time_point<std::chrono::steady_clock> m_lastTime;
+
+    float m_deltaTime;
+    float m_currentTime;
+    uint32 m_totalFrames;
+    uint32 m_framesPerSecond;
+
+    float m_period;
+    bool  m_debugMode;
 };
 
 } // namespace gil
 
-#include <HSGIL/core/dataStructures/vector.inl>
-
-#endif // HSGIL_DSTR_VECTOR_HPP
+#endif // HSGIL_TIMER_HPP

@@ -24,7 +24,7 @@
 #ifndef HSGIL_WINDOW_MANAGER_HPP
 #define HSGIL_WINDOW_MANAGER_HPP
 
-#include <HSGIL/core/config.hpp>
+#include <HSGIL/config/config.hpp>
 
 #if defined(HSGIL_OS_WINDOWS)
     #include <HSGIL/window/win32WindowManager.hpp>

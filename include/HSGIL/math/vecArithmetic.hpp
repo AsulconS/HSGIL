@@ -24,8 +24,8 @@
 #ifndef HSGIL_VEC_ARITHMETIC_HPP
 #define HSGIL_VEC_ARITHMETIC_HPP
 
-#include <HSGIL/core/config.hpp>
-#include <HSGIL/core/common.hpp>
+#include <HSGIL/config/config.hpp>
+#include <HSGIL/config/common.hpp>
 
 #include <HSGIL/math/vec2.hpp>
 #include <HSGIL/math/vec3.hpp>

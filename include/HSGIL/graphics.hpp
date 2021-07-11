@@ -24,7 +24,7 @@
 #ifndef HSGIL_GRAPHICS_I_HPP
 #define HSGIL_GRAPHICS_I_HPP
 
-#include <HSGIL/core/config.hpp>
+#include <HSGIL/config/config.hpp>
 
 #include <HSGIL/graphics/shader.hpp>
 #include <HSGIL/graphics/gUtils.hpp>

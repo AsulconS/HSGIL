@@ -21,26 +21,12 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_W_UTILS_HPP
-#define HSGIL_W_UTILS_HPP
+#ifndef HSGIL_SYSTEM_I_HPP
+#define HSGIL_SYSTEM_I_HPP
 
 #include <HSGIL/config/config.hpp>
-#include <HSGIL/config/common.hpp>
 
-#include <cstring>
+#include <HSGIL/system/timer.hpp>
+#include <HSGIL/system/utility.hpp>
 
-namespace gil
-{
-/**
- * @brief Function that checks if an OpenGL extension is supported
- * 
- * @param extList 
- * @param extension 
- * @return true 
- * @return false 
- */
-HSGIL_API bool isExtensionSupported(const char* extList, const char* extension);
-
-} // namespace gil
-
-#endif // HSGIL_W_UTILS_HPP
+#endif // HSGIL_SYSTEM_I_HPP
