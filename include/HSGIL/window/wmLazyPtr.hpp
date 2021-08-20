@@ -53,5 +53,4 @@ private:
 
 } // namespace gil
 
-
 #endif // HSGIL_WM_LAZY_PTR

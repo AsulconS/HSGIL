@@ -34,7 +34,7 @@ namespace gil
  * @brief IEventHandler Interface that deals with the system events
  * 
  */
-class IEventHandler
+class HSGIL_API IEventHandler
 {
 public:
     /**

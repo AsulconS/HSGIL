@@ -30,7 +30,7 @@ namespace gil
  * @brief IInputControl Interface that is just a input controller with a magnitude
  * 
  */
-class IInputControl
+class HSGIL_API IInputControl
 {
 public:
     /**

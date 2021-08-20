@@ -24,7 +24,9 @@
 #ifndef HSGIL_DSTR_VECTOR_HPP
 #define HSGIL_DSTR_VECTOR_HPP
 
+#include <HSGIL/config/config.hpp>
 #include <HSGIL/config/common.hpp>
+
 #include <HSGIL/system/utility.hpp>
 
 #define INITIAL_CAPACITY 4
@@ -32,7 +34,7 @@
 namespace gil
 {
 template <typename T>
-class Vector
+class HSGIL_API Vector
 {
 public:
     explicit Vector();

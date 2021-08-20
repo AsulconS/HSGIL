@@ -78,4 +78,3 @@ public:
 } // namespace gil
 
 #endif // HSGIL_WINDOW_EXCEPTION_HPP
-
