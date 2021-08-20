@@ -21,10 +21,12 @@
  *                                                                              *
  ********************************************************************************/
 
-#if !defined(HSGIL_COMMON_HPP)
+#ifndef HSGIL_COMMON_HPP
 #define HSGIL_COMMON_HPP
 
 #include <cstdint>
+
+#define MAX_PATH_LENGTH 260
 
 namespace gil
 {

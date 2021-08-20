@@ -55,16 +55,16 @@ public:
     /**
      * @brief Construct a new Shader object from its name
      * 
-     * @param t_name 
+     * @param name 
      */
-    Shader(const char* t_name);
+    Shader(const std::string& name);
     /**
      * @brief Construct a new Shader object from string source
      * 
-     * @param t_vsSrc 
-     * @param t_fsSrc 
+     * @param vsSrc 
+     * @param fsSrc 
      */
-    Shader(const char* t_vsSrc, const char* t_fsSrc);
+    Shader(const std::string& vsSrc, const std::string& fsSrc);
     /**
      * @brief Destroy the Shader object
      * 
@@ -169,15 +169,17 @@ private:
      * @brief Create a Shader object
      * 
      * @param type 
+     * @param src 
      * @return uint32 
      */
-    uint32 createShader(const GLenum type);
+    uint32 createShader(const GLenum type, const std::string& src);
     /**
      * @brief Loads some type of shader from a file
      * 
      * @param type Specifies the type of the shader (VS or FS)
+     * @return std::string 
      */
-    void loadShaderFromFile(const GLenum type);
+    std::string loadShaderFromFile(const GLenum type, const std::string& path);
 
     /**
      * @brief Check if some error ocurred
@@ -187,11 +189,8 @@ private:
      */
     void checkErrors(const uint32 target, const bool isProgram);
 
+private:
     uint32 m_program;
-
-    std::string m_path;
-    std::string m_vsSrc;
-    std::string m_fsSrc;
 };
 
 } // namespace gil

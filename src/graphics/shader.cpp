@@ -25,16 +25,13 @@
 
 namespace gil
 {
-Shader::Shader(const char* t_name)
-    : m_path {"shaders/"}
+Shader::Shader(const std::string& t_name)
 {
-    m_path += t_name;
+    std::string vsSrc {loadShaderFromFile(GL_VERTEX_SHADER, "shaders/" + t_name)};
+    std::string fsSrc {loadShaderFromFile(GL_FRAGMENT_SHADER, "shaders/" + t_name)};
 
-    loadShaderFromFile(GL_VERTEX_SHADER);
-    loadShaderFromFile(GL_FRAGMENT_SHADER);
-
-    uint32 vertexShader = createShader(GL_VERTEX_SHADER);
-    uint32 fragmentShader = createShader(GL_FRAGMENT_SHADER);
+    uint32 vertexShader {createShader(GL_VERTEX_SHADER, vsSrc)};
+    uint32 fragmentShader {createShader(GL_FRAGMENT_SHADER, fsSrc)};
 
     m_program = glCreateProgram();
     glAttachShader(m_program, vertexShader);
@@ -47,12 +44,10 @@ Shader::Shader(const char* t_name)
     glDeleteShader(fragmentShader);
 }
 
-Shader::Shader(const char* t_vsSrc, const char* t_fsSrc)
-    : m_vsSrc {t_vsSrc},
-      m_fsSrc {t_fsSrc}
+Shader::Shader(const std::string& vsSrc, const std::string& fsSrc)
 {
-    uint32 vertexShader = createShader(GL_VERTEX_SHADER);
-    uint32 fragmentShader = createShader(GL_FRAGMENT_SHADER);
+    uint32 vertexShader {createShader(GL_VERTEX_SHADER, vsSrc)};
+    uint32 fragmentShader {createShader(GL_FRAGMENT_SHADER, fsSrc)};
 
     m_program = glCreateProgram();
     glAttachShader(m_program, vertexShader);
@@ -130,19 +125,10 @@ void Shader::setMat4(const std::string& name, const glm::mat4& m0)
     glUniformMatrix4fv(glGetUniformLocation(m_program, name.c_str()), 1, GL_FALSE, glm::value_ptr(m0));
 }
 
-uint32 Shader::createShader(const GLenum type)
+uint32 Shader::createShader(const GLenum type, const std::string& src)
 {
     uint32 shader = glCreateShader(type);
-    const char* shaderSrc;
-
-    if(type == GL_VERTEX_SHADER)
-    {
-        shaderSrc = m_vsSrc.c_str();
-    }
-    else
-    {
-        shaderSrc = m_fsSrc.c_str();
-    }
+    const char* shaderSrc {src.c_str()};
 
     glShaderSource(shader, 1, &shaderSrc, nullptr);
     glCompileShader(shader);
@@ -152,33 +138,25 @@ uint32 Shader::createShader(const GLenum type)
     return shader;
 }
 
-void Shader::loadShaderFromFile(const GLenum type)
+std::string Shader::loadShaderFromFile(const GLenum type, const std::string& path)
 {
     std::ifstream shaderFile;
     std::stringstream shaderStrStream;
 
     shaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
 
-    std::string extension = (type == GL_VERTEX_SHADER) ? ".vs" : ".fs";
+    std::string extension {(type == GL_VERTEX_SHADER) ? ".vs" : ".fs"};
     try
     {
-        shaderFile.open(m_path + extension);
+        shaderFile.open(path + extension);
         shaderStrStream << shaderFile.rdbuf();
         shaderFile.close();
-
-        if(type == GL_VERTEX_SHADER)
-        {
-            m_vsSrc = shaderStrStream.str();
-        }
-        else
-        {
-            m_fsSrc = shaderStrStream.str();
-        }
     }
     catch(const std::ifstream::failure& e)
     {
         std::cerr << "Error while loading shader:\n" << e.what() << std::endl;
     }
+    return shaderStrStream.str();
 }
 
 void Shader::checkErrors(const uint32 target, const bool isProgram)

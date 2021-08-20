@@ -67,19 +67,31 @@ bool loadObj(const char* path, Vector<float>& vertexData, Vector<uint32>& indice
                 if(buffer[1] == ' ')
                 {
                     glm::vec3 vertex;
-                    sscanf(buffer, "%s %f %f %f", type, &vertex.x, &vertex.y, &vertex.z);
+                    #if defined(HSGIL_OS_WINDOWS)
+                        sscanf_s(buffer, "%s %f %f %f", type, 3, &vertex.x, &vertex.y, &vertex.z);
+                    #else
+                        sscanf(buffer, "%s %f %f %f", type, &vertex.x, &vertex.y, &vertex.z);
+                    #endif
                     vertices.push_back(vertex);
                 }
                 else if(buffer[1] == 'n')
                 {
                     glm::vec3 normal;
-                    sscanf(buffer, "%s %f %f %f", type, &normal.x, &normal.y, &normal.z);
+                    #if defined(HSGIL_OS_WINDOWS)
+                        sscanf_s(buffer, "%s %f %f %f", type, 3, &normal.x, &normal.y, &normal.z);
+                    #else
+                        sscanf(buffer, "%s %f %f %f", type, &normal.x, &normal.y, &normal.z);
+                    #endif
                     normals.push_back(normal);
                 }
                 else if(buffer[1] == 't')
                 {
                     glm::vec2 UV;
-                    sscanf(buffer, "%s %f %f", type, &UV.x, &UV.y);
+                    #if defined(HSGIL_OS_WINDOWS)
+                        sscanf_s(buffer, "%s %f %f", type, 3, &UV.x, &UV.y);
+                    #else
+                        sscanf(buffer, "%s %f %f", type, &UV.x, &UV.y);
+                    #endif
                     UVs.push_back(UV);
                 }
             }
@@ -92,32 +104,60 @@ bool loadObj(const char* path, Vector<float>& vertexData, Vector<uint32>& indice
                 {
                     if(hasUVs)
                     {
-                        sscanf(buffer, "%s %u/%u/%u %u/%u/%u %u/%u/%u", type,
-                                                                        &faceVertexIndices[0], &faceUVIndices[0], &faceNormalIndices[0],
-                                                                        &faceVertexIndices[1], &faceUVIndices[1], &faceNormalIndices[1],
-                                                                        &faceVertexIndices[2], &faceUVIndices[2], &faceNormalIndices[2]);
+                        #if defined(HSGIL_OS_WINDOWS)
+                            sscanf_s(buffer, "%s %u/%u/%u %u/%u/%u %u/%u/%u", type, 3,
+                                                                              &faceVertexIndices[0], &faceUVIndices[0], &faceNormalIndices[0],
+                                                                              &faceVertexIndices[1], &faceUVIndices[1], &faceNormalIndices[1],
+                                                                              &faceVertexIndices[2], &faceUVIndices[2], &faceNormalIndices[2]);
+                        #else
+                            sscanf(buffer, "%s %u/%u/%u %u/%u/%u %u/%u/%u", type,
+                                                                            &faceVertexIndices[0], &faceUVIndices[0], &faceNormalIndices[0],
+                                                                            &faceVertexIndices[1], &faceUVIndices[1], &faceNormalIndices[1],
+                                                                            &faceVertexIndices[2], &faceUVIndices[2], &faceNormalIndices[2]);
+                        #endif
                     }
                     else
                     {
-                        sscanf(buffer, "%s %u//%u %u//%u %u//%u",   type,
-                                                                    &faceVertexIndices[0], &faceNormalIndices[0],
-                                                                    &faceVertexIndices[1], &faceNormalIndices[1],
-                                                                    &faceVertexIndices[2], &faceNormalIndices[2]);
+                        #if defined(HSGIL_OS_WINDOWS)
+                            sscanf_s(buffer, "%s %u//%u %u//%u %u//%u", type, 3,
+                                                                        &faceVertexIndices[0], &faceNormalIndices[0],
+                                                                        &faceVertexIndices[1], &faceNormalIndices[1],
+                                                                        &faceVertexIndices[2], &faceNormalIndices[2]);
+                        #else
+                            sscanf(buffer, "%s %u//%u %u//%u %u//%u", type,
+                                                                      &faceVertexIndices[0], &faceNormalIndices[0],
+                                                                      &faceVertexIndices[1], &faceNormalIndices[1],
+                                                                      &faceVertexIndices[2], &faceNormalIndices[2]);
+                        #endif
                     }
                 }
                 else if(hasUVs)
                 {
-                    sscanf(buffer, "%s %u/%u/ %u/%u/ %u/%u/",   type,
-                                                                &faceVertexIndices[0], &faceUVIndices[0],
-                                                                &faceVertexIndices[1], &faceUVIndices[1],
-                                                                &faceVertexIndices[2], &faceUVIndices[2]);
+                    #if defined(HSGIL_OS_WINDOWS)
+                        sscanf_s(buffer, "%s %u/%u/ %u/%u/ %u/%u/", type, 3,
+                                                                    &faceVertexIndices[0], &faceUVIndices[0],
+                                                                    &faceVertexIndices[1], &faceUVIndices[1],
+                                                                    &faceVertexIndices[2], &faceUVIndices[2]);
+                    #else
+                        sscanf(buffer, "%s %u/%u/ %u/%u/ %u/%u/", type,
+                                                                  &faceVertexIndices[0], &faceUVIndices[0],
+                                                                  &faceVertexIndices[1], &faceUVIndices[1],
+                                                                  &faceVertexIndices[2], &faceUVIndices[2]);
+                    #endif
                 }
                 else
                 {
-                    sscanf(buffer, "%s %u// %u// %u//", type,
-                                                        &faceVertexIndices[0],
-                                                        &faceVertexIndices[1],
-                                                        &faceVertexIndices[2]);
+                    #if defined(HSGIL_OS_WINDOWS)
+                        sscanf_s(buffer, "%s %u// %u// %u//", type, 3,
+                                                              &faceVertexIndices[0],
+                                                              &faceVertexIndices[1],
+                                                              &faceVertexIndices[2]);
+                    #else
+                        sscanf(buffer, "%s %u// %u// %u//", type,
+                                                            &faceVertexIndices[0],
+                                                            &faceVertexIndices[1],
+                                                            &faceVertexIndices[2]);
+                    #endif
                 }
 
                 for(uint8 i = 0; i < 3; ++i)

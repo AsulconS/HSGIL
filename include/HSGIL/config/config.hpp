@@ -21,7 +21,7 @@
  *                                                                              *
  ********************************************************************************/
 
-#if !defined(HSGIL_CONFIG_HPP)
+#ifndef HSGIL_CONFIG_HPP
 #define HSGIL_CONFIG_HPP
 
 /**
