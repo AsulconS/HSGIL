@@ -27,21 +27,28 @@
 /**
  * This defines the OS we are working with
  * Currently: Linux and Windows
+ * Details: Deals with dynamic linking semantics
  */
 #if defined(_WIN32) || defined(WIN32) || defined(_MSC_VER)
     #define HSGIL_OS_WINDOWS
-    #define DLL_EXPORT __declspec(dllexport) 
-    #define DLL_IMPORT __declspec(dllimport)
+    #define HSGIL_DLL_EXPORT __declspec(dllexport) 
+    #define HSGIL_DLL_IMPORT __declspec(dllimport)
 #elif defined(__unix__) || defined(linux) || defined(__GNUC__)
     #define HSGIL_OS_LINUX
-    #define DLL_EXPORT __attribute__((visibility("default")))
+    #define HSGIL_DLL_EXPORT __attribute__((visibility("default")))
+    #define HSGIL_DLL_IMPORT
+#else
+    #define HSGIL_OS_UNKNOWN
+    #define HSGIL_DLL_EXPORT
+    #define HSGIL_DLL_IMPORT
+    #pragma warning Unknow semantics for dynamic linking
 #endif
 
 #if defined(__HSGIL_SHARED_LIB)
     #if defined(__HSGIL_COMPILING)
-        #define HSGIL_API DLL_EXPORT
+        #define HSGIL_API HSGIL_DLL_EXPORT
     #else
-        #define HSGIL_API DLL_IMPORT
+        #define HSGIL_API HSGIL_DLL_IMPORT
     #endif
 #else
     #define HSGIL_API
