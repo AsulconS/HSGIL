@@ -7,7 +7,7 @@ macro(build_cpp_source filename)
     target_link_libraries(${filename} LINK_PUBLIC HSGIL opengl32)
     add_custom_command(TARGET ${filename} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        ${CMAKE_SOURCE_DIR}/HSGIL.dll
+        $<TARGET_FILE:HSGIL>
         ${CMAKE_SOURCE_DIR}/examples
     )
 endmacro(build_cpp_source)
