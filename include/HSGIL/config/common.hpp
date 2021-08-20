@@ -21,7 +21,7 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_COMMON_HPP
+#if !defined(HSGIL_COMMON_HPP)
 #define HSGIL_COMMON_HPP
 
 #include <cstdint>

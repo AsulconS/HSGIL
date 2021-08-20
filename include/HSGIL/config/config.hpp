@@ -21,19 +21,30 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_CONFIG_HPP
+#if !defined(HSGIL_CONFIG_HPP)
 #define HSGIL_CONFIG_HPP
 
 /**
  * This defines the OS we are working with
  * Currently: Linux and Windows
  */
-#if defined(_WIN32) || defined(WIN32)
+#if defined(_WIN32) || defined(WIN32) || defined(_MSC_VER)
     #define HSGIL_OS_WINDOWS
-#elif defined(__unix__) || defined(linux)
+    #define DLL_EXPORT __declspec(dllexport) 
+    #define DLL_IMPORT __declspec(dllimport)
+#elif defined(__unix__) || defined(linux) || defined(__GNUC__)
     #define HSGIL_OS_LINUX
+    #define DLL_EXPORT __attribute__((visibility("default")))
 #endif
 
-#define HSGIL_API
+#if defined(__HSGIL_SHARED_LIB)
+    #if defined(__HSGIL_COMPILING)
+        #define HSGIL_API DLL_EXPORT
+    #else
+        #define HSGIL_API DLL_IMPORT
+    #endif
+#else
+    #define HSGIL_API
+#endif
 
 #endif // HSGIL_CONFIG_HPP

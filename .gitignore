@@ -8,3 +8,8 @@ build
 # Files
 .priv
 *.bat
+desktop.ini
+
+# Excecutables and dlls
+*.dll
+*.exe
