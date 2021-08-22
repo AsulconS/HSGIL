@@ -103,7 +103,7 @@ protected:
 
     uint32 m_width;
     uint32 m_height;
-    std::string m_title;
+    const char* m_title;
 
     bool m_ready;
 

@@ -93,7 +93,7 @@ float RenderingWindow::getAspectRatio() const
 
 void RenderingWindow::initializeWindow()
 {
-    m_windowManager->createRenderingWindow(m_title.c_str(), 0, 0, m_width, m_height);
+    m_windowManager->createRenderingWindow(m_title, 0, 0, m_width, m_height);
     if(!m_windowManager->isActive())
     {
         throw WindowInitException();
