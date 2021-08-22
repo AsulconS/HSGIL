@@ -1,15 +1,36 @@
-cmake_minimum_required(VERSION 3.9)
+cmake_minimum_required(VERSION 3.12)
 
+# Disable CYGWIN Legacy Warning
 set(CMAKE_LEGACY_CYGWIN_WIN32 0)
+
+# * Set where .dlls should go (in revision)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY $<1:${CMAKE_SOURCE_DIR}>)
 
-project(HSGIL VERSION 0.0.1 DESCRIPTION "\
-    HSGIL is an OpenSource Graphics Library written in C++\
+# Set all versio configuration
+set(VERSION_MAJOR 0)
+set(VERSION_MINOR 0)
+set(VERSION_PATCH 1)
+set(SO_VERSION ${VERSION_MAJOR}.${VERSION_MINOR})
+set(FULL_VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH})
+
+# Project info
+project(HSGIL
+VERSION
+    ${FULL_VERSION}
+DESCRIPTION
+    "HSGIL is an OpenSource Graphics Library written in C++\
     designed for a simple and handy graphics rendering. It's\
     constantly developing and updating to improve its mechanics\
     and features. This is also aimed at the development of the\
-    Curly Engine (a new Game Engine).\
-")
+    Curly Engine (a new Game Engine)."
+)
+
+# Project options
+option(HSGIL_BUILD_SHARED "Build HSGIL in shared mode [Static by default]." OFF)
+option(HSGIL_BUILD_EXAMPLES "Build HSGIL examples." OFF)
+
+# Set C++11 as the standard
+set(CMAKE_CXX_STANDARD 11)
 
 include(GNUInstallDirs)
 
@@ -19,8 +40,8 @@ else()
     set(WINDOWS_MANAGER linuxWindowManager)
 endif()
 
-add_library(HSGIL
-SHARED
+# Get Source Files
+set(HSGIL_SOURCES
     external/src/glad/glad.c
     src/system/timer.cpp
     src/graphics/gUtils.cpp
@@ -37,22 +58,37 @@ SHARED
     src/window/wmLazyPtr.cpp
     src/window/wUtils.cpp
 )
+
+# Buil library
+if(HSGIL_BUILD_SHARED)
+    add_library(HSGIL SHARED ${HSGIL_SOURCES})
+else()
+    add_library(HSGIL STATIC ${HSGIL_SOURCES})
+endif()
 set_target_properties(HSGIL
 PROPERTIES
     VERSION ${PROJECT_VERSION}
-    SOVERSION 0
+    SOVERSION ${SO_VERSION}
     PUBLIC_HEADER include/hsgil.hpp
 )
 configure_file(HSGIL.pc.in HSGIL.pc @ONLY)
-target_compile_definitions(HSGIL
-PUBLIC
-    GLAD_GLAPI_EXPORT
-PRIVATE
-    __STDC_LIB_EXT1__
-    __HSGIL_COMPILING
-    __HSGIL_SHARED_LIB
-    GLAD_GLAPI_EXPORT_BUILD
-)
+if(HSGIL_BUILD_SHARED)
+    target_compile_definitions(HSGIL
+    PUBLIC
+        GLAD_GLAPI_EXPORT
+    PRIVATE
+        __STDC_LIB_EXT1__
+        __HSGIL_COMPILING
+        __HSGIL_SHARED_LIB
+        GLAD_GLAPI_EXPORT_BUILD
+    )
+else()
+    target_compile_definitions(HSGIL
+    PRIVATE
+        __STDC_LIB_EXT1__
+        __HSGIL_COMPILING
+    )
+endif()
 target_include_directories(HSGIL PRIVATE include)
 install(TARGETS HSGIL
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
@@ -63,4 +99,6 @@ install(FILES ${CMAKE_BINARY_DIR}/HSGIL.pc
 )
 target_link_libraries(HSGIL opengl32)
 
-add_subdirectory(examples)
+if(HSGIL_BUILD_EXAMPLES)
+    add_subdirectory(examples)
+endif()
