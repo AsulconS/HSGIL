@@ -23,12 +23,17 @@
 
 #include <HSGIL/system/timer.hpp>
 
+#include <chrono>
+#include <iostream>
+
+#include "timerPlatform.hpp"
+
 namespace gil
 {
 Timer::Timer(const bool t_debugMode, const float t_period)
-    : m_start           {std::chrono::steady_clock::now()},
-      m_currentStart    {std::chrono::steady_clock::now()},
-      m_lastTime        {std::chrono::steady_clock::now()},
+    : m_start           {plat::getTime()},
+      m_currentStart    {plat::getTime()},
+      m_lastTime        {plat::getTime()},
       m_deltaTime       {0.0f},
       m_currentTime     {0.0f},
       m_totalFrames     {0},
@@ -54,21 +59,21 @@ void Timer::tick()
         {
             std::cout << (m_framesPerSecond - 1) << " fps" << std::endl;
         }
-        m_currentStart    = std::chrono::steady_clock::now();
+        m_currentStart    = plat::getTime();
         m_framesPerSecond = 0;
     }
 }
 
 void Timer::restart()
 {
-    m_start           = std::chrono::steady_clock::now();
-    m_currentStart    = std::chrono::steady_clock::now();
-    m_lastTime        = std::chrono::steady_clock::now();
+    m_start           = plat::getTime();
+    m_currentStart    = plat::getTime();
+    m_lastTime        = plat::getTime();
     m_totalFrames     = 0;
     m_framesPerSecond = 0;
 }
 
-float Timer::getDeltaTime()
+secT Timer::getDeltaTime()
 {
     return m_deltaTime;
 }
@@ -83,24 +88,24 @@ uint32 Timer::getFramesPerSecond()
     return m_framesPerSecond;
 }
 
-float Timer::procDeltaTime()
+secT Timer::procDeltaTime()
 {
-    std::chrono::time_point<std::chrono::steady_clock> currentTime = std::chrono::steady_clock::now();
-    std::chrono::duration<float> deltaTime = currentTime - m_lastTime;
+    Time currentTime {plat::getTime()};
+    secT deltaTime {(currentTime - m_lastTime).asSeconds()};
     m_lastTime = currentTime;
-    return deltaTime.count();
+    return deltaTime;
 }
 
-float Timer::procTotalElapsedTime()
+secT Timer::procTotalElapsedTime()
 {
-    std::chrono::time_point<std::chrono::steady_clock> currentTime = std::chrono::steady_clock::now();
-    return std::chrono::duration<float>(currentTime - m_start).count();
+    Time currentTime {plat::getTime()};
+    return (currentTime - m_start).asSeconds();
 }
 
-float Timer::procCurrentElapsedTime()
+secT Timer::procCurrentElapsedTime()
 {
-    std::chrono::time_point<std::chrono::steady_clock> currentTime = std::chrono::steady_clock::now();
-    return std::chrono::duration<float>(currentTime - m_currentStart).count();
+    Time currentTime {plat::getTime()};
+    return (currentTime - m_currentStart).asSeconds();
 }
 
 } // namespace gil

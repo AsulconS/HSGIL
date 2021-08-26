@@ -31,8 +31,6 @@
 #include <HSGIL/math/vec3.hpp>
 #include <HSGIL/math/vec4.hpp>
 
-#include <cmath>
-
 namespace gil
 {
 /**

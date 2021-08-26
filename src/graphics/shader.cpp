@@ -23,6 +23,11 @@
 
 #include <HSGIL/graphics/shader.hpp>
 
+#include <string>
+#include <fstream>
+#include <sstream>
+#include <iostream>
+
 namespace gil
 {
 Shader::Shader(const std::string& t_name)

@@ -30,9 +30,6 @@
 #include <HSGIL/window/windowManager.hpp>
 #include <HSGIL/window/iEventHandler.hpp>
 
-#include <string>
-#include <iostream>
-
 namespace gil
 {
 /**

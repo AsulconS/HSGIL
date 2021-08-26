@@ -32,7 +32,6 @@
 #include <HSGIL/system/dstr/vector.hpp>
 
 #include <HSGIL/graphics/shader.hpp>
-#include <HSGIL/graphics/gUtils.hpp>
 
 namespace gil
 {

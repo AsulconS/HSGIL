@@ -23,6 +23,8 @@
 
 #include <HSGIL/graphics/mesh.hpp>
 
+#include <HSGIL/graphics/gUtils.hpp>
+
 namespace gil
 {
 Mesh::Mesh()

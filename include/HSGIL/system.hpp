@@ -26,6 +26,7 @@
 
 #include <HSGIL/config/config.hpp>
 
+#include <HSGIL/system/time.hpp>
 #include <HSGIL/system/timer.hpp>
 #include <HSGIL/system/utility.hpp>
 

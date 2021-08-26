@@ -23,6 +23,8 @@
 
 #include <HSGIL/window/inputControl.hpp>
 
+#include <HSGIL/math/mUtils.hpp>
+
 namespace gil
 {
 InputControl::InputControl()

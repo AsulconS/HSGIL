@@ -42,8 +42,6 @@
 #include <GL/glx.h>
 #include <GL/glxext.h>
 
-#include <cstring>
-#include <iostream>
 #include <unordered_map>
 
 #define NUM_KEYS_SIZE 256

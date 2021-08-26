@@ -23,6 +23,9 @@
 
 #include <HSGIL/window/linuxWindowManager.hpp>
 
+#include <cstring>
+#include <iostream>
+
 namespace gil
 {
 uint32 WindowManager::s_activeSessions  {0u};

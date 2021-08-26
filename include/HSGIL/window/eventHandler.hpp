@@ -26,6 +26,7 @@
 
 #include <HSGIL/config/config.hpp>
 #include <HSGIL/config/common.hpp>
+
 #include <HSGIL/system/dstr/vector.hpp>
 
 #include <HSGIL/window/iEventHandler.hpp>

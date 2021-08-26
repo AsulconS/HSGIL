@@ -21,10 +21,13 @@
  *                                                                              *
  ********************************************************************************/
 
-#define STB_IMAGE_IMPLEMENTATION
-
 #include <HSGIL/graphics/gUtils.hpp>
+
+#define  STB_IMAGE_IMPLEMENTATION
 #include <HSGIL/external/stb_image.h>
+
+#include <fstream>
+#include <iostream>
 
 namespace gil
 {

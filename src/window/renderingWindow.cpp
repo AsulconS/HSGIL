@@ -23,6 +23,10 @@
 
 #include <HSGIL/window/renderingWindow.hpp>
 
+#include <HSGIL/exception/window/windowException.hpp>
+
+#include <iostream>
+
 namespace gil
 {
 RenderingWindow::RenderingWindow(const uint32 t_width, const uint32 t_height, const char* t_title, IEventHandler* t_eventHandler)

@@ -23,6 +23,8 @@
 
 #include <HSGIL/math/vecArithmetic.hpp>
 
+#include <cmath>
+
 namespace gil
 {
 bool operator==(const Vec2f& l, const Vec2f& r)

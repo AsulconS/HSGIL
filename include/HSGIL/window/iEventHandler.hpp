@@ -24,6 +24,7 @@
 #ifndef HSGIL_I_EVENT_HANDLER_HPP
 #define HSGIL_I_EVENT_HANDLER_HPP
 
+#include <HSGIL/config/config.hpp>
 #include <HSGIL/config/common.hpp>
 
 #include <HSGIL/window/inputBindings.hpp>

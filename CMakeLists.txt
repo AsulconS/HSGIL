@@ -9,7 +9,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY $<1:${CMAKE_SOURCE_DIR}>)
 # Set all versio configuration
 set(VERSION_MAJOR 0)
 set(VERSION_MINOR 0)
-set(VERSION_PATCH 1)
+set(VERSION_PATCH 2)
 set(SO_VERSION ${VERSION_MAJOR}.${VERSION_MINOR})
 set(FULL_VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH})
 
@@ -35,15 +35,17 @@ set(CMAKE_CXX_STANDARD 11)
 include(GNUInstallDirs)
 
 if(WIN32)
-    set(WINDOWS_MANAGER win32WindowManager)
+    set(HSGIL_PLATFORM win32)
 else()
-    set(WINDOWS_MANAGER linuxWindowManager)
+    set(HSGIL_PLATFORM linux)
 endif()
 
 # Get Source Files
 set(HSGIL_SOURCES
     external/src/glad/glad.c
+    src/system/time.cpp
     src/system/timer.cpp
+    src/system/${HSGIL_PLATFORM}/timerPlatform.cpp
     src/graphics/gUtils.cpp
     src/graphics/mesh.cpp
     src/graphics/model.cpp
@@ -54,7 +56,7 @@ set(HSGIL_SOURCES
     src/window/inputControl.cpp
     src/window/inputTrigger.cpp
     src/window/renderingWindow.cpp
-    src/window/${WINDOWS_MANAGER}.cpp
+    src/window/${HSGIL_PLATFORM}WindowManager.cpp
     src/window/wmLazyPtr.cpp
     src/window/wUtils.cpp
 )

@@ -46,6 +46,7 @@ constexpr double Ed   { 2.718281828459045 };
 constexpr double GALd { 9.806650000000000 };
 
 } // namespace constants
+
 } // namespace gil
 
 #endif // HSGIL_CONSTANTS_HPP

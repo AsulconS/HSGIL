@@ -24,7 +24,8 @@
 #ifndef HSGIL_WIN32_WINDOW_MANAGER_HPP
 #define HSGIL_WIN32_WINDOW_MANAGER_HPP
 
-#include <windows.h>
+#include <Windows.h>
+
 #include <HSGIL/external/glad/glad.h>
 #include <HSGIL/external/GL/wglext.h>
 
@@ -36,7 +37,6 @@
 #include <HSGIL/window/wmLazyPtr.hpp>
 #include <HSGIL/window/wUtils.hpp>
 
-#include <iostream>
 #include <unordered_map>
 
 #define NUM_KEYS_SIZE 256u

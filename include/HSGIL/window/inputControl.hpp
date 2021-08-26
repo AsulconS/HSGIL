@@ -27,8 +27,6 @@
 #include <HSGIL/config/config.hpp>
 #include <HSGIL/config/common.hpp>
 
-#include <HSGIL/math/mUtils.hpp>
-
 #include <HSGIL/window/iInputControl.hpp>
 
 namespace gil

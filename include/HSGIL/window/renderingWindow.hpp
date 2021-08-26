@@ -27,16 +27,11 @@
 #include <HSGIL/config/config.hpp>
 #include <HSGIL/config/common.hpp>
 
-#include <HSGIL/exception/window/windowException.hpp>
-
 #include <HSGIL/window/iWindow.hpp>
 #include <HSGIL/window/inputEvents.hpp>
 #include <HSGIL/window/inputBindings.hpp>
 #include <HSGIL/window/windowManager.hpp>
 #include <HSGIL/window/iEventHandler.hpp>
-
-#include <string>
-#include <iostream>
 
 namespace gil
 {

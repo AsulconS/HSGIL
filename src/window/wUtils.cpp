@@ -23,6 +23,8 @@
 
 #include <HSGIL/window/wUtils.hpp>
 
+#include <cstring>
+
 namespace gil
 {
 bool isExtensionSupported(const char* extList, const char* extension)

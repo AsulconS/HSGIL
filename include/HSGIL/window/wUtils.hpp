@@ -27,8 +27,6 @@
 #include <HSGIL/config/config.hpp>
 #include <HSGIL/config/common.hpp>
 
-#include <cstring>
-
 namespace gil
 {
 /**

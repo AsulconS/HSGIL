@@ -23,6 +23,8 @@
 
 #include <HSGIL/graphics/model.hpp>
 
+#include <HSGIL/graphics/gUtils.hpp>
+
 namespace gil
 {
 Model::Model()

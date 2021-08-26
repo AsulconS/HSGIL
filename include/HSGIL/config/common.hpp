@@ -39,9 +39,11 @@ using uint16 = uint16_t;
 using uint32 = uint32_t;
 using uint64 = uint64_t;
 
-using byte   = uint8_t;
+using secT   = float;
+using milliT = int32_t;
+using microT = int64_t;
 
-using Tag    = uint32_t;
+using byte = uint8_t;
 
 } // namespace gil
 

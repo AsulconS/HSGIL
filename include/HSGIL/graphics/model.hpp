@@ -29,9 +29,8 @@
 #include <HSGIL/config/config.hpp>
 #include <HSGIL/config/common.hpp>
 
-#include <HSGIL/graphics/shader.hpp>
-#include <HSGIL/graphics/gUtils.hpp>
 #include <HSGIL/graphics/mesh.hpp>
+#include <HSGIL/graphics/shader.hpp>
 
 namespace gil
 {

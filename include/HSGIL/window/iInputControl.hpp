@@ -24,6 +24,9 @@
 #ifndef HSGIL_I_INPUT_CONTROL_HPP
 #define HSGIL_I_INPUT_CONTROL_HPP
 
+#include <HSGIL/config/config.hpp>
+#include <HSGIL/config/common.hpp>
+
 namespace gil
 {
 /**
