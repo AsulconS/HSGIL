@@ -23,6 +23,9 @@ option(HSGIL_BUILD_EXAMPLES "Build HSGIL examples." OFF)
 # Set C++11 as the standard
 set(CMAKE_CXX_STANDARD 11)
 
+# Set generic lib name
+set(HSGIL_LIB_NAME hsgil)
+
 include(GNUInstallDirs)
 
 if(WIN32)
@@ -54,19 +57,19 @@ set(HSGIL_SOURCES
 
 # Buil library
 if(HSGIL_BUILD_SHARED)
-    add_library(HSGIL SHARED ${HSGIL_SOURCES})
+    add_library(${HSGIL_LIB_NAME} SHARED ${HSGIL_SOURCES})
 else()
-    add_library(HSGIL STATIC ${HSGIL_SOURCES})
+    add_library(${HSGIL_LIB_NAME} STATIC ${HSGIL_SOURCES})
 endif()
-set_target_properties(HSGIL
+set_target_properties(${HSGIL_LIB_NAME}
 PROPERTIES
     VERSION ${PROJECT_VERSION}
     SOVERSION ${SO_VERSION}
     PUBLIC_HEADER include/hsgil.hpp
 )
-configure_file(HSGIL.pc.in HSGIL.pc @ONLY)
+configure_file(${HSGIL_LIB_NAME}.pc.in ${HSGIL_LIB_NAME}.pc @ONLY)
 if(HSGIL_BUILD_SHARED)
-    target_compile_definitions(HSGIL
+    target_compile_definitions(${HSGIL_LIB_NAME}
     PUBLIC
         GLAD_GLAPI_EXPORT
     PRIVATE
@@ -76,21 +79,21 @@ if(HSGIL_BUILD_SHARED)
         GLAD_GLAPI_EXPORT_BUILD
     )
 else()
-    target_compile_definitions(HSGIL
+    target_compile_definitions(${HSGIL_LIB_NAME}
     PRIVATE
         __STDC_LIB_EXT1__
         __HSGIL_COMPILING
     )
 endif()
-target_include_directories(HSGIL PRIVATE include)
-install(TARGETS HSGIL
+target_include_directories(${HSGIL_LIB_NAME} PRIVATE include)
+install(TARGETS ${HSGIL_LIB_NAME}
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
-install(FILES ${CMAKE_BINARY_DIR}/HSGIL.pc
+install(FILES ${CMAKE_BINARY_DIR}/${HSGIL_LIB_NAME}.pc
     DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/pkgconfig
 )
-target_link_libraries(HSGIL opengl32)
+target_link_libraries(${HSGIL_LIB_NAME} opengl32)
 
 if(HSGIL_BUILD_EXAMPLES)
     add_subdirectory(examples)

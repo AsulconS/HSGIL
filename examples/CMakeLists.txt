@@ -4,10 +4,10 @@ macro(build_cpp_source filename)
     add_executable(${filename} ${filename}.cpp)
     target_include_directories(${filename} PRIVATE ../include)
     target_include_directories(${filename} PRIVATE ../include/HSGIL/external)
-    target_link_libraries(${filename} LINK_PUBLIC HSGIL opengl32)
+    target_link_libraries(${filename} LINK_PUBLIC ${HSGIL_LIB_NAME} opengl32)
     add_custom_command(TARGET ${filename} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        $<TARGET_FILE:HSGIL>
+        $<TARGET_FILE:${HSGIL_LIB_NAME}>
         ${CMAKE_SOURCE_DIR}/examples
     )
 endmacro(build_cpp_source)
