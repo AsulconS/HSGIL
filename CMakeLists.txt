@@ -6,7 +6,7 @@ set(CMAKE_LEGACY_CYGWIN_WIN32 0)
 # * Set where .dlls should go (in revision)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY $<1:${CMAKE_SOURCE_DIR}>)
 
-# Set all versio configuration
+# Set all version configuration
 set(VERSION_MAJOR 0)
 set(VERSION_MINOR 0)
 set(VERSION_PATCH 2)
@@ -14,16 +14,7 @@ set(SO_VERSION ${VERSION_MAJOR}.${VERSION_MINOR})
 set(FULL_VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH})
 
 # Project info
-project(HSGIL
-VERSION
-    ${FULL_VERSION}
-DESCRIPTION
-    "HSGIL is an OpenSource Graphics Library written in C++\
-    designed for a simple and handy graphics rendering. It's\
-    constantly developing and updating to improve its mechanics\
-    and features. This is also aimed at the development of the\
-    Curly Engine (a new Game Engine)."
-)
+project(HSGIL VERSION ${FULL_VERSION})
 
 # Project options
 option(HSGIL_BUILD_SHARED "Build HSGIL in shared mode [Static by default]." OFF)
