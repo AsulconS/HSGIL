@@ -34,7 +34,7 @@ bool isExtensionSupported(const char* extList, const char* extension)
     const char* terminator;
 
 	where = strchr(extension, ' ');
-	if (where || *extension == '\0')
+	if(where || *extension == '\0')
     {
 	    return false;
     }
