@@ -81,8 +81,8 @@ private:
     void updateMousePosition(Vec2i position);
 
     Vec2i m_mousePos;
-    std::map<InputCode,KeyInfo> m_keys;
-    std::map<InputCode,MouseInfo> m_mouseButtons;
+    std::map<InputCode, KeyInfo> m_keys;
+    std::map<InputCode, MouseInfo> m_mouseButtons;
 
     int m_currentTime;
 };
