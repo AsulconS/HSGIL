@@ -45,7 +45,7 @@
 namespace gil
 {
 class IWindow;
-class WindowParams;
+struct WindowParams;
 
 using EventCallbackFunction = void (*)(IWindow*, InputEvent, WindowParams*);
 
