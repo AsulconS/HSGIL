@@ -33,7 +33,7 @@
 
 namespace gil
 {
-class WindowParams;
+struct WindowParams;
 
 /**
  * @brief Rendering Window Class that handle a window for render of the program
