@@ -42,6 +42,7 @@
     #define HSGIL_DLL_EXPORT
     #define HSGIL_DLL_IMPORT
     #pragma warning Unknow semantics for dynamic linking
+    #error HSGIL has no support for this OS
 #endif
 
 #if defined(__HSGIL_SHARED_LIB)
