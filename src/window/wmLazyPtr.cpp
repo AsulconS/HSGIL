@@ -21,8 +21,9 @@
  *                                                                              *
  ********************************************************************************/
 
-#include <HSGIL/window/wmLazyPtr.hpp>
-#include <HSGIL/window/windowManager.hpp>
+#include "wmLazyPtr.hpp"
+
+#include "windowManager.hpp"
 
 namespace gil
 {

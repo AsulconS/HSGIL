@@ -48,7 +48,7 @@ set(HSGIL_SOURCES
     src/math/vecArithmetic.cpp
     src/window/inputHandler.cpp
     src/window/renderingWindow.cpp
-    src/window/${HSGIL_PLATFORM}WindowManager.cpp
+    src/window/${HSGIL_PLATFORM}/windowManagerPlatform.cpp
     src/window/wmLazyPtr.cpp
     src/window/wUtils.cpp
 )

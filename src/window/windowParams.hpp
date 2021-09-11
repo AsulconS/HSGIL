@@ -21,17 +21,31 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_WINDOW_MANAGER_HPP
-#define HSGIL_WINDOW_MANAGER_HPP
+#ifndef WINDOW_PARAMS_HPP
+#define WINDOW_PARAMS_HPP
 
-#include <HSGIL/config/config.hpp>
+#include <HSGIL/math/vec2.hpp>
 
-#if defined(HSGIL_OS_WINDOWS)
-    #include <HSGIL/window/win32WindowManager.hpp>
-#elif defined(HSGIL_OS_LINUX)
-    #include <HSGIL/window/linuxWindowManager.hpp>
-#else
-    #error HSGIL has no support for this OS
-#endif
+#include <HSGIL/window/inputBindings.hpp>
 
-#endif // HSGIL_WINDOW_MANAGER_HPP
+namespace gil
+{
+
+struct WindowParams
+{
+};
+
+struct MouseParams : public WindowParams
+{
+    InputCode code;
+    Vec2i pos;
+};
+
+struct KeyboardParams: public WindowParams
+{
+    InputCode code;
+};
+
+} // namespace gil
+
+#endif // HSGIL_WINDOW_PARAMS_HPP

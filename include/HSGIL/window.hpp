@@ -28,11 +28,9 @@
 
 #include <HSGIL/window/inputEvents.hpp>
 #include <HSGIL/window/inputBindings.hpp>
+#include <HSGIL/window/inputHandler.hpp>
 
 #include <HSGIL/window/iWindow.hpp>
 #include <HSGIL/window/renderingWindow.hpp>
-#include <HSGIL/window/windowManager.hpp>
-
-#include <HSGIL/window/wUtils.hpp>
 
 #endif // HSGIL_WINDOW_I_HPP

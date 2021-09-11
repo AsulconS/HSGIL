@@ -34,10 +34,6 @@
 #include <HSGIL/config/common.hpp>
 
 #include <HSGIL/window/inputEvents.hpp>
-#include <HSGIL/window/inputBindings.hpp>
-#include <HSGIL/window/windowParams.hpp>
-#include <HSGIL/window/wmLazyPtr.hpp>
-#include <HSGIL/window/wUtils.hpp>
 
 #include <unordered_map>
 
@@ -49,12 +45,13 @@
 namespace gil
 {
 class IWindow;
+class WindowParams;
 
-typedef void (*EventCallbackFunction)(IWindow*, InputEvent, WindowParams*);
+using EventCallbackFunction = void (*)(IWindow*, InputEvent, WindowParams*);
 
 class HSGIL_API WindowManager final
 {
-    friend WMLazyPtr;
+    friend class WMLazyPtr;
 public:
     static WindowManager* createInstance();
     static WindowManager* getInstance(const uint32 index);

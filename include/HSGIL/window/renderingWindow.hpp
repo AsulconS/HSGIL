@@ -29,13 +29,12 @@
 
 #include <HSGIL/window/iWindow.hpp>
 #include <HSGIL/window/inputEvents.hpp>
-#include <HSGIL/window/inputBindings.hpp>
-#include <HSGIL/window/windowManager.hpp>
-#include <HSGIL/window/windowParams.hpp>
 #include <HSGIL/window/inputHandler.hpp>
 
 namespace gil
 {
+class WindowParams;
+
 /**
  * @brief Rendering Window Class that handle a window for render of the program
  * 

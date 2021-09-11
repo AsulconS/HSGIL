@@ -27,11 +27,12 @@
 #include <HSGIL/config/config.hpp>
 #include <HSGIL/config/common.hpp>
 
-#include <HSGIL/window/windowManager.hpp>
 #include <HSGIL/window/inputHandler.hpp>
 
 namespace gil
 {
+class WindowManager;
+
 /**
  * @brief Window Class that handle a Window of the program
  * 

@@ -27,6 +27,9 @@
 
 #include <iostream>
 
+#include "windowParams.hpp"
+#include "windowManager.hpp"
+
 namespace gil
 {
 RenderingWindow::RenderingWindow(const uint32 t_width, const uint32 t_height, const char* t_title, InputHandler* t_inputHandler)
@@ -53,9 +56,9 @@ RenderingWindow::RenderingWindow(const uint32 t_width, const uint32 t_height, co
 RenderingWindow::~RenderingWindow()
 {
     std::cout << "Destructing Window " << m_title << std::endl;
-    if(this->isActive())
+    if(isActive())
     {
-        this->close();
+        close();
     }
     std::cout << "Window " << m_title << " destroyed" << std::endl;
 }
@@ -116,22 +119,22 @@ void RenderingWindow::eventCallback(IWindow* window, InputEvent event, WindowPar
             case KEY_PRESSED:
             case KEY_RELEASED:
                 {
-                    std::cout << "Presion Grandota " << ((KeyboardParams*)params)->code << '\n';
-                    rWindow->m_inputHandler->updateKeyEvent(((KeyboardParams*)params)->code, event);
+                    std::cout << "Presion Grandota " << static_cast<KeyboardParams*>(params)->code << '\n';
+                    rWindow->m_inputHandler->updateKeyEvent(static_cast<KeyboardParams*>(params)->code, event);
                 }
                 break;
 
             case BUTTON_PRESSED:
             case BUTTON_RELEASED:
                 {
-                    std::cout << "Presion Chikita " << ((MouseParams*)params)->code << '\n';
-                    rWindow->m_inputHandler->updateMouseEvent(((MouseParams*)params)->code, event);
+                    std::cout << "Presion Chikita " << static_cast<MouseParams*>(params)->code << '\n';
+                    rWindow->m_inputHandler->updateMouseEvent(static_cast<MouseParams*>(params)->code, event);
                 }
                 break;
 
             case MOUSE_MOVE:
                 {
-                    rWindow->m_inputHandler->updateMousePosition(((MouseParams*)params)->pos);
+                    rWindow->m_inputHandler->updateMousePosition(static_cast<MouseParams*>(params)->pos);
                 }
                 break;
 

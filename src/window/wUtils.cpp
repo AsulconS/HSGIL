@@ -21,7 +21,7 @@
  *                                                                              *
  ********************************************************************************/
 
-#include <HSGIL/window/wUtils.hpp>
+#include "wUtils.hpp"
 
 #include <cstring>
 

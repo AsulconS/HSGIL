@@ -21,9 +21,15 @@
  *                                                                              *
  ********************************************************************************/
 
-#include <HSGIL/window/win32WindowManager.hpp>
+#include "windowManagerPlatform.hpp"
+
+#include <HSGIL/window/inputBindings.hpp>
 
 #include <iostream>
+
+#include "../wUtils.hpp"
+#include "../wmLazyPtr.hpp"
+#include "../windowParams.hpp"
 
 namespace gil
 {

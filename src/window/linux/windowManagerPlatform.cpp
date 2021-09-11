@@ -21,7 +21,7 @@
  *                                                                              *
  ********************************************************************************/
 
-#include <HSGIL/window/linuxWindowManager.hpp>
+#include "windowManagerPlatform.hpp"
 
 #include <cstring>
 #include <iostream>
