@@ -47,13 +47,13 @@ public:
     struct KeyInfo
     {
         InputEvent event;
-        int time;
+        int32 time;
     };
 
     struct MouseInfo
     {
         InputEvent event;
-        int time;
+        int32 time;
     };
 
     InputHandler();
@@ -76,15 +76,15 @@ private:
     void initKey(InputCode key);
     void initButton(InputCode button);
 
-    void updateKeyEvent(InputCode key,InputEvent event);
-    void updateMouseEvent(InputCode button,InputEvent event);
+    void updateKeyEvent(InputCode key, InputEvent event);
+    void updateMouseEvent(InputCode button, InputEvent event);
     void updateMousePosition(Vec2i position);
 
     Vec2i m_mousePos;
     std::map<InputCode, KeyInfo> m_keys;
     std::map<InputCode, MouseInfo> m_mouseButtons;
 
-    int m_currentTime;
+    int32 m_currentTime;
 };
 
 } // namespace gil
