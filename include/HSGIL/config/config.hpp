@@ -31,7 +31,7 @@
  */
 #if defined(_WIN32) || defined(WIN32) || defined(_MSC_VER)
     #define HSGIL_OS_WINDOWS
-    #define HSGIL_DLL_EXPORT __declspec(dllexport) 
+    #define HSGIL_DLL_EXPORT __declspec(dllexport)
     #define HSGIL_DLL_IMPORT __declspec(dllimport)
 #elif defined(__unix__) || defined(linux) || defined(__GNUC__)
     #define HSGIL_OS_LINUX
