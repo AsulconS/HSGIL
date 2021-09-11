@@ -29,8 +29,8 @@
 
 namespace gil
 {
-RenderingWindow::RenderingWindow(const uint32 t_width, const uint32 t_height, const char* t_title, IEventHandler* t_eventHandler)
-    : IWindow {t_width, t_height, t_title, t_eventHandler}
+RenderingWindow::RenderingWindow(const uint32 t_width, const uint32 t_height, const char* t_title, InputHandler* t_inputHandler)
+    : IWindow {t_width, t_height, t_title, t_inputHandler}
 {
     m_windowManager = WindowManager::createInstance();
     m_windowManager->setEventCallbackFunction(this, eventCallback);
@@ -75,13 +75,15 @@ void RenderingWindow::close()
     m_windowManager->destroyWindow();
 }
 
-void RenderingWindow::setEventHandler(IEventHandler& t_eventHandler)
+void RenderingWindow::setInputHandler(InputHandler& t_inputHandler)
 {
-    m_eventHandler = &t_eventHandler;
+    m_inputHandler = &t_inputHandler;
 }
 
 void RenderingWindow::pollEvents()
 {
+    if(m_inputHandler != nullptr)
+        m_inputHandler->tick();
     m_windowManager->pollEvents();
 }
 
@@ -104,38 +106,32 @@ void RenderingWindow::initializeWindow()
     }
 }
 
-void RenderingWindow::eventCallback(IWindow* window, InputEvent event, InputCode inputCode, bool repeat)
+void RenderingWindow::eventCallback(IWindow* window, InputEvent event, WindowParams* params)
 {
     RenderingWindow* rWindow = static_cast<RenderingWindow*>(window);
-    if(rWindow->m_eventHandler != nullptr)
+    if(rWindow->m_inputHandler != nullptr)
     {
         switch(event)
         {
             case KEY_PRESSED:
-                {
-                    std::cout << "Pressed Key " << inputCode << " Repeated? " << repeat << '\n';
-                    rWindow->m_eventHandler->onKeyDown(inputCode, repeat);
-                }
-                break;
-
             case KEY_RELEASED:
                 {
-                    std::cout << "Released Key " << inputCode << " Repeated? " << repeat << '\n';
-                    rWindow->m_eventHandler->onKeyUp(inputCode, repeat);
+                    std::cout << "Presion Grandota " << ((KeyboardParams*)params)->code << '\n';
+                    rWindow->m_inputHandler->updateKeyEvent(((KeyboardParams*)params)->code, event);
                 }
                 break;
 
             case BUTTON_PRESSED:
+            case BUTTON_RELEASED:
                 {
-                    std::cout << "Pressed Button " << inputCode << '\n';
-                    rWindow->m_eventHandler->onMouseDown(inputCode, 1);
+                    std::cout << "Presion Chikita " << ((MouseParams*)params)->code << '\n';
+                    rWindow->m_inputHandler->updateMouseEvent(((MouseParams*)params)->code, event);
                 }
                 break;
 
-            case BUTTON_RELEASED:
+            case MOUSE_MOVE:
                 {
-                    std::cout << "Released Button " << inputCode << '\n';
-                    rWindow->m_eventHandler->onMouseUp(inputCode, 1);
+                    rWindow->m_inputHandler->updateMousePosition(((MouseParams*)params)->pos);
                 }
                 break;
 

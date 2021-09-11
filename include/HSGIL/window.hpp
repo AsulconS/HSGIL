@@ -32,11 +32,6 @@
 #include <HSGIL/window/iWindow.hpp>
 #include <HSGIL/window/renderingWindow.hpp>
 #include <HSGIL/window/windowManager.hpp>
-#include <HSGIL/window/iInputControl.hpp>
-#include <HSGIL/window/iEventHandler.hpp>
-#include <HSGIL/window/inputControl.hpp>
-#include <HSGIL/window/inputTrigger.hpp>
-#include <HSGIL/window/eventHandler.hpp>
 
 #include <HSGIL/window/wUtils.hpp>
 

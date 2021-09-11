@@ -50,6 +50,7 @@ const int WindowManager::s_attribs[ATTRIB_LIST_SIZE]
     0
 };
 
+int WindowManager::s_mouseTrackCount {0};
 int WindowManager::s_keyPhysicStates[NUM_KEYS_SIZE] {};
 
 MSG WindowManager::s_msg {};
@@ -423,7 +424,9 @@ LRESULT CALLBACK WindowManager::HSGILProc(HWND hWnd, UINT uMsg, WPARAM wParam, L
         case WM_KEYDOWN:
             {
                 WindowManager* windowInstance = s_wmInstances[s_hwndMap[hWnd]];
-                windowInstance->mf_eventCallbackFunction(windowInstance->m_windowCallbackInstance, KEY_PRESSED, static_cast<InputCode>(wParam), s_keyPhysicStates[wParam]);
+                KeyboardParams params;
+                params.code = static_cast<InputCode>(wParam);
+                windowInstance->mf_eventCallbackFunction(windowInstance->m_windowCallbackInstance, KEY_PRESSED, &params);
                 s_keyPhysicStates[wParam] = 1;
             }
             break;
@@ -432,22 +435,129 @@ LRESULT CALLBACK WindowManager::HSGILProc(HWND hWnd, UINT uMsg, WPARAM wParam, L
             {
                 s_keyPhysicStates[wParam] = 0;
                 WindowManager* windowInstance = s_wmInstances[s_hwndMap[hWnd]];
-                windowInstance->mf_eventCallbackFunction(windowInstance->m_windowCallbackInstance, KEY_RELEASED, static_cast<InputCode>(wParam), false);
+                KeyboardParams params;
+                params.code = static_cast<InputCode>(wParam);
+                windowInstance->mf_eventCallbackFunction(windowInstance->m_windowCallbackInstance, KEY_RELEASED, &params);
             }
             break;
 
         case WM_KILLFOCUS:
             {
-                std::cout << "Lost focus" << std::endl;
                 WindowManager* windowInstance = s_wmInstances[s_hwndMap[hWnd]];
                 for(uint32 i = 0; i < NUM_KEYS_SIZE; ++i)
                 {
                     if(s_keyPhysicStates[i])
                     {
                         s_keyPhysicStates[i] = 0;
-                        windowInstance->mf_eventCallbackFunction(windowInstance->m_windowCallbackInstance, KEY_RELEASED, static_cast<InputCode>(i), false);
+                        KeyboardParams params;
+                        params.code = static_cast<InputCode>(i);
+                        windowInstance->mf_eventCallbackFunction(windowInstance->m_windowCallbackInstance, KEY_RELEASED, &params);
                     }
                 }
+                MouseParams lparam;
+                MouseParams rparam;
+                lparam.code = InputCode::MOUSE_BUTTON_LEFT;
+                rparam.code = InputCode::MOUSE_BUTTON_RIGHT;
+                windowInstance->mf_eventCallbackFunction(windowInstance->m_windowCallbackInstance, BUTTON_RELEASED, &lparam);
+                windowInstance->mf_eventCallbackFunction(windowInstance->m_windowCallbackInstance, BUTTON_RELEASED, &rparam);
+            }
+            break;
+
+        case WM_LBUTTONDOWN:
+            {
+                if(!(s_mouseTrackCount++))
+                    SetCapture(hWnd);
+                WindowManager* windowInstance = s_wmInstances[s_hwndMap[hWnd]];
+                MouseParams params;
+                params.code = InputCode::MOUSE_BUTTON_LEFT;
+                windowInstance->mf_eventCallbackFunction(windowInstance->m_windowCallbackInstance, BUTTON_PRESSED, &params);
+            }
+            break;
+
+        case WM_LBUTTONUP:
+            {
+                WindowManager* windowInstance = s_wmInstances[s_hwndMap[hWnd]];
+                MouseParams params;
+                params.code = InputCode::MOUSE_BUTTON_LEFT;
+                windowInstance->mf_eventCallbackFunction(windowInstance->m_windowCallbackInstance, BUTTON_RELEASED, &params);
+                if(!(s_mouseTrackCount--))
+                    ReleaseCapture();
+            }
+            break;
+
+        case WM_RBUTTONDOWN:
+            {
+                if(!(s_mouseTrackCount++))
+                    SetCapture(hWnd);
+                WindowManager* windowInstance = s_wmInstances[s_hwndMap[hWnd]];
+                MouseParams params;
+                params.code = InputCode::MOUSE_BUTTON_RIGHT;
+                windowInstance->mf_eventCallbackFunction(windowInstance->m_windowCallbackInstance, BUTTON_PRESSED, &params);
+            }
+            break;
+
+        case WM_RBUTTONUP:
+            {
+                WindowManager* windowInstance = s_wmInstances[s_hwndMap[hWnd]];
+                MouseParams params;
+                params.code = InputCode::MOUSE_BUTTON_RIGHT;
+                windowInstance->mf_eventCallbackFunction(windowInstance->m_windowCallbackInstance, BUTTON_RELEASED, &params);
+                if(!(s_mouseTrackCount--))
+                    ReleaseCapture();
+            }
+            break;
+
+        case WM_MBUTTONDOWN:
+            {
+                if(!(s_mouseTrackCount++))
+                    SetCapture(hWnd);
+                WindowManager* windowInstance = s_wmInstances[s_hwndMap[hWnd]];
+                MouseParams params;
+                params.code = InputCode::MOUSE_BUTTON_MIDDLE;
+                windowInstance->mf_eventCallbackFunction(windowInstance->m_windowCallbackInstance, BUTTON_PRESSED, &params);
+            }
+            break;
+
+        case WM_MBUTTONUP:
+            {
+                WindowManager* windowInstance = s_wmInstances[s_hwndMap[hWnd]];
+                MouseParams params;
+                params.code = InputCode::MOUSE_BUTTON_MIDDLE;
+                windowInstance->mf_eventCallbackFunction(windowInstance->m_windowCallbackInstance, BUTTON_RELEASED, &params);
+                if(!(s_mouseTrackCount--))
+                    ReleaseCapture();
+            }
+            break;
+
+        case WM_XBUTTONDOWN:
+            {
+                if(!(s_mouseTrackCount++))
+                    SetCapture(hWnd);
+                WindowManager* windowInstance = s_wmInstances[s_hwndMap[hWnd]];
+                MouseParams params;
+                params.code = InputCode::MOUSE_BUTTON_04;
+                windowInstance->mf_eventCallbackFunction(windowInstance->m_windowCallbackInstance, BUTTON_PRESSED, &params);
+            }
+            break;
+
+        case WM_XBUTTONUP:
+            {
+                WindowManager* windowInstance = s_wmInstances[s_hwndMap[hWnd]];
+                MouseParams params;
+                params.code = InputCode::MOUSE_BUTTON_04;
+                windowInstance->mf_eventCallbackFunction(windowInstance->m_windowCallbackInstance, BUTTON_RELEASED, &params);
+                if(!(s_mouseTrackCount--))
+                    ReleaseCapture();
+            }
+            break;
+
+        case WM_MOUSEMOVE:
+            {
+                WindowManager* windowInstance = s_wmInstances[s_hwndMap[hWnd]];
+                MouseParams params;
+                params.pos.x = GET_X_LPARAM(lParam);
+                params.pos.y = GET_Y_LPARAM(lParam);
+                windowInstance->mf_eventCallbackFunction(windowInstance->m_windowCallbackInstance, MOUSE_MOVE, &params);
             }
             break;
 

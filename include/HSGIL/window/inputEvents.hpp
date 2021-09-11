@@ -33,8 +33,9 @@ enum InputEvent
     BUTTON_PRESSED  = 0x2,
     BUTTON_RELEASED = 0x3,
 
-    // Form Events
-    FORM_BUTTON_PRESSED = 0x4
+    MOUSE_MOVE = 0x4,
+
+    UNKNOWN_INPUT_EVENT = 0xFFF
 };
 
 } // namespace gil

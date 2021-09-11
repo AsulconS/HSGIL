@@ -1,5 +1,7 @@
 #include <HSGIL/hsgil.hpp>
 
+#include <iostream>
+
 int main()
 {
     gil::RenderingWindow window(800, 600, "Finn");
@@ -8,33 +10,10 @@ int main()
         return -1;
     }
 
-    gil::InputControl yRot;
-    gil::InputControl xAxis;
-    gil::InputControl zAxis;
+    gil::InputHandler inputHandler;
+    window.setInputHandler(inputHandler);
 
-    gil::InputTrigger exit;
-    gil::InputTrigger switcher;
-
-    gil::EventHandler eventHandler01;
-    eventHandler01.addKeyControl(gil::KEY_F1, switcher, 1.0f);
-    eventHandler01.addKeyControl(gil::KEY_Q, yRot,   1.0f);
-    eventHandler01.addKeyControl(gil::KEY_E, yRot,  -1.0f);
-    eventHandler01.addKeyControl(gil::KEY_A, xAxis, -1.0f);
-    eventHandler01.addKeyControl(gil::KEY_D, xAxis,  1.0f);
-    eventHandler01.addKeyControl(gil::KEY_W, zAxis, -1.0f);
-    eventHandler01.addKeyControl(gil::KEY_S, zAxis,  1.0f);
-    eventHandler01.addKeyControl(gil::KEY_ESCAPE, exit, 1.0f);
-
-    gil::EventHandler eventHandler02;
-    eventHandler02.addKeyControl(gil::KEY_F1, switcher, 1.0f);
-    eventHandler02.addKeyControl(gil::KEY_A, yRot, -1.0f);
-    eventHandler02.addKeyControl(gil::KEY_D, yRot,  1.0f);
-    eventHandler02.addKeyControl(gil::KEY_Q, exit,  1.0f);
-
-    bool ceh {0};
-    window.setEventHandler(eventHandler01);
-
-    glm::vec3 position = {0.0f, 0.5f, 2.0f};
+    glm::vec3 position {0.0f, 0.5f, 2.0f};
 
     gil::Shader shader("3default");
     gil::setupDefaultLights(shader, position);
@@ -48,28 +27,15 @@ int main()
     float yRotationAngle {-gil::constants::PI};
     float yRotationWeight {1.5f};
 
-    gil::Timer timer {};
+    gil::Timer timer {true};
     glEnable(GL_DEPTH_TEST);
     while(window.isActive())
     {
         window.pollEvents();
-        if(exit.isTriggered())
+        if(inputHandler.onKeyTriggered(gil::KEY_ESCAPE))
         {
             window.close();
             continue;
-        }
-        if(switcher.isTriggered())
-        {
-            if(!ceh)
-            {
-                window.setEventHandler(eventHandler02);
-                ceh = 1;
-            }
-            else
-            {
-                window.setEventHandler(eventHandler01);
-                ceh = 0;
-            }
         }
 
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
@@ -77,12 +43,47 @@ int main()
 
         shader.use();
 
-        float deltaTime = timer.getDeltaTime();
-        finn01Pos.x += xAxis.getMagnitude() * moveWeight * deltaTime;
-        finn01Pos.z += zAxis.getMagnitude() * moveWeight * deltaTime;
-        finn02Pos.x += xAxis.getMagnitude() * moveWeight * deltaTime;
-        finn02Pos.z += zAxis.getMagnitude() * moveWeight * deltaTime;
-        yRotationAngle += yRot.getMagnitude() * yRotationWeight * deltaTime;
+        float deltaTime {timer.getDeltaTime()};
+        if(inputHandler.onButtonDown(gil::MOUSE_BUTTON_LEFT))
+        {
+            finn01Pos.x += 1.0f * moveWeight * deltaTime;
+            finn02Pos.x += 1.0f * moveWeight * deltaTime;
+        }
+        if(inputHandler.onButtonDown(gil::MOUSE_BUTTON_RIGHT))
+        {
+            finn01Pos.x -= 1.0f * moveWeight * deltaTime;
+            finn02Pos.x -= 1.0f * moveWeight * deltaTime;
+        }
+        if(inputHandler.onKeyDown(gil::KEY_S))
+        {
+            finn01Pos.z += 1.0f * moveWeight * deltaTime;
+            finn02Pos.z += 1.0f * moveWeight * deltaTime;
+        }
+        if(inputHandler.onKeyDown(gil::KEY_W))
+        {
+            finn01Pos.z -= 1.0f * moveWeight * deltaTime;
+            finn02Pos.z -= 1.0f * moveWeight * deltaTime;
+        }
+
+        if(inputHandler.onKeyDown(gil::KEY_R))
+        {
+            yRotationAngle += 1.0f * yRotationWeight * deltaTime;
+        }
+
+        if(inputHandler.onClick(gil::MOUSE_BUTTON_MIDDLE))
+        {
+            std::cout << inputHandler.getMousePos().x << " " << inputHandler.getMousePos().y << std::endl;
+        }
+
+        if(inputHandler.onClick(gil::MOUSE_BUTTON_04))
+        {
+            std::cout << " BOTON 4 " << std::endl;
+        }
+
+        if(inputHandler.onClick(gil::MOUSE_BUTTON_05))
+        {
+            std::cout << " BOTON 5 " << std::endl;
+        }
 
         glm::mat4 view = glm::lookAt(64.0f * position, glm::vec3{0.0f, 0.0f, 0.0f}, glm::vec3{0.0f, 1.0f, 0.0f});
         glm::mat4 projection = glm::perspective(45.0f, window.getAspectRatio(), 0.1f, 256.0f);

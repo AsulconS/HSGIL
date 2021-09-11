@@ -21,62 +21,72 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_INPUT_TRIGGER_HPP
-#define HSGIL_INPUT_TRIGGER_HPP
+#ifndef HSGIL_INPUT_HANDLER_HPP
+#define HSGIL_INPUT_HANDLER_HPP
 
 #include <HSGIL/config/config.hpp>
 #include <HSGIL/config/common.hpp>
 
-#include <HSGIL/window/iInputControl.hpp>
+#include <HSGIL/math/vec2.hpp>
+
+#include <HSGIL/window/inputEvents.hpp>
+#include <HSGIL/window/inputBindings.hpp>
+
+#include <map>
 
 namespace gil
 {
 /**
- * @brief InputTrigger Class that is an input controller that triggers
- * some accion once when pressed (no repeat) and can't do nothing until
- * it gets pressed again (i.e. exit key, 'once' keys).
+ * @brief InputHandler class that handles input
  * 
  */
-class HSGIL_API InputTrigger : public IInputControl
+class HSGIL_API InputHandler
 {
+    friend class RenderingWindow;
 public:
-    /**
-     * @brief Construct a new InputTrigger object
-     * 
-     */
-    InputTrigger();
-    /**
-     * @brief Destroy the InputTrigger object
-     * 
-     */
-    virtual ~InputTrigger();
+    struct KeyInfo
+    {
+        InputEvent event;
+        int time;
+    };
 
-    /**
-     * @brief Adds an amount to its magnitude
-     * 
-     * @param amount 
-     */
-    virtual void accum(const float amount) override;
-    /**
-     * @brief Get the Magnitude of the control
-     * 
-     * @return float 
-     */
-    virtual float getMagnitude() override;
+    struct MouseInfo
+    {
+        InputEvent event;
+        int time;
+    };
 
-    /**
-     * @brief Checks once if the control has been triggered, then sets its flag to 1
-     * until its ammount makes 0 again
-     * 
-     * @return true 
-     * @return false 
-     */
-    bool isTriggered();
+    InputHandler();
+
+    bool onKeyDown(InputCode key);
+    bool onKeyUp(InputCode key);
+    bool onKeyReleased(InputCode key);
+    bool onKeyTriggered(InputCode key);
+
+    bool onClick(InputCode button);
+    bool onRelease(InputCode button);
+    bool onButtonDown(InputCode button);
+    bool onButtonUp(InputCode button);
+
+    Vec2i getMousePos();
 
 private:
-    bool m_triggered;
+    void tick();
+
+    void initKey(InputCode key);
+    void initButton(InputCode button);
+
+    void updateKeyEvent(InputCode key,InputEvent event);
+    void updateMouseEvent(InputCode button,InputEvent event);
+    void updateMousePosition(Vec2i position);
+
+    Vec2i m_mousePos;
+    std::map<InputCode,KeyInfo> m_keys;
+    std::map<InputCode,MouseInfo> m_mouseButtons;
+
+    int m_currentTime;
 };
 
 } // namespace gil
 
-#endif // HSGIL_INPUT_TRIGGER_HPP
+#endif // HSGIL_INPUT_HANLDER_HPP

@@ -46,9 +46,7 @@ set(HSGIL_SOURCES
     src/graphics/shader.cpp
     src/math/mUtils.cpp
     src/math/vecArithmetic.cpp
-    src/window/eventHandler.cpp
-    src/window/inputControl.cpp
-    src/window/inputTrigger.cpp
+    src/window/inputHandler.cpp
     src/window/renderingWindow.cpp
     src/window/${HSGIL_PLATFORM}WindowManager.cpp
     src/window/wmLazyPtr.cpp

@@ -21,46 +21,30 @@
  *                                                                              *
  ********************************************************************************/
 
-#include <HSGIL/window/inputTrigger.hpp>
+#ifndef WINDOW_PARAMS_HPP
+#define WINDOW_PARAMS_HPP
+
+#include <HSGIL/math/vec2.hpp>
+#include <HSGIL/window/inputBindings.hpp>
 
 namespace gil
 {
-InputTrigger::InputTrigger()
-    : IInputControl {},
-      m_triggered   {false}
-{
-}
 
-InputTrigger::~InputTrigger()
+struct WindowParams
 {
-}
+};
 
-void InputTrigger::accum(const float amount)
+struct MouseParams : public WindowParams
 {
-    m_magnitude += amount;
-}
+    InputCode code;
+    Vec2i pos;
+};
 
-float InputTrigger::getMagnitude()
+struct KeyboardParams: public WindowParams
 {
-    if(m_magnitude != 0.0f)
-    {
-        if(!m_triggered)
-        {
-            m_triggered = true;
-            return 1.0f;
-        }
-    }
-    else
-    {
-        m_triggered = false;
-    }
-
-    return 0.0f;
-}
-
-bool InputTrigger::isTriggered()
-{
-    return getMagnitude() == 1.0f;
-}
+    InputCode code;
+};
 
 } // namespace gil
+
+#endif // HSGIL_WINDOW_PARAMS_HPP

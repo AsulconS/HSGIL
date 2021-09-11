@@ -25,6 +25,7 @@
 #define HSGIL_WIN32_WINDOW_MANAGER_HPP
 
 #include <Windows.h>
+#include <Windowsx.h>
 
 #include <HSGIL/external/glad/glad.h>
 #include <HSGIL/external/GL/wglext.h>
@@ -34,6 +35,7 @@
 
 #include <HSGIL/window/inputEvents.hpp>
 #include <HSGIL/window/inputBindings.hpp>
+#include <HSGIL/window/windowParams.hpp>
 #include <HSGIL/window/wmLazyPtr.hpp>
 #include <HSGIL/window/wUtils.hpp>
 
@@ -48,7 +50,7 @@ namespace gil
 {
 class IWindow;
 
-typedef void (*EventCallbackFunction)(IWindow*, InputEvent, InputCode, bool);
+typedef void (*EventCallbackFunction)(IWindow*, InputEvent, WindowParams*);
 
 class HSGIL_API WindowManager final
 {
@@ -102,6 +104,7 @@ private:
     static PIXELFORMATDESCRIPTOR s_pfd;
     static const int s_attribs[ATTRIB_LIST_SIZE];
 
+    static int s_mouseTrackCount;
     static int s_keyPhysicStates[NUM_KEYS_SIZE];
 
     static MSG s_msg;

@@ -31,7 +31,8 @@
 #include <HSGIL/window/inputEvents.hpp>
 #include <HSGIL/window/inputBindings.hpp>
 #include <HSGIL/window/windowManager.hpp>
-#include <HSGIL/window/iEventHandler.hpp>
+#include <HSGIL/window/windowParams.hpp>
+#include <HSGIL/window/inputHandler.hpp>
 
 namespace gil
 {
@@ -49,7 +50,7 @@ public:
      * @param t_width 
      * @param t_height 
      */
-    explicit RenderingWindow(const uint32 t_width = 800u, const uint32 t_height = 600u, const char* t_title = "Untitled", IEventHandler* t_eventHandler = nullptr);
+    explicit RenderingWindow(const uint32 t_width = 800u, const uint32 t_height = 600u, const char* t_title = "Untitled", InputHandler* t_inputHandler = nullptr);
     /**
      * @brief Destroy the RenderingWindow object
      * 
@@ -83,10 +84,10 @@ public:
     virtual void close() override;
 
     /**
-     * @brief Set the Event Handler object
+     * @brief Set the Input Handler object
      * 
      */
-    virtual void setEventHandler(IEventHandler& t_eventHandler) override;
+    virtual void setInputHandler(InputHandler& t_inputHandler) override;
     /**
      * @brief Poll the Events to process the input
      * 
@@ -115,7 +116,7 @@ private:
      * @param inputCode 
      * @param repeat 
      */
-    static void eventCallback(IWindow* window, InputEvent event, InputCode inputCode, bool repeat);
+    static void eventCallback(IWindow* window, InputEvent event, WindowParams* params);
 };
 
 } // namespace gil
