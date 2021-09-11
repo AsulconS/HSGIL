@@ -51,7 +51,7 @@ using EventCallbackFunction = void (*)(IWindow*, InputEvent, WindowParams*);
 
 class HSGIL_API WindowManager final
 {
-    friend class WMLazyPtr;
+    friend class HSGIL_API WMLazyPtr;
 public:
     static WindowManager* createInstance();
     static WindowManager* getInstance(const uint32 index);
