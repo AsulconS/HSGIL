@@ -21,7 +21,11 @@
  *                                                                              *
  ********************************************************************************/
 
+namespace gil
+{
 inline const char* GenericException::what() const throw()
 {
     return "gil::Exception : Generic Exception";
 }
+
+} // namespace gil

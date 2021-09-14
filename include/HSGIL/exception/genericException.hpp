@@ -43,8 +43,8 @@ public:
     virtual const char* what() const throw() override;
 };
 
-#include <HSGIL/exception/genericException.inl>
-
 } // namespace gil
+
+#include <HSGIL/exception/genericException.inl>
 
 #endif // HSGIL_GENERIC_EXCEPTION_HPP
