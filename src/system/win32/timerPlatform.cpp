@@ -25,6 +25,12 @@
 
 #include "../timerPlatform.hpp"
 
+#ifdef _WIN64
+    #define _HSGIL_GET_TICK_COUNT GetTickCount64
+#else
+    #define _HSGIL_GET_TICK_COUNT GetTickCount
+#endif
+
 namespace gil
 {
 namespace plat
@@ -36,7 +42,7 @@ namespace plat
  */
 Time getTime()
 {
-    return rawTimeBuilder(GetTickCount64() * 1000ull);
+    return rawTimeBuilder(_HSGIL_GET_TICK_COUNT() * 1000ull);
 }
 
 } // namespace plat
