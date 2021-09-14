@@ -21,6 +21,8 @@
  *                                                                              *
  ********************************************************************************/
 
+namespace gil
+{
 inline const char* GraphicsException::what() const throw()
 {
     return "gil::GraphicsException : Graphics Exception";
@@ -30,3 +32,5 @@ inline const char* ShaderException::what() const throw()
 {
     return "gil::ShaderException : Shader failed to create";
 }
+
+} // namespace gil

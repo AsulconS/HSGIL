@@ -21,6 +21,8 @@
  *                                                                              *
  ********************************************************************************/
 
+namespace gil
+{
 inline const char* WindowException::what() const throw()
 {
     return "gil::WindowException : Window Exception";
@@ -35,3 +37,5 @@ inline const char* GLADInitException::what() const throw()
 {
     return "gil::GLADInitException : GLAD failed to initialize";
 }
+
+} // namespace gil

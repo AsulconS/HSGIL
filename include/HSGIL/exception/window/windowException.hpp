@@ -73,8 +73,8 @@ public:
     virtual const char* what() const throw() override;
 };
 
-#include <HSGIL/exception/window/windowException.inl>
-
 } // namespace gil
+
+#include <HSGIL/exception/window/windowException.inl>
 
 #endif // HSGIL_WINDOW_EXCEPTION_HPP

@@ -58,8 +58,8 @@ public:
     virtual const char* what() const throw() override;
 };
 
-#include <HSGIL/exception/graphics/graphicsException.inl>
-
 } // namespace gil
+
+#include <HSGIL/exception/graphics/graphicsException.inl>
 
 #endif // HSGIL_GRAPHICS_EXCEPTION_HPP
