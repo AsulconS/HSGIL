@@ -37,7 +37,7 @@ namespace _priv
 {
 HSGIL_API uint64 p2RoundUp(uint64 val);
 
-} // namespace priv
+} // namespace _priv
 
 template <typename T>
 class HSGIL_API Vector
