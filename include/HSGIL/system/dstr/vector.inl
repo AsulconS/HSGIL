@@ -27,7 +27,7 @@ template <typename T>
 inline Vector<T>::Vector()
     : m_data     {nullptr},
       m_size     {0},
-      m_capacity {INITIAL_CAPACITY}
+      m_capacity {_INITIAL_CAPACITY}
 {
     m_data = new T[m_capacity];
 }
@@ -36,16 +36,8 @@ template <typename T>
 inline Vector<T>::Vector(uint64 n)
     : m_data     {nullptr},
       m_size     {n},
-      m_capacity {n}
+      m_capacity {_priv::p2RoundUp(n)}
 {
-    m_capacity |= (m_capacity >> 0x01);
-    m_capacity |= (m_capacity >> 0x02);
-    m_capacity |= (m_capacity >> 0x04);
-    m_capacity |= (m_capacity >> 0x08);
-    m_capacity |= (m_capacity >> 0x10);
-    m_capacity |= (m_capacity >> 0x20);
-    m_capacity += 0x01;
-
     m_data = new T[m_capacity];
 }
 
@@ -80,7 +72,7 @@ inline Vector<T>::Vector(Vector<T>&& o)
 
     o.m_data = nullptr;
     o.m_size = 0;
-    o.m_capacity = INITIAL_CAPACITY;
+    o.m_capacity = _INITIAL_CAPACITY;
 
     o.m_data = new T[o.m_capacity];
 }
@@ -120,43 +112,11 @@ inline Vector<T>& Vector<T>::operator=(Vector<T>&& o)
 
     o.m_data = nullptr;
     o.m_size = 0;
-    o.m_capacity = INITIAL_CAPACITY;
+    o.m_capacity = _INITIAL_CAPACITY;
 
     o.m_data = new T[o.m_capacity];
 
     return (*this);
-}
-
-template <typename T>
-inline void Vector<T>::push_back(const T& val)
-{
-    if(m_size >= m_capacity)
-    {
-        reallocate();
-    }
-    m_data[m_size++] = val;
-}
-
-template <typename T>
-inline void Vector<T>::push_back(T&& val)
-{
-    if(m_size >= m_capacity)
-    {
-        reallocate();
-    }
-    m_data[m_size++] = hsgil_move(val);
-}
-
-template <typename T>
-inline T* Vector<T>::data() noexcept
-{
-    return m_data;
-}
-
-template <typename T>
-inline const T* Vector<T>::data() const noexcept
-{
-    return m_data;
 }
 
 template <typename T>
@@ -166,9 +126,33 @@ inline uint64 Vector<T>::size() const noexcept
 }
 
 template <typename T>
+inline void Vector<T>::resize(uint64 n)
+{
+    expand(n);
+    m_size = n;
+}
+
+template <typename T>
+inline void Vector<T>::resize(uint64 n, const T& val)
+{
+    expand(n);
+    for(uint64 i = m_size; i < n; ++i)
+    {
+        m_data[i] = val;
+    }
+    m_size = n;
+}
+
+template <typename T>
 inline uint64 Vector<T>::capacity() const noexcept
 {
     return m_capacity;
+}
+
+template <typename T>
+inline bool Vector<T>::empty() const noexcept
+{
+    return !m_size;
 }
 
 template <typename T>
@@ -184,15 +168,109 @@ inline const T& Vector<T>::operator[](uint64 n) const
 }
 
 template <typename T>
+inline T& Vector<T>::front()
+{
+    return m_data[0];
+}
+
+template <typename T>
+inline const T& Vector<T>::front() const
+{
+    return m_data[0];
+}
+
+template <typename T>
+inline T& Vector<T>::back()
+{
+    return m_data[m_size - 1];
+}
+
+template <typename T>
+inline const T& Vector<T>::back() const
+{
+    return m_data[m_size - 1];
+}
+
+template <typename T>
+inline T* Vector<T>::data() noexcept
+{
+    return m_data;
+}
+
+template <typename T>
+inline const T* Vector<T>::data() const noexcept
+{
+    return m_data;
+}
+
+template <typename T>
+inline void Vector<T>::assign(uint64 n, const T& val)
+{
+    expand(n);
+    for(uint64 i = 0; i < n; ++i)
+    {
+        m_data[i] = val;
+    }
+    m_size = n;
+}
+
+template <typename T>
+inline void Vector<T>::push_back(const T& val)
+{
+    if(m_size >= m_capacity)
+    {
+        m_capacity <<= 0x1;
+        reallocate();
+    }
+    m_data[m_size++] = val;
+}
+
+template <typename T>
+inline void Vector<T>::push_back(T&& val)
+{
+    if(m_size >= m_capacity)
+    {
+        m_capacity <<= 0x1;
+        reallocate();
+    }
+    m_data[m_size++] = hsgil_move(val);
+}
+
+template <typename T>
+inline void Vector<T>::pop_back()
+{
+    if(m_size)
+    {
+        --m_size;
+    }
+}
+
+template <typename T>
+inline void Vector<T>::clear() noexcept
+{
+    m_size = 0;
+}
+
+template <typename T>
 inline void Vector<T>::reallocate()
 {
-    T* n_data = new T[m_capacity <<= 1];
+    T* n_data = new T[m_capacity];
     for(uint64 i = 0; i < m_size; ++i)
     {
         n_data[i] = hsgil_move(m_data[i]);
     }
     delete[] m_data;
     m_data = n_data;
+}
+
+template <typename T>
+inline void Vector<T>::expand(uint64 n)
+{
+    if(n > m_capacity)
+    {
+        m_capacity = _priv::p2RoundUp(n);
+        reallocate();
+    }
 }
 
 } // namespace gil

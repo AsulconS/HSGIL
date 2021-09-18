@@ -29,27 +29,164 @@
 
 #include <HSGIL/system/utility.hpp>
 
-#define INITIAL_CAPACITY 4
+#define _INITIAL_CAPACITY 4
 
 namespace gil
 {
+namespace _priv
+{
+HSGIL_API uint64 p2RoundUp(uint64 val);
+
+} // namespace priv
+
 template <typename T>
 class HSGIL_API Vector
 {
 public:
-    explicit Vector();
-    explicit Vector(uint64 n);
-
+    /**
+     * @brief Construct a new Vector object
+     * 
+     */
+    Vector();
+    /**
+     * @brief Construct a new Vector object
+     * 
+     * @param n 
+     */
+    Vector(uint64 n);
+    /**
+     * @brief Construct a new Vector object
+     * 
+     * @param n 
+     * @param val 
+     */
     Vector(uint64 n, const T& val);
 
+    /**
+     * @brief Construct a new Vector object
+     * 
+     * @param o 
+     */
     Vector(const Vector<T>& o);
+    /**
+     * @brief Construct a new Vector object
+     * 
+     * @param o 
+     */
     Vector(Vector<T>&& o);
 
+    /**
+     * @brief Destroy the Vector object
+     * 
+     */
     virtual ~Vector();
 
+    /**
+     * @brief C-Assigns a vector to another
+     * 
+     * @param o 
+     * @return Vector<T>& 
+     */
     Vector<T>& operator=(const Vector<T>& o);
+    /**
+     * @brief M-Assigns a vector to another
+     * 
+     * @param o 
+     * @return Vector<T>& 
+     */
     Vector<T>& operator=(Vector<T>&& o);
 
+    /**
+     * @brief Gets the size of the vector
+     * 
+     * @return uint64 
+     */
+    uint64 size() const noexcept;
+    /**
+     * @brief Resizes the vector given a size
+     * 
+     * @param n 
+     */
+    void resize(uint64 n);
+    /**
+     * @brief Resizes the vector filling the values given a size and a value
+     * 
+     * @param n 
+     * @param val 
+     */
+    void resize(uint64 n, const T& val);
+    /**
+     * @brief Gets the capacity of the vector
+     * 
+     * @return uint64 
+     */
+    uint64 capacity() const noexcept;
+    /**
+     * @brief Returns a boolean indicating if vector is empty or not
+     * 
+     * @return true 
+     * @return false 
+     */
+    bool empty() const noexcept;
+
+    /**
+     * @brief Returns a reference to access elements
+     * 
+     * @param n 
+     * @return T& 
+     */
+    T& operator[](uint64 n);
+    /**
+     * @brief Returns a constant reference to access elements
+     * 
+     * @param n 
+     * @return const T& 
+     */
+    const T& operator[](uint64 n) const;
+    /**
+     * @brief Returns a reference to access first element
+     * 
+     * @return T& 
+     */
+    T& front();
+    /**
+     * @brief Returns a constant reference to access first element
+     * 
+     * @return const T& 
+     */
+    const T& front() const;
+    /**
+     * @brief Returns a reference to access last element
+     * 
+     * @return T& 
+     */
+    T& back();
+    /**
+     * @brief Returns a constant reference to access last element
+     * 
+     * @return const T& 
+     */
+    const T& back() const;
+    /**
+     * @brief Gets a direct pointer to the raw data
+     * 
+     * @return T* 
+     */
+    T* data() noexcept;
+    /**
+     * @brief Gets a direct constant pointer to the raw data
+     * 
+     * @return const T* 
+     */
+    const T* data() const noexcept;
+
+    /**
+     * @brief Assigns new contents to the vector given size and value
+     * 
+     * @param n 
+     * @param val 
+     */
+    void assign(uint64 n, const T& val);
     /**
      * @brief C-Pushes a new element at the end of the vector
      * 
@@ -63,32 +200,15 @@ public:
      */
     void push_back(T&& val);
     /**
-     * @brief Gets a direct pointer to the raw data
+     * @brief Drops the last element of the vector
      * 
-     * @return T* 
      */
-    T* data() noexcept;
+    void pop_back();
     /**
-     * @brief Gets a direct pointer to the raw data
+     * @brief Clears the vector
      * 
-     * @return const T* 
      */
-    const T* data() const noexcept;
-    /**
-     * @brief Gets the size of the vector
-     * 
-     * @return uint64 
-     */
-    uint64 size() const noexcept;
-    /**
-     * @brief Gets the capacity of the vector
-     * 
-     * @return uint64 
-     */
-    uint64 capacity() const noexcept;
-
-    T& operator[](uint64 n);
-    const T& operator[](uint64 n) const;
+    void clear() noexcept;
 
 private:
     T* m_data;
@@ -96,6 +216,7 @@ private:
     uint64 m_capacity;
 
     void reallocate();
+    void expand(uint64 n);
 };
 
 } // namespace gil

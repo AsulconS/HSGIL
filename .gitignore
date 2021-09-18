@@ -10,6 +10,7 @@ build
 *.bat
 desktop.ini
 
-# Excecutables and dlls
+# Excecutables, pdbs and dlls
 *.dll
+*.pdb
 *.exe

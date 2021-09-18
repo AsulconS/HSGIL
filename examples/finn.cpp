@@ -1,3 +1,5 @@
+#include <vld.h>
+
 #include <HSGIL/hsgil.hpp>
 
 #include <iostream>
