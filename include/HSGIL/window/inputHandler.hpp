@@ -44,18 +44,6 @@ class HSGIL_API InputHandler
 {
     friend class RenderingWindow;
 public:
-    struct KeyInfo
-    {
-        InputEvent event;
-        int32 time;
-    };
-
-    struct MouseInfo
-    {
-        InputEvent event;
-        int32 time;
-    };
-
     InputHandler();
 
     bool onKeyDown(InputCode key);
@@ -69,6 +57,19 @@ public:
     bool onButtonUp(InputCode button);
 
     Vec2i getMousePos();
+
+private:
+    struct KeyInfo
+    {
+        InputEvent event;
+        int32 time;
+    };
+
+    struct MouseInfo
+    {
+        InputEvent event;
+        int32 time;
+    };
 
 private:
     void tick();
