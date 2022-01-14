@@ -37,12 +37,12 @@ uint32 WindowManager::s_activeSessions  {0u};
 uint32 WindowManager::s_wmInstanceCount {0u};
 WMLazyPtr WindowManager::s_wmInstances[MAX_WINDOW_INSTANCES] {};
 
-std::unordered_map<HWND, uint32> WindowManager::s_hwndMap {};
+Map<HWND, uint32> WindowManager::s_hwndMap {};
 
 WNDCLASSEXA WindowManager::s_gldcc {};
-const char  WindowManager::s_gldccName[GLDCC_NAME_SIZE] {"GLDCC"};
+const char WindowManager::s_gldccName[GLDCC_NAME_SIZE] {"GLDCC"};
 
-PIXELFORMATDESCRIPTOR WindowManager::s_pfd;
+PIXELFORMATDESCRIPTOR WindowManager::s_pfd {};
 const int WindowManager::s_attribs[ATTRIB_LIST_SIZE]
 {
     WGL_DRAW_TO_WINDOW_ARB  , GL_TRUE,

@@ -33,9 +33,11 @@
 #include <HSGIL/config/config.hpp>
 #include <HSGIL/config/common.hpp>
 
-#include <HSGIL/window/inputEvents.hpp>
+//#include <HSGIL/system/dstr/map.hpp>
+#include <map>
+#define Map std::map
 
-#include <unordered_map>
+#include <HSGIL/window/inputEvents.hpp>
 
 #define NUM_KEYS_SIZE 256u
 #define GLDCC_NAME_SIZE 6u
@@ -91,7 +93,7 @@ private:
     /**
      * @brief   Window Hash Table <Window Handler, Instance ID>
      */
-    static std::unordered_map<HWND, uint32> s_hwndMap;
+    static Map<HWND, uint32> s_hwndMap;
 
     /* Satatic Win32 API Internal Data */
 

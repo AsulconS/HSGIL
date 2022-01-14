@@ -27,12 +27,14 @@
 #include <HSGIL/config/config.hpp>
 #include <HSGIL/config/common.hpp>
 
+//#include <HSGIL/system/dstr/map.hpp>
+#include <map>
+#define Map std::map
+
 #include <HSGIL/math/vec2.hpp>
 
 #include <HSGIL/window/inputEvents.hpp>
 #include <HSGIL/window/inputBindings.hpp>
-
-#include <map>
 
 namespace gil
 {
@@ -82,8 +84,8 @@ private:
     void updateMousePosition(Vec2i position);
 
     Vec2i m_mousePos;
-    std::map<InputCode, KeyInfo> m_keys;
-    std::map<InputCode, MouseInfo> m_mouseButtons;
+    Map<InputCode, KeyInfo> m_keys;
+    Map<InputCode, MouseInfo> m_mouseButtons;
 
     int32 m_currentTime;
 };

@@ -128,14 +128,14 @@ inline uint64 Vector<T>::size() const noexcept
 template <typename T>
 inline void Vector<T>::resize(uint64 n)
 {
-    expand(n);
+    guaranteeSpace(n);
     m_size = n;
 }
 
 template <typename T>
 inline void Vector<T>::resize(uint64 n, const T& val)
 {
-    expand(n);
+    guaranteeSpace(n);
     for(uint64 i = m_size; i < n; ++i)
     {
         m_data[i] = val;
@@ -206,7 +206,7 @@ inline const T* Vector<T>::data() const noexcept
 template <typename T>
 inline void Vector<T>::assign(uint64 n, const T& val)
 {
-    expand(n);
+    guaranteeSpace(n);
     for(uint64 i = 0; i < n; ++i)
     {
         m_data[i] = val;
@@ -264,7 +264,7 @@ inline void Vector<T>::reallocate()
 }
 
 template <typename T>
-inline void Vector<T>::expand(uint64 n)
+inline void Vector<T>::guaranteeSpace(uint64 n)
 {
     if(n > m_capacity)
     {

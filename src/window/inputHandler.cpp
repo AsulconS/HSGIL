@@ -43,7 +43,7 @@ void InputHandler::initKey(InputCode key)
 
 bool InputHandler::onKeyDown(InputCode key)
 {
-    if(m_keys.find(key) == m_keys.end())
+    if(m_keys.find(key) == m_keys.end())//if(!m_keys.contains(key))
         initKey(key);
     return (m_keys[key].event == InputEvent::KEY_PRESSED);
 }
@@ -55,7 +55,7 @@ bool InputHandler::onKeyTriggered(InputCode key)
 
 bool InputHandler::onKeyUp(InputCode key)
 {
-    if(m_keys.find(key) == m_keys.end())
+    if(m_keys.find(key) == m_keys.end())//if(!m_keys.contains(key))
         initKey(key);
     return (m_keys[key].event == InputEvent::KEY_RELEASED);
 }
@@ -92,14 +92,14 @@ bool InputHandler::onRelease(InputCode button)
 
 bool InputHandler::onButtonDown(InputCode button)
 {
-    if(m_mouseButtons.find(button) == m_mouseButtons.end())
+    if(m_mouseButtons.find(button) == m_mouseButtons.end())//if(!m_mouseButtons.contains(button))
         initButton(button);
     return (m_mouseButtons[button].event == InputEvent::BUTTON_PRESSED);
 }
 
 bool InputHandler::onButtonUp(InputCode button)
 {
-    if(m_mouseButtons.find(button) == m_mouseButtons.end())
+    if(m_mouseButtons.find(button) == m_mouseButtons.end())//if(!m_mouseButtons.contains(button))
         initButton(button);
     return (m_mouseButtons[button].event == InputEvent::BUTTON_RELEASED);
 }
