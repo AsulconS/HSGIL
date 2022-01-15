@@ -21,200 +21,171 @@
  *                                                                              *
  ********************************************************************************/
 
-#include <HSGIL/system/time.hpp>
-
 namespace gil
 {
-Time::Time()
+inline constexpr Time::Time()
     : m_timeCount {0}
 {
 }
 
-Time::Time(microT t_timeCount)
+inline constexpr Time::Time(microT t_timeCount)
     : m_timeCount {t_timeCount}
 {
 }
 
-Time::~Time()
-{
-}
-
-secT Time::asSeconds() const
+inline constexpr secT Time::asSeconds() const
 {
     return static_cast<secT>(m_timeCount) / 1000000.0f;
 }
 
-milliT Time::asMilliseconds() const
+inline constexpr milliT Time::asMilliseconds() const
 {
     return static_cast<milliT>(m_timeCount / 1000);
 }
 
-microT Time::asMicroseconds() const
+inline constexpr microT Time::asMicroseconds() const
 {
     return m_timeCount;
 }
 
-microT Time::getRawTimeCount() const
+inline constexpr microT Time::getRawTimeCount() const
 {
     return m_timeCount;
 }
 
-Time seconds(secT seconds)
+inline constexpr Time seconds(secT seconds)
 {
     return Time {static_cast<microT>(seconds * 1000000.0f)};
 }
 
-Time milliseconds(milliT milliseconds)
+inline constexpr Time milliseconds(milliT milliseconds)
 {
     return Time {static_cast<microT>(milliseconds * 1000)};
 }
 
-Time microseconds(microT microseconds)
+inline constexpr Time microseconds(microT microseconds)
 {
     return Time {microseconds};
 }
 
-Time rawTimeBuilder(microT microseconds)
+inline constexpr Time rawTimeBuilder(microT microseconds)
 {
     return Time {microseconds};
 }
 
-bool operator==(const Time& lhs, const Time& rhs)
+inline constexpr bool operator==(const Time& lhs, const Time& rhs)
 {
     return lhs.getRawTimeCount() == rhs.getRawTimeCount();
 }
 
-bool operator!=(const Time& lhs, const Time& rhs)
+inline constexpr bool operator!=(const Time& lhs, const Time& rhs)
 {
     return lhs.getRawTimeCount() != rhs.getRawTimeCount();
 }
 
-bool operator<(const Time& lhs, const Time& rhs)
+inline constexpr bool operator<(const Time& lhs, const Time& rhs)
 {
     return lhs.getRawTimeCount() < rhs.getRawTimeCount();
 }
 
-bool operator>(const Time& lhs, const Time& rhs)
+inline constexpr bool operator>(const Time& lhs, const Time& rhs)
 {
     return lhs.getRawTimeCount() > rhs.getRawTimeCount();
 }
 
-bool operator<=(const Time& lhs, const Time& rhs)
+inline constexpr bool operator<=(const Time& lhs, const Time& rhs)
 {
     return lhs.getRawTimeCount() <= rhs.getRawTimeCount();
 }
 
-bool operator>=(const Time& lhs, const Time& rhs)
+inline constexpr bool operator>=(const Time& lhs, const Time& rhs)
 {
     return lhs.getRawTimeCount() >= rhs.getRawTimeCount();
 }
 
-Time operator+(const Time& lhs, const Time& rhs)
+inline constexpr Time operator-(const Time& rhs)
+{
+    return rawTimeBuilder(-rhs.getRawTimeCount());
+}
+
+inline constexpr Time operator+(const Time& lhs, const Time& rhs)
 {
     return rawTimeBuilder(lhs.getRawTimeCount() + rhs.getRawTimeCount());
 }
 
-Time operator-(const Time& lhs, const Time& rhs)
+inline constexpr Time operator-(const Time& lhs, const Time& rhs)
 {
     return rawTimeBuilder(lhs.getRawTimeCount() - rhs.getRawTimeCount());
 }
 
-Time operator*(const Time& lhs, const Time& rhs)
-{
-    return rawTimeBuilder(lhs.getRawTimeCount() * rhs.getRawTimeCount());
-}
-
-Time operator*(const Time& lhs, float rhs)
+inline constexpr Time operator*(const Time& lhs, float rhs)
 {
     return rawTimeBuilder(lhs.getRawTimeCount() * static_cast<microT>(rhs));
 }
 
-Time operator*(const Time& lhs, int64 rhs)
+inline constexpr Time operator*(const Time& lhs, int64 rhs)
 {
     return rawTimeBuilder(lhs.getRawTimeCount() * static_cast<microT>(rhs));
 }
 
-Time operator*(float lhs, const Time& rhs)
+inline constexpr Time operator*(float lhs, const Time& rhs)
 {
     return rawTimeBuilder(static_cast<microT>(lhs) * rhs.getRawTimeCount());
 }
 
-Time operator*(int64 lhs, const Time& rhs)
+inline constexpr Time operator*(int64 lhs, const Time& rhs)
 {
     return rawTimeBuilder(static_cast<microT>(lhs) * rhs.getRawTimeCount());
 }
 
-Time operator/(const Time& lhs, const Time& rhs)
-{
-    return rawTimeBuilder(lhs.getRawTimeCount() / rhs.getRawTimeCount());
-}
-
-Time operator/(const Time& lhs, float rhs)
+inline constexpr Time operator/(const Time& lhs, float rhs)
 {
     return rawTimeBuilder(lhs.getRawTimeCount() / static_cast<microT>(rhs));
 }
 
-Time operator/(const Time& lhs, int64 rhs)
+inline constexpr Time operator/(const Time& lhs, int64 rhs)
 {
     return rawTimeBuilder(lhs.getRawTimeCount() / static_cast<microT>(rhs));
 }
 
-Time operator/(float lhs, const Time& rhs)
+inline constexpr Time operator/(float lhs, const Time& rhs)
 {
     return rawTimeBuilder(static_cast<microT>(lhs) / rhs.getRawTimeCount());
 }
 
-Time operator/(int64 lhs, const Time& rhs)
+inline constexpr Time operator/(int64 lhs, const Time& rhs)
 {
     return rawTimeBuilder(static_cast<microT>(lhs) / rhs.getRawTimeCount());
 }
 
-Time& operator+=(Time& lhs, const Time& rhs)
+inline constexpr Time& operator+=(Time& lhs, const Time& rhs)
 {
-    lhs = lhs + rhs;
-    return lhs;
+    return lhs = lhs + rhs;
 }
 
-Time& operator-=(Time& lhs, const Time& rhs)
+inline constexpr Time& operator-=(Time& lhs, const Time& rhs)
 {
-    lhs = lhs - rhs;
-    return lhs;
+    return lhs = lhs - rhs;
 }
 
-Time& operator*=(Time& lhs, const Time& rhs)
+inline constexpr Time& operator*=(Time& lhs, float rhs)
 {
-    lhs = lhs * rhs;
-    return lhs;
+    return lhs = lhs * rhs;
 }
 
-Time& operator*=(Time& lhs, float rhs)
+inline constexpr Time& operator*=(Time& lhs, int64 rhs)
 {
-    lhs = lhs * rhs;
-    return lhs;
+    return lhs = lhs * rhs;
 }
 
-Time& operator*=(Time& lhs, int64 rhs)
+inline constexpr Time& operator/=(Time& lhs, float rhs)
 {
-    lhs = lhs * rhs;
-    return lhs;
+    return lhs = lhs / rhs;
 }
 
-Time& operator/=(Time& lhs, const Time& rhs)
+inline constexpr Time& operator/=(Time& lhs, int64 rhs)
 {
-    lhs = lhs / rhs;
-    return lhs;
-}
-
-Time& operator/=(Time& lhs, float rhs)
-{
-    lhs = lhs / rhs;
-    return lhs;
-}
-
-Time& operator/=(Time& lhs, int64 rhs)
-{
-    lhs = lhs / rhs;
-    return lhs;
+    return lhs = lhs / rhs;
 }
 
 } // namespace gil

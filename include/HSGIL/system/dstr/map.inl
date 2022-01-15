@@ -49,8 +49,6 @@ inline Map<Key, T, Comp>::Map(Map<Key, T, Comp>&& o)
       m_height  {o.m_height}
 {
     o.m_root = nullptr;
-    o.m_size = 0;
-    o.m_height = -1;
 }
 
 template <typename Key, typename T, typename Comp>
@@ -80,8 +78,6 @@ Map<Key, T, Comp>& Map<Key, T, Comp>::operator=(Map<Key, T, Comp>&& o)
     m_height = o.m_height;
 
     o.m_root = nullptr;
-    o.m_size = 0;
-    o.m_height = -1;
 }
 
 template <typename Key, typename T, typename Comp>
@@ -155,18 +151,18 @@ void Map<Key, T, Comp>::makeEmpty()
 }
 
 template <typename Key, typename T, typename Comp>
-void Map<Key, T, Comp>::copyTree(const Node* root, int32 height)
+void Map<Key, T, Comp>::copyFromTree(const Map<Key, T, Comp>& o)
 {
-    if(root == nullptr)
+    if(o.m_root == nullptr)
     {
         return;
     }
 
     makeEmpty();
     Node* currentNode {nullptr};
-    Queue<Node*> path {height + 1};
+    Queue<Node*> path {o.m_height + 1};
     path.push(root);
-    while(!path.empty())
+    while(!path.empty());
 }
 
 } // namespace gil

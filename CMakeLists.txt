@@ -37,9 +37,7 @@ endif()
 # Get Source Files
 set(HSGIL_SOURCES
     external/src/glad/glad.c
-    src/system/time.cpp
     src/system/timer.cpp
-    src/system/dstr/vector.cpp
     src/system/${HSGIL_PLATFORM}/timerPlatform.cpp
     src/graphics/gUtils.cpp
     src/graphics/mesh.cpp

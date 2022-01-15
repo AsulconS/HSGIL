@@ -33,50 +33,44 @@ namespace gil
  * @brief Timer Class that measures the time intervals, calculate Delta Time and other time stuff
  * 
  */
-class HSGIL_API Time
+class Time final
 {
-    friend HSGIL_API Time seconds(secT seconds);
-    friend HSGIL_API Time milliseconds(milliT milliseconds);
-    friend HSGIL_API Time microseconds(microT microseconds);
-    friend HSGIL_API Time rawTimeBuilder(microT microseconds);
+    friend constexpr Time seconds(secT seconds);
+    friend constexpr Time milliseconds(milliT milliseconds);
+    friend constexpr Time microseconds(microT microseconds);
+    friend constexpr Time rawTimeBuilder(microT microseconds);
 public:
     /**
      * @brief Construct a new Time object
      * 
      */
-    Time();
-    /**
-     * @brief Destroy the Time object
-     * 
-     */
-    virtual ~Time();
+    constexpr Time();
 
     /**
      * @brief Get the Time Point value as seconds
      * 
      * @return secT 
      */
-    secT asSeconds() const;
+    constexpr secT asSeconds() const;
     /**
      * @brief Get the Time Point value as milliseconds
      * 
      * @return milliT 
      */
-    milliT asMilliseconds() const;
+    constexpr milliT asMilliseconds() const;
     /**
      * @brief Get the Time Point value as microseconds
      * 
      * @return microT 
      */
-    microT asMicroseconds() const;
-
+    constexpr microT asMicroseconds() const;
     /**
      * @brief Get the Raw Time Count as microseconds
      * It's equivalent to asMicroseconds function
      * 
      * @return microT 
      */
-    microT getRawTimeCount() const;
+    constexpr microT getRawTimeCount() const;
 
 private:
     /**
@@ -85,7 +79,7 @@ private:
      * 
      * @param t_timeCount 
      */
-    explicit Time(microT t_timeCount);
+    constexpr explicit Time(microT t_timeCount);
 
 private:
     microT m_timeCount;
@@ -97,21 +91,22 @@ private:
  * @param seconds 
  * @return Time 
  */
-HSGIL_API Time seconds(secT seconds);
+constexpr Time seconds(secT seconds);
 /**
  * @brief Construct a new Time object given milliseconds amount
  * 
  * @param milliseconds 
  * @return Time 
  */
-HSGIL_API Time milliseconds(milliT milliseconds);
+constexpr Time milliseconds(milliT milliseconds);
 /**
  * @brief Construct a new Time object given microseconds amount
  * 
  * @param microseconds 
  * @return Time 
  */
-HSGIL_API Time microseconds(microT microseconds);
+constexpr Time microseconds(microT microseconds);
+
 /**
  * @brief Construct a new Time object given microseconds amount
  * It's equivalent to microseconds function
@@ -119,24 +114,26 @@ HSGIL_API Time microseconds(microT microseconds);
  * @param microseconds 
  * @return Time 
  */
-HSGIL_API Time rawTimeBuilder(microT microseconds);
+constexpr Time rawTimeBuilder(microT microseconds);
 
 /**
  * @brief Compare two Time Point values
  * 
- * @param o 
+ * @param lhs 
+ * @param rhs 
  * @return true if equal
  * @return false if different
  */
-bool operator==(const Time& lhs, const Time& rhs);
+constexpr bool operator==(const Time& lhs, const Time& rhs);
 /**
  * @brief Compare two Time Point values
  * 
- * @param o 
+ * @param lhs 
+ * @param rhs 
  * @return true if different
  * @return false if equal
  */
-bool operator!=(const Time& lhs, const Time& rhs);
+constexpr bool operator!=(const Time& lhs, const Time& rhs);
 
 /**
  * @brief Compare two Time Point values
@@ -146,7 +143,7 @@ bool operator!=(const Time& lhs, const Time& rhs);
  * @return true if lhs is less than rhs
  * @return false otherwise
  */
-bool operator<(const Time& lhs, const Time& rhs);
+constexpr bool operator<(const Time& lhs, const Time& rhs);
 /**
  * @brief Compare two Time Point values
  * 
@@ -155,7 +152,7 @@ bool operator<(const Time& lhs, const Time& rhs);
  * @return true if lhs is greater than rhs
  * @return false otherwise
  */
-bool operator>(const Time& lhs, const Time& rhs);
+constexpr bool operator>(const Time& lhs, const Time& rhs);
 /**
  * @brief Compare two Time Point values
  * 
@@ -164,16 +161,24 @@ bool operator>(const Time& lhs, const Time& rhs);
  * @return true if lhs is less or equal than rhs
  * @return false otherwise
  */
-bool operator<=(const Time& lhs, const Time& rhs);
+constexpr bool operator<=(const Time& lhs, const Time& rhs);
 /**
  * @brief Compare two Time Point values
  * 
- * @param lhs if lhs is greater than rhs
+ * @param lhs 
  * @param rhs 
  * @return true if lhs is greater or equal than rhs
  * @return false otherwise
  */
-bool operator>=(const Time& lhs, const Time& rhs);
+constexpr bool operator>=(const Time& lhs, const Time& rhs);
+
+/**
+ * @brief Changes sign of time
+ * 
+ * @param rhs 
+ * @return Time 
+ */
+constexpr Time operator-(const Time& rhs);
 
 /**
  * @brief Add two Time Points
@@ -182,7 +187,7 @@ bool operator>=(const Time& lhs, const Time& rhs);
  * @param rhs 
  * @return Time 
  */
-Time operator+(const Time& lhs, const Time& rhs);
+constexpr Time operator+(const Time& lhs, const Time& rhs);
 /**
  * @brief Subtract two Time Points
  * 
@@ -190,15 +195,7 @@ Time operator+(const Time& lhs, const Time& rhs);
  * @param rhs 
  * @return Time 
  */
-Time operator-(const Time& lhs, const Time& rhs);
-/**
- * @brief Multiply two Time Points
- * 
- * @param lhs 
- * @param rhs 
- * @return Time 
- */
-Time operator*(const Time& lhs, const Time& rhs);
+constexpr Time operator-(const Time& lhs, const Time& rhs);
 /**
  * @brief Multiply a Time Point by a floating point scalar
  * 
@@ -206,7 +203,7 @@ Time operator*(const Time& lhs, const Time& rhs);
  * @param rhs 
  * @return Time 
  */
-Time operator*(const Time& lhs, float rhs);
+constexpr Time operator*(const Time& lhs, float rhs);
 /**
  * @brief Multiply a Time Point by an integer scalar
  * 
@@ -214,7 +211,7 @@ Time operator*(const Time& lhs, float rhs);
  * @param rhs 
  * @return Time 
  */
-Time operator*(const Time& lhs, int64 rhs);
+constexpr Time operator*(const Time& lhs, int64 rhs);
 /**
  * @brief Multiply a floating point scalar by a Time Point
  * 
@@ -222,7 +219,7 @@ Time operator*(const Time& lhs, int64 rhs);
  * @param rhs 
  * @return Time 
  */
-Time operator*(float lhs, const Time& rhs);
+constexpr Time operator*(float lhs, const Time& rhs);
 /**
  * @brief Multiply an integer scalar by a Time Point
  * 
@@ -230,15 +227,7 @@ Time operator*(float lhs, const Time& rhs);
  * @param rhs 
  * @return Time 
  */
-Time operator*(int64 lhs, const Time& rhs);
-/**
- * @brief Divide two Time Points
- * 
- * @param lhs 
- * @param rhs 
- * @return Time 
- */
-Time operator/(const Time& lhs, const Time& rhs);
+constexpr Time operator*(int64 lhs, const Time& rhs);
 /**
  * @brief Divide a Time Point by a floating point scalar
  * 
@@ -246,7 +235,7 @@ Time operator/(const Time& lhs, const Time& rhs);
  * @param rhs 
  * @return Time 
  */
-Time operator/(const Time& lhs, float rhs);
+constexpr Time operator/(const Time& lhs, float rhs);
 /**
  * @brief Divide a Time Point by an integer scalar
  * 
@@ -254,7 +243,7 @@ Time operator/(const Time& lhs, float rhs);
  * @param rhs 
  * @return Time 
  */
-Time operator/(const Time& lhs, int64 rhs);
+constexpr Time operator/(const Time& lhs, int64 rhs);
 /**
  * @brief Divide a floating point scalar by a Time Point
  * 
@@ -262,7 +251,7 @@ Time operator/(const Time& lhs, int64 rhs);
  * @param rhs 
  * @return Time 
  */
-Time operator/(float lhs, const Time& rhs);
+constexpr Time operator/(float lhs, const Time& rhs);
 /**
  * @brief Divide an integer scalar by a Time Point
  * 
@@ -270,7 +259,7 @@ Time operator/(float lhs, const Time& rhs);
  * @param rhs 
  * @return Time 
  */
-Time operator/(int64 lhs, const Time& rhs);
+constexpr Time operator/(int64 lhs, const Time& rhs);
 
 /**
  * @brief Add a Time Point to a Time Point
@@ -279,7 +268,7 @@ Time operator/(int64 lhs, const Time& rhs);
  * @param rhs 
  * @return Time& 
  */
-Time& operator+=(Time& lhs, const Time& rhs);
+constexpr Time& operator+=(Time& lhs, const Time& rhs);
 /**
  * @brief Subtract a Time Point to a Time Point
  * 
@@ -287,15 +276,7 @@ Time& operator+=(Time& lhs, const Time& rhs);
  * @param rhs 
  * @return Time& 
  */
-Time& operator-=(Time& lhs, const Time& rhs);
-/**
- * @brief Multiply a Time Point to a Time Point
- * 
- * @param lhs 
- * @param rhs 
- * @return Time& 
- */
-Time& operator*=(Time& lhs, const Time& rhs);
+constexpr Time& operator-=(Time& lhs, const Time& rhs);
 /**
  * @brief Multiply a floating point scalar to a Time Point
  * 
@@ -303,7 +284,7 @@ Time& operator*=(Time& lhs, const Time& rhs);
  * @param rhs 
  * @return Time& 
  */
-Time& operator*=(Time& lhs, float rhs);
+constexpr Time& operator*=(Time& lhs, float rhs);
 /**
  * @brief Multiply an integer scalar to a Time Point
  * 
@@ -311,15 +292,7 @@ Time& operator*=(Time& lhs, float rhs);
  * @param rhs 
  * @return Time& 
  */
-Time& operator*=(Time& lhs, int64 rhs);
-/**
- * @brief Divide a Time Point to a Time Point
- * 
- * @param lhs 
- * @param rhs 
- * @return Time& 
- */
-Time& operator/=(Time& lhs, const Time& rhs);
+constexpr Time& operator*=(Time& lhs, int64 rhs);
 /**
  * @brief Divide a floating point scalar to a Time Point
  * 
@@ -327,7 +300,7 @@ Time& operator/=(Time& lhs, const Time& rhs);
  * @param rhs 
  * @return Time& 
  */
-Time& operator/=(Time& lhs, float rhs);
+constexpr Time& operator/=(Time& lhs, float rhs);
 /**
  * @brief Divide an integer scalar to a Time Point
  * 
@@ -335,8 +308,10 @@ Time& operator/=(Time& lhs, float rhs);
  * @param rhs 
  * @return Time& 
  */
-Time& operator/=(Time& lhs, int64 rhs);
+constexpr Time& operator/=(Time& lhs, int64 rhs);
 
 } // namespace gil
+
+#include <HSGIL/system/time.inl>
 
 #endif // HSGIL_TIME_HPP

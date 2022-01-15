@@ -33,14 +33,8 @@
 
 namespace gil
 {
-namespace _priv
-{
-HSGIL_API uint64 p2RoundUp(uint64 val);
-
-} // namespace _priv
-
 template <typename T>
-class HSGIL_API Vector
+class Vector
 {
 public:
     /**
@@ -218,6 +212,12 @@ private:
     void reallocate();
     void guaranteeSpace(uint64 n);
 };
+
+namespace _priv
+{
+uint64 p2RoundUp(uint64 val);
+
+} // namespace _priv
 
 } // namespace gil
 

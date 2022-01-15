@@ -56,10 +56,6 @@ inline Queue<T>::Queue(Queue<T>&& o)
       m_capacity {o.m_capacity}
 {
     o.m_data = nullptr;
-    o.m_front = 0;
-    o.m_back = 0;
-    o.m_size = 0;
-    o.m_capacity = 0;
 }
 
 template <typename T>
@@ -99,10 +95,6 @@ inline Queue<T>& Queue<T>::operator=(Queue<T>&& o)
     m_capacity = o.m_capacity;
 
     o.m_data = nullptr;
-    o.m_front = 0;
-    o.m_back = 0;
-    o.m_size = 0;
-    o.m_capacity = 0;
 
     return (*this);
 }

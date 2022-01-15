@@ -69,12 +69,7 @@ inline Vector<T>::Vector(Vector<T>&& o)
       m_capacity {o.m_capacity}
 {
     m_data = o.m_data;
-
     o.m_data = nullptr;
-    o.m_size = 0;
-    o.m_capacity = _INITIAL_CAPACITY;
-
-    o.m_data = new T[o.m_capacity];
 }
 
 template <typename T>
@@ -109,12 +104,7 @@ inline Vector<T>& Vector<T>::operator=(Vector<T>&& o)
     m_capacity = o.m_capacity;
 
     m_data = o.m_data;
-
     o.m_data = nullptr;
-    o.m_size = 0;
-    o.m_capacity = _INITIAL_CAPACITY;
-
-    o.m_data = new T[o.m_capacity];
 
     return (*this);
 }
@@ -254,7 +244,7 @@ inline void Vector<T>::clear() noexcept
 template <typename T>
 inline void Vector<T>::reallocate()
 {
-    T* n_data = new T[m_capacity];
+    T* n_data {new T[m_capacity]};
     for(uint64 i = 0; i < m_size; ++i)
     {
         n_data[i] = hsgil_move(m_data[i]);
@@ -272,5 +262,21 @@ inline void Vector<T>::guaranteeSpace(uint64 n)
         reallocate();
     }
 }
+
+namespace _priv
+{
+inline uint64 p2RoundUp(uint64 val)
+{
+    --val;
+    val |= (val >> 0x01);
+    val |= (val >> 0x02);
+    val |= (val >> 0x04);
+    val |= (val >> 0x08);
+    val |= (val >> 0x10);
+    val |= (val >> 0x20);
+    return val + 0x1;
+}
+
+} // namespace _priv
 
 } // namespace gil
