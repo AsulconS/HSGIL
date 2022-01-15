@@ -46,7 +46,7 @@ class LessComp
 } // namespace _priv
 
 template <typename Key, typename T, typename Comp = _priv::LessComp<Key>>
-class HSGIL_API Map
+class Map
 {
 public:
     /**

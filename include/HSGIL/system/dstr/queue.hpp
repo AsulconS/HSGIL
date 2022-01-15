@@ -34,7 +34,7 @@
 namespace gil
 {
 template <typename T>
-class HSGIL_API Queue
+class Queue
 {
 public:
     /**
