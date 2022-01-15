@@ -126,7 +126,7 @@ void Map<Key, T, Comp>::makeEmpty()
     }
 
     Node* currentNode {nullptr};
-    Queue<Node*> path {m_height + 1};
+    Stack<Node*> path {m_height + 1};
     path.push(m_root);
     while(!path.empty())
     {
@@ -160,7 +160,7 @@ void Map<Key, T, Comp>::copyFromTree(const Map<Key, T, Comp>& o)
 
     makeEmpty();
     Node* currentNode {nullptr};
-    Queue<Node*> path {o.m_height + 1};
+    Stack<Node*> path {o.m_height + 1};
     path.push(root);
     while(!path.empty());
 }

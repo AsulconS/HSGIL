@@ -207,7 +207,7 @@ inline void Vector<T>::assign(uint64 n, const T& val)
 template <typename T>
 inline void Vector<T>::push_back(const T& val)
 {
-    if(m_size >= m_capacity)
+    if(m_size == m_capacity)
     {
         m_capacity <<= 0x1;
         reallocate();
@@ -218,7 +218,7 @@ inline void Vector<T>::push_back(const T& val)
 template <typename T>
 inline void Vector<T>::push_back(T&& val)
 {
-    if(m_size >= m_capacity)
+    if(m_size == m_capacity)
     {
         m_capacity <<= 0x1;
         reallocate();
