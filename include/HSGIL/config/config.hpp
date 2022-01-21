@@ -45,8 +45,8 @@
     #error HSGIL has no support for this OS
 #endif
 
-#if defined(__HSGIL_SHARED_LIB)
-    #if defined(__HSGIL_COMPILING)
+#if defined(C__HSGIL_SHARED_LIB)
+    #if defined(C__HSGIL_COMPILING)
         #define HSGIL_API HSGIL_DLL_EXPORT
     #else
         #define HSGIL_API HSGIL_DLL_IMPORT

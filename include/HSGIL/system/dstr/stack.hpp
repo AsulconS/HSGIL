@@ -29,7 +29,7 @@
 
 #include <HSGIL/system/utility.hpp>
 
-#define _STACK_DEFAULT_CAPACITY 16
+#define HSGIL_STACK_DEFAULT_CAPACITY 16
 
 namespace gil
 {
@@ -42,7 +42,7 @@ public:
      * 
      * @param t_capacity 
      */
-    Stack(uint64 t_capacity = _STACK_DEFAULT_CAPACITY);
+    Stack(uint64 t_capacity = HSGIL_STACK_DEFAULT_CAPACITY);
 
     /**
      * @brief Construct a new Stack object

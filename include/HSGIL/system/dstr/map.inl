@@ -35,10 +35,10 @@ inline Map<Key, T, Comp>::Map(const Comp& t_comp)
 template <typename Key, typename T, typename Comp>
 inline Map<Key, T, Comp>::Map(const Map<Key, T, Comp>& o)
     : mf_comp   {o.mf_comp},
+      m_root    {h_clone(o.m_root)},
       m_size    {o.m_size},
       m_height  {o.m_height}
 {
-    copyFromTree(o);
 }
 
 template <typename Key, typename T, typename Comp>
@@ -54,23 +54,24 @@ inline Map<Key, T, Comp>::Map(Map<Key, T, Comp>&& o)
 template <typename Key, typename T, typename Comp>
 inline Map<Key, T, Comp>::~Map()
 {
-    makeEmpty();
+    h_makeEmpty(m_root);
 }
 
 template <typename Key, typename T, typename Comp>
-Map<Key, T, Comp>& Map<Key, T, Comp>::operator=(const Map<Key, T, Comp>& o)
+inline Map<Key, T, Comp>& Map<Key, T, Comp>::operator=(const Map<Key, T, Comp>& o)
 {
-    copyTree(o.m_root, o.m_height);
+    h_makeEmpty(m_root);
 
     mf_comp = o.mf_comp;
+    m_root = h_clone(o.m_root);
     m_size = o.m_size;
     m_height = o.m_height;
 }
 
 template <typename Key, typename T, typename Comp>
-Map<Key, T, Comp>& Map<Key, T, Comp>::operator=(Map<Key, T, Comp>&& o)
+inline Map<Key, T, Comp>& Map<Key, T, Comp>::operator=(Map<Key, T, Comp>&& o)
 {
-    makeEmpty();
+    h_makeEmpty(m_root);
 
     mf_comp = o.mf_comp;
     m_root = o.m_root;
@@ -81,69 +82,21 @@ Map<Key, T, Comp>& Map<Key, T, Comp>::operator=(Map<Key, T, Comp>&& o)
 }
 
 template <typename Key, typename T, typename Comp>
-bool Map<Key, T, Comp>::empty() const noexcept
+inline bool Map<Key, T, Comp>::empty() const noexcept
 {
     return !m_size;
 }
 
 template <typename Key, typename T, typename Comp>
-uint64 Map<Key, T, Comp>::size() const noexcept
+inline uint64 Map<Key, T, Comp>::size() const noexcept
 {
     return m_size;
 }
 
 template <typename Key, typename T, typename Comp>
-T& Map<Key, T, Comp>::operator[](const Key& key)
+inline void Map<Key, T, Comp>::clear()
 {
-}
-
-template <typename Key, typename T, typename Comp>
-T& Map<Key, T, Comp>::operator[](Key&& key)
-{
-}
-
-template <typename Key, typename T, typename Comp>
-T& Map<Key, T, Comp>::at(const Key& key)
-{
-}
-
-template <typename Key, typename T, typename Comp>
-const T& Map<Key, T, Comp>::at(const Key& key) const
-{
-}
-
-template <typename Key, typename T, typename Comp>
-bool Map<Key, T, Comp>::contains(const Key& key) const
-{
-}
-
-template <typename Key, typename T, typename Comp>
-void Map<Key, T, Comp>::makeEmpty()
-{
-    if(m_root == nullptr)
-    {
-        return;
-    }
-
-    Node* currentNode {nullptr};
-    Stack<Node*> path {m_height + 1};
-    path.push(m_root);
-    while(!path.empty())
-    {
-        currentNode = path.front();
-        path.pop();
-
-        if(currentNode->left != nullptr)
-        {
-            path.push(currentNode->left);
-        }
-        if(currentNode->right != nullptr)
-        {
-            path.push(currentNode->right);
-        }
-
-        delete currentNode;
-    }
+    h_makeEmpty(m_root);
 
     m_root = nullptr;
     m_size = 0;
@@ -151,18 +104,137 @@ void Map<Key, T, Comp>::makeEmpty()
 }
 
 template <typename Key, typename T, typename Comp>
-void Map<Key, T, Comp>::copyFromTree(const Map<Key, T, Comp>& o)
+inline T& Map<Key, T, Comp>::operator[](const Key& key)
 {
-    if(o.m_root == nullptr)
+}
+
+template <typename Key, typename T, typename Comp>
+inline T& Map<Key, T, Comp>::operator[](Key&& key)
+{
+}
+
+template <typename Key, typename T, typename Comp>
+inline T& Map<Key, T, Comp>::at(const Key& key)
+{
+    Node* node {h_find(key, m_root)};
+    if(node == nullptr)
+    {
+        throw KeyNotFoundException();
+        return;
+    }
+    return node->data.second;
+}
+
+template <typename Key, typename T, typename Comp>
+inline const T& Map<Key, T, Comp>::at(const Key& key) const
+{
+    const Node* node {h_find(key, m_root)};
+    if(node == nullptr)
+    {
+        throw KeyNotFoundException();
+        return;
+    }
+    return node->data.second;
+}
+
+template <typename Key, typename T, typename Comp>
+inline bool Map<Key, T, Comp>::contains(const Key& key) const
+{
+    h_find(key, m_root) != nullptr;
+}
+
+template <typename Key, typename T, typename Comp>
+inline Map<Key, T, Comp>::Node* Map<Key, T, Comp>::h_clone(const Node* root) const
+{
+    if(root == nullptr)
+    {
+        return nullptr;
+    }
+    return new Node {root->data, root->color, h_clone(root->left), h_clone(root->right)};
+}
+
+template <typename Key, typename T, typename Comp>
+inline Map<Key, T, Comp>::Node* Map<Key, T, Comp>::h_find(const Key& key, Node* root)
+{
+    if(root == nullptr)
+    {
+        return nullptr;
+    }
+    if(mf_comp(key, root->data.first))
+    {
+        return h_contains(key, root->left);
+    }
+    if(mf_comp(root->data.first, key))
+    {
+        return h_contains(key, root->right);
+    }
+    return root;
+}
+
+template <typename Key, typename T, typename Comp>
+inline const Map<Key, T, Comp>::Node* Map<Key, T, Comp>::h_find(const Key& key, const Node* root) const
+{
+    if(root == nullptr)
+    {
+        return nullptr;
+    }
+    if(mf_comp(key, root->data.first))
+    {
+        return h_contains(key, root->left);
+    }
+    if(mf_comp(root->data.first, key))
+    {
+        return h_contains(key, root->right);
+    }
+    return root;
+}
+
+template <typename Key, typename T, typename Comp>
+inline Map<Key, T, Comp>::Node* Map<Key, T, Comp>::h_stdInsert(const Key& key, Node* root)
+{
+    if(root == nullptr)
+    {
+        return root = new Node {{key, T {}}, HSGIL_CONST_RED, nullptr, nullptr};
+    }
+    if(mf_comp(key, root->data.first))
+    {
+        return h_insert(key, root->left);
+    }
+    if(mf_comp(root->data.first, key))
+    {
+        return h_insert(key, root->right);
+    }
+    return nullptr;
+}
+
+template <typename Key, typename T, typename Comp>
+inline Map<Key, T, Comp>::Node* Map<Key, T, Comp>::h_stdInsert(Key&& key, Node* root)
+{
+    if(root == nullptr)
+    {
+        return root = new Node {{hsgil_move(key), T {}}, HSGIL_CONST_RED, nullptr, nullptr};
+    }
+    if(mf_comp(key, root->data.first))
+    {
+        return h_insert(hsgil_move(key), root->left);
+    }
+    if(mf_comp(root->data.first, key))
+    {
+        return h_insert(hsgil_move(key), root->right);
+    }
+    return nullptr;
+}
+
+template <typename Key, typename T, typename Comp>
+inline void Map<Key, T, Comp>::h_makeEmpty(Node* root)
+{
+    if(root == nullptr)
     {
         return;
     }
-
-    makeEmpty();
-    Node* currentNode {nullptr};
-    Stack<Node*> path {o.m_height + 1};
-    path.push(root);
-    while(!path.empty());
+    h_makeEmpty(root->left);
+    h_makeEmpty(root->right);
+    delete root;
 }
 
 } // namespace gil

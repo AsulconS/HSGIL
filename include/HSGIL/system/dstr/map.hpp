@@ -30,12 +30,14 @@
 #include <HSGIL/system/utility.hpp>
 #include <HSGIL/system/dstr/stack.hpp>
 
-#define _CONST_RED true
-#define _CONST_BLACK false
+#include <HSGIL/exception/system/dstrException.hpp>
+
+#define HSGIL_CONST_RED true
+#define HSGIL_CONST_BLACK false
 
 namespace gil
 {
-namespace _priv
+namespace priv
 {
 template <typename T>
 class LessComp
@@ -43,9 +45,9 @@ class LessComp
     inline constexpr bool operator()(const T& l, const T& r) const { return l < r; }
 };
 
-} // namespace _priv
+} // namespace priv
 
-template <typename Key, typename T, typename Comp = _priv::LessComp<Key>>
+template <typename Key, typename T, typename Comp = priv::LessComp<Key>>
 class Map
 {
 public:
@@ -105,6 +107,12 @@ public:
     uint64 size() const noexcept;
 
     /**
+     * @brief Clears the content
+     * 
+     */
+    void clear();
+
+    /**
      * @brief Returns a reference to access elements given a l-value key. 
      * If key doesn't exist, it gets created
      * 
@@ -154,14 +162,19 @@ private:
     struct Node
     {
         Pair data;
-        bool color;
+        Node* parent;
         Node* left;
         Node* right;
+        bool color;
     };
 
 private:
-    void makeEmpty();
-    void copyFromTree(const Map<Key, T, Comp>& o);
+    Node* h_clone(const Node* root) const;
+    Node* h_find(const Key& key, Node* root);
+    const Node* h_find(const Key& key, const Node* root) const;
+    Node* h_stdInsert(const Key& key, Node* root);
+    Node* h_stdInsert(Key&& key, Node* root);
+    void h_makeEmpty(Node* root);
 
 private:
     Comp mf_comp;

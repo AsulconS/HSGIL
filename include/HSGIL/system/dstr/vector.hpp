@@ -29,7 +29,7 @@
 
 #include <HSGIL/system/utility.hpp>
 
-#define _INITIAL_CAPACITY 4
+#define HSGIL_INITIAL_CAPACITY 4
 
 namespace gil
 {
@@ -213,11 +213,11 @@ private:
     void guaranteeSpace(uint64 n);
 };
 
-namespace _priv
+namespace priv
 {
 uint64 p2RoundUp(uint64 val);
 
-} // namespace _priv
+} // namespace priv
 
 } // namespace gil
 

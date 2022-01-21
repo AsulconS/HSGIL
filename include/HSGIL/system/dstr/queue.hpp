@@ -29,7 +29,7 @@
 
 #include <HSGIL/system/utility.hpp>
 
-#define _QUEUE_DEFAULT_CAPACITY 16
+#define HSGIL_QUEUE_DEFAULT_CAPACITY 16
 
 namespace gil
 {
@@ -42,7 +42,7 @@ public:
      * 
      * @param t_capacity 
      */
-    Queue(uint64 t_capacity = _QUEUE_DEFAULT_CAPACITY);
+    Queue(uint64 t_capacity = HSGIL_QUEUE_DEFAULT_CAPACITY);
 
     /**
      * @brief Construct a new Queue object

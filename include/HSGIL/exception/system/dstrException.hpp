@@ -21,30 +21,45 @@
  *                                                                              *
  ********************************************************************************/
 
-#include <Windows.h>
+#ifndef HSGIL_DSTR_EXCEPTION_HPP
+#define HSGIL_DSTR_EXCEPTION_HPP
 
-#include "../timerPlatform.hpp"
-
-#ifdef _WIN64
-    #define HSGIL_GET_TICK_COUNT GetTickCount64
-#else
-    #define HSGIL_GET_TICK_COUNT GetTickCount
-#endif
+#include <HSGIL/exception/genericException.hpp>
 
 namespace gil
 {
-namespace plat
-{
 /**
- * @brief Get the current Time
+ * @brief DStr Generic Exception
  * 
- * @return Time 
  */
-Time getTime()
+class DStrException : public GenericException
 {
-    return rawTimeBuilder(HSGIL_GET_TICK_COUNT() * 1000ull);
-}
+public:
+    /**
+     * @brief Overridden method to know why exactly the DStr Exception was thrown
+     * 
+     * @return const char* 
+     */
+    virtual const char* what() const throw() override;
+};
 
-} // namespace plat
+/**
+ * @brief Window Exception that is thrown when a Window can't initialize
+ * 
+ */
+class KeyNotFoundException : public DStrException
+{
+public:
+    /**
+     * @brief Overridden method to know why exactly the Exception was thrown
+     * 
+     * @return const char* 
+     */
+    virtual const char* what() const throw() override;
+};
 
 } // namespace gil
+
+#include <HSGIL/exception/system/dstrException.inl>
+
+#endif // HSGIL_DSTR_EXCEPTION_HPP

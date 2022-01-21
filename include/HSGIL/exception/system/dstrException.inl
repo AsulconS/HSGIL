@@ -21,30 +21,16 @@
  *                                                                              *
  ********************************************************************************/
 
-#include <Windows.h>
-
-#include "../timerPlatform.hpp"
-
-#ifdef _WIN64
-    #define HSGIL_GET_TICK_COUNT GetTickCount64
-#else
-    #define HSGIL_GET_TICK_COUNT GetTickCount
-#endif
-
 namespace gil
 {
-namespace plat
+inline const char* DStrException::what() const throw()
 {
-/**
- * @brief Get the current Time
- * 
- * @return Time 
- */
-Time getTime()
-{
-    return rawTimeBuilder(HSGIL_GET_TICK_COUNT() * 1000ull);
+    return "gil::DStrException : Data Structure Exception";
 }
 
-} // namespace plat
+inline const char* KeyNotFoundException::what() const throw()
+{
+    return "gil::KeyNotFoundException : Key Not Found in the container";
+}
 
 } // namespace gil
