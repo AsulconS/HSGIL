@@ -30,26 +30,26 @@
  * Details: Deals with dynamic linking semantics
  */
 #if defined(_WIN32) || defined(WIN32) || defined(_MSC_VER)
-    #define HSGIL_OS_WINDOWS
-    #define HSGIL_DLL_EXPORT __declspec(dllexport)
-    #define HSGIL_DLL_IMPORT __declspec(dllimport)
+    #define CF__HSGIL_OS_WINDOWS
+    #define CF__HSGIL_DLL_EXPORT __declspec(dllexport)
+    #define CF__HSGIL_DLL_IMPORT __declspec(dllimport)
 #elif defined(__unix__) || defined(linux) || defined(__GNUC__)
-    #define HSGIL_OS_LINUX
-    #define HSGIL_DLL_EXPORT __attribute__((visibility("default")))
-    #define HSGIL_DLL_IMPORT
+    #define CF__HSGIL_OS_LINUX
+    #define CF__HSGIL_DLL_EXPORT __attribute__((visibility("default")))
+    #define CF__HSGIL_DLL_IMPORT
 #else
-    #define HSGIL_OS_UNKNOWN
-    #define HSGIL_DLL_EXPORT
-    #define HSGIL_DLL_IMPORT
+    #define CF__HSGIL_OS_UNKNOWN
+    #define CF__HSGIL_DLL_EXPORT
+    #define CF__HSGIL_DLL_IMPORT
     #pragma warning Unknow semantics for dynamic linking
     #error HSGIL has no support for this OS
 #endif
 
 #if defined(C__HSGIL_SHARED_LIB)
     #if defined(C__HSGIL_COMPILING)
-        #define HSGIL_API HSGIL_DLL_EXPORT
+        #define HSGIL_API CF__HSGIL_DLL_EXPORT
     #else
-        #define HSGIL_API HSGIL_DLL_IMPORT
+        #define HSGIL_API CF__HSGIL_DLL_IMPORT
     #endif
 #else
     #define HSGIL_API

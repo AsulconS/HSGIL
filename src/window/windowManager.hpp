@@ -27,9 +27,9 @@
 #include <HSGIL/config/config.hpp>
 #include <HSGIL/config/common.hpp>
 
-#if defined(HSGIL_OS_WINDOWS)
+#if defined(CF__HSGIL_OS_WINDOWS)
     #include "win32/windowManagerPlatform.hpp"
-#elif defined(HSGIL_OS_LINUX)
+#elif defined(CF__HSGIL_OS_LINUX)
     #include "linux/windowManagerPlatform.hpp"
 #else
     #error HSGIL has no support for this OS
