@@ -26,7 +26,7 @@
 
 #include <cstdint>
 
-#define MAX_PATH_LENGTH 260
+#define HSGIL_MAX_PATH_LENGTH 260
 
 namespace gil
 {
