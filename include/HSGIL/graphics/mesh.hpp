@@ -80,7 +80,7 @@ protected:
     uint32 m_EBO;
 
     Vector<uint32> m_indices;
-    Vector<float>  m_vertexData;
+    Vector<float> m_vertexData;
 };
 
 } // namespace gil
