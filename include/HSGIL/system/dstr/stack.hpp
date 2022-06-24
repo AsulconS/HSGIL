@@ -21,82 +21,116 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_TIMER_HPP
-#define HSGIL_TIMER_HPP
+#ifndef HSGIL_DSTR_STACK_HPP
+#define HSGIL_DSTR_STACK_HPP
 
 #include <HSGIL/config/config.hpp>
 #include <HSGIL/config/common.hpp>
 
-#include <HSGIL/system/time.hpp>
+#include <HSGIL/system/utility.hpp>
+
+#define HSGIL_STACK_DEFAULT_CAPACITY 16
 
 namespace gil
 {
-/**
- * @brief Timer Class that measures the time intervals, calculate Delta Time and other time stuff
- * 
- */
-class HSGIL_API Timer
+template <typename T>
+class Stack
 {
 public:
     /**
-     * @brief Construct a new Timer object
+     * @brief Construct a new Stack object
      * 
+     * @param t_capacity 
      */
-    explicit Timer(const bool t_debugMode = false, const float t_period = 1.0f);
-    /**
-     * @brief Destroy the Timer object
-     * 
-     */
-    virtual ~Timer();
+    Stack(uint64 t_capacity = HSGIL_STACK_DEFAULT_CAPACITY);
 
     /**
-     * @brief Update the timer
+     * @brief Construct a new Stack object
      * 
+     * @param o 
      */
-    void tick();
+    Stack(const Stack<T>& o);
     /**
-     * @brief Restart the timer
+     * @brief Construct a new Stack object
      * 
+     * @param o 
      */
-    void restart();
+    Stack(Stack<T>&& o);
 
     /**
-     * @brief Get the Delta Time
+     * @brief Destroy the Stack object
      * 
-     * @return float 
      */
-    secT getDeltaTime();
+    virtual ~Stack();
+
     /**
-     * @brief Get the Total Frame count
+     * @brief C-Assigns a Stack to another
      * 
-     * @return uint32 
+     * @param o 
+     * @return Stack<T>& 
      */
-    uint32 getTotalFrames();
+    Stack<T>& operator=(const Stack<T>& o);
     /**
-     * @brief Get the Frames Per Second count
+     * @brief M-Assigns a Stack to another
      * 
-     * @return uint32 
+     * @param o 
+     * @return Stack<T>& 
      */
-    uint32 getFramesPerSecond();
+    Stack<T>& operator=(Stack<T>&& o);
+
+    /**
+     * @brief Gets the size of the Stack
+     * 
+     * @return uint64 
+     */
+    uint64 size() const noexcept;
+    /**
+     * @brief Returns a boolean indicating if Stack is empty or not
+     * 
+     * @return true 
+     * @return false 
+     */
+    bool empty() const noexcept;
+
+    /**
+     * @brief Returns a reference to access last element
+     * 
+     * @return T& 
+     */
+    T& top();
+    /**
+     * @brief Returns a constant reference to access last element
+     * 
+     * @return const T& 
+     */
+    const T& top() const;
+
+    /**
+     * @brief C-Pushes a new element to the Stack
+     * 
+     * @param val 
+     */
+    void push(const T& val);
+    /**
+     * @brief M-Pushes a new element to the Stack
+     * 
+     * @param val 
+     */
+    void push(T&& val);
+    /**
+     * @brief Drops the last element of the Stack
+     * 
+     */
+    void pop();
 
 private:
-    secT procDeltaTime();
-    secT procTotalElapsedTime();
-    secT procCurrentElapsedTime();
-
-    microT m_start;
-    microT m_currentStart;
-    microT m_lastTime;
-
-    secT m_deltaTime;
-    secT m_currentTime;
-    uint32 m_totalFrames;
-    uint32 m_framesPerSecond;
-
-    secT m_period;
-    bool m_debugMode;
+    T* m_data;
+    uint64 m_size;
+    uint64 m_capacity;
 };
 
 } // namespace gil
 
-#endif // HSGIL_TIMER_HPP
+#include <HSGIL/system/dstr/stack.inl>
+
+#endif // HSGIL_DSTR_STACK_HPP

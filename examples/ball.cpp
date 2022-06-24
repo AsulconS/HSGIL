@@ -47,21 +47,21 @@ void Ball::generateBallVerticesAndIndices()
             // vertex position (x, y, z)
             z = zx * cosf(sectorAngle);             // r * cos(u) * cos(v)
             x = zx * sinf(sectorAngle);             // r * cos(u) * sin(v)
-            m_vertexData.push_back(x);
-            m_vertexData.push_back(y);
-            m_vertexData.push_back(z);
+            m_vertexData->push_back(x);
+            m_vertexData->push_back(y);
+            m_vertexData->push_back(z);
 
             // normalized vertex normal (nx, ny, nz)
             nx = x * radiusInvLen;
             ny = y * radiusInvLen;
             nz = z * radiusInvLen;
-            m_vertexData.push_back(nx);
-            m_vertexData.push_back(ny);
-            m_vertexData.push_back(nz);
+            m_vertexData->push_back(nx);
+            m_vertexData->push_back(ny);
+            m_vertexData->push_back(nz);
 
             // 0.0f UV coords
-            m_vertexData.push_back(0.0f);
-            m_vertexData.push_back(0.0f);
+            m_vertexData->push_back(0.0f);
+            m_vertexData->push_back(0.0f);
         }
     }
 
@@ -77,23 +77,23 @@ void Ball::generateBallVerticesAndIndices()
             // k1 => k2 => k1+1
             if(i != 0)
             {
-                m_indices.push_back(k1 + j);
-                m_indices.push_back(k2 + j);
-                m_indices.push_back(k1 + j + 1);
+                m_indices->push_back(k1 + j);
+                m_indices->push_back(k2 + j);
+                m_indices->push_back(k1 + j + 1);
             }
             else if(j == m_segmentCount - 1)
             {
-                m_indices.push_back(k1 + j);
-                m_indices.push_back(k2 + j);
-                m_indices.push_back(k2 + j + 1);
+                m_indices->push_back(k1 + j);
+                m_indices->push_back(k2 + j);
+                m_indices->push_back(k2 + j + 1);
             }
 
             // k1+1 => k2 => k2+1
             if(i != (m_ringCount - 1))
             {
-                m_indices.push_back(k1 + j + 1);
-                m_indices.push_back(k2 + j);
-                m_indices.push_back(k2 + j + 1);
+                m_indices->push_back(k1 + j + 1);
+                m_indices->push_back(k2 + j);
+                m_indices->push_back(k2 + j + 1);
             }
         }
     }

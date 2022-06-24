@@ -29,18 +29,12 @@
 
 #include <HSGIL/system/utility.hpp>
 
-#define _INITIAL_CAPACITY 4
+#define HSGIL_INITIAL_CAPACITY 4
 
 namespace gil
 {
-namespace _priv
-{
-HSGIL_API uint64 p2RoundUp(uint64 val);
-
-} // namespace _priv
-
 template <typename T>
-class HSGIL_API Vector
+class Vector
 {
 public:
     /**
@@ -216,8 +210,14 @@ private:
     uint64 m_capacity;
 
     void reallocate();
-    void expand(uint64 n);
+    void guaranteeSpace(uint64 n);
 };
+
+namespace hid
+{
+uint64 p2RoundUp(uint64 val);
+
+} // namespace hid
 
 } // namespace gil
 

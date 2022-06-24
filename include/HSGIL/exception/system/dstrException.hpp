@@ -21,18 +21,45 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_WINDOW_MANAGER_HPP
-#define HSGIL_WINDOW_MANAGER_HPP
+#ifndef HSGIL_DSTR_EXCEPTION_HPP
+#define HSGIL_DSTR_EXCEPTION_HPP
 
-#include <HSGIL/config/config.hpp>
-#include <HSGIL/config/common.hpp>
+#include <HSGIL/exception/genericException.hpp>
 
-#if defined(CF__HSGIL_OS_WINDOWS)
-    #include "win32/windowManagerPlatform.hpp"
-#elif defined(CF__HSGIL_OS_LINUX)
-    #include "linux/windowManagerPlatform.hpp"
-#else
-    #error HSGIL has no support for this OS
-#endif
+namespace gil
+{
+/**
+ * @brief DStr Generic Exception
+ * 
+ */
+class DStrException : public GenericException
+{
+public:
+    /**
+     * @brief Overridden method to know why exactly the DStr Exception was thrown
+     * 
+     * @return const char* 
+     */
+    virtual const char* what() const throw() override;
+};
 
-#endif // HSGIL_WINDOW_MANAGER_HPP
+/**
+ * @brief Window Exception that is thrown when a Window can't initialize
+ * 
+ */
+class KeyNotFoundException : public DStrException
+{
+public:
+    /**
+     * @brief Overridden method to know why exactly the Exception was thrown
+     * 
+     * @return const char* 
+     */
+    virtual const char* what() const throw() override;
+};
+
+} // namespace gil
+
+#include <HSGIL/exception/system/dstrException.inl>
+
+#endif // HSGIL_DSTR_EXCEPTION_HPP

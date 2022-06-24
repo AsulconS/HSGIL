@@ -21,18 +21,39 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_WINDOW_MANAGER_HPP
-#define HSGIL_WINDOW_MANAGER_HPP
+#ifndef HSGIL_SAFE_PTR_HPP
+#define HSGIL_SAFE_PTR_HPP
 
 #include <HSGIL/config/config.hpp>
 #include <HSGIL/config/common.hpp>
 
-#if defined(CF__HSGIL_OS_WINDOWS)
-    #include "win32/windowManagerPlatform.hpp"
-#elif defined(CF__HSGIL_OS_LINUX)
-    #include "linux/windowManagerPlatform.hpp"
-#else
-    #error HSGIL has no support for this OS
-#endif
+namespace gil
+{
+template <typename T>
+class HSGIL_API SafePtr final
+{
+public:
+    template <typename... TArgs>
+    SafePtr(TArgs... args);
+    SafePtr(SafePtr<T>&& o);
+    ~SafePtr();
 
-#endif // HSGIL_WINDOW_MANAGER_HPP
+    T& operator*();
+    T* operator->();
+    bool operator==(const SafePtr<T>& o);
+    bool operator!=(const SafePtr<T>& o);
+    bool operator==(const std::nullptr_t nullPtr);
+    bool operator!=(const std::nullptr_t nullPtr);
+    operator T*();
+
+private:
+    T* m_data;
+
+    SafePtr(const SafePtr<T>& o) = delete;
+};
+
+} // namespace gil
+
+#include "safePtr.inl"
+
+#endif // HSGIL_SAFE_PTR_HPP

@@ -21,82 +21,130 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_TIMER_HPP
-#define HSGIL_TIMER_HPP
+#ifndef HSGIL_DSTR_QUEUE_HPP
+#define HSGIL_DSTR_QUEUE_HPP
 
 #include <HSGIL/config/config.hpp>
 #include <HSGIL/config/common.hpp>
 
-#include <HSGIL/system/time.hpp>
+#include <HSGIL/system/utility.hpp>
+
+#define HSGIL_QUEUE_DEFAULT_CAPACITY 16
 
 namespace gil
 {
-/**
- * @brief Timer Class that measures the time intervals, calculate Delta Time and other time stuff
- * 
- */
-class HSGIL_API Timer
+template <typename T>
+class Queue
 {
 public:
     /**
-     * @brief Construct a new Timer object
+     * @brief Construct a new Queue object
      * 
+     * @param t_capacity 
      */
-    explicit Timer(const bool t_debugMode = false, const float t_period = 1.0f);
-    /**
-     * @brief Destroy the Timer object
-     * 
-     */
-    virtual ~Timer();
+    Queue(uint64 t_capacity = HSGIL_QUEUE_DEFAULT_CAPACITY);
 
     /**
-     * @brief Update the timer
+     * @brief Construct a new Queue object
      * 
+     * @param o 
      */
-    void tick();
+    Queue(const Queue<T>& o);
     /**
-     * @brief Restart the timer
+     * @brief Construct a new Queue object
      * 
+     * @param o 
      */
-    void restart();
+    Queue(Queue<T>&& o);
 
     /**
-     * @brief Get the Delta Time
+     * @brief Destroy the Queue object
      * 
-     * @return float 
      */
-    secT getDeltaTime();
+    virtual ~Queue();
+
     /**
-     * @brief Get the Total Frame count
+     * @brief C-Assigns a queue to another
      * 
-     * @return uint32 
+     * @param o 
+     * @return Queue<T>& 
      */
-    uint32 getTotalFrames();
+    Queue<T>& operator=(const Queue<T>& o);
     /**
-     * @brief Get the Frames Per Second count
+     * @brief M-Assigns a queue to another
      * 
-     * @return uint32 
+     * @param o 
+     * @return Queue<T>& 
      */
-    uint32 getFramesPerSecond();
+    Queue<T>& operator=(Queue<T>&& o);
+
+    /**
+     * @brief Gets the size of the queue
+     * 
+     * @return uint64 
+     */
+    uint64 size() const noexcept;
+    /**
+     * @brief Returns a boolean indicating if queue is empty or not
+     * 
+     * @return true 
+     * @return false 
+     */
+    bool empty() const noexcept;
+
+    /**
+     * @brief Returns a reference to access first element
+     * 
+     * @return T& 
+     */
+    T& front();
+    /**
+     * @brief Returns a constant reference to access first element
+     * 
+     * @return const T& 
+     */
+    const T& front() const;
+    /**
+     * @brief Returns a reference to access last element
+     * 
+     * @return T& 
+     */
+    T& back();
+    /**
+     * @brief Returns a constant reference to access last element
+     * 
+     * @return const T& 
+     */
+    const T& back() const;
+
+    /**
+     * @brief C-Pushes a new element to the queue
+     * 
+     * @param val 
+     */
+    void push(const T& val);
+    /**
+     * @brief M-Pushes a new element to the queue
+     * 
+     * @param val 
+     */
+    void push(T&& val);
+    /**
+     * @brief Drops the last element of the queue
+     * 
+     */
+    void pop();
 
 private:
-    secT procDeltaTime();
-    secT procTotalElapsedTime();
-    secT procCurrentElapsedTime();
-
-    microT m_start;
-    microT m_currentStart;
-    microT m_lastTime;
-
-    secT m_deltaTime;
-    secT m_currentTime;
-    uint32 m_totalFrames;
-    uint32 m_framesPerSecond;
-
-    secT m_period;
-    bool m_debugMode;
+    T* m_data;
+    uint64 m_front;
+    uint64 m_back;
+    uint64 m_size;
+    uint64 m_capacity;
 };
 
 } // namespace gil
 
-#endif // HSGIL_TIMER_HPP
+#include <HSGIL/system/dstr/queue.inl>
+
+#endif // HSGIL_DSTR_QUEUE_HPP

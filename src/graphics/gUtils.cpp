@@ -70,7 +70,7 @@ bool loadObj(const char* path, Vector<float>& vertexData, Vector<uint32>& indice
                 if(buffer[1] == ' ')
                 {
                     glm::vec3 vertex;
-                    #if defined(HSGIL_OS_WINDOWS)
+                    #if defined(CF__HSGIL_OS_WINDOWS)
                         sscanf_s(buffer, "%s %f %f %f", type, 3, &vertex.x, &vertex.y, &vertex.z);
                     #else
                         sscanf(buffer, "%s %f %f %f", type, &vertex.x, &vertex.y, &vertex.z);
@@ -80,7 +80,7 @@ bool loadObj(const char* path, Vector<float>& vertexData, Vector<uint32>& indice
                 else if(buffer[1] == 'n')
                 {
                     glm::vec3 normal;
-                    #if defined(HSGIL_OS_WINDOWS)
+                    #if defined(CF__HSGIL_OS_WINDOWS)
                         sscanf_s(buffer, "%s %f %f %f", type, 3, &normal.x, &normal.y, &normal.z);
                     #else
                         sscanf(buffer, "%s %f %f %f", type, &normal.x, &normal.y, &normal.z);
@@ -90,7 +90,7 @@ bool loadObj(const char* path, Vector<float>& vertexData, Vector<uint32>& indice
                 else if(buffer[1] == 't')
                 {
                     glm::vec2 UV;
-                    #if defined(HSGIL_OS_WINDOWS)
+                    #if defined(CF__HSGIL_OS_WINDOWS)
                         sscanf_s(buffer, "%s %f %f", type, 3, &UV.x, &UV.y);
                     #else
                         sscanf(buffer, "%s %f %f", type, &UV.x, &UV.y);
@@ -107,7 +107,7 @@ bool loadObj(const char* path, Vector<float>& vertexData, Vector<uint32>& indice
                 {
                     if(hasUVs)
                     {
-                        #if defined(HSGIL_OS_WINDOWS)
+                        #if defined(CF__HSGIL_OS_WINDOWS)
                             sscanf_s(buffer, "%s %u/%u/%u %u/%u/%u %u/%u/%u", type, 3,
                                                                               &faceVertexIndices[0], &faceUVIndices[0], &faceNormalIndices[0],
                                                                               &faceVertexIndices[1], &faceUVIndices[1], &faceNormalIndices[1],
@@ -121,7 +121,7 @@ bool loadObj(const char* path, Vector<float>& vertexData, Vector<uint32>& indice
                     }
                     else
                     {
-                        #if defined(HSGIL_OS_WINDOWS)
+                        #if defined(CF__HSGIL_OS_WINDOWS)
                             sscanf_s(buffer, "%s %u//%u %u//%u %u//%u", type, 3,
                                                                         &faceVertexIndices[0], &faceNormalIndices[0],
                                                                         &faceVertexIndices[1], &faceNormalIndices[1],
@@ -136,7 +136,7 @@ bool loadObj(const char* path, Vector<float>& vertexData, Vector<uint32>& indice
                 }
                 else if(hasUVs)
                 {
-                    #if defined(HSGIL_OS_WINDOWS)
+                    #if defined(CF__HSGIL_OS_WINDOWS)
                         sscanf_s(buffer, "%s %u/%u/ %u/%u/ %u/%u/", type, 3,
                                                                     &faceVertexIndices[0], &faceUVIndices[0],
                                                                     &faceVertexIndices[1], &faceUVIndices[1],
@@ -150,7 +150,7 @@ bool loadObj(const char* path, Vector<float>& vertexData, Vector<uint32>& indice
                 }
                 else
                 {
-                    #if defined(HSGIL_OS_WINDOWS)
+                    #if defined(CF__HSGIL_OS_WINDOWS)
                         sscanf_s(buffer, "%s %u// %u// %u//", type, 3,
                                                               &faceVertexIndices[0],
                                                               &faceVertexIndices[1],
