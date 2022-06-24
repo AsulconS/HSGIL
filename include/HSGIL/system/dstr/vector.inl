@@ -27,7 +27,7 @@ template <typename T>
 inline Vector<T>::Vector()
     : m_data     {nullptr},
       m_size     {0},
-      m_capacity {_INITIAL_CAPACITY}
+      m_capacity {HSGIL_INITIAL_CAPACITY}
 {
     m_data = new T[m_capacity];
 }
@@ -36,7 +36,7 @@ template <typename T>
 inline Vector<T>::Vector(uint64 n)
     : m_data     {nullptr},
       m_size     {n},
-      m_capacity {_priv::p2RoundUp(n)}
+      m_capacity {hid::p2RoundUp(n)}
 {
     m_data = new T[m_capacity];
 }
@@ -69,12 +69,7 @@ inline Vector<T>::Vector(Vector<T>&& o)
       m_capacity {o.m_capacity}
 {
     m_data = o.m_data;
-
     o.m_data = nullptr;
-    o.m_size = 0;
-    o.m_capacity = _INITIAL_CAPACITY;
-
-    o.m_data = new T[o.m_capacity];
 }
 
 template <typename T>
@@ -109,12 +104,7 @@ inline Vector<T>& Vector<T>::operator=(Vector<T>&& o)
     m_capacity = o.m_capacity;
 
     m_data = o.m_data;
-
     o.m_data = nullptr;
-    o.m_size = 0;
-    o.m_capacity = _INITIAL_CAPACITY;
-
-    o.m_data = new T[o.m_capacity];
 
     return (*this);
 }
@@ -128,14 +118,14 @@ inline uint64 Vector<T>::size() const noexcept
 template <typename T>
 inline void Vector<T>::resize(uint64 n)
 {
-    expand(n);
+    guaranteeSpace(n);
     m_size = n;
 }
 
 template <typename T>
 inline void Vector<T>::resize(uint64 n, const T& val)
 {
-    expand(n);
+    guaranteeSpace(n);
     for(uint64 i = m_size; i < n; ++i)
     {
         m_data[i] = val;
@@ -206,7 +196,7 @@ inline const T* Vector<T>::data() const noexcept
 template <typename T>
 inline void Vector<T>::assign(uint64 n, const T& val)
 {
-    expand(n);
+    guaranteeSpace(n);
     for(uint64 i = 0; i < n; ++i)
     {
         m_data[i] = val;
@@ -217,7 +207,7 @@ inline void Vector<T>::assign(uint64 n, const T& val)
 template <typename T>
 inline void Vector<T>::push_back(const T& val)
 {
-    if(m_size >= m_capacity)
+    if(m_size == m_capacity)
     {
         m_capacity <<= 0x1;
         reallocate();
@@ -228,7 +218,7 @@ inline void Vector<T>::push_back(const T& val)
 template <typename T>
 inline void Vector<T>::push_back(T&& val)
 {
-    if(m_size >= m_capacity)
+    if(m_size == m_capacity)
     {
         m_capacity <<= 0x1;
         reallocate();
@@ -254,7 +244,7 @@ inline void Vector<T>::clear() noexcept
 template <typename T>
 inline void Vector<T>::reallocate()
 {
-    T* n_data = new T[m_capacity];
+    T* n_data {new T[m_capacity]};
     for(uint64 i = 0; i < m_size; ++i)
     {
         n_data[i] = hsgil_move(m_data[i]);
@@ -264,13 +254,29 @@ inline void Vector<T>::reallocate()
 }
 
 template <typename T>
-inline void Vector<T>::expand(uint64 n)
+inline void Vector<T>::guaranteeSpace(uint64 n)
 {
     if(n > m_capacity)
     {
-        m_capacity = _priv::p2RoundUp(n);
+        m_capacity = hid::p2RoundUp(n);
         reallocate();
     }
 }
+
+namespace hid
+{
+inline uint64 p2RoundUp(uint64 val)
+{
+    --val;
+    val |= (val >> 0x01);
+    val |= (val >> 0x02);
+    val |= (val >> 0x04);
+    val |= (val >> 0x08);
+    val |= (val >> 0x10);
+    val |= (val >> 0x20);
+    return val + 0x1;
+}
+
+} // namespace hid
 
 } // namespace gil

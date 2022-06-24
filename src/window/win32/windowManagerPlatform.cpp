@@ -37,12 +37,12 @@ uint32 WindowManager::s_activeSessions  {0u};
 uint32 WindowManager::s_wmInstanceCount {0u};
 WMLazyPtr WindowManager::s_wmInstances[MAX_WINDOW_INSTANCES] {};
 
-std::unordered_map<HWND, uint32> WindowManager::s_hwndMap {};
+SafePtr<Map<HWND, uint32>> WindowManager::s_hwndMap {};
 
 WNDCLASSEXA WindowManager::s_gldcc {};
-const char  WindowManager::s_gldccName[GLDCC_NAME_SIZE] {"GLDCC"};
+const char WindowManager::s_gldccName[GLDCC_NAME_SIZE] {"GLDCC"};
 
-PIXELFORMATDESCRIPTOR WindowManager::s_pfd;
+PIXELFORMATDESCRIPTOR WindowManager::s_pfd {};
 const int WindowManager::s_attribs[ATTRIB_LIST_SIZE]
 {
     WGL_DRAW_TO_WINDOW_ARB  , GL_TRUE,
@@ -137,7 +137,7 @@ void WindowManager::createRenderingWindow(const char* title, int x, int y, int w
         );
         m_active = true;
         ++s_activeSessions;
-        s_hwndMap[m_windowHandle] = m_index;
+        (*s_hwndMap)[m_windowHandle] = m_index;
     }
 }
 
@@ -354,7 +354,7 @@ LRESULT CALLBACK WindowManager::HSGILProc(HWND hWnd, UINT uMsg, WPARAM wParam, L
     {
         case WM_CREATE:
             {
-                WindowManager* windowInstance = s_wmInstances[s_hwndMap[hWnd]];
+                WindowManager* windowInstance = s_wmInstances[(*s_hwndMap)[hWnd]];
                 HDC& hdc = windowInstance->m_deviceContextHandle;
                 hdc = GetDC(hWnd);
 
@@ -402,14 +402,15 @@ LRESULT CALLBACK WindowManager::HSGILProc(HWND hWnd, UINT uMsg, WPARAM wParam, L
 
                 memset(s_keyPhysicStates, 0, sizeof(s_keyPhysicStates));
 
-                MessageBoxA(0, (char*)glGetString(GL_VERSION), "OpenGL Version", 0);
-                MessageBoxA(0, (char*)glGetString(GL_SHADING_LANGUAGE_VERSION), "GLSL Version", 0);
+                std::cout << "OpenGL " << (char*)glGetString(GL_VERSION);
+                std::cout << " Renderer: " << (char*)glGetString(GL_RENDERER) << std::endl;
+                std::cout << "GLSL Version: " << (char*)glGetString(GL_SHADING_LANGUAGE_VERSION) << std::endl;
             }
             break;
 
         case WM_DESTROY:
             {
-                WindowManager* windowInstance = s_wmInstances[s_hwndMap[hWnd]];
+                WindowManager* windowInstance = s_wmInstances[(*s_hwndMap)[hWnd]];
                 --s_activeSessions;
                 windowInstance->m_active = false;
                 wglMakeCurrent(windowInstance->m_deviceContextHandle, nullptr);
@@ -423,13 +424,13 @@ LRESULT CALLBACK WindowManager::HSGILProc(HWND hWnd, UINT uMsg, WPARAM wParam, L
 
         case WM_PAINT:
             {
-                SwapBuffers(s_wmInstances[s_hwndMap[hWnd]]->m_deviceContextHandle);
+                SwapBuffers(s_wmInstances[(*s_hwndMap)[hWnd]]->m_deviceContextHandle);
             }
             break;
 
         case WM_KEYDOWN:
             {
-                WindowManager* windowInstance = s_wmInstances[s_hwndMap[hWnd]];
+                WindowManager* windowInstance = s_wmInstances[(*s_hwndMap)[hWnd]];
                 KeyboardParams params;
                 params.code = static_cast<InputCode>(wParam);
                 windowInstance->mf_eventCallbackFunction(windowInstance->m_windowCallbackInstance, KEY_PRESSED, &params);
@@ -440,7 +441,7 @@ LRESULT CALLBACK WindowManager::HSGILProc(HWND hWnd, UINT uMsg, WPARAM wParam, L
         case WM_KEYUP:
             {
                 s_keyPhysicStates[wParam] = 0;
-                WindowManager* windowInstance = s_wmInstances[s_hwndMap[hWnd]];
+                WindowManager* windowInstance = s_wmInstances[(*s_hwndMap)[hWnd]];
                 KeyboardParams params;
                 params.code = static_cast<InputCode>(wParam);
                 windowInstance->mf_eventCallbackFunction(windowInstance->m_windowCallbackInstance, KEY_RELEASED, &params);
@@ -449,7 +450,7 @@ LRESULT CALLBACK WindowManager::HSGILProc(HWND hWnd, UINT uMsg, WPARAM wParam, L
 
         case WM_KILLFOCUS:
             {
-                WindowManager* windowInstance = s_wmInstances[s_hwndMap[hWnd]];
+                WindowManager* windowInstance = s_wmInstances[(*s_hwndMap)[hWnd]];
                 for(uint32 i = 0; i < NUM_KEYS_SIZE; ++i)
                 {
                     if(s_keyPhysicStates[i])
@@ -473,7 +474,7 @@ LRESULT CALLBACK WindowManager::HSGILProc(HWND hWnd, UINT uMsg, WPARAM wParam, L
             {
                 if(!(s_mouseTrackCount++))
                     SetCapture(hWnd);
-                WindowManager* windowInstance = s_wmInstances[s_hwndMap[hWnd]];
+                WindowManager* windowInstance = s_wmInstances[(*s_hwndMap)[hWnd]];
                 MouseParams params;
                 params.code = InputCode::MOUSE_BUTTON_LEFT;
                 windowInstance->mf_eventCallbackFunction(windowInstance->m_windowCallbackInstance, BUTTON_PRESSED, &params);
@@ -482,7 +483,7 @@ LRESULT CALLBACK WindowManager::HSGILProc(HWND hWnd, UINT uMsg, WPARAM wParam, L
 
         case WM_LBUTTONUP:
             {
-                WindowManager* windowInstance = s_wmInstances[s_hwndMap[hWnd]];
+                WindowManager* windowInstance = s_wmInstances[(*s_hwndMap)[hWnd]];
                 MouseParams params;
                 params.code = InputCode::MOUSE_BUTTON_LEFT;
                 windowInstance->mf_eventCallbackFunction(windowInstance->m_windowCallbackInstance, BUTTON_RELEASED, &params);
@@ -495,7 +496,7 @@ LRESULT CALLBACK WindowManager::HSGILProc(HWND hWnd, UINT uMsg, WPARAM wParam, L
             {
                 if(!(s_mouseTrackCount++))
                     SetCapture(hWnd);
-                WindowManager* windowInstance = s_wmInstances[s_hwndMap[hWnd]];
+                WindowManager* windowInstance = s_wmInstances[(*s_hwndMap)[hWnd]];
                 MouseParams params;
                 params.code = InputCode::MOUSE_BUTTON_RIGHT;
                 windowInstance->mf_eventCallbackFunction(windowInstance->m_windowCallbackInstance, BUTTON_PRESSED, &params);
@@ -504,7 +505,7 @@ LRESULT CALLBACK WindowManager::HSGILProc(HWND hWnd, UINT uMsg, WPARAM wParam, L
 
         case WM_RBUTTONUP:
             {
-                WindowManager* windowInstance = s_wmInstances[s_hwndMap[hWnd]];
+                WindowManager* windowInstance = s_wmInstances[(*s_hwndMap)[hWnd]];
                 MouseParams params;
                 params.code = InputCode::MOUSE_BUTTON_RIGHT;
                 windowInstance->mf_eventCallbackFunction(windowInstance->m_windowCallbackInstance, BUTTON_RELEASED, &params);
@@ -517,7 +518,7 @@ LRESULT CALLBACK WindowManager::HSGILProc(HWND hWnd, UINT uMsg, WPARAM wParam, L
             {
                 if(!(s_mouseTrackCount++))
                     SetCapture(hWnd);
-                WindowManager* windowInstance = s_wmInstances[s_hwndMap[hWnd]];
+                WindowManager* windowInstance = s_wmInstances[(*s_hwndMap)[hWnd]];
                 MouseParams params;
                 params.code = InputCode::MOUSE_BUTTON_MIDDLE;
                 windowInstance->mf_eventCallbackFunction(windowInstance->m_windowCallbackInstance, BUTTON_PRESSED, &params);
@@ -526,7 +527,7 @@ LRESULT CALLBACK WindowManager::HSGILProc(HWND hWnd, UINT uMsg, WPARAM wParam, L
 
         case WM_MBUTTONUP:
             {
-                WindowManager* windowInstance = s_wmInstances[s_hwndMap[hWnd]];
+                WindowManager* windowInstance = s_wmInstances[(*s_hwndMap)[hWnd]];
                 MouseParams params;
                 params.code = InputCode::MOUSE_BUTTON_MIDDLE;
                 windowInstance->mf_eventCallbackFunction(windowInstance->m_windowCallbackInstance, BUTTON_RELEASED, &params);
@@ -539,7 +540,7 @@ LRESULT CALLBACK WindowManager::HSGILProc(HWND hWnd, UINT uMsg, WPARAM wParam, L
             {
                 if(!(s_mouseTrackCount++))
                     SetCapture(hWnd);
-                WindowManager* windowInstance = s_wmInstances[s_hwndMap[hWnd]];
+                WindowManager* windowInstance = s_wmInstances[(*s_hwndMap)[hWnd]];
                 MouseParams params;
                 params.code = InputCode::MOUSE_BUTTON_04;
                 windowInstance->mf_eventCallbackFunction(windowInstance->m_windowCallbackInstance, BUTTON_PRESSED, &params);
@@ -548,7 +549,7 @@ LRESULT CALLBACK WindowManager::HSGILProc(HWND hWnd, UINT uMsg, WPARAM wParam, L
 
         case WM_XBUTTONUP:
             {
-                WindowManager* windowInstance = s_wmInstances[s_hwndMap[hWnd]];
+                WindowManager* windowInstance = s_wmInstances[(*s_hwndMap)[hWnd]];
                 MouseParams params;
                 params.code = InputCode::MOUSE_BUTTON_04;
                 windowInstance->mf_eventCallbackFunction(windowInstance->m_windowCallbackInstance, BUTTON_RELEASED, &params);
@@ -559,7 +560,7 @@ LRESULT CALLBACK WindowManager::HSGILProc(HWND hWnd, UINT uMsg, WPARAM wParam, L
 
         case WM_MOUSEMOVE:
             {
-                WindowManager* windowInstance = s_wmInstances[s_hwndMap[hWnd]];
+                WindowManager* windowInstance = s_wmInstances[(*s_hwndMap)[hWnd]];
                 MouseParams params;
                 params.pos.x = GET_X_LPARAM(lParam);
                 params.pos.y = GET_Y_LPARAM(lParam);

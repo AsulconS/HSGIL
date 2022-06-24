@@ -1,16 +1,26 @@
-# Folders
-.vscode
-.VSCodeCounter
-other/misc
-doc
-build
+# Root directories to ignore
+/[Bb]uild/
+/[Dd]oc/
+/[Oo]ther/[Mm]isc/
 
-# Files
-.priv
+# Visual Studio cache directory
+.vs/
+
+# Visual Studio Code configuration directory
+.vscode/
+
+# Visual Studio Code counter extension directory
+.VSCodeCounter/
+
+# Utility files
+*.priv
 *.bat
+
+# OS generated files
 desktop.ini
 
-# Excecutables, pdbs and dlls
+# Builds
 *.dll
+*.lib
 *.pdb
 *.exe

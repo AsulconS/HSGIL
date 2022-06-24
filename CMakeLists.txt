@@ -37,9 +37,7 @@ endif()
 # Get Source Files
 set(HSGIL_SOURCES
     external/src/glad/glad.c
-    src/system/time.cpp
     src/system/timer.cpp
-    src/system/dstr/vector.cpp
     src/system/${HSGIL_PLATFORM}/timerPlatform.cpp
     src/graphics/gUtils.cpp
     src/graphics/mesh.cpp
@@ -73,15 +71,15 @@ if(HSGIL_BUILD_SHARED)
         GLAD_GLAPI_EXPORT
     PRIVATE
         __STDC_LIB_EXT1__
-        __HSGIL_COMPILING
-        __HSGIL_SHARED_LIB
+        C__HSGIL_COMPILING
+        C__HSGIL_SHARED_LIB
         GLAD_GLAPI_EXPORT_BUILD
     )
 else()
     target_compile_definitions(${HSGIL_LIB_NAME}
     PRIVATE
         __STDC_LIB_EXT1__
-        __HSGIL_COMPILING
+        C__HSGIL_COMPILING
     )
 endif()
 target_include_directories(${HSGIL_LIB_NAME} PRIVATE include)

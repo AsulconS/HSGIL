@@ -21,88 +21,126 @@
  *                                                                              *
  ********************************************************************************/
 
-#include <HSGIL/system/timer.hpp>
-
-#include <chrono>
-#include <iostream>
-
-#include "timerPlatform.hpp"
-
 namespace gil
 {
-Timer::Timer(const bool t_debugMode, const float t_period)
-    : m_start           {plat::getTime().getRawTimeCount()},
-      m_currentStart    {plat::getTime().getRawTimeCount()},
-      m_lastTime        {plat::getTime().getRawTimeCount()},
-      m_deltaTime       {0.0f},
-      m_currentTime     {0.0f},
-      m_totalFrames     {0},
-      m_framesPerSecond {0},
-      m_period          {t_period},
-      m_debugMode       {t_debugMode}
+template <typename T>
+inline Stack<T>::Stack(uint64 t_capacity)
+    : m_size     {0},
+      m_capacity {t_capacity}
 {
+    m_data = new T[m_capacity];
 }
 
-Timer::~Timer()
+template <typename T>
+inline Stack<T>::Stack(const Stack<T>& o)
+    : m_size     {o.m_size},
+      m_capacity {o.m_capacity}
 {
-}
-
-void Timer::tick()
-{
-    m_currentTime = procCurrentElapsedTime();
-    m_deltaTime = procDeltaTime();
-    ++m_framesPerSecond;
-    ++m_totalFrames;
-    if(m_currentTime >= m_period)
+    m_data = new T[m_capacity];
+    for(uint64 i = 0; i < m_size; ++i)
     {
-        if(m_debugMode)
-        {
-            std::cout << m_framesPerSecond << " fps" << std::endl;
-        }
-        m_currentStart    = plat::getTime().getRawTimeCount();
-        m_framesPerSecond = 0;
+        m_data[i] = o.m_data[i];
     }
 }
 
-void Timer::restart()
+template <typename T>
+inline Stack<T>::Stack(Stack<T>&& o)
+    : m_data     {o.m_data},
+      m_size     {o.m_size},
+      m_capacity {o.m_capacity}
 {
-    m_lastTime = m_currentStart = m_start = plat::getTime().getRawTimeCount();
-    m_framesPerSecond = m_totalFrames = 0;
+    o.m_data = nullptr;
 }
 
-secT Timer::getDeltaTime()
+template <typename T>
+inline Stack<T>::~Stack()
 {
-    return m_deltaTime;
+    delete[] m_data;
 }
 
-uint32 Timer::getTotalFrames()
+template <typename T>
+inline Stack<T>& Stack<T>::operator=(const Stack<T>& o)
 {
-    return m_totalFrames;
+    delete[] m_data;
+
+    m_size = o.m_size;
+    m_capacity = o.m_capacity;
+
+    m_data = new T[m_capacity];
+    for(uint64 i = 0; i < m_size; ++i)
+    {
+        m_data[i] = o.m_data[i];
+    }
+
+    return (*this);
 }
 
-uint32 Timer::getFramesPerSecond()
+template <typename T>
+inline Stack<T>& Stack<T>::operator=(Stack<T>&& o)
 {
-    return m_framesPerSecond;
+    delete[] m_data;
+
+    m_data = o.m_data;
+    m_size = o.m_size;
+    m_capacity = o.m_capacity;
+
+    o.m_data = nullptr;
+
+    return (*this);
 }
 
-secT Timer::procDeltaTime()
+template <typename T>
+inline uint64 Stack<T>::size() const noexcept
 {
-    Time currentTime {plat::getTime()};
-    secT deltaTime {(currentTime - rawTimeBuilder(m_lastTime)).asSeconds()};
-    m_lastTime = currentTime.getRawTimeCount();
-    return deltaTime;
+    return m_size;
 }
 
-secT Timer::procTotalElapsedTime()
+template <typename T>
+inline bool Stack<T>::empty() const noexcept
 {
-    Time currentTime {plat::getTime()};
-    return (currentTime - rawTimeBuilder(m_start)).asSeconds();
+    return !m_size;
 }
 
-secT Timer::procCurrentElapsedTime()
+template <typename T>
+inline T& Stack<T>::top()
 {
-    Time currentTime {plat::getTime()};
-    return (currentTime - rawTimeBuilder(m_currentStart)).asSeconds();
+    return m_data[m_size - 1];
+}
+
+template <typename T>
+inline const T& Stack<T>::top() const
+{
+    return m_data[m_size - 1];
+}
+
+template <typename T>
+inline void Stack<T>::push(const T& val)
+{
+    if(m_size == m_capacity)
+    {
+        return;
+    }
+    m_data[m_size++] = val;
+}
+
+template <typename T>
+inline void Stack<T>::push(T&& val)
+{
+    if(m_size == m_capacity)
+    {
+        return;
+    }
+    m_data[m_size++] = hsgil_move(val);
+}
+
+template <typename T>
+inline void Stack<T>::pop()
+{
+    if(!m_size)
+    {
+        return;
+    }
+    --m_size;
 }
 
 } // namespace gil

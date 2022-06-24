@@ -21,24 +21,71 @@
  *                                                                              *
  ********************************************************************************/
 
-#include <HSGIL/system/dstr/vector.hpp>
-
 namespace gil
 {
-namespace _priv
+template <typename T>
+template <typename... TArgs>
+inline SafePtr<T>::SafePtr(TArgs... args)
 {
-uint64 p2RoundUp(uint64 val)
-{
-    --val;
-    val |= (val >> 0x01);
-    val |= (val >> 0x02);
-    val |= (val >> 0x04);
-    val |= (val >> 0x08);
-    val |= (val >> 0x10);
-    val |= (val >> 0x20);
-    return val + 0x1;
+    m_data = new T(args...);
 }
 
-} // namespace _priv
+template <typename T>
+inline SafePtr<T>::SafePtr(SafePtr<T>&& o)
+    : m_data {o.m_data}
+{
+    delete o.m_data;
+}
+
+template <typename T>
+inline SafePtr<T>::~SafePtr()
+{
+    if(m_data != nullptr)
+    {
+        delete m_data;
+    }
+}
+
+template <typename T>
+inline T& SafePtr<T>::operator*()
+{
+    return *m_data;
+}
+
+template <typename T>
+inline T* SafePtr<T>::operator->()
+{
+    return m_data;
+}
+
+template <typename T>
+inline bool SafePtr<T>::operator==(const SafePtr<T>& o)
+{
+    return this->m_data == o.m_data;
+}
+
+template <typename T>
+inline bool SafePtr<T>::operator!=(const SafePtr<T>& o)
+{
+    return this->m_data != o.m_data;
+}
+
+template <typename T>
+inline bool SafePtr<T>::operator==(const std::nullptr_t nullPtr)
+{
+    return this->m_data == nullPtr;
+}
+
+template <typename T>
+inline bool SafePtr<T>::operator!=(const std::nullptr_t nullPtr)
+{
+    return this->m_data != nullPtr;
+}
+
+template <typename T>
+inline SafePtr<T>::operator T*()
+{
+    return m_data;
+}
 
 } // namespace gil

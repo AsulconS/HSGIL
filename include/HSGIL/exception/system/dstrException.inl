@@ -21,18 +21,16 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_WINDOW_MANAGER_HPP
-#define HSGIL_WINDOW_MANAGER_HPP
+namespace gil
+{
+inline const char* DStrException::what() const throw()
+{
+    return "gil::DStrException : Data Structure Exception";
+}
 
-#include <HSGIL/config/config.hpp>
-#include <HSGIL/config/common.hpp>
+inline const char* KeyNotFoundException::what() const throw()
+{
+    return "gil::KeyNotFoundException : Key Not Found in the container";
+}
 
-#if defined(CF__HSGIL_OS_WINDOWS)
-    #include "win32/windowManagerPlatform.hpp"
-#elif defined(CF__HSGIL_OS_LINUX)
-    #include "linux/windowManagerPlatform.hpp"
-#else
-    #error HSGIL has no support for this OS
-#endif
-
-#endif // HSGIL_WINDOW_MANAGER_HPP
+} // namespace gil
