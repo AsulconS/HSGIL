@@ -84,9 +84,9 @@ private:
     secT procTotalElapsedTime();
     secT procCurrentElapsedTime();
 
-    Time m_start;
-    Time m_currentStart;
-    Time m_lastTime;
+    microT m_start;
+    microT m_currentStart;
+    microT m_lastTime;
 
     secT m_deltaTime;
     secT m_currentTime;

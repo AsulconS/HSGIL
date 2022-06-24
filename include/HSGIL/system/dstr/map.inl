@@ -144,7 +144,7 @@ inline bool Map<Key, T, Comp>::contains(const Key& key) const
 }
 
 template <typename Key, typename T, typename Comp>
-inline Map<Key, T, Comp>::Node* Map<Key, T, Comp>::h_clone(const Node* root) const
+inline typename Map<Key, T, Comp>::Node* Map<Key, T, Comp>::h_clone(const Node* root) const
 {
     if(root == nullptr)
     {
@@ -154,7 +154,7 @@ inline Map<Key, T, Comp>::Node* Map<Key, T, Comp>::h_clone(const Node* root) con
 }
 
 template <typename Key, typename T, typename Comp>
-inline Map<Key, T, Comp>::Node* Map<Key, T, Comp>::h_find(const Key& key, Node* root)
+inline typename Map<Key, T, Comp>::Node* Map<Key, T, Comp>::h_find(const Key& key, Node* root)
 {
     if(root == nullptr)
     {
@@ -172,7 +172,7 @@ inline Map<Key, T, Comp>::Node* Map<Key, T, Comp>::h_find(const Key& key, Node* 
 }
 
 template <typename Key, typename T, typename Comp>
-inline const Map<Key, T, Comp>::Node* Map<Key, T, Comp>::h_find(const Key& key, const Node* root) const
+inline const typename Map<Key, T, Comp>::Node* Map<Key, T, Comp>::h_find(const Key& key, const Node* root) const
 {
     if(root == nullptr)
     {
@@ -190,25 +190,41 @@ inline const Map<Key, T, Comp>::Node* Map<Key, T, Comp>::h_find(const Key& key, 
 }
 
 template <typename Key, typename T, typename Comp>
-inline Map<Key, T, Comp>::Node* Map<Key, T, Comp>::h_stdInsert(const Key& key, Node* root)
+inline typename Map<Key, T, Comp>::Node* Map<Key, T, Comp>::h_stdInsert(const Key& key)
 {
-    if(root == nullptr)
+    Node* parent {nullptr};
+    Node* current {m_root};
+    while(current != nullptr)
     {
-        return root = new Node {{key, T {}}, HSGIL_CONST_RED, nullptr, nullptr};
+        parent = current;
+        if(mf_comp(key, current->data.first))
+        {
+            current = current->left;
+        }
+        else if(mf_comp(current->data.first, key))
+        {
+            current = current->right;
+        }
+        else
+        {
+            return;
+        }
     }
-    if(mf_comp(key, root->data.first))
+
+    Node* node {new Node {{key, T {}}, parent, nullptr, nullptr, HSGIL_CONST_RED}};
+    if(parent == nullptr)
     {
-        return h_insert(key, root->left);
+        m_root = node;
     }
-    if(mf_comp(root->data.first, key))
-    {
-        return h_insert(key, root->right);
-    }
-    return nullptr;
+    else if(m)
+
+    if(node->parent == nullptr)
+
+    return node;
 }
 
 template <typename Key, typename T, typename Comp>
-inline Map<Key, T, Comp>::Node* Map<Key, T, Comp>::h_stdInsert(Key&& key, Node* root)
+inline typename Map<Key, T, Comp>::Node* Map<Key, T, Comp>::h_stdInsert(Key&& key)
 {
     if(root == nullptr)
     {

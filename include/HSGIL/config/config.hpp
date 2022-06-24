@@ -41,7 +41,7 @@
     #define CF__HSGIL_OS_UNKNOWN
     #define CF__HSGIL_DLL_EXPORT
     #define CF__HSGIL_DLL_IMPORT
-    #pragma warning Unknow semantics for dynamic linking
+    #pragma warning Unknown semantics for dynamic linking
     #error HSGIL has no support for this OS
 #endif
 

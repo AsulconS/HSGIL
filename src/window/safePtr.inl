@@ -21,75 +21,71 @@
  *                                                                              *
  ********************************************************************************/
 
-#include <HSGIL/graphics/mesh.hpp>
-
-#include <HSGIL/graphics/gUtils.hpp>
-
 namespace gil
 {
-Mesh::Mesh()
-    : m_VAO        {0},
-      m_VBO        {0},
-      m_EBO        {0},
-      m_indices    {new Vector<uint32>},
-      m_vertexData {new Vector<float>}
+template <typename T>
+template <typename... TArgs>
+inline SafePtr<T>::SafePtr(TArgs... args)
 {
+    m_data = new T(args...);
 }
 
-Mesh::Mesh(const char* path, bool hasNormals, bool hasUVs)
-    : m_VAO        {0},
-      m_VBO        {0},
-      m_EBO        {0},
-      m_indices    {new Vector<uint32>},
-      m_vertexData {new Vector<float>}
+template <typename T>
+inline SafePtr<T>::SafePtr(SafePtr<T>&& o)
+    : m_data {o.m_data}
 {
-    loadObj(path, *m_vertexData, *m_indices, hasNormals, hasUVs);
-    generate();
+    delete o.m_data;
 }
 
-Mesh::~Mesh()
+template <typename T>
+inline SafePtr<T>::~SafePtr()
 {
-    glDeleteVertexArrays(1, &m_VAO);
-    glDeleteBuffers(1, &m_VBO);
-    glDeleteBuffers(1, &m_EBO);
-    delete m_indices;
-    delete m_vertexData;
+    if(m_data != nullptr)
+    {
+        delete m_data;
+    }
 }
 
-void Mesh::draw(const Shader& shader)
+template <typename T>
+inline T& SafePtr<T>::operator*()
 {
-    shader.use();
-    glBindVertexArray(m_VAO);
-        glDrawElements(GL_TRIANGLES, (uint32)m_indices->size(), GL_UNSIGNED_INT, (void*)0);
-    glBindVertexArray(0);
+    return *m_data;
 }
 
-void Mesh::generate()
+template <typename T>
+inline T* SafePtr<T>::operator->()
 {
-    glGenVertexArrays(1, &m_VAO);
-    glGenBuffers(1, &m_VBO);
-    glGenBuffers(1, &m_EBO);
+    return m_data;
+}
 
-    glBindVertexArray(m_VAO);
+template <typename T>
+inline bool SafePtr<T>::operator==(const SafePtr<T>& o)
+{
+    return this->m_data == o.m_data;
+}
 
-    glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
-    glBufferData(GL_ARRAY_BUFFER, m_vertexData->size() * sizeof(float), m_vertexData->data(), GL_STATIC_DRAW);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indices->size() * sizeof(uint32), m_indices->data(), GL_STATIC_DRAW);
+template <typename T>
+inline bool SafePtr<T>::operator!=(const SafePtr<T>& o)
+{
+    return this->m_data != o.m_data;
+}
 
-    // Position Attrib
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
+template <typename T>
+inline bool SafePtr<T>::operator==(const std::nullptr_t nullPtr)
+{
+    return this->m_data == nullPtr;
+}
 
-    // Normal Attrib
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-    glEnableVertexAttribArray(1);
+template <typename T>
+inline bool SafePtr<T>::operator!=(const std::nullptr_t nullPtr)
+{
+    return this->m_data != nullPtr;
+}
 
-    // UV Attrib
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-    glEnableVertexAttribArray(2);
-
-    glBindVertexArray(0);
+template <typename T>
+inline SafePtr<T>::operator T*()
+{
+    return m_data;
 }
 
 } // namespace gil

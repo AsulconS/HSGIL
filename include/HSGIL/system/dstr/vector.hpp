@@ -213,11 +213,11 @@ private:
     void guaranteeSpace(uint64 n);
 };
 
-namespace priv
+namespace hid
 {
 uint64 p2RoundUp(uint64 val);
 
-} // namespace priv
+} // namespace hid
 
 } // namespace gil
 

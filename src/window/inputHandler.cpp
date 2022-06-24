@@ -26,8 +26,16 @@
 namespace gil
 {
 InputHandler::InputHandler()
-    : m_currentTime {0}
+    : m_keys         {new Map<InputCode, KeyInfo>},
+      m_mouseButtons {new Map<InputCode, MouseInfo>},
+      m_currentTime  {0}
 {
+}
+
+InputHandler::~InputHandler()
+{
+    delete m_keys;
+    delete m_mouseButtons;
 }
 
 void InputHandler::tick()
@@ -37,79 +45,79 @@ void InputHandler::tick()
 
 void InputHandler::initKey(InputCode key)
 {
-    m_keys[key].event = InputEvent::KEY_RELEASED;
-    m_keys[key].time = m_currentTime - 1;
+    (*m_keys)[key].event = InputEvent::KEY_RELEASED;
+    (*m_keys)[key].time = m_currentTime - 1;
 }
 
 bool InputHandler::onKeyDown(InputCode key)
 {
-    if(m_keys.find(key) == m_keys.end())//if(!m_keys.contains(key))
+    if(m_keys->find(key) == m_keys->end())//if(!m_keys.contains(key))
         initKey(key);
-    return (m_keys[key].event == InputEvent::KEY_PRESSED);
+    return ((*m_keys)[key].event == InputEvent::KEY_PRESSED);
 }
 
 bool InputHandler::onKeyTriggered(InputCode key)
 {
-    return onKeyDown(key) && (m_keys[key].time == m_currentTime);
+    return onKeyDown(key) && ((*m_keys)[key].time == m_currentTime);
 }
 
 bool InputHandler::onKeyUp(InputCode key)
 {
-    if(m_keys.find(key) == m_keys.end())//if(!m_keys.contains(key))
+    if(m_keys->find(key) == m_keys->end())//if(!m_keys.contains(key))
         initKey(key);
-    return (m_keys[key].event == InputEvent::KEY_RELEASED);
+    return ((*m_keys)[key].event == InputEvent::KEY_RELEASED);
 }
 
 bool InputHandler::onKeyReleased(InputCode key)
 {
-    return onKeyUp(key) && (m_keys[key].time == m_currentTime);
+    return onKeyUp(key) && ((*m_keys)[key].time == m_currentTime);
 }
 
 void InputHandler::updateKeyEvent(InputCode key, InputEvent event)
 {
-    if(m_keys[key].event != event)
+    if((*m_keys)[key].event != event)
     {
-        m_keys[key].event = event;
-        m_keys[key].time = m_currentTime;
+        (*m_keys)[key].event = event;
+        (*m_keys)[key].time = m_currentTime;
     }
 }
 
 void InputHandler::initButton(InputCode button)
 {
-    m_mouseButtons[button].event = InputEvent::BUTTON_RELEASED;
-    m_mouseButtons[button].time = m_currentTime - 1;
+    (*m_mouseButtons)[button].event = InputEvent::BUTTON_RELEASED;
+    (*m_mouseButtons)[button].time = m_currentTime - 1;
 }
 
 bool InputHandler::onClick(InputCode button)
 {
-    return onButtonDown(button) && (m_mouseButtons[button].time == m_currentTime);
+    return onButtonDown(button) && ((*m_mouseButtons)[button].time == m_currentTime);
 }
 
 bool InputHandler::onRelease(InputCode button)
 {
-    return onButtonUp(button) && (m_mouseButtons[button].time == m_currentTime);
+    return onButtonUp(button) && ((*m_mouseButtons)[button].time == m_currentTime);
 }
 
 bool InputHandler::onButtonDown(InputCode button)
 {
-    if(m_mouseButtons.find(button) == m_mouseButtons.end())//if(!m_mouseButtons.contains(button))
+    if(m_mouseButtons->find(button) == m_mouseButtons->end())//if(!m_mouseButtons.contains(button))
         initButton(button);
-    return (m_mouseButtons[button].event == InputEvent::BUTTON_PRESSED);
+    return ((*m_mouseButtons)[button].event == InputEvent::BUTTON_PRESSED);
 }
 
 bool InputHandler::onButtonUp(InputCode button)
 {
-    if(m_mouseButtons.find(button) == m_mouseButtons.end())//if(!m_mouseButtons.contains(button))
+    if(m_mouseButtons->find(button) == m_mouseButtons->end())//if(!m_mouseButtons.contains(button))
         initButton(button);
-    return (m_mouseButtons[button].event == InputEvent::BUTTON_RELEASED);
+    return ((*m_mouseButtons)[button].event == InputEvent::BUTTON_RELEASED);
 }
 
 void InputHandler::updateMouseEvent(InputCode button, InputEvent event)
 {
-    if(m_mouseButtons[button].event != event)
+    if((*m_mouseButtons)[button].event != event)
     {
-        m_mouseButtons[button].event = event;
-        m_mouseButtons[button].time = m_currentTime;
+        (*m_mouseButtons)[button].event = event;
+        (*m_mouseButtons)[button].time = m_currentTime;
     }
 }
 

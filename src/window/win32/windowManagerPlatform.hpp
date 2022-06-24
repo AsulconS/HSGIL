@@ -39,6 +39,8 @@
 
 #include <HSGIL/window/inputEvents.hpp>
 
+#include "../safePtr.hpp"
+
 #define NUM_KEYS_SIZE 256u
 #define GLDCC_NAME_SIZE 6u
 #define ATTRIB_LIST_SIZE 17u
@@ -93,7 +95,7 @@ private:
     /**
      * @brief   Window Hash Table <Window Handler, Instance ID>
      */
-    static Map<HWND, uint32> s_hwndMap;
+    static SafePtr<Map<HWND, uint32>> s_hwndMap;
 
     /* Satatic Win32 API Internal Data */
 

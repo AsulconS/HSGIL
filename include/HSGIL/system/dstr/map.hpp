@@ -37,7 +37,7 @@
 
 namespace gil
 {
-namespace priv
+namespace hid
 {
 template <typename T>
 class LessComp
@@ -45,9 +45,9 @@ class LessComp
     inline constexpr bool operator()(const T& l, const T& r) const { return l < r; }
 };
 
-} // namespace priv
+} // namespace hid
 
-template <typename Key, typename T, typename Comp = priv::LessComp<Key>>
+template <typename Key, typename T, typename Comp = hid::LessComp<Key>>
 class Map
 {
 public:
@@ -172,8 +172,8 @@ private:
     Node* h_clone(const Node* root) const;
     Node* h_find(const Key& key, Node* root);
     const Node* h_find(const Key& key, const Node* root) const;
-    Node* h_stdInsert(const Key& key, Node* root);
-    Node* h_stdInsert(Key&& key, Node* root);
+    Node* h_stdInsert(const Key& key);
+    Node* h_stdInsert(Key&& key);
     void h_makeEmpty(Node* root);
 
 private:

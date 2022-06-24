@@ -21,76 +21,39 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_INPUT_HANDLER_HPP
-#define HSGIL_INPUT_HANDLER_HPP
+#ifndef HSGIL_SAFE_PTR_HPP
+#define HSGIL_SAFE_PTR_HPP
 
 #include <HSGIL/config/config.hpp>
 #include <HSGIL/config/common.hpp>
 
-//#include <HSGIL/system/dstr/map.hpp>
-#include <map>
-#define Map std::map
-
-#include <HSGIL/math/vec2.hpp>
-
-#include <HSGIL/window/inputEvents.hpp>
-#include <HSGIL/window/inputBindings.hpp>
-
 namespace gil
 {
-/**
- * @brief InputHandler class that handles input
- * 
- */
-class HSGIL_API InputHandler
+template <typename T>
+class HSGIL_API SafePtr final
 {
-    friend class RenderingWindow;
 public:
-    InputHandler();
-    virtual ~InputHandler();
+    template <typename... TArgs>
+    SafePtr(TArgs... args);
+    SafePtr(SafePtr<T>&& o);
+    ~SafePtr();
 
-    bool onKeyDown(InputCode key);
-    bool onKeyUp(InputCode key);
-    bool onKeyReleased(InputCode key);
-    bool onKeyTriggered(InputCode key);
-
-    bool onClick(InputCode button);
-    bool onRelease(InputCode button);
-    bool onButtonDown(InputCode button);
-    bool onButtonUp(InputCode button);
-
-    Vec2i getMousePos();
+    T& operator*();
+    T* operator->();
+    bool operator==(const SafePtr<T>& o);
+    bool operator!=(const SafePtr<T>& o);
+    bool operator==(const std::nullptr_t nullPtr);
+    bool operator!=(const std::nullptr_t nullPtr);
+    operator T*();
 
 private:
-    struct KeyInfo
-    {
-        InputEvent event;
-        int32 time;
-    };
+    T* m_data;
 
-    struct MouseInfo
-    {
-        InputEvent event;
-        int32 time;
-    };
-
-private:
-    void tick();
-
-    void initKey(InputCode key);
-    void initButton(InputCode button);
-
-    void updateKeyEvent(InputCode key, InputEvent event);
-    void updateMouseEvent(InputCode button, InputEvent event);
-    void updateMousePosition(Vec2i position);
-
-    Vec2i m_mousePos;
-    Map<InputCode, KeyInfo>* m_keys;
-    Map<InputCode, MouseInfo>* m_mouseButtons;
-
-    int32 m_currentTime;
+    SafePtr(const SafePtr<T>& o) = delete;
 };
 
 } // namespace gil
 
-#endif // HSGIL_INPUT_HANLDER_HPP
+#include "safePtr.inl"
+
+#endif // HSGIL_SAFE_PTR_HPP

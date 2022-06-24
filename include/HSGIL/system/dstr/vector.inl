@@ -36,7 +36,7 @@ template <typename T>
 inline Vector<T>::Vector(uint64 n)
     : m_data     {nullptr},
       m_size     {n},
-      m_capacity {priv::p2RoundUp(n)}
+      m_capacity {hid::p2RoundUp(n)}
 {
     m_data = new T[m_capacity];
 }
@@ -258,12 +258,12 @@ inline void Vector<T>::guaranteeSpace(uint64 n)
 {
     if(n > m_capacity)
     {
-        m_capacity = priv::p2RoundUp(n);
+        m_capacity = hid::p2RoundUp(n);
         reallocate();
     }
 }
 
-namespace priv
+namespace hid
 {
 inline uint64 p2RoundUp(uint64 val)
 {
@@ -277,6 +277,6 @@ inline uint64 p2RoundUp(uint64 val)
     return val + 0x1;
 }
 
-} // namespace priv
+} // namespace hid
 
 } // namespace gil
