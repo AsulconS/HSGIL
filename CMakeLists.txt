@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.12)
 set(CMAKE_LEGACY_CYGWIN_WIN32 0)
 
 # * Set where .dlls should go (in revision)
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY $<1:${CMAKE_SOURCE_DIR}>)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY $<1:${CMAKE_SOURCE_DIR}>/lib)
 
 # Set all version configuration
 set(VERSION_MAJOR 0)
