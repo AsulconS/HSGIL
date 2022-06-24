@@ -1,6 +1,7 @@
 # Root directories to ignore
 /[Bb]uild/
 /[Dd]oc/
+/[Ll]ib/
 /[Oo]ther/[Mm]isc/
 
 # Visual Studio cache directory
