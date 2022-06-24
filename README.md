@@ -17,4 +17,4 @@
 
 ## What is HSGIL?
 
-HSGIL is an OpenSource Graphics Library written in C++ designed for a simple and handy graphics rendering. It's constantly developing and updating to improve its mechanics and features. This is also aimed at the development of the Spectrum Game Engine.
+HSGIL is an OpenSource Graphics Library written in C++ designed for a simple and handy graphics rendering. It's constantly developing and updating to improve its mechanics and features. This is also aimed at the development of the Curly Game Engine.
