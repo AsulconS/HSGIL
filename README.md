@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-    <a href="https://github.com/AsulconS/HSGIL/releases/tag/v0.1.0" target="_blank"><img src="https://img.shields.io/github/v/release/AsulconS/HSGIL"></a>
+    <a href="https://github.com/AsulconS/HSGIL/releases/tag/v0.1.0"><img src="https://img.shields.io/github/v/release/AsulconS/HSGIL"></a>
     <a href="#"><img src="https://img.shields.io/github/last-commit/AsulconS/HSGIL"></a>
     <a href="#"><img src="https://img.shields.io/github/commit-activity/y/AsulconS/HSGIL"></a>
     <a href="https://github.com/AsulconS/HSGIL/issues"><img src="https://img.shields.io/github/issues/AsulconS/HSGIL"></a>
