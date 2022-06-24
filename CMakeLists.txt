@@ -3,13 +3,13 @@ cmake_minimum_required(VERSION 3.12)
 # Disable CYGWIN Legacy Warning
 set(CMAKE_LEGACY_CYGWIN_WIN32 0)
 
-# * Set where .dlls should go (in revision)
+# Set where .dll should go
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY $<1:${CMAKE_SOURCE_DIR}>/lib)
 
 # Set all version configuration
 set(VERSION_MAJOR 0)
-set(VERSION_MINOR 0)
-set(VERSION_PATCH 2)
+set(VERSION_MINOR 1)
+set(VERSION_PATCH 1)
 set(SO_VERSION ${VERSION_MAJOR}.${VERSION_MINOR})
 set(FULL_VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH})
 
@@ -19,6 +19,7 @@ project(HSGIL VERSION ${FULL_VERSION})
 # Project options
 option(HSGIL_BUILD_SHARED "Build HSGIL in shared mode [Static by default]." OFF)
 option(HSGIL_BUILD_EXAMPLES "Build HSGIL examples." OFF)
+option(HSGIL_DEV_OPT_1 OFF)
 
 # Set C++11 as the standard
 set(CMAKE_CXX_STANDARD 11)

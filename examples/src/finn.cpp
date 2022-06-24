@@ -1,5 +1,3 @@
-#include <vld.h>
-
 #include <HSGIL/hsgil.hpp>
 
 #include <iostream>
@@ -20,8 +18,8 @@ int main()
     gil::Shader shader("3default");
     gil::setupDefaultLights(shader, position);
 
-    gil::Model finn01("finn.obj", "finn.png");
-    gil::Model finn02("finn.obj", "finn.png");
+    gil::Model finn01("res/finn.obj", "res/finn.png");
+    gil::Model finn02("res/finn.obj", "res/finn.png");
 
     glm::vec3 finn01Pos {-32.0f, -32.0f, 0.0f};
     glm::vec3 finn02Pos {32.0f, -32.0f, 0.0f};

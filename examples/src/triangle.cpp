@@ -4,7 +4,7 @@
 
 int main()
 {
-    gil::RenderingWindow window;
+    gil::RenderingWindow window(800, 600, "Triangle");
 
     if(!window.isReady())
     {

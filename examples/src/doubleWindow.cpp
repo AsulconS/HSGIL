@@ -9,10 +9,10 @@ int main()
         return -1;
     }
 
-    gil::EventHandler defaultEventHandler01;
-    gil::EventHandler defaultEventHandler02;
-    window01.setEventHandler(defaultEventHandler01);
-    window02.setEventHandler(defaultEventHandler02);
+    gil::InputHandler inputHandler01;
+    gil::InputHandler inputHandler02;
+    window01.setInputHandler(inputHandler01);
+    window02.setInputHandler(inputHandler02);
 
     while(window01.isActive() || window02.isActive())
     {

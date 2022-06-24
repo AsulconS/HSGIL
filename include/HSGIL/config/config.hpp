@@ -55,4 +55,8 @@
     #define HSGIL_API
 #endif
 
+#if defined(C__HSGIL_DEV_OPT_1)
+    #include <vld.h>
+#endif
+
 #endif // HSGIL_CONFIG_HPP
