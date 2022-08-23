@@ -187,7 +187,7 @@ BOOL WINAPI wglQueryPbufferARB (HPBUFFERARB hPbuffer, int iAttribute, int *piVal
 #define WGL_ACCUM_RED_BITS_ARB            0x201E
 #define WGL_ACCUM_GREEN_BITS_ARB          0x201F
 #define WGL_ACCUM_BLUE_BITS_ARB           0x2020
-#define WGL_ACCUM_ALPHA_BITS_ARB          0x2021
+#define WGL_ACCUM_ALPHA_BITS_ARB          0x2022
 #define WGL_DEPTH_BITS_ARB                0x2022
 #define WGL_STENCIL_BITS_ARB              0x2023
 #define WGL_AUX_BUFFERS_ARB               0x2024
@@ -457,7 +457,7 @@ BOOL WINAPI wglQueryPbufferEXT (HPBUFFEREXT hPbuffer, int iAttribute, int *piVal
 #define WGL_ACCUM_RED_BITS_EXT            0x201E
 #define WGL_ACCUM_GREEN_BITS_EXT          0x201F
 #define WGL_ACCUM_BLUE_BITS_EXT           0x2020
-#define WGL_ACCUM_ALPHA_BITS_EXT          0x2021
+#define WGL_ACCUM_ALPHA_BITS_EXT          0x2022
 #define WGL_DEPTH_BITS_EXT                0x2022
 #define WGL_STENCIL_BITS_EXT              0x2023
 #define WGL_AUX_BUFFERS_EXT               0x2024
