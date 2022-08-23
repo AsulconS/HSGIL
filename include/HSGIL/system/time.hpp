@@ -268,7 +268,7 @@ constexpr Time operator/(int64 lhs, const Time& rhs);
  * @param rhs 
  * @return Time& 
  */
-constexpr Time& operator+=(Time& lhs, const Time& rhs);
+Time& operator+=(Time& lhs, const Time& rhs);
 /**
  * @brief Subtract a Time Point to a Time Point
  * 
@@ -276,7 +276,7 @@ constexpr Time& operator+=(Time& lhs, const Time& rhs);
  * @param rhs 
  * @return Time& 
  */
-constexpr Time& operator-=(Time& lhs, const Time& rhs);
+Time& operator-=(Time& lhs, const Time& rhs);
 /**
  * @brief Multiply a floating point scalar to a Time Point
  * 
@@ -284,7 +284,7 @@ constexpr Time& operator-=(Time& lhs, const Time& rhs);
  * @param rhs 
  * @return Time& 
  */
-constexpr Time& operator*=(Time& lhs, float rhs);
+Time& operator*=(Time& lhs, float rhs);
 /**
  * @brief Multiply an integer scalar to a Time Point
  * 
@@ -292,7 +292,7 @@ constexpr Time& operator*=(Time& lhs, float rhs);
  * @param rhs 
  * @return Time& 
  */
-constexpr Time& operator*=(Time& lhs, int64 rhs);
+Time& operator*=(Time& lhs, int64 rhs);
 /**
  * @brief Divide a floating point scalar to a Time Point
  * 
@@ -300,7 +300,7 @@ constexpr Time& operator*=(Time& lhs, int64 rhs);
  * @param rhs 
  * @return Time& 
  */
-constexpr Time& operator/=(Time& lhs, float rhs);
+Time& operator/=(Time& lhs, float rhs);
 /**
  * @brief Divide an integer scalar to a Time Point
  * 
@@ -308,7 +308,7 @@ constexpr Time& operator/=(Time& lhs, float rhs);
  * @param rhs 
  * @return Time& 
  */
-constexpr Time& operator/=(Time& lhs, int64 rhs);
+Time& operator/=(Time& lhs, int64 rhs);
 
 } // namespace gil
 

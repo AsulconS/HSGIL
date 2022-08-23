@@ -91,7 +91,11 @@ install(TARGETS ${HSGIL_LIB_NAME}
 install(FILES ${CMAKE_BINARY_DIR}/${HSGIL_LIB_NAME}.pc
     DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/pkgconfig
 )
-target_link_libraries(${HSGIL_LIB_NAME} opengl32)
+if(WIN32)
+    target_link_libraries(${HSGIL_LIB_NAME} opengl32)
+else()
+    target_link_libraries(${HSGIL_LIB_NAME} GL X11)
+endif()
 
 if(HSGIL_BUILD_EXAMPLES)
     add_subdirectory(examples)
