@@ -29,10 +29,15 @@
 #include <HSGIL/config/config.hpp>
 #include <HSGIL/config/common.hpp>
 
+//#include <HSGIL/system/dstr/map.hpp>
+#include <map>
+#define Map std::map
+
 #include <HSGIL/window/inputEvents.hpp>
 #include <HSGIL/window/inputBindings.hpp>
-#include <HSGIL/window/wmLazyPtr.hpp>
-#include <HSGIL/window/wUtils.hpp>
+
+#include "../safePtr.hpp"
+#include "../wmLazyPtr.hpp"
 
 #include <X11/Xlib.h>
 #include <X11/XKBlib.h>
@@ -41,8 +46,6 @@
 
 #include <GL/glx.h>
 #include <GL/glxext.h>
-
-#include <unordered_map>
 
 #define NUM_KEYS_SIZE 256
 #define NUM_BUTTONS_SIZE 10
@@ -55,14 +58,15 @@ typedef XID XWND;
 namespace gil
 {
 class IWindow;
+struct WindowParams;
 
-typedef void (*EventCallbackFunction)(IWindow*, InputEvent, InputCode, bool);
+typedef void (*EventCallbackFunction)(IWindow*, InputEvent, WindowParams*);
 typedef void (*PFNGLXSWAPINTERVALPROC1)(Display*, GLXDrawable, int);
 typedef int  (*PFNGLXSWAPINTERVALPROC2)(int);
 
 class HSGIL_API WindowManager final
 {
-    friend WMLazyPtr;
+    friend HSGIL_API WMLazyPtr;
 public:
     static WindowManager* createInstance();
     static WindowManager* getInstance(const uint32 index);
@@ -110,7 +114,7 @@ private:
     /**
      * @brief   Window Hash Table <Window Handler, Instance ID>
      */
-    static std::unordered_map<XWND, uint32> s_hwndMap;
+    static SafePtr<Map<XWND, uint32>> s_hwndMap;
 
     /* Static Internal Data */
 

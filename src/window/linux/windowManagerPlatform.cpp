@@ -26,13 +26,17 @@
 #include <cstring>
 #include <iostream>
 
+#include "../wUtils.hpp"
+#include "../wmLazyPtr.hpp"
+#include "../windowParams.hpp"
+
 namespace gil
 {
 uint32 WindowManager::s_activeSessions  {0u};
 uint32 WindowManager::s_wmInstanceCount {0u};
 WMLazyPtr WindowManager::s_wmInstances[MAX_WINDOW_INSTANCES] {};
 
-std::unordered_map<XWND, uint32> WindowManager::s_hwndMap {};
+SafePtr<Map<XWND, uint32>> WindowManager::s_hwndMap {};
 
 const int WindowManager::s_glxAttribs[ATTRIB_LIST_SIZE]
 {
@@ -154,7 +158,7 @@ void WindowManager::createRenderingWindow(const char* title, int x, int y, int w
 
         m_active = true;
         ++s_activeSessions;
-        s_hwndMap[m_windowHandle] = m_index;
+        (*s_hwndMap)[m_windowHandle] = m_index;
     }
 }
 
@@ -387,7 +391,7 @@ int WindowManager::rawToStandard(int rawCode)
 
         case XK_Select:         return KEY_SELECT;
         case XK_Print:          return KEY_PRINT_SCREEN;
-        case XK_Execute:        return KEY_EXECUTE;
+        //case XK_Execute:        return KEY_EXECUTE;
         case XK_Help:           return KEY_HELP;
 
         case XK_Pause:          return KEY_PAUSE;
@@ -559,7 +563,7 @@ void WindowManager::HSGILProc()
     {
         case ClientMessage:
             {
-                WindowManager* windowInstance = s_wmInstances[s_hwndMap[s_event.xany.window]];
+                WindowManager* windowInstance = s_wmInstances[(*s_hwndMap)[s_event.xany.window]];
                 if(s_event.xclient.data.l[0] == windowInstance->m_atomWmDeleteWindow)
                 {
                     std::cout << "CInternal Window Destroy Request" << std::endl;
@@ -570,7 +574,7 @@ void WindowManager::HSGILProc()
 
         case DestroyNotify:
             {
-                WindowManager* windowInstance = s_wmInstances[s_hwndMap[s_event.xany.window]];
+                WindowManager* windowInstance = s_wmInstances[(*s_hwndMap)[s_event.xany.window]];
                 std::cout << "DInternal Window Destroy Request" << std::endl;
                 windowInstance->destroyWindow();
             }
@@ -579,13 +583,15 @@ void WindowManager::HSGILProc()
         case FocusOut:
             {
                 std::cout << "Lost focus" << std::endl;
-                WindowManager* windowInstance = s_wmInstances[s_hwndMap[s_event.xfocus.window]];
+                WindowManager* windowInstance = s_wmInstances[(*s_hwndMap)[s_event.xfocus.window]];
                 for(uint32 i = 0; i < NUM_KEYS_SIZE; ++i)
                 {
                     if(s_keyPhysicStates[i])
                     {
                         s_keyPhysicStates[i] = 0;
-                        windowInstance->mf_eventCallbackFunction(windowInstance->m_windowCallbackInstance, KEY_RELEASED, static_cast<InputCode>(s_keyCodesMap[i]), false);
+                        KeyboardParams params;
+                        params.code = static_cast<InputCode>(s_keyCodesMap[i]);
+                        windowInstance->mf_eventCallbackFunction(windowInstance->m_windowCallbackInstance, KEY_RELEASED, &params);
                     }
                 }
             }
@@ -593,15 +599,20 @@ void WindowManager::HSGILProc()
 
         case MotionNotify:
             {
-                // This works, but disabled temporarily
-                // printf("Mouse move: [%d, %d]\n", s_event.xmotion.x, s_event.xmotion.y);
+                WindowManager* windowInstance = s_wmInstances[(*s_hwndMap)[s_event.xany.window]];
+                MouseParams params;
+                params.pos.x = s_event.xmotion.x;
+                params.pos.y = s_event.xmotion.y;
+                windowInstance->mf_eventCallbackFunction(windowInstance->m_windowCallbackInstance, MOUSE_MOVE, &params);
             }
             break;
 
         case KeyPress:
             {
-                WindowManager* windowInstance = s_wmInstances[s_hwndMap[s_event.xany.window]];
-                windowInstance->mf_eventCallbackFunction(windowInstance->m_windowCallbackInstance, KEY_PRESSED, static_cast<InputCode>(s_keyCodesMap[s_event.xkey.keycode]), s_keyPhysicStates[s_event.xkey.keycode]);
+                WindowManager* windowInstance = s_wmInstances[(*s_hwndMap)[s_event.xany.window]];
+                KeyboardParams params;
+                params.code = static_cast<InputCode>(s_keyCodesMap[s_event.xkey.keycode]);
+                windowInstance->mf_eventCallbackFunction(windowInstance->m_windowCallbackInstance, KEY_PRESSED, &params);
                 s_keyPhysicStates[s_event.xkey.keycode] = 1;
             }
             break;
@@ -609,22 +620,28 @@ void WindowManager::HSGILProc()
         case KeyRelease:
             {
                 s_keyPhysicStates[s_event.xkey.keycode] = 0;
-                WindowManager* windowInstance = s_wmInstances[s_hwndMap[s_event.xany.window]];
-                windowInstance->mf_eventCallbackFunction(windowInstance->m_windowCallbackInstance, KEY_RELEASED, static_cast<InputCode>(s_keyCodesMap[s_event.xkey.keycode]), false);
+                WindowManager* windowInstance = s_wmInstances[(*s_hwndMap)[s_event.xany.window]];
+                KeyboardParams params;
+                params.code = static_cast<InputCode>(s_keyCodesMap[s_event.xkey.keycode]);
+                windowInstance->mf_eventCallbackFunction(windowInstance->m_windowCallbackInstance, KEY_RELEASED, &params);
             }
             break;
 
         case ButtonPress:
             {
-                WindowManager* windowInstance = s_wmInstances[s_hwndMap[s_event.xany.window]];
-                windowInstance->mf_eventCallbackFunction(windowInstance->m_windowCallbackInstance, BUTTON_PRESSED, static_cast<InputCode>(s_mouseButtonsMap[s_event.xbutton.button]), false);
+                WindowManager* windowInstance = s_wmInstances[(*s_hwndMap)[s_event.xany.window]];
+                MouseParams params;
+                params.code = static_cast<InputCode>(s_mouseButtonsMap[s_event.xbutton.button]);
+                windowInstance->mf_eventCallbackFunction(windowInstance->m_windowCallbackInstance, BUTTON_PRESSED, &params);
             }
             break;
 
         case ButtonRelease:
             {
-                WindowManager* windowInstance = s_wmInstances[s_hwndMap[s_event.xany.window]];
-                windowInstance->mf_eventCallbackFunction(windowInstance->m_windowCallbackInstance, BUTTON_RELEASED, static_cast<InputCode>(s_mouseButtonsMap[s_event.xbutton.button]), false);
+                WindowManager* windowInstance = s_wmInstances[(*s_hwndMap)[s_event.xany.window]];
+                MouseParams params;
+                params.code = static_cast<InputCode>(s_mouseButtonsMap[s_event.xbutton.button]);
+                windowInstance->mf_eventCallbackFunction(windowInstance->m_windowCallbackInstance, BUTTON_RELEASED, &params);
             }
             break;
 
