@@ -63,7 +63,7 @@ set_target_properties(${HSGIL_LIB_NAME}
 PROPERTIES
     VERSION ${PROJECT_VERSION}
     SOVERSION ${SO_VERSION}
-    PUBLIC_HEADER include/hsgil.hpp
+    PUBLIC_HEADER include/HSGIL/hsgil.hpp
 )
 configure_file(${HSGIL_LIB_NAME}.pc.in ${HSGIL_LIB_NAME}.pc @ONLY)
 if(HSGIL_BUILD_SHARED)
