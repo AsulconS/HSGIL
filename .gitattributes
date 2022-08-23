@@ -1,0 +1,15 @@
+*.h linguist-language=cpp
+*.inc linguist-language=cpp
+thirdparty/* linguist-vendored
+
+* text=auto eol=lf
+*.bat eol=crlf
+
+*.icns binary
+*.ico binary
+*.jar binary
+*.png binary
+*.jpg binary
+*.ttf binary
+*.tza binary
+Footer
