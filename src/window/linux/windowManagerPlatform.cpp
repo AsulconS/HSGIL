@@ -599,8 +599,11 @@ void WindowManager::HSGILProc()
 
         case MotionNotify:
             {
-                // This works, but disabled temporarily
-                // printf("Mouse move: [%d, %d]\n", s_event.xmotion.x, s_event.xmotion.y);
+                WindowManager* windowInstance = s_wmInstances[(*s_hwndMap)[s_event.xany.window]];
+                MouseParams params;
+                params.pos.x = s_event.xmotion.x;
+                params.pos.y = s_event.xmotion.y;
+                windowInstance->mf_eventCallbackFunction(windowInstance->m_windowCallbackInstance, MOUSE_MOVE, &params);
             }
             break;
 
