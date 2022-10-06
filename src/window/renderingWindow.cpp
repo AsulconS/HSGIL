@@ -33,7 +33,7 @@
 namespace gil
 {
 RenderingWindow::RenderingWindow(const uint32 t_width, const uint32 t_height, const char* t_title, InputHandler* t_inputHandler)
-    : IWindow {t_width, t_height, t_title, t_inputHandler}
+    : IWindow     {t_width, t_height, t_title, t_inputHandler}
 {
     m_windowManager = WindowManager::createInstance();
     m_windowManager->setEventCallbackFunction(this, eventCallback);
@@ -119,7 +119,6 @@ void RenderingWindow::eventCallback(IWindow* window, InputEvent event, WindowPar
             case KEY_PRESSED:
             case KEY_RELEASED:
                 {
-                    std::cout << "Presion Grandota " << static_cast<KeyboardParams*>(params)->code << '\n';
                     rWindow->m_inputHandler->updateKeyEvent(static_cast<KeyboardParams*>(params)->code, event);
                 }
                 break;
@@ -127,7 +126,6 @@ void RenderingWindow::eventCallback(IWindow* window, InputEvent event, WindowPar
             case BUTTON_PRESSED:
             case BUTTON_RELEASED:
                 {
-                    std::cout << "Presion Chikita " << static_cast<MouseParams*>(params)->code << '\n';
                     rWindow->m_inputHandler->updateMouseEvent(static_cast<MouseParams*>(params)->code, event);
                 }
                 break;
