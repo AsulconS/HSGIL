@@ -7,18 +7,18 @@ class Ball : public gil::Mesh
 {
 public:
     Ball(const float t_radius, const gil::uint32 t_segmentCount = 36, const gil::uint32 t_ringCount = 18);
-    virtual ~Ball() {}
+    ~Ball() final = default;
 
 private:
-    float m_radius;
-    gil::uint32 m_segmentCount;
-    gil::uint32 m_ringCount;
+    float _radius;
+    gil::uint32 _segmentCount;
+    gil::uint32 _ringCount;
 
     void generateBallVerticesAndIndices();
 };
 
 Ball::Ball(const float t_radius, const gil::uint32 t_segmentCount, const gil::uint32 t_ringCount)
-    : gil::Mesh(), m_radius(t_radius), m_segmentCount(t_segmentCount), m_ringCount(t_ringCount)
+    : gil::Mesh(), _radius(t_radius), _segmentCount(t_segmentCount), _ringCount(t_ringCount)
 {
     generateBallVerticesAndIndices();
     generate();
@@ -26,27 +26,41 @@ Ball::Ball(const float t_radius, const gil::uint32 t_segmentCount, const gil::ui
 
 void Ball::generateBallVerticesAndIndices()
 {
-    float x, y, z, zx;
-    float nx, ny, nz;
-    float radiusInvLen = 1.0f / m_radius;
+    // Vertex Coordinate values
+    float x;
+    float y;
+    float z;
+    float zx;
 
-    float sectorStep = 2 * gil::constants::PI / m_segmentCount;
-    float stackStep = gil::constants::PI / m_ringCount;
-    float sectorAngle, stackAngle;
+    // Normalized Vertex Coordinate Values
+    float nx;
+    float ny;
+    float nz;
 
-    for(gil::uint32 i = 0; i <= m_ringCount; ++i)
+    // Radius inverse helper
+    float radiusInvLen{ 1.0f / _radius };
+
+    // Sector and Stack step based on counts
+    float stackStep{ gil::constants::PI / _ringCount };
+    float sectorStep{ 2.0f * gil::constants::PI / _segmentCount };
+
+    // Sector and Stack angles
+    float stackAngle;
+    float sectorAngle;
+
+    for (int i{ 0 }; i <= _ringCount; ++i)
     {
-        stackAngle = gil::constants::PI / 2 - i * stackStep;        // starting from pi/2 to -pi/2
-        zx = m_radius * cosf(stackAngle);              // r * cos(u)
-        y  = m_radius * sinf(stackAngle);              // r * sin(u)
+        stackAngle = gil::constants::PI / 2.0f - i * stackStep; // starting from pi/2 to -pi/2
+        zx = _radius * cosf(stackAngle); // r * cos(u)
+        y = _radius * sinf(stackAngle);  // r * sin(u)
 
-        for(gil::uint32 j = 0; j < m_segmentCount; ++j)
+        for (int j{ 0 }; j < _segmentCount; ++j)
         {
-            sectorAngle = j * sectorStep;           // starting from 0 to 2pi
+            sectorAngle = j * sectorStep; // starting from 0 to 2pi
 
             // vertex position (x, y, z)
-            z = zx * cosf(sectorAngle);             // r * cos(u) * cos(v)
-            x = zx * sinf(sectorAngle);             // r * cos(u) * sin(v)
+            z = zx * cosf(sectorAngle); // r * cos(u) * cos(v)
+            x = zx * sinf(sectorAngle); // r * cos(u) * sin(v)
             m_vertexData->push_back(x);
             m_vertexData->push_back(y);
             m_vertexData->push_back(z);
@@ -62,40 +76,82 @@ void Ball::generateBallVerticesAndIndices()
             // 0.0f UV coords
             m_vertexData->push_back(0.0f);
             m_vertexData->push_back(0.0f);
+
+            // Skip if it's the first or last vertex
+            if (i == 0 || i == _ringCount)
+            {
+                break;
+            }
         }
     }
 
-    gil::uint32 k1, k2;
-    for(gil::uint32 i = 0; i < m_ringCount; ++i)
+    // index helpers
+    int k1;
+    int k2;
+
+    // vertex indices for triangles
+    int v0;
+    int v1;
+    int v2;
+    int v3;
+    for (int j{ 0 }; j < _segmentCount; ++j)
     {
-        k1 = i * m_segmentCount;       // beginning of current stack
-        k2 = k1 + m_segmentCount;      // beginning of next stack
-
-        for(gil::uint32 j = 0; j < m_segmentCount; ++j)
+        v0 = 0;
+        v1 = 1 + j;
+        v2 = 1 + j + 1;
+        if (j == _segmentCount - 1)
         {
-            // 2 triangles per sector excluding first and last stacks
-            // k1 => k2 => k1+1
-            if(i != 0)
+            v2 = 1;
+        }
+        m_indices->push_back(v0);
+        m_indices->push_back(v1);
+        m_indices->push_back(v2);
+    }
+    for (int i{ 1 }; i < _ringCount - 1; ++i)
+    {
+        k1 = 1 + (i - 1) * _segmentCount; // beginning of current ring
+        k2 = k1 + _segmentCount;          // beginning of next ring
+
+        for (int j{ 0 }; j < _segmentCount; ++j)
+        {
+            v0 = k1 + j;
+            v1 = k2 + j;
+            v2 = k2 + j + 1;
+            v3 = k1 + j + 1;
+
+            // For last segment, it must connect with the beginning
+            if (j == _segmentCount - 1)
             {
-                m_indices->push_back(k1 + j);
-                m_indices->push_back(k2 + j);
-                m_indices->push_back(k1 + j + 1);
-            }
-            else if(j == m_segmentCount - 1)
-            {
-                m_indices->push_back(k1 + j);
-                m_indices->push_back(k2 + j);
-                m_indices->push_back(k2 + j + 1);
+                v2 = k2;
+                v3 = k1;
             }
 
-            // k1+1 => k2 => k2+1
-            if(i != (m_ringCount - 1))
-            {
-                m_indices->push_back(k1 + j + 1);
-                m_indices->push_back(k2 + j);
-                m_indices->push_back(k2 + j + 1);
-            }
+            // Triangle: v0 => v1 => v2
+            m_indices->push_back(v0);
+            m_indices->push_back(v1);
+            m_indices->push_back(v2);
+
+            // Triangle: v0 => v2 => v3
+            m_indices->push_back(v0);
+            m_indices->push_back(v2);
+            m_indices->push_back(v3);
         }
+    }
+    for (int j{ 0 }; j < _segmentCount; ++j)
+    {
+        k1 = 1 + (_ringCount - 2) * _segmentCount; // beginning of current ring
+        k2 = k1 + _segmentCount;                   // beginning of next ring
+
+        v0 = k1 + j;
+        v2 = k2;
+        v3 = k1 + j + 1;
+        if (j == _segmentCount - 1)
+        {
+            v3 = k1;
+        }
+        m_indices->push_back(v0);
+        m_indices->push_back(v2);
+        m_indices->push_back(v3);
     }
 }
 
@@ -131,7 +187,7 @@ int main()
         shader.use();
 
         rigidBodyPos.y += rigidBodyJumpForce * timer.getDeltaTime();
-        glm::mat4 model = glm::mat4(1.0f);
+        glm::mat4 model{ glm::mat4(1.0f) };
         model = glm::translate(model, rigidBodyPos);
         rigidBodyJumpForce -= gil::constants::GAL * 0.0625f;
         if(rigidBodyPos.y <= 0.0f)
@@ -140,8 +196,8 @@ int main()
             rigidBodyJumpForce = 16.0f;
         }
 
-        glm::mat4 view = glm::lookAt(viewPos, glm::vec3{0.0f, 0.0f, 0.0f}, glm::vec3{0.0f, 1.0f, 0.0f});
-        glm::mat4 projection = glm::perspective(45.0f, window.getAspectRatio(), 0.1f, 100.0f);
+        glm::mat4 view{ glm::lookAt(viewPos, glm::vec3{0.0f, 0.0f, 0.0f}, glm::vec3{0.0f, 1.0f, 0.0f}) };
+        glm::mat4 projection{ glm::perspective(45.0f, window.getAspectRatio(), 0.1f, 100.0f) };
         shader.setMat4("model", model);
         shader.setMat4("view", view);
         shader.setMat4("projection", projection);
