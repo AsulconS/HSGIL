@@ -22,7 +22,7 @@ option(HSGIL_BUILD_EXAMPLES "Build HSGIL examples." OFF)
 option(HSGIL_DEV_OPT_1 OFF)
 
 # Set C++11 as the standard
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 14)
 
 # Set generic lib name
 set(HSGIL_LIB_NAME hsgil)
