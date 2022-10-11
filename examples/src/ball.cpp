@@ -48,13 +48,13 @@ void Ball::generateBallVerticesAndIndices()
     float stackAngle;
     float sectorAngle;
 
-    for (int i{ 0 }; i <= _ringCount; ++i)
+    for (gil::uint32 i{ 0 }; i <= _ringCount; ++i)
     {
         stackAngle = gil::constants::PI / 2.0f - i * stackStep; // starting from pi/2 to -pi/2
         zx = _radius * cosf(stackAngle); // r * cos(u)
         y = _radius * sinf(stackAngle);  // r * sin(u)
 
-        for (int j{ 0 }; j < _segmentCount; ++j)
+        for (gil::uint32 j{ 0 }; j < _segmentCount; ++j)
         {
             sectorAngle = j * sectorStep; // starting from 0 to 2pi
 
@@ -94,7 +94,7 @@ void Ball::generateBallVerticesAndIndices()
     int v1;
     int v2;
     int v3;
-    for (int j{ 0 }; j < _segmentCount; ++j)
+    for (gil::uint32 j{ 0 }; j < _segmentCount; ++j)
     {
         v0 = 0;
         v1 = 1 + j;
@@ -107,12 +107,12 @@ void Ball::generateBallVerticesAndIndices()
         m_indices->push_back(v1);
         m_indices->push_back(v2);
     }
-    for (int i{ 1 }; i < _ringCount - 1; ++i)
+    for (gil::uint32 i{ 1 }; i < _ringCount - 1; ++i)
     {
         k1 = 1 + (i - 1) * _segmentCount; // beginning of current ring
         k2 = k1 + _segmentCount;          // beginning of next ring
 
-        for (int j{ 0 }; j < _segmentCount; ++j)
+        for (gil::uint32 j{ 0 }; j < _segmentCount; ++j)
         {
             v0 = k1 + j;
             v1 = k2 + j;
@@ -137,7 +137,7 @@ void Ball::generateBallVerticesAndIndices()
             m_indices->push_back(v3);
         }
     }
-    for (int j{ 0 }; j < _segmentCount; ++j)
+    for (gil::uint32 j{ 0 }; j < _segmentCount; ++j)
     {
         k1 = 1 + (_ringCount - 2) * _segmentCount; // beginning of current ring
         k2 = k1 + _segmentCount;                   // beginning of next ring
