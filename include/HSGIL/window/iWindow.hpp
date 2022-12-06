@@ -48,7 +48,7 @@ public:
      * @param t_title 
      * @param t_eventHandler 
      */
-    IWindow(const uint32 t_width, const uint32 t_height, const char* t_title, InputHandler* t_inputHandler) : m_width {t_width}, m_height {t_height}, m_title {t_title}, m_ready {false}, m_inputHandler {t_inputHandler} {}
+    IWindow(const int t_width, const int t_height, const char* t_title, InputHandler* t_inputHandler) : m_windowWidth {t_width}, m_windowHeight {t_height}, m_title {t_title}, m_ready {false}, m_inputHandler {t_inputHandler} {}
     /**
      * @brief Destroy the Window object
      * 
@@ -91,6 +91,18 @@ public:
      * @return float value containing the current aspect ratio
      */
     virtual float getAspectRatio() const = 0;
+    /**
+     * @brief Get the Window Rect object as Vec2i
+     * 
+     * @return Vec2i vector containing width and height of the window in pixels
+     */
+    virtual Vec2i getWindowRect() const = 0;
+    /**
+     * @brief Get the Workspace Rect object as Vec2i
+     * 
+     * @return Vec2i vector containing width and height of the viewport in pixels
+     */
+    virtual Vec2i getViewportRect() const = 0;
 
 protected:
     /**
@@ -99,8 +111,10 @@ protected:
      */
     virtual void initializeWindow() = 0;
 
-    uint32 m_width;
-    uint32 m_height;
+    int m_windowWidth;
+    int m_windowHeight;
+    int m_viewportWidth;
+    int m_viewportHeight;
     const char* m_title;
 
     bool m_ready;

@@ -117,7 +117,7 @@ bool WindowManager::isActive()
     return m_active;
 }
 
-void WindowManager::createRenderingWindow(const char* title, int x, int y, int width, int height)
+WindowRectParams WindowManager::createRenderingWindow(const char* title, int x, int y, int width, int height)
 {
     if(!m_active)
     {
@@ -139,6 +139,17 @@ void WindowManager::createRenderingWindow(const char* title, int x, int y, int w
         ++s_activeSessions;
         (*s_hwndMap)[m_windowHandle] = m_index;
     }
+
+    RECT clientRect{};
+    RECT windowRect{};
+    WindowRectParams rectParams{};
+    GetClientRect(m_windowHandle, &clientRect);
+    GetWindowRect(m_windowHandle, &windowRect);
+    rectParams.clientWidth = clientRect.right - clientRect.left;
+    rectParams.clientHeight = clientRect.bottom - clientRect.top;
+    rectParams.windowWidth = windowRect.right - windowRect.left;
+    rectParams.windowHeight = windowRect.bottom - windowRect.top;
+    return rectParams;
 }
 
 void WindowManager::destroyWindow()

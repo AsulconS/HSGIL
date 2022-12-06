@@ -38,6 +38,7 @@
 
 #include "../safePtr.hpp"
 #include "../wmLazyPtr.hpp"
+#include "../windowParams.hpp"
 
 #include <X11/Xlib.h>
 #include <X11/XKBlib.h>
@@ -58,7 +59,6 @@ typedef XID XWND;
 namespace gil
 {
 class IWindow;
-struct WindowParams;
 
 typedef void (*EventCallbackFunction)(IWindow*, InputEvent, WindowParams*);
 typedef void (*PFNGLXSWAPINTERVALPROC1)(Display*, GLXDrawable, int);
@@ -72,7 +72,7 @@ public:
     static WindowManager* getInstance(const uint32 index);
 
     bool isActive();
-    void createRenderingWindow(const char* title, int x, int y, int width, int height);
+    WindowRectParams createRenderingWindow(const char* title, int x, int y, int width, int height);
     void destroyWindow();
 
     void setEventCallbackFunction(IWindow* t_windowCallbackInstance, EventCallbackFunction tf_eventCallbackFunction);

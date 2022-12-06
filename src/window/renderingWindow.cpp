@@ -97,12 +97,26 @@ void RenderingWindow::swapBuffers()
 
 float RenderingWindow::getAspectRatio() const
 {
-    return static_cast<float>(m_width) / static_cast<float>(m_height);
+    return static_cast<float>(m_windowWidth) / static_cast<float>(m_windowHeight);
+}
+
+Vec2i RenderingWindow::getWindowRect() const
+{
+    return { m_windowWidth, m_windowHeight };
+}
+
+Vec2i RenderingWindow::getViewportRect() const
+{
+    return { m_viewportWidth, m_viewportHeight };
 }
 
 void RenderingWindow::initializeWindow()
 {
-    m_windowManager->createRenderingWindow(m_title, 0, 0, m_width, m_height);
+    WindowRectParams rectParams{ m_windowManager->createRenderingWindow(m_title, 0, 0, m_windowWidth, m_windowHeight) };
+    m_windowWidth = rectParams.windowWidth;
+    m_windowHeight = rectParams.windowHeight;
+    m_viewportWidth = rectParams.clientWidth;
+    m_viewportHeight = rectParams.clientHeight;
     if(!m_windowManager->isActive())
     {
         throw WindowInitException();
@@ -111,7 +125,7 @@ void RenderingWindow::initializeWindow()
 
 void RenderingWindow::eventCallback(IWindow* window, InputEvent event, WindowParams* params)
 {
-    RenderingWindow* rWindow = static_cast<RenderingWindow*>(window);
+    RenderingWindow* rWindow{ static_cast<RenderingWindow*>(window) };
     if(rWindow->m_inputHandler != nullptr)
     {
         switch(event)
