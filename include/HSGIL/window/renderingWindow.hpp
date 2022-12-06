@@ -98,6 +98,18 @@ public:
      * @return float 
      */
     virtual float getAspectRatio() const override;
+    /**
+     * @brief Get the Window Rect object as Vec2i
+     * 
+     * @return Vec2i vector containing width and height of the window in pixels
+     */
+    virtual Vec2i getWindowRect() const override;
+    /**
+     * @brief Get the Workspace Rect object as Vec2i
+     * 
+     * @return Vec2i vector containing width and height of the viewport in pixels
+     */
+    virtual Vec2i getViewportRect() const override;
 
 protected:
     /**

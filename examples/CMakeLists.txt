@@ -5,7 +5,7 @@ if(HSGIL_BUILD_SHARED)
         add_custom_command(
         OUTPUT  ${CMAKE_SOURCE_DIR}/examples/${HSGIL_LIB_NAME}.dll
                 $<$<CONFIG:Debug>:${CMAKE_SOURCE_DIR}/examples/${HSGIL_LIB_NAME}.pdb>
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        COMMAND ${CMAKE_COMMAND} -E copy
                 ${CMAKE_SOURCE_DIR}/lib/${HSGIL_LIB_NAME}.dll
                 $<$<CONFIG:Debug>:${CMAKE_SOURCE_DIR}/lib/${HSGIL_LIB_NAME}.pdb>
                 ${CMAKE_SOURCE_DIR}/examples
@@ -17,7 +17,7 @@ if(HSGIL_BUILD_SHARED)
     else()
         add_custom_command(
         OUTPUT  ${CMAKE_SOURCE_DIR}/examples/lib${HSGIL_LIB_NAME}.so
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        COMMAND ${CMAKE_COMMAND} -E copy
                 ${CMAKE_SOURCE_DIR}/build/lib${HSGIL_LIB_NAME}.so
                 ${CMAKE_SOURCE_DIR}/examples
         )
