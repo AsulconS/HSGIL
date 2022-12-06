@@ -123,7 +123,7 @@ bool WindowManager::isActive()
     return m_active;
 }
 
-void WindowManager::createRenderingWindow(const char* title, int x, int y, int width, int height)
+WindowRectParams WindowManager::createRenderingWindow(const char* title, int x, int y, int width, int height)
 {
     if(!m_active)
     {
@@ -160,6 +160,8 @@ void WindowManager::createRenderingWindow(const char* title, int x, int y, int w
         ++s_activeSessions;
         (*s_hwndMap)[m_windowHandle] = m_index;
     }
+
+    return {};
 }
 
 void WindowManager::destroyWindow()

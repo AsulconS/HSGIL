@@ -41,9 +41,17 @@ struct MouseParams : public WindowParams
     Vec2i pos;
 };
 
-struct KeyboardParams: public WindowParams
+struct KeyboardParams : public WindowParams
 {
     InputCode code;
+};
+
+struct WindowRectParams : public WindowParams
+{
+    int clientWidth;
+    int clientHeight;
+    int windowWidth;
+    int windowHeight;
 };
 
 } // namespace gil

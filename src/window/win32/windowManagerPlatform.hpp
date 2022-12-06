@@ -40,6 +40,7 @@
 #include <HSGIL/window/inputEvents.hpp>
 
 #include "../safePtr.hpp"
+#include "../windowParams.hpp"
 
 #define NUM_KEYS_SIZE 256u
 #define GLDCC_NAME_SIZE 6u
@@ -49,7 +50,6 @@
 namespace gil
 {
 class IWindow;
-struct WindowParams;
 
 using EventCallbackFunction = void (*)(IWindow*, InputEvent, WindowParams*);
 
@@ -61,7 +61,7 @@ public:
     static WindowManager* getInstance(const uint32 index);
 
     bool isActive();
-    void createRenderingWindow(const char* title, int x, int y, int width, int height);
+    WindowRectParams createRenderingWindow(const char* title, int x, int y, int width, int height);
     void destroyWindow();
 
     void setEventCallbackFunction(IWindow* t_windowCallbackInstance, EventCallbackFunction tf_eventCallbackFunction);
