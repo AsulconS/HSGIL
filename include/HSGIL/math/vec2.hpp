@@ -42,8 +42,8 @@ struct Vec2f
  */
 struct Vec2i
 {
-    int x;
-    int y;
+    uint32 x;
+    uint32 y;
 };
 
 using Vec2 = Vec2f;

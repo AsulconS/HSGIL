@@ -1,7 +1,7 @@
 /********************************************************************************
  *                                                                              *
  * HSGIL - Handy Scalable Graphics Integration Library                          *
- * Copyright (c) 2019-2022 Adrian Bedregal                                      *
+ * Copyright (c) 2019-2023 Adrian Bedregal                                      *
  *                                                                              *
  * This software is provided 'as-is', without any express or implied            *
  * warranty. In no event will the authors be held liable for any damages        *
@@ -21,36 +21,37 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_COMMON_HPP
-#define HSGIL_COMMON_HPP
+#include <HSGIL/hsgil.hpp>
 
-#include <cstdint>
+#include <iostream>
 
-#define HSGIL_MAX_PATH_LENGTH 260
-
-namespace gil
+int main()
 {
-using int8   = int8_t;
-using int16  = int16_t;
-using int32  = int32_t;
-using int64  = int64_t;
-using uint8  = uint8_t;
-using uint16 = uint16_t;
-using uint32 = uint32_t;
-using uint64 = uint64_t;
+    gil::RenderingWindow window(800, 600, "Gyroscope");
+    if (!window.isReady())
+    {
+        std::cerr << "Window is not ready, something went wrong" << std::endl;
+        return -1;
+    }
 
-using secT   = float;
-using milliT = int32_t;
-using microT = int64_t;
+    gil::InputHandler inputHandler;
+    window.setInputHandler(inputHandler);
 
-using byte = uint8_t;
+    gil::Timer timer;
+    while (window.isActive())
+    {
+        window.pollEvents();
+        if (inputHandler.onKeyDown(gil::KEY_ESCAPE))
+        {
+            window.close();
+        }
 
-} // namespace gil
+        glClearColor(0.2f, 0.5f, 1.0f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
 
-namespace luis  = gil;
-namespace erick = gil;
-namespace yober = gil;
-namespace pogdo = gil;
-namespace zhong = gil;
+        window.swapBuffers();
+        timer.tick();
+    }
 
-#endif // HSGIL_COMMON_HPP
+    return 0;
+}
