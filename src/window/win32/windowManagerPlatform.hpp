@@ -40,6 +40,7 @@
 #include <HSGIL/window/inputEvents.hpp>
 
 #include "../safePtr.hpp"
+#include "../wmLazyPtr.hpp"
 #include "../windowParams.hpp"
 
 #define NUM_KEYS_SIZE 256u
