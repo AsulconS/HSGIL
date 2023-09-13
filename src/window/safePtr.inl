@@ -34,7 +34,7 @@ template <typename T>
 inline SafePtr<T>::SafePtr(SafePtr<T>&& o)
     : m_data {o.m_data}
 {
-    delete o.m_data;
+    o.m_data = nullptr;
 }
 
 template <typename T>

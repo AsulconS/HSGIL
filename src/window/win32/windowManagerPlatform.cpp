@@ -178,7 +178,14 @@ void WindowManager::pollEvents()
 
 void WindowManager::swapBuffers()
 {
-    SwapBuffers(m_deviceContextHandle);
+    if(m_active)
+    {
+        if(s_vSyncCompat)
+        {
+            wglSwapIntervalEXT(1);
+        }
+        wglSwapLayerBuffers(m_deviceContextHandle, WGL_SWAP_MAIN_PLANE);
+    }
 }
 
 WindowManager::WindowManager(const uint32 t_index)
@@ -203,7 +210,7 @@ void WindowManager::registerGLDCC()
     s_gldcc.cbWndExtra    = 0;
     s_gldcc.hInstance     = s_procInstanceHandle;
     s_gldcc.hIcon         = nullptr;
-    s_gldcc.hCursor       = LoadCursorA(nullptr, MAKEINTRESOURCEA(32512));
+    s_gldcc.hCursor       = LoadCursorA(nullptr, IDC_ARROW);
     s_gldcc.hbrBackground = (HBRUSH)(COLOR_BACKGROUND);
     s_gldcc.lpszMenuName  = nullptr;
     s_gldcc.lpszClassName = s_gldccName;
@@ -219,11 +226,11 @@ void WindowManager::loadGLExtensions()
 {
     WNDCLASSEXA dWindowClass;
     dWindowClass.cbSize         = sizeof(WNDCLASSEXA);
-    dWindowClass.style          = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
+    dWindowClass.style          = 0u;
     dWindowClass.lpfnWndProc    = DefWindowProcA;
     dWindowClass.cbClsExtra     = 0;
     dWindowClass.cbWndExtra     = 0;
-    dWindowClass.hInstance      = s_procInstanceHandle;
+    dWindowClass.hInstance      = 0;
     dWindowClass.hIcon          = nullptr;
     dWindowClass.hCursor        = nullptr;
     dWindowClass.hbrBackground  = nullptr;
@@ -240,15 +247,15 @@ void WindowManager::loadGLExtensions()
     (
         0L,                         // Extended Window Style
         dWindowClass.lpszClassName, // Window Class Name
-        "DWC",                      // Window Title
+        "",                         // Window Title
         0,                          // Window Style
 
         CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
 
-        nullptr,                // Parent Window Handle
-        nullptr,                // Menu Handle
-        dWindowClass.hInstance, // Handle to current instance
-        nullptr                 // Additional Application Data
+        nullptr,     // Parent Window Handle
+        nullptr,     // Menu Handle
+        nullptr,     // Handle to current instance
+        nullptr      // Additional Application Data
     );
 
     if(!dWindow)
@@ -390,8 +397,8 @@ LRESULT CALLBACK WindowManager::HSGILProc(HWND hWnd, UINT uMsg, WPARAM wParam, L
                 {
                     int glContextAttribs[] =
                     {
-                        WGL_CONTEXT_MAJOR_VERSION_ARB, 3,
-                        WGL_CONTEXT_MINOR_VERSION_ARB, 3,
+                        WGL_CONTEXT_MAJOR_VERSION_ARB, 4,
+                        WGL_CONTEXT_MINOR_VERSION_ARB, 6,
                         WGL_CONTEXT_PROFILE_MASK_ARB,  WGL_CONTEXT_CORE_PROFILE_BIT_ARB,
                         0
                     };
@@ -405,11 +412,6 @@ LRESULT CALLBACK WindowManager::HSGILProc(HWND hWnd, UINT uMsg, WPARAM wParam, L
                 wglMakeCurrent(hdc, glContext);
 
                 gladLoadGL();
-
-                if(s_vSyncCompat)
-                {
-                    wglSwapIntervalEXT(1);
-                }
 
                 memset(s_keyPhysicStates, 0, sizeof(s_keyPhysicStates));
 
@@ -430,12 +432,6 @@ LRESULT CALLBACK WindowManager::HSGILProc(HWND hWnd, UINT uMsg, WPARAM wParam, L
                 {
                     PostQuitMessage(0);
                 }
-            }
-            break;
-
-        case WM_PAINT:
-            {
-                SwapBuffers(s_wmInstances[(*s_hwndMap)[hWnd]]->m_deviceContextHandle);
             }
             break;
 

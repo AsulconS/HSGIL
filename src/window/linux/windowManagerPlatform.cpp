@@ -211,6 +211,17 @@ void WindowManager::swapBuffers()
 {
     if(m_active)
     {
+        if(s_vSyncCompat)
+        {
+            if(glXSwapIntervalEXTMode)
+            {
+                glXSwapInterval1(glXGetCurrentDisplay(), glXGetCurrentDrawable(), 1);
+            }
+            else
+            {
+                glXSwapInterval2(1);
+            }
+        }
         glXSwapBuffers(s_display, m_windowHandle);
     }
 }
@@ -229,8 +240,8 @@ void WindowManager::createContext()
 {
     int contextAttribs[] =
     {
-        GLX_CONTEXT_MAJOR_VERSION_ARB, 3,
-		GLX_CONTEXT_MINOR_VERSION_ARB, 3,
+        GLX_CONTEXT_MAJOR_VERSION_ARB, 4,
+		GLX_CONTEXT_MINOR_VERSION_ARB, 6,
 		GLX_CONTEXT_FLAGS_ARB, GLX_CONTEXT_FORWARD_COMPATIBLE_BIT_ARB,
 		None
 	};
@@ -257,13 +268,6 @@ void WindowManager::createContext()
 
     gladLoadGL();
 
-    if(s_vSyncCompat)
-    {
-        if(glXSwapIntervalEXTMode)
-            glXSwapInterval1(glXGetCurrentDisplay(), glXGetCurrentDrawable(), 1);
-        else
-            glXSwapInterval2(1);
-    }
     std::cout << "Context Created" << std::endl;
 }
 
