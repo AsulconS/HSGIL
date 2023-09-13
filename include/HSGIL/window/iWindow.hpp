@@ -28,6 +28,7 @@
 #include <HSGIL/config/common.hpp>
 
 #include <HSGIL/window/inputHandler.hpp>
+#include <HSGIL/window/customization.hpp>
 
 namespace gil
 {
@@ -48,7 +49,7 @@ public:
      * @param t_title 
      * @param t_eventHandler 
      */
-    IWindow(const uint32 t_width, const uint32 t_height, const char* t_title, InputHandler* t_inputHandler) : m_windowWidth {t_width}, m_windowHeight {t_height}, m_title {t_title}, m_ready {false}, m_inputHandler {t_inputHandler} {}
+    IWindow(const uint32 t_width, const uint32 t_height, const char* t_title, WindowStyle t_style, InputHandler* t_inputHandler) : m_windowWidth {t_width}, m_windowHeight {t_height}, m_title {t_title}, m_style {t_style}, m_ready {false}, m_inputHandler {t_inputHandler} {}
     /**
      * @brief Destroy the Window object
      * 
@@ -116,6 +117,7 @@ protected:
     uint32 m_viewportWidth;
     uint32 m_viewportHeight;
     const char* m_title;
+    WindowStyle m_style;
 
     bool m_ready;
 

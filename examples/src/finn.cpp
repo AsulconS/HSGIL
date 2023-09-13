@@ -4,7 +4,7 @@
 
 int main()
 {
-    gil::RenderingWindow window(800, 600, "Finn");
+    gil::RenderingWindow window(800, 600, "Finn", gil::WindowStyle::BORDERLESS_FULLSCREEN_STYLE);
     if(!window.isReady())
     {
         return -1;
@@ -44,12 +44,12 @@ int main()
         shader.use();
 
         float deltaTime {timer.getDeltaTime()};
-        if(inputHandler.onButtonDown(gil::MOUSE_BUTTON_LEFT))
+        if(inputHandler.onKeyDown(gil::KEY_D))
         {
             finn01Pos.x += 1.0f * moveWeight * deltaTime;
             finn02Pos.x += 1.0f * moveWeight * deltaTime;
         }
-        if(inputHandler.onButtonDown(gil::MOUSE_BUTTON_RIGHT))
+        if(inputHandler.onKeyDown(gil::KEY_A))
         {
             finn01Pos.x -= 1.0f * moveWeight * deltaTime;
             finn02Pos.x -= 1.0f * moveWeight * deltaTime;
@@ -65,9 +65,13 @@ int main()
             finn02Pos.z -= 1.0f * moveWeight * deltaTime;
         }
 
-        if(inputHandler.onKeyDown(gil::KEY_R))
+        if(inputHandler.onKeyDown(gil::KEY_Q))
         {
             yRotationAngle += 1.0f * yRotationWeight * deltaTime;
+        }
+        if(inputHandler.onKeyDown(gil::KEY_E))
+        {
+            yRotationAngle -= 1.0f * yRotationWeight * deltaTime;
         }
 
         if(inputHandler.onClick(gil::MOUSE_BUTTON_MIDDLE))

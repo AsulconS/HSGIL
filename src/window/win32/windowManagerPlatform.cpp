@@ -117,16 +117,42 @@ bool WindowManager::isActive()
     return m_active;
 }
 
-WindowRectParams WindowManager::createRenderingWindow(const char* title, int x, int y, int width, int height)
+WindowRectParams WindowManager::createRenderingWindow(const char* title, int x, int y, int width, int height, WindowStyle style)
 {
     if(!m_active)
     {
+        DWORD windowStyle = WS_VISIBLE;
+        switch(style)
+        {
+            case WindowStyle::WINDOWED_STYLE:
+                {
+                    windowStyle |= WS_OVERLAPPEDWINDOW;
+                }
+                break;
+            case WindowStyle::BORDERLESS_STYLE:
+                {
+                    windowStyle |= WS_POPUP | WS_BORDER;
+                    x = y = 0; // Disable positioning since its borderless
+                }
+                break;
+            case WindowStyle::BORDERLESS_FULLSCREEN_STYLE:
+                {
+                    windowStyle |= WS_POPUP | WS_BORDER;
+                    width  = GetSystemMetrics(SM_CXSCREEN); // Fix width  to fullscreen
+                    height = GetSystemMetrics(SM_CYSCREEN); // Fix height to fullscreen
+                    x = y = 0; // Disable positioning since its borderless
+                }
+                break;
+            default:
+                break;
+        };
+
         m_windowHandle = CreateWindowExA
         (
-            0L,                               // Extended Window Style
-            s_gldcc.lpszClassName,            // Window Class Name
-            title,                            // Window Title
-            WS_OVERLAPPEDWINDOW | WS_VISIBLE, // Window Style
+            0L,                     // Extended Window Style
+            s_gldcc.lpszClassName,  // Window Class Name
+            title,                  // Window Title
+            windowStyle,            // Window Style
 
             x, y, width, height,
 

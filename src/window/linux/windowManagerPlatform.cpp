@@ -123,7 +123,7 @@ bool WindowManager::isActive()
     return m_active;
 }
 
-WindowRectParams WindowManager::createRenderingWindow(const char* title, int x, int y, int width, int height)
+WindowRectParams WindowManager::createRenderingWindow(const char* title, int x, int y, int width, int height, WindowStyle style)
 {
     if(!m_active)
     {

@@ -38,6 +38,7 @@
 #define Map std::map
 
 #include <HSGIL/window/inputEvents.hpp>
+#include <HSGIL/window/customization.hpp>
 
 #include "../safePtr.hpp"
 #include "../wmLazyPtr.hpp"
@@ -62,7 +63,7 @@ public:
     static WindowManager* getInstance(const uint32 index);
 
     bool isActive();
-    WindowRectParams createRenderingWindow(const char* title, int x, int y, int width, int height);
+    WindowRectParams createRenderingWindow(const char* title, int x, int y, int width, int height, WindowStyle style);
     void destroyWindow();
 
     void setEventCallbackFunction(IWindow* t_windowCallbackInstance, EventCallbackFunction tf_eventCallbackFunction);

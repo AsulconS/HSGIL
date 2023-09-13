@@ -30,6 +30,7 @@
 #include <HSGIL/window/iWindow.hpp>
 #include <HSGIL/window/inputEvents.hpp>
 #include <HSGIL/window/inputHandler.hpp>
+#include <HSGIL/window/customization.hpp>
 
 namespace gil
 {
@@ -49,7 +50,7 @@ public:
      * @param t_width 
      * @param t_height 
      */
-    explicit RenderingWindow(const uint32 t_width = 800u, const uint32 t_height = 600u, const char* t_title = "Untitled", InputHandler* t_inputHandler = nullptr);
+    explicit RenderingWindow(const uint32 t_width = 800u, const uint32 t_height = 600u, const char* t_title = "Untitled", WindowStyle t_style = WindowStyle::WINDOWED_STYLE, InputHandler* t_inputHandler = nullptr);
     /**
      * @brief Destroy the RenderingWindow object
      * 
