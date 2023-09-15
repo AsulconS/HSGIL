@@ -520,7 +520,7 @@ LRESULT CALLBACK WindowManager::HSGILProc(HWND hWnd, UINT uMsg, WPARAM wParam, L
                 MouseParams params;
                 params.code = InputCode::MOUSE_BUTTON_LEFT;
                 windowInstance->mf_eventCallbackFunction(windowInstance->m_windowCallbackInstance, BUTTON_RELEASED, &params);
-                if(!(s_mouseTrackCount--))
+                if(!(--s_mouseTrackCount))
                     ReleaseCapture();
             }
             break;
@@ -542,7 +542,7 @@ LRESULT CALLBACK WindowManager::HSGILProc(HWND hWnd, UINT uMsg, WPARAM wParam, L
                 MouseParams params;
                 params.code = InputCode::MOUSE_BUTTON_RIGHT;
                 windowInstance->mf_eventCallbackFunction(windowInstance->m_windowCallbackInstance, BUTTON_RELEASED, &params);
-                if(!(s_mouseTrackCount--))
+                if(!(--s_mouseTrackCount))
                     ReleaseCapture();
             }
             break;
@@ -564,7 +564,7 @@ LRESULT CALLBACK WindowManager::HSGILProc(HWND hWnd, UINT uMsg, WPARAM wParam, L
                 MouseParams params;
                 params.code = InputCode::MOUSE_BUTTON_MIDDLE;
                 windowInstance->mf_eventCallbackFunction(windowInstance->m_windowCallbackInstance, BUTTON_RELEASED, &params);
-                if(!(s_mouseTrackCount--))
+                if(!(--s_mouseTrackCount))
                     ReleaseCapture();
             }
             break;
@@ -586,7 +586,7 @@ LRESULT CALLBACK WindowManager::HSGILProc(HWND hWnd, UINT uMsg, WPARAM wParam, L
                 MouseParams params;
                 params.code = InputCode::MOUSE_BUTTON_04;
                 windowInstance->mf_eventCallbackFunction(windowInstance->m_windowCallbackInstance, BUTTON_RELEASED, &params);
-                if(!(s_mouseTrackCount--))
+                if(!(--s_mouseTrackCount))
                     ReleaseCapture();
             }
             break;

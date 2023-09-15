@@ -4,7 +4,7 @@
 
 int main()
 {
-    gil::RenderingWindow window(800, 600, "Finn", gil::WindowStyle::BORDERLESS_FULLSCREEN_STYLE);
+    gil::RenderingWindow window(800, 600, "Finn", gil::WindowStyle::WINDOWED_STYLE);
     if(!window.isReady())
     {
         return -1;
@@ -65,11 +65,11 @@ int main()
             finn02Pos.z -= 1.0f * moveWeight * deltaTime;
         }
 
-        if(inputHandler.onKeyDown(gil::KEY_Q))
+        if(inputHandler.onKeyDown(gil::KEY_Q) || inputHandler.onButtonDown(gil::MOUSE_BUTTON_LEFT))
         {
             yRotationAngle += 1.0f * yRotationWeight * deltaTime;
         }
-        if(inputHandler.onKeyDown(gil::KEY_E))
+        if(inputHandler.onKeyDown(gil::KEY_E) || inputHandler.onButtonDown(gil::MOUSE_BUTTON_RIGHT))
         {
             yRotationAngle -= 1.0f * yRotationWeight * deltaTime;
         }
@@ -77,16 +77,6 @@ int main()
         if(inputHandler.onClick(gil::MOUSE_BUTTON_MIDDLE))
         {
             std::cout << inputHandler.getMousePos().x << " " << inputHandler.getMousePos().y << std::endl;
-        }
-
-        if(inputHandler.onClick(gil::MOUSE_BUTTON_04))
-        {
-            std::cout << " BOTON 4 " << std::endl;
-        }
-
-        if(inputHandler.onClick(gil::MOUSE_BUTTON_05))
-        {
-            std::cout << " BOTON 5 " << std::endl;
         }
 
         glm::mat4 view = glm::lookAt(64.0f * position, glm::vec3{0.0f, 0.0f, 0.0f}, glm::vec3{0.0f, 1.0f, 0.0f});
