@@ -1,7 +1,7 @@
 /********************************************************************************
  *                                                                              *
  * HSGIL - Handy Scalable Graphics Integration Library                          *
- * Copyright (c) 2019-2021 Adrian Bedregal                                      *
+ * Copyright (c) 2019-2022 Adrian Bedregal                                      *
  *                                                                              *
  * This software is provided 'as-is', without any express or implied            *
  * warranty. In no event will the authors be held liable for any damages        *
@@ -28,6 +28,7 @@
 #include <HSGIL/config/common.hpp>
 
 #include <HSGIL/window/inputHandler.hpp>
+#include <HSGIL/window/customization.hpp>
 
 namespace gil
 {
@@ -48,7 +49,7 @@ public:
      * @param t_title 
      * @param t_eventHandler 
      */
-    IWindow(const uint32 t_width, const uint32 t_height, const char* t_title, InputHandler* t_inputHandler) : m_width {t_width}, m_height {t_height}, m_title {t_title}, m_ready {false}, m_inputHandler {t_inputHandler} {}
+    IWindow(const uint32 t_width, const uint32 t_height, const char* t_title, WindowStyle t_style, InputHandler* t_inputHandler) : m_windowWidth {t_width}, m_windowHeight {t_height}, m_title {t_title}, m_style {t_style}, m_ready {false}, m_inputHandler {t_inputHandler} {}
     /**
      * @brief Destroy the Window object
      * 
@@ -91,6 +92,18 @@ public:
      * @return float value containing the current aspect ratio
      */
     virtual float getAspectRatio() const = 0;
+    /**
+     * @brief Get the Window Rect object as Vec2i
+     * 
+     * @return Vec2i vector containing width and height of the window in pixels
+     */
+    virtual Vec2i getWindowRect() const = 0;
+    /**
+     * @brief Get the Workspace Rect object as Vec2i
+     * 
+     * @return Vec2i vector containing width and height of the viewport in pixels
+     */
+    virtual Vec2i getViewportRect() const = 0;
 
 protected:
     /**
@@ -99,9 +112,12 @@ protected:
      */
     virtual void initializeWindow() = 0;
 
-    uint32 m_width;
-    uint32 m_height;
+    uint32 m_windowWidth;
+    uint32 m_windowHeight;
+    uint32 m_viewportWidth;
+    uint32 m_viewportHeight;
     const char* m_title;
+    WindowStyle m_style;
 
     bool m_ready;
 

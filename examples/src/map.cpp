@@ -1,4 +1,3 @@
-#include <vld.h>
 #include <HSGIL/system/dstr/map.hpp>
 
 #include <iostream>

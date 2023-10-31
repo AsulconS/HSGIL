@@ -1,7 +1,7 @@
 /********************************************************************************
  *                                                                              *
  * HSGIL - Handy Scalable Graphics Integration Library                          *
- * Copyright (c) 2019-2021 Adrian Bedregal                                      *
+ * Copyright (c) 2019-2022 Adrian Bedregal                                      *
  *                                                                              *
  * This software is provided 'as-is', without any express or implied            *
  * warranty. In no event will the authors be held liable for any damages        *
@@ -42,8 +42,8 @@ struct Vec2f
  */
 struct Vec2i
 {
-    int x;
-    int y;
+    uint32 x;
+    uint32 y;
 };
 
 using Vec2 = Vec2f;

@@ -1,7 +1,7 @@
 /********************************************************************************
  *                                                                              *
  * HSGIL - Handy Scalable Graphics Integration Library                          *
- * Copyright (c) 2019-2021 Adrian Bedregal                                      *
+ * Copyright (c) 2019-2022 Adrian Bedregal                                      *
  *                                                                              *
  * This software is provided 'as-is', without any express or implied            *
  * warranty. In no event will the authors be held liable for any damages        *
@@ -29,10 +29,17 @@
 #include <HSGIL/config/config.hpp>
 #include <HSGIL/config/common.hpp>
 
+//#include <HSGIL/system/dstr/map.hpp>
+#include <map>
+#define Map std::map
+
 #include <HSGIL/window/inputEvents.hpp>
 #include <HSGIL/window/inputBindings.hpp>
-#include <HSGIL/window/wmLazyPtr.hpp>
-#include <HSGIL/window/wUtils.hpp>
+#include <HSGIL/window/customization.hpp>
+
+#include "../safePtr.hpp"
+#include "../wmLazyPtr.hpp"
+#include "../windowParams.hpp"
 
 #include <X11/Xlib.h>
 #include <X11/XKBlib.h>
@@ -41,8 +48,6 @@
 
 #include <GL/glx.h>
 #include <GL/glxext.h>
-
-#include <unordered_map>
 
 #define NUM_KEYS_SIZE 256
 #define NUM_BUTTONS_SIZE 10
@@ -56,19 +61,19 @@ namespace gil
 {
 class IWindow;
 
-typedef void (*EventCallbackFunction)(IWindow*, InputEvent, InputCode, bool);
+typedef void (*EventCallbackFunction)(IWindow*, InputEvent, WindowParams*);
 typedef void (*PFNGLXSWAPINTERVALPROC1)(Display*, GLXDrawable, int);
 typedef int  (*PFNGLXSWAPINTERVALPROC2)(int);
 
 class HSGIL_API WindowManager final
 {
-    friend WMLazyPtr;
+    friend HSGIL_API WMLazyPtr;
 public:
     static WindowManager* createInstance();
     static WindowManager* getInstance(const uint32 index);
 
     bool isActive();
-    void createRenderingWindow(const char* title, int x, int y, int width, int height);
+    WindowRectParams createRenderingWindow(const char* title, int x, int y, int width, int height, WindowStyle style);
     void destroyWindow();
 
     void setEventCallbackFunction(IWindow* t_windowCallbackInstance, EventCallbackFunction tf_eventCallbackFunction);
@@ -110,7 +115,7 @@ private:
     /**
      * @brief   Window Hash Table <Window Handler, Instance ID>
      */
-    static std::unordered_map<XWND, uint32> s_hwndMap;
+    static SafePtr<Map<XWND, uint32>> s_hwndMap;
 
     /* Static Internal Data */
 

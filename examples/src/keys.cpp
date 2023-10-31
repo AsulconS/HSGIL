@@ -8,8 +8,8 @@ int main()
         return -1;
     }
 
-    gil::EventHandler defaultEventHandler;
-    window.setEventHandler(defaultEventHandler);
+    gil::InputHandler inputHandler;
+    window.setInputHandler(inputHandler);
 
     while(window.isActive())
     {

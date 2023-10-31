@@ -1,7 +1,7 @@
 /********************************************************************************
  *                                                                              *
  * HSGIL - Handy Scalable Graphics Integration Library                          *
- * Copyright (c) 2019-2021 Adrian Bedregal                                      *
+ * Copyright (c) 2019-2022 Adrian Bedregal                                      *
  *                                                                              *
  * This software is provided 'as-is', without any express or implied            *
  * warranty. In no event will the authors be held liable for any damages        *
@@ -37,14 +37,7 @@ Model::Model(const char* path, const char* texturePath, bool hasNormals, bool ha
     : m_mesh       {path, hasNormals, hasUVs},
       m_diffuseMap {0}
 {
-    if(texturePath != nullptr)
-    {
-        m_diffuseMap = loadTexture(texturePath);
-    }
-    else
-    {
-        m_diffuseMap = loadTexture("default.png");
-    }
+    m_diffuseMap = loadTexture(texturePath);
 }
 
 Model::~Model()

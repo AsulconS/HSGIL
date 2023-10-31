@@ -21,76 +21,17 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_INPUT_HANDLER_HPP
-#define HSGIL_INPUT_HANDLER_HPP
-
-#include <HSGIL/config/config.hpp>
-#include <HSGIL/config/common.hpp>
-
-//#include <HSGIL/system/dstr/map.hpp>
-#include <map>
-#define Map std::map
-
-#include <HSGIL/math/vec2.hpp>
-
-#include <HSGIL/window/inputEvents.hpp>
-#include <HSGIL/window/inputBindings.hpp>
+#ifndef HSGIL_WINDOW_CUSTOMIZATION_HPP
+#define HSGIL_WINDOW_CUSTOMIZATION_HPP
 
 namespace gil
 {
-/**
- * @brief InputHandler class that handles input
- * 
- */
-class HSGIL_API InputHandler
-{
-    friend class RenderingWindow;
-public:
-    InputHandler();
-    virtual ~InputHandler();
-
-    bool onKeyDown(InputCode key);
-    bool onKeyUp(InputCode key);
-    bool onKeyReleased(InputCode key);
-    bool onKeyTriggered(InputCode key);
-
-    bool onClick(InputCode button);
-    bool onRelease(InputCode button);
-    bool onButtonDown(InputCode button);
-    bool onButtonUp(InputCode button);
-
-    Vec2i getMousePos();
-
-private:
-    struct KeyInfo
-    {
-        InputEvent event;
-        int32 time;
-    };
-
-    struct MouseInfo
-    {
-        InputEvent event;
-        int32 time;
-    };
-
-private:
-    void tick();
-
-    void initKey(InputCode key);
-    void initButton(InputCode button);
-
-    void updateKeyEvent(InputCode key, InputEvent event);
-    void updateMouseEvent(InputCode button, InputEvent event);
-    void updateMousePosition(Vec2i position);
-
-    Vec2i m_mousePos;
-    Map<InputCode, KeyInfo>* m_keys;
-    Map<InputCode, MouseInfo>* m_mouseButtons;
-
-    int32 m_currentTime;
+enum class WindowStyle {
+    WINDOWED_STYLE,
+    BORDERLESS_STYLE,
+    BORDERLESS_FULLSCREEN_STYLE
 };
 
 } // namespace gil
 
-#endif // HSGIL_INPUT_HANLDER_HPP
+#endif // HSGIL_WINDOW_CUSTOMIZATION_HPP

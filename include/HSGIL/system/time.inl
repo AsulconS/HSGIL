@@ -1,7 +1,7 @@
 /********************************************************************************
  *                                                                              *
  * HSGIL - Handy Scalable Graphics Integration Library                          *
- * Copyright (c) 2019-2021 Adrian Bedregal                                      *
+ * Copyright (c) 2019-2022 Adrian Bedregal                                      *
  *                                                                              *
  * This software is provided 'as-is', without any express or implied            *
  * warranty. In no event will the authors be held liable for any damages        *
@@ -158,32 +158,32 @@ inline constexpr Time operator/(int64 lhs, const Time& rhs)
     return rawTimeBuilder(static_cast<microT>(lhs) / rhs.getRawTimeCount());
 }
 
-inline constexpr Time& operator+=(Time& lhs, const Time& rhs)
+inline Time& operator+=(Time& lhs, const Time& rhs)
 {
     return lhs = lhs + rhs;
 }
 
-inline constexpr Time& operator-=(Time& lhs, const Time& rhs)
+inline Time& operator-=(Time& lhs, const Time& rhs)
 {
     return lhs = lhs - rhs;
 }
 
-inline constexpr Time& operator*=(Time& lhs, float rhs)
+inline Time& operator*=(Time& lhs, float rhs)
 {
     return lhs = lhs * rhs;
 }
 
-inline constexpr Time& operator*=(Time& lhs, int64 rhs)
+inline Time& operator*=(Time& lhs, int64 rhs)
 {
     return lhs = lhs * rhs;
 }
 
-inline constexpr Time& operator/=(Time& lhs, float rhs)
+inline Time& operator/=(Time& lhs, float rhs)
 {
     return lhs = lhs / rhs;
 }
 
-inline constexpr Time& operator/=(Time& lhs, int64 rhs)
+inline Time& operator/=(Time& lhs, int64 rhs)
 {
     return lhs = lhs / rhs;
 }

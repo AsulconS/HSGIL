@@ -1,7 +1,7 @@
 /********************************************************************************
  *                                                                              *
  * HSGIL - Handy Scalable Graphics Integration Library                          *
- * Copyright (c) 2019-2022 Adrian Bedregal                                      *
+ * Copyright (c) 2019-2023 Adrian Bedregal                                      *
  *                                                                              *
  * This software is provided 'as-is', without any express or implied            *
  * warranty. In no event will the authors be held liable for any damages        *
@@ -21,76 +21,63 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_INPUT_HANDLER_HPP
-#define HSGIL_INPUT_HANDLER_HPP
+#include <HSGIL/hsgil.hpp>
 
-#include <HSGIL/config/config.hpp>
-#include <HSGIL/config/common.hpp>
+#include <iostream>
 
-//#include <HSGIL/system/dstr/map.hpp>
-#include <map>
-#define Map std::map
-
-#include <HSGIL/math/vec2.hpp>
-
-#include <HSGIL/window/inputEvents.hpp>
-#include <HSGIL/window/inputBindings.hpp>
-
-namespace gil
+int main()
 {
-/**
- * @brief InputHandler class that handles input
- * 
- */
-class HSGIL_API InputHandler
-{
-    friend class RenderingWindow;
-public:
-    InputHandler();
-    virtual ~InputHandler();
-
-    bool onKeyDown(InputCode key);
-    bool onKeyUp(InputCode key);
-    bool onKeyReleased(InputCode key);
-    bool onKeyTriggered(InputCode key);
-
-    bool onClick(InputCode button);
-    bool onRelease(InputCode button);
-    bool onButtonDown(InputCode button);
-    bool onButtonUp(InputCode button);
-
-    Vec2i getMousePos();
-
-private:
-    struct KeyInfo
+    gil::RenderingWindow window(800, 600, "Shader Tester");
+    if (!window.isReady())
     {
-        InputEvent event;
-        int32 time;
-    };
+        std::cerr << "Window is not ready, something went wrong" << std::endl;
+        return -1;
+    }
 
-    struct MouseInfo
+    gil::InputHandler inputHandler;
+    window.setInputHandler(inputHandler);
+
+    gil::Shader shader("test");
+    float vertexData[] =
     {
-        InputEvent event;
-        int32 time;
+        // Position
+        -0.5f, -0.5f,
+         0.5f, -0.5f,
+         0.0f,  0.5f
     };
+    gil::uint32 VAO, VBO;
+    glGenVertexArrays(1, &VAO);
+    glGenBuffers(1, &VBO);
 
-private:
-    void tick();
+    glBindVertexArray(VAO);
 
-    void initKey(InputCode key);
-    void initButton(InputCode button);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertexData), vertexData, GL_STATIC_DRAW);
 
-    void updateKeyEvent(InputCode key, InputEvent event);
-    void updateMouseEvent(InputCode button, InputEvent event);
-    void updateMousePosition(Vec2i position);
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (const void*)0);
+    glEnableVertexAttribArray(0);
 
-    Vec2i m_mousePos;
-    Map<InputCode, KeyInfo>* m_keys;
-    Map<InputCode, MouseInfo>* m_mouseButtons;
+    glBindVertexArray(0);
 
-    int32 m_currentTime;
-};
+    gil::Timer timer;
+    while (window.isActive())
+    {
+        window.pollEvents();
+        if (inputHandler.onKeyDown(gil::KEY_ESCAPE))
+        {
+            window.close();
+        }
 
-} // namespace gil
+        shader.use();
+        glClearColor(0.2f, 0.5f, 1.0f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+        glBindVertexArray(VAO);
+            glDrawArrays(GL_TRIANGLES, 0, sizeof(vertexData) / sizeof(float));
+        glBindVertexArray(0);
 
-#endif // HSGIL_INPUT_HANLDER_HPP
+        window.swapBuffers();
+        timer.tick();
+    }
+
+    return 0;
+}

@@ -1,7 +1,7 @@
 /********************************************************************************
  *                                                                              *
  * HSGIL - Handy Scalable Graphics Integration Library                          *
- * Copyright (c) 2019-2021 Adrian Bedregal                                      *
+ * Copyright (c) 2019-2022 Adrian Bedregal                                      *
  *                                                                              *
  * This software is provided 'as-is', without any express or implied            *
  * warranty. In no event will the authors be held liable for any damages        *
@@ -53,6 +53,10 @@
     #endif
 #else
     #define HSGIL_API
+#endif
+
+#if defined(C__HSGIL_DEV_OPT_1)
+    #include <vld.h>
 #endif
 
 #endif // HSGIL_CONFIG_HPP

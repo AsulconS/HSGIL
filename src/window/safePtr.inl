@@ -1,7 +1,7 @@
 /********************************************************************************
  *                                                                              *
  * HSGIL - Handy Scalable Graphics Integration Library                          *
- * Copyright (c) 2019-2021 Adrian Bedregal                                      *
+ * Copyright (c) 2019-2022 Adrian Bedregal                                      *
  *                                                                              *
  * This software is provided 'as-is', without any express or implied            *
  * warranty. In no event will the authors be held liable for any damages        *
@@ -34,7 +34,7 @@ template <typename T>
 inline SafePtr<T>::SafePtr(SafePtr<T>&& o)
     : m_data {o.m_data}
 {
-    delete o.m_data;
+    o.m_data = nullptr;
 }
 
 template <typename T>

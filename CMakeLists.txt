@@ -1,15 +1,15 @@
-cmake_minimum_required(VERSION 3.12)
+cmake_minimum_required(VERSION 3.20)
 
 # Disable CYGWIN Legacy Warning
 set(CMAKE_LEGACY_CYGWIN_WIN32 0)
 
-# * Set where .dlls should go (in revision)
+# Set where .dll should go
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY $<1:${CMAKE_SOURCE_DIR}>/lib)
 
 # Set all version configuration
 set(VERSION_MAJOR 0)
-set(VERSION_MINOR 0)
-set(VERSION_PATCH 2)
+set(VERSION_MINOR 2)
+set(VERSION_PATCH 0)
 set(SO_VERSION ${VERSION_MAJOR}.${VERSION_MINOR})
 set(FULL_VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH})
 
@@ -19,9 +19,10 @@ project(HSGIL VERSION ${FULL_VERSION})
 # Project options
 option(HSGIL_BUILD_SHARED "Build HSGIL in shared mode [Static by default]." OFF)
 option(HSGIL_BUILD_EXAMPLES "Build HSGIL examples." OFF)
+option(HSGIL_DEV_OPT_1 OFF)
 
-# Set C++11 as the standard
-set(CMAKE_CXX_STANDARD 11)
+# Set C++17 as the standard
+set(CMAKE_CXX_STANDARD 17)
 
 # Set generic lib name
 set(HSGIL_LIB_NAME hsgil)
@@ -62,7 +63,7 @@ set_target_properties(${HSGIL_LIB_NAME}
 PROPERTIES
     VERSION ${PROJECT_VERSION}
     SOVERSION ${SO_VERSION}
-    PUBLIC_HEADER include/hsgil.hpp
+    PUBLIC_HEADER include/HSGIL/hsgil.hpp
 )
 configure_file(${HSGIL_LIB_NAME}.pc.in ${HSGIL_LIB_NAME}.pc @ONLY)
 if(HSGIL_BUILD_SHARED)
@@ -90,7 +91,11 @@ install(TARGETS ${HSGIL_LIB_NAME}
 install(FILES ${CMAKE_BINARY_DIR}/${HSGIL_LIB_NAME}.pc
     DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/pkgconfig
 )
-target_link_libraries(${HSGIL_LIB_NAME} opengl32)
+if(WIN32)
+    target_link_libraries(${HSGIL_LIB_NAME} opengl32)
+else()
+    target_link_libraries(${HSGIL_LIB_NAME} GL X11)
+endif()
 
 if(HSGIL_BUILD_EXAMPLES)
     add_subdirectory(examples)

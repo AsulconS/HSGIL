@@ -21,7 +21,16 @@
 desktop.ini
 
 # Builds
+*.so
 *.dll
 *.lib
 *.pdb
 *.exe
+examples/*.so
+
+# Examples
+examples/ball
+examples/doubleWindow
+examples/finn
+examples/keys
+examples/triangle

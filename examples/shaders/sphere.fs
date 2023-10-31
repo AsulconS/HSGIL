@@ -73,8 +73,8 @@ vec3 calcDirLight(DirLight light, vec3 normal, vec3 viewDir)
     vec3 reflectDir = reflect(-lightDir, normal);
     float spec = pow(max(dot(viewDir, reflectDir), 0.0f), 32);
     // Final Shading
-    vec3 ambient  = light.ambient  * vec3(texture(material.texture_diffuse, UV));;
-    vec3 diffuse  = light.diffuse  * diff * vec3(texture(material.texture_diffuse, UV));;
+    vec3 ambient  = light.ambient  * vec3(0.0f, 0.5f, 1.0f);
+    vec3 diffuse  = light.diffuse  * diff * vec3(0.0f, 0.5f, 1.0f);
     vec3 specular = light.specular * spec * material.specular;
     return (ambient + diffuse + specular);
 }
@@ -91,8 +91,8 @@ vec3 calcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
     float distance = length(light.position - fragPos);
     float attenuation = 1.0f / (light.constant + light.linear * distance + light.quadratic * (distance * distance));
     // Final Shading
-    vec3 ambient  = light.ambient  * vec3(texture(material.texture_diffuse, UV));;
-    vec3 diffuse  = light.diffuse  * diff * vec3(texture(material.texture_diffuse, UV));;
+    vec3 ambient  = light.ambient  * vec3(0.0f, 0.5f, 1.0f);
+    vec3 diffuse  = light.diffuse  * diff * vec3(0.0f, 0.5f, 1.0f);
     vec3 specular = light.specular * spec * material.specular;
     ambient  *= attenuation;
     diffuse  *= attenuation;

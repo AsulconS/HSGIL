@@ -1,7 +1,7 @@
 /********************************************************************************
  *                                                                              *
  * HSGIL - Handy Scalable Graphics Integration Library                          *
- * Copyright (c) 2019-2021 Adrian Bedregal                                      *
+ * Copyright (c) 2019-2022 Adrian Bedregal                                      *
  *                                                                              *
  * This software is provided 'as-is', without any express or implied            *
  * warranty. In no event will the authors be held liable for any damages        *
@@ -117,16 +117,42 @@ bool WindowManager::isActive()
     return m_active;
 }
 
-void WindowManager::createRenderingWindow(const char* title, int x, int y, int width, int height)
+WindowRectParams WindowManager::createRenderingWindow(const char* title, int x, int y, int width, int height, WindowStyle style)
 {
     if(!m_active)
     {
+        DWORD windowStyle = WS_VISIBLE;
+        switch(style)
+        {
+            case WindowStyle::WINDOWED_STYLE:
+                {
+                    windowStyle |= WS_OVERLAPPEDWINDOW;
+                }
+                break;
+            case WindowStyle::BORDERLESS_STYLE:
+                {
+                    windowStyle |= WS_POPUP | WS_BORDER;
+                    x = y = 0; // Disable positioning since its borderless
+                }
+                break;
+            case WindowStyle::BORDERLESS_FULLSCREEN_STYLE:
+                {
+                    windowStyle |= WS_POPUP | WS_BORDER;
+                    width  = GetSystemMetrics(SM_CXSCREEN); // Fix width  to fullscreen
+                    height = GetSystemMetrics(SM_CYSCREEN); // Fix height to fullscreen
+                    x = y = 0; // Disable positioning since its borderless
+                }
+                break;
+            default:
+                break;
+        };
+
         m_windowHandle = CreateWindowExA
         (
-            0L,                               // Extended Window Style
-            s_gldcc.lpszClassName,            // Window Class Name
-            title,                            // Window Title
-            WS_OVERLAPPEDWINDOW | WS_VISIBLE, // Window Style
+            0L,                     // Extended Window Style
+            s_gldcc.lpszClassName,  // Window Class Name
+            title,                  // Window Title
+            windowStyle,            // Window Style
 
             x, y, width, height,
 
@@ -139,6 +165,17 @@ void WindowManager::createRenderingWindow(const char* title, int x, int y, int w
         ++s_activeSessions;
         (*s_hwndMap)[m_windowHandle] = m_index;
     }
+
+    RECT clientRect{};
+    RECT windowRect{};
+    WindowRectParams rectParams{};
+    GetClientRect(m_windowHandle, &clientRect);
+    GetWindowRect(m_windowHandle, &windowRect);
+    rectParams.clientWidth = clientRect.right - clientRect.left;
+    rectParams.clientHeight = clientRect.bottom - clientRect.top;
+    rectParams.windowWidth = windowRect.right - windowRect.left;
+    rectParams.windowHeight = windowRect.bottom - windowRect.top;
+    return rectParams;
 }
 
 void WindowManager::destroyWindow()
@@ -167,7 +204,14 @@ void WindowManager::pollEvents()
 
 void WindowManager::swapBuffers()
 {
-    SwapBuffers(m_deviceContextHandle);
+    if(m_active)
+    {
+        if(s_vSyncCompat)
+        {
+            wglSwapIntervalEXT(1);
+        }
+        wglSwapLayerBuffers(m_deviceContextHandle, WGL_SWAP_MAIN_PLANE);
+    }
 }
 
 WindowManager::WindowManager(const uint32 t_index)
@@ -192,7 +236,7 @@ void WindowManager::registerGLDCC()
     s_gldcc.cbWndExtra    = 0;
     s_gldcc.hInstance     = s_procInstanceHandle;
     s_gldcc.hIcon         = nullptr;
-    s_gldcc.hCursor       = LoadCursorA(nullptr, MAKEINTRESOURCEA(32512));
+    s_gldcc.hCursor       = LoadCursorA(nullptr, IDC_ARROW);
     s_gldcc.hbrBackground = (HBRUSH)(COLOR_BACKGROUND);
     s_gldcc.lpszMenuName  = nullptr;
     s_gldcc.lpszClassName = s_gldccName;
@@ -208,11 +252,11 @@ void WindowManager::loadGLExtensions()
 {
     WNDCLASSEXA dWindowClass;
     dWindowClass.cbSize         = sizeof(WNDCLASSEXA);
-    dWindowClass.style          = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
+    dWindowClass.style          = 0u;
     dWindowClass.lpfnWndProc    = DefWindowProcA;
     dWindowClass.cbClsExtra     = 0;
     dWindowClass.cbWndExtra     = 0;
-    dWindowClass.hInstance      = s_procInstanceHandle;
+    dWindowClass.hInstance      = 0;
     dWindowClass.hIcon          = nullptr;
     dWindowClass.hCursor        = nullptr;
     dWindowClass.hbrBackground  = nullptr;
@@ -229,15 +273,15 @@ void WindowManager::loadGLExtensions()
     (
         0L,                         // Extended Window Style
         dWindowClass.lpszClassName, // Window Class Name
-        "DWC",                      // Window Title
+        "",                         // Window Title
         0,                          // Window Style
 
         CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
 
-        nullptr,                // Parent Window Handle
-        nullptr,                // Menu Handle
-        dWindowClass.hInstance, // Handle to current instance
-        nullptr                 // Additional Application Data
+        nullptr,     // Parent Window Handle
+        nullptr,     // Menu Handle
+        nullptr,     // Handle to current instance
+        nullptr      // Additional Application Data
     );
 
     if(!dWindow)
@@ -379,8 +423,8 @@ LRESULT CALLBACK WindowManager::HSGILProc(HWND hWnd, UINT uMsg, WPARAM wParam, L
                 {
                     int glContextAttribs[] =
                     {
-                        WGL_CONTEXT_MAJOR_VERSION_ARB, 3,
-                        WGL_CONTEXT_MINOR_VERSION_ARB, 3,
+                        WGL_CONTEXT_MAJOR_VERSION_ARB, 4,
+                        WGL_CONTEXT_MINOR_VERSION_ARB, 6,
                         WGL_CONTEXT_PROFILE_MASK_ARB,  WGL_CONTEXT_CORE_PROFILE_BIT_ARB,
                         0
                     };
@@ -394,11 +438,6 @@ LRESULT CALLBACK WindowManager::HSGILProc(HWND hWnd, UINT uMsg, WPARAM wParam, L
                 wglMakeCurrent(hdc, glContext);
 
                 gladLoadGL();
-
-                if(s_vSyncCompat)
-                {
-                    wglSwapIntervalEXT(1);
-                }
 
                 memset(s_keyPhysicStates, 0, sizeof(s_keyPhysicStates));
 
@@ -419,12 +458,6 @@ LRESULT CALLBACK WindowManager::HSGILProc(HWND hWnd, UINT uMsg, WPARAM wParam, L
                 {
                     PostQuitMessage(0);
                 }
-            }
-            break;
-
-        case WM_PAINT:
-            {
-                SwapBuffers(s_wmInstances[(*s_hwndMap)[hWnd]]->m_deviceContextHandle);
             }
             break;
 
@@ -487,7 +520,7 @@ LRESULT CALLBACK WindowManager::HSGILProc(HWND hWnd, UINT uMsg, WPARAM wParam, L
                 MouseParams params;
                 params.code = InputCode::MOUSE_BUTTON_LEFT;
                 windowInstance->mf_eventCallbackFunction(windowInstance->m_windowCallbackInstance, BUTTON_RELEASED, &params);
-                if(!(s_mouseTrackCount--))
+                if(!(--s_mouseTrackCount))
                     ReleaseCapture();
             }
             break;
@@ -509,7 +542,7 @@ LRESULT CALLBACK WindowManager::HSGILProc(HWND hWnd, UINT uMsg, WPARAM wParam, L
                 MouseParams params;
                 params.code = InputCode::MOUSE_BUTTON_RIGHT;
                 windowInstance->mf_eventCallbackFunction(windowInstance->m_windowCallbackInstance, BUTTON_RELEASED, &params);
-                if(!(s_mouseTrackCount--))
+                if(!(--s_mouseTrackCount))
                     ReleaseCapture();
             }
             break;
@@ -531,7 +564,7 @@ LRESULT CALLBACK WindowManager::HSGILProc(HWND hWnd, UINT uMsg, WPARAM wParam, L
                 MouseParams params;
                 params.code = InputCode::MOUSE_BUTTON_MIDDLE;
                 windowInstance->mf_eventCallbackFunction(windowInstance->m_windowCallbackInstance, BUTTON_RELEASED, &params);
-                if(!(s_mouseTrackCount--))
+                if(!(--s_mouseTrackCount))
                     ReleaseCapture();
             }
             break;
@@ -553,7 +586,7 @@ LRESULT CALLBACK WindowManager::HSGILProc(HWND hWnd, UINT uMsg, WPARAM wParam, L
                 MouseParams params;
                 params.code = InputCode::MOUSE_BUTTON_04;
                 windowInstance->mf_eventCallbackFunction(windowInstance->m_windowCallbackInstance, BUTTON_RELEASED, &params);
-                if(!(s_mouseTrackCount--))
+                if(!(--s_mouseTrackCount))
                     ReleaseCapture();
             }
             break;

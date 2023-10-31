@@ -1,7 +1,7 @@
 /********************************************************************************
  *                                                                              *
  * HSGIL - Handy Scalable Graphics Integration Library                          *
- * Copyright (c) 2019-2021 Adrian Bedregal                                      *
+ * Copyright (c) 2019-2022 Adrian Bedregal                                      *
  *                                                                              *
  * This software is provided 'as-is', without any express or implied            *
  * warranty. In no event will the authors be held liable for any damages        *
@@ -30,6 +30,7 @@
 #include <HSGIL/window/iWindow.hpp>
 #include <HSGIL/window/inputEvents.hpp>
 #include <HSGIL/window/inputHandler.hpp>
+#include <HSGIL/window/customization.hpp>
 
 namespace gil
 {
@@ -49,7 +50,7 @@ public:
      * @param t_width 
      * @param t_height 
      */
-    explicit RenderingWindow(const uint32 t_width = 800u, const uint32 t_height = 600u, const char* t_title = "Untitled", InputHandler* t_inputHandler = nullptr);
+    explicit RenderingWindow(const uint32 t_width = 800u, const uint32 t_height = 600u, const char* t_title = "Untitled", WindowStyle t_style = WindowStyle::WINDOWED_STYLE, InputHandler* t_inputHandler = nullptr);
     /**
      * @brief Destroy the RenderingWindow object
      * 
@@ -98,6 +99,18 @@ public:
      * @return float 
      */
     virtual float getAspectRatio() const override;
+    /**
+     * @brief Get the Window Rect object as Vec2i
+     * 
+     * @return Vec2i vector containing width and height of the window in pixels
+     */
+    virtual Vec2i getWindowRect() const override;
+    /**
+     * @brief Get the Workspace Rect object as Vec2i
+     * 
+     * @return Vec2i vector containing width and height of the viewport in pixels
+     */
+    virtual Vec2i getViewportRect() const override;
 
 protected:
     /**

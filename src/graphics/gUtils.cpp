@@ -1,7 +1,7 @@
 /********************************************************************************
  *                                                                              *
  * HSGIL - Handy Scalable Graphics Integration Library                          *
- * Copyright (c) 2019-2021 Adrian Bedregal                                      *
+ * Copyright (c) 2019-2022 Adrian Bedregal                                      *
  *                                                                              *
  * This software is provided 'as-is', without any express or implied            *
  * warranty. In no event will the authors be held liable for any damages        *
@@ -226,9 +226,19 @@ uint32 loadTexture(const char* path)
     int height;
     int nrComponents;
 
-    stbi_set_flip_vertically_on_load(true);
-    uint8* data = stbi_load(path, &width, &height, &nrComponents, 0);
-    if(data)
+    uint8* data;
+    if (path)
+    {
+        stbi_set_flip_vertically_on_load(true);
+        data = stbi_load(path, &width, &height, &nrComponents, 0);
+    }
+    else
+    {
+        width = height = nrComponents = 1;
+        data = new uint8[width * height * nrComponents];
+    }
+
+    if (data)
     {
         GLenum format;
         if (nrComponents == 1)
@@ -247,7 +257,14 @@ uint32 loadTexture(const char* path)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-        stbi_image_free(data);
+        if (path)
+        {
+            stbi_image_free(data);
+        }
+        else
+        {
+            delete[] data;
+        }
     }
     else
     {

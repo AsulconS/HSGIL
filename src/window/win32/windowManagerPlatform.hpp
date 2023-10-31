@@ -1,7 +1,7 @@
 /********************************************************************************
  *                                                                              *
  * HSGIL - Handy Scalable Graphics Integration Library                          *
- * Copyright (c) 2019-2021 Adrian Bedregal                                      *
+ * Copyright (c) 2019-2022 Adrian Bedregal                                      *
  *                                                                              *
  * This software is provided 'as-is', without any express or implied            *
  * warranty. In no event will the authors be held liable for any damages        *
@@ -38,8 +38,11 @@
 #define Map std::map
 
 #include <HSGIL/window/inputEvents.hpp>
+#include <HSGIL/window/customization.hpp>
 
 #include "../safePtr.hpp"
+#include "../wmLazyPtr.hpp"
+#include "../windowParams.hpp"
 
 #define NUM_KEYS_SIZE 256u
 #define GLDCC_NAME_SIZE 6u
@@ -49,7 +52,6 @@
 namespace gil
 {
 class IWindow;
-struct WindowParams;
 
 using EventCallbackFunction = void (*)(IWindow*, InputEvent, WindowParams*);
 
@@ -61,7 +63,7 @@ public:
     static WindowManager* getInstance(const uint32 index);
 
     bool isActive();
-    void createRenderingWindow(const char* title, int x, int y, int width, int height);
+    WindowRectParams createRenderingWindow(const char* title, int x, int y, int width, int height, WindowStyle style);
     void destroyWindow();
 
     void setEventCallbackFunction(IWindow* t_windowCallbackInstance, EventCallbackFunction tf_eventCallbackFunction);

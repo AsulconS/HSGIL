@@ -1,7 +1,7 @@
 /********************************************************************************
  *                                                                              *
  * HSGIL - Handy Scalable Graphics Integration Library                          *
- * Copyright (c) 2019-2022 Adrian Bedregal                                      *
+ * Copyright (c) 2019-2023 Adrian Bedregal                                      *
  *                                                                              *
  * This software is provided 'as-is', without any express or implied            *
  * warranty. In no event will the authors be held liable for any damages        *
@@ -21,76 +21,37 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_INPUT_HANDLER_HPP
-#define HSGIL_INPUT_HANDLER_HPP
+#include <HSGIL/hsgil.hpp>
 
-#include <HSGIL/config/config.hpp>
-#include <HSGIL/config/common.hpp>
+#include <iostream>
 
-//#include <HSGIL/system/dstr/map.hpp>
-#include <map>
-#define Map std::map
-
-#include <HSGIL/math/vec2.hpp>
-
-#include <HSGIL/window/inputEvents.hpp>
-#include <HSGIL/window/inputBindings.hpp>
-
-namespace gil
+int main()
 {
-/**
- * @brief InputHandler class that handles input
- * 
- */
-class HSGIL_API InputHandler
-{
-    friend class RenderingWindow;
-public:
-    InputHandler();
-    virtual ~InputHandler();
-
-    bool onKeyDown(InputCode key);
-    bool onKeyUp(InputCode key);
-    bool onKeyReleased(InputCode key);
-    bool onKeyTriggered(InputCode key);
-
-    bool onClick(InputCode button);
-    bool onRelease(InputCode button);
-    bool onButtonDown(InputCode button);
-    bool onButtonUp(InputCode button);
-
-    Vec2i getMousePos();
-
-private:
-    struct KeyInfo
+    gil::RenderingWindow window(800, 600, "Gyroscope");
+    if (!window.isReady())
     {
-        InputEvent event;
-        int32 time;
-    };
+        std::cerr << "Window is not ready, something went wrong" << std::endl;
+        return -1;
+    }
 
-    struct MouseInfo
+    gil::InputHandler inputHandler;
+    window.setInputHandler(inputHandler);
+
+    gil::Timer timer;
+    while (window.isActive())
     {
-        InputEvent event;
-        int32 time;
-    };
+        window.pollEvents();
+        if (inputHandler.onKeyDown(gil::KEY_ESCAPE))
+        {
+            window.close();
+        }
 
-private:
-    void tick();
+        glClearColor(0.2f, 0.5f, 1.0f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
 
-    void initKey(InputCode key);
-    void initButton(InputCode button);
+        window.swapBuffers();
+        timer.tick();
+    }
 
-    void updateKeyEvent(InputCode key, InputEvent event);
-    void updateMouseEvent(InputCode button, InputEvent event);
-    void updateMousePosition(Vec2i position);
-
-    Vec2i m_mousePos;
-    Map<InputCode, KeyInfo>* m_keys;
-    Map<InputCode, MouseInfo>* m_mouseButtons;
-
-    int32 m_currentTime;
-};
-
-} // namespace gil
-
-#endif // HSGIL_INPUT_HANLDER_HPP
+    return 0;
+}
