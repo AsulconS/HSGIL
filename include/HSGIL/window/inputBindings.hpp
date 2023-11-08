@@ -21,8 +21,7 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_INPUT_BINDINGS_HPP
-#define HSGIL_INPUT_BINDINGS_HPP
+#pragma once
 
 namespace gil
 {
@@ -244,5 +243,3 @@ enum InputCode
 };
 
 } // namespace gil
-
-#endif // HSGIL_INPUT_BINDINGS_HPP

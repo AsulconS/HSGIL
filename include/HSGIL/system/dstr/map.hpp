@@ -21,8 +21,7 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_DSTR_MAP_HPP
-#define HSGIL_DSTR_MAP_HPP
+#pragma once
 
 #include <HSGIL/config/config.hpp>
 #include <HSGIL/config/common.hpp>
@@ -188,4 +187,5 @@ private:
 
 #include <HSGIL/system/dstr/map.inl>
 
-#endif // HSGIL_DSTR_MAP_HPP
+#undef HSGIL_CONST_RED
+#undef HSGIL_CONST_BLACK

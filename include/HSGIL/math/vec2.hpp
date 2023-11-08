@@ -21,8 +21,7 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_VEC2_HPP
-#define HSGIL_VEC2_HPP
+#pragma once
 
 namespace gil
 {
@@ -49,5 +48,3 @@ struct Vec2i
 using Vec2 = Vec2f;
 
 } // namespace gil
-
-#endif // HSGIL_VEC2_HPP

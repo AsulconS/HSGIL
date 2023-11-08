@@ -21,8 +21,7 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_TIME_HPP
-#define HSGIL_TIME_HPP
+#pragma once
 
 #include <HSGIL/config/config.hpp>
 #include <HSGIL/config/common.hpp>
@@ -313,5 +312,3 @@ Time& operator/=(Time& lhs, int64 rhs);
 } // namespace gil
 
 #include <HSGIL/system/time.inl>
-
-#endif // HSGIL_TIME_HPP

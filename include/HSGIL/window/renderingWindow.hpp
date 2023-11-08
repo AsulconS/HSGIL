@@ -21,8 +21,7 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_RENDERING_WINDOW_HPP
-#define HSGIL_RENDERING_WINDOW_HPP
+#pragma once
 
 #include <HSGIL/config/config.hpp>
 #include <HSGIL/config/common.hpp>
@@ -132,5 +131,3 @@ private:
 };
 
 } // namespace gil
-
-#endif // HSGIL_RENDERING_WINDOW_HPP

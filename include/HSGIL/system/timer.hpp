@@ -21,8 +21,7 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_TIMER_HPP
-#define HSGIL_TIMER_HPP
+#pragma once
 
 #include <HSGIL/config/config.hpp>
 #include <HSGIL/config/common.hpp>
@@ -98,5 +97,3 @@ private:
 };
 
 } // namespace gil
-
-#endif // HSGIL_TIMER_HPP

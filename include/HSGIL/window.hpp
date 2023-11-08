@@ -21,8 +21,7 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_WINDOW_I_HPP
-#define HSGIL_WINDOW_I_HPP
+#pragma once
 
 #include <HSGIL/config/config.hpp>
 
@@ -32,5 +31,3 @@
 
 #include <HSGIL/window/iWindow.hpp>
 #include <HSGIL/window/renderingWindow.hpp>
-
-#endif // HSGIL_WINDOW_I_HPP

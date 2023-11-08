@@ -21,13 +21,10 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_SYSTEM_I_HPP
-#define HSGIL_SYSTEM_I_HPP
+#pragma once
 
 #include <HSGIL/config/config.hpp>
 
 #include <HSGIL/system/time.hpp>
 #include <HSGIL/system/timer.hpp>
 #include <HSGIL/system/utility.hpp>
-
-#endif // HSGIL_SYSTEM_I_HPP

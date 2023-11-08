@@ -21,8 +21,7 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_WINDOW_EXCEPTION_HPP
-#define HSGIL_WINDOW_EXCEPTION_HPP
+#pragma once
 
 #include <HSGIL/exception/genericException.hpp>
 
@@ -76,5 +75,3 @@ public:
 } // namespace gil
 
 #include <HSGIL/exception/window/windowException.inl>
-
-#endif // HSGIL_WINDOW_EXCEPTION_HPP

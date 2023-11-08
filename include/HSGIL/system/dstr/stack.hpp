@@ -21,8 +21,7 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_DSTR_STACK_HPP
-#define HSGIL_DSTR_STACK_HPP
+#pragma once
 
 #include <HSGIL/config/config.hpp>
 #include <HSGIL/config/common.hpp>
@@ -133,4 +132,4 @@ private:
 
 #include <HSGIL/system/dstr/stack.inl>
 
-#endif // HSGIL_DSTR_STACK_HPP
+#undef HSGIL_STACK_DEFAULT_CAPACITY

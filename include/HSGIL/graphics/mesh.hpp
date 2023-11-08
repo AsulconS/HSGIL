@@ -21,8 +21,7 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_MESH_HPP
-#define HSGIL_MESH_HPP
+#pragma once
 
 #include <HSGIL/external/glm/glm.hpp>
 
@@ -84,5 +83,3 @@ protected:
 };
 
 } // namespace gil
-
-#endif // HSGIL_MESH_HPP

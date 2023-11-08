@@ -21,8 +21,7 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_GRAPHICS_I_HPP
-#define HSGIL_GRAPHICS_I_HPP
+#pragma once
 
 #include <HSGIL/config/config.hpp>
 
@@ -30,5 +29,3 @@
 #include <HSGIL/graphics/gUtils.hpp>
 #include <HSGIL/graphics/mesh.hpp>
 #include <HSGIL/graphics/model.hpp>
-
-#endif // HSGIL_GRAPHICS_I_HPP

@@ -21,8 +21,7 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_DSTR_QUEUE_HPP
-#define HSGIL_DSTR_QUEUE_HPP
+#pragma once
 
 #include <HSGIL/config/config.hpp>
 #include <HSGIL/config/common.hpp>
@@ -147,4 +146,4 @@ private:
 
 #include <HSGIL/system/dstr/queue.inl>
 
-#endif // HSGIL_DSTR_QUEUE_HPP
+#undef HSGIL_QUEUE_DEFAULT_CAPACITY

@@ -21,8 +21,7 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_DSTR_EXCEPTION_HPP
-#define HSGIL_DSTR_EXCEPTION_HPP
+#pragma once
 
 #include <HSGIL/exception/genericException.hpp>
 
@@ -61,5 +60,3 @@ public:
 } // namespace gil
 
 #include <HSGIL/exception/system/dstrException.inl>
-
-#endif // HSGIL_DSTR_EXCEPTION_HPP

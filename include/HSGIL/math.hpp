@@ -21,8 +21,7 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_MATH_I_HPP
-#define HSGIL_MATH_I_HPP
+#pragma once
 
 #include <HSGIL/config/config.hpp>
 
@@ -32,5 +31,3 @@
 #include <HSGIL/math/vec4.hpp>
 #include <HSGIL/math/mUtils.hpp>
 #include <HSGIL/math/vecArithmetic.hpp>
-
-#endif // HSGIL_MATH_I_HPP

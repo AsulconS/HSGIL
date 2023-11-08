@@ -21,8 +21,7 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_INPUT_HANDLER_HPP
-#define HSGIL_INPUT_HANDLER_HPP
+#pragma once
 
 #include <HSGIL/config/config.hpp>
 #include <HSGIL/config/common.hpp>
@@ -92,5 +91,3 @@ private:
 };
 
 } // namespace gil
-
-#endif // HSGIL_INPUT_HANLDER_HPP

@@ -21,8 +21,7 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_CONSTANTS_HPP
-#define HSGIL_CONSTANTS_HPP
+#pragma once
 
 namespace gil
 {
@@ -48,5 +47,3 @@ constexpr double GALd { 9.806650000000000 };
 } // namespace constants
 
 } // namespace gil
-
-#endif // HSGIL_CONSTANTS_HPP

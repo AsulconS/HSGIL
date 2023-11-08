@@ -21,8 +21,7 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_VEC_ARITHMETIC_HPP
-#define HSGIL_VEC_ARITHMETIC_HPP
+#pragma once
 
 #include <HSGIL/config/config.hpp>
 #include <HSGIL/config/common.hpp>
@@ -622,5 +621,3 @@ HSGIL_API Vec3f normalize(const Vec3f& v);
 HSGIL_API Vec4f normalize(const Vec4f& v);
 
 } // namespace gil
-
-#endif // HSGIL_VEC_ARITHMETIC_HPP

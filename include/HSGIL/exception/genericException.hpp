@@ -21,8 +21,7 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_GENERIC_EXCEPTION_HPP
-#define HSGIL_GENERIC_EXCEPTION_HPP
+#pragma once
 
 #include <exception>
 
@@ -46,5 +45,3 @@ public:
 } // namespace gil
 
 #include <HSGIL/exception/genericException.inl>
-
-#endif // HSGIL_GENERIC_EXCEPTION_HPP

@@ -21,8 +21,7 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_GRAPHICS_EXCEPTION_HPP
-#define HSGIL_GRAPHICS_EXCEPTION_HPP
+#pragma once
 
 #include <HSGIL/exception/genericException.hpp>
 
@@ -61,5 +60,3 @@ public:
 } // namespace gil
 
 #include <HSGIL/exception/graphics/graphicsException.inl>
-
-#endif // HSGIL_GRAPHICS_EXCEPTION_HPP

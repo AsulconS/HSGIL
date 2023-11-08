@@ -21,8 +21,7 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_WINDOW_CUSTOMIZATION_HPP
-#define HSGIL_WINDOW_CUSTOMIZATION_HPP
+#pragma once
 
 namespace gil
 {
@@ -33,5 +32,3 @@ enum class WindowStyle {
 };
 
 } // namespace gil
-
-#endif // HSGIL_WINDOW_CUSTOMIZATION_HPP

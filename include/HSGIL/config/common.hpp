@@ -21,8 +21,7 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_COMMON_HPP
-#define HSGIL_COMMON_HPP
+#pragma once
 
 #include <cstdint>
 
@@ -52,5 +51,3 @@ namespace erick = gil;
 namespace yober = gil;
 namespace pogdo = gil;
 namespace zhong = gil;
-
-#endif // HSGIL_COMMON_HPP

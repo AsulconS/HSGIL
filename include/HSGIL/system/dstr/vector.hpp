@@ -21,8 +21,7 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_DSTR_VECTOR_HPP
-#define HSGIL_DSTR_VECTOR_HPP
+#pragma once
 
 #include <HSGIL/config/config.hpp>
 #include <HSGIL/config/common.hpp>
@@ -223,4 +222,4 @@ uint64 p2RoundUp(uint64 val);
 
 #include <HSGIL/system/dstr/vector.inl>
 
-#endif // HSGIL_DSTR_VECTOR_HPP
+#undef HSGIL_INITIAL_CAPACITY

@@ -21,8 +21,7 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_SHADER_HPP
-#define HSGIL_SHADER_HPP
+#pragma once
 
 #include <HSGIL/external/glad/glad.h>
 #include <HSGIL/external/glm/glm.hpp>
@@ -189,5 +188,3 @@ private:
 };
 
 } // namespace gil
-
-#endif // HSGIL_SHADER_HPP

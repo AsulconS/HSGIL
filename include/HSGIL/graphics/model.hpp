@@ -21,8 +21,7 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_MODEL_HPP
-#define HSGIL_MODEL_HPP
+#pragma once
 
 #include <HSGIL/external/glm/glm.hpp>
 
@@ -74,5 +73,3 @@ protected:
 };
 
 } // namespace gil
-
-#endif // HSGIL_MODEL_HPP

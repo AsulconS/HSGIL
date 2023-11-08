@@ -21,8 +21,7 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_M_UTILS_HPP
-#define HSGIL_M_UTILS_HPP
+#pragma once
 
 #include <HSGIL/config/config.hpp>
 #include <HSGIL/config/common.hpp>
@@ -133,5 +132,3 @@ HSGIL_API bool isBetween(unsigned int val, unsigned int lBound, unsigned int rBo
 HSGIL_API bool isBetween(float val, float lBound, float rBound);
 
 } // namespace gil
-
-#endif // HSGIL_M_UTILS_HPP

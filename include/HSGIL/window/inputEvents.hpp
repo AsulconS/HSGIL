@@ -21,8 +21,7 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_INPUT_EVENTS_HPP
-#define HSGIL_INPUT_EVENTS_HPP
+#pragma once
 
 namespace gil
 {
@@ -39,5 +38,3 @@ enum InputEvent
 };
 
 } // namespace gil
-
-#endif // HSGIL_INPUT_EVENTS_HPP

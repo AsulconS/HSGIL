@@ -21,8 +21,7 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_G_UTILS_HPP
-#define HSGIL_G_UTILS_HPP
+#pragma once
 
 #include <HSGIL/external/glm/glm.hpp>
 
@@ -64,5 +63,3 @@ HSGIL_API uint32 loadTexture(const char* path);
 HSGIL_API void setupDefaultLights(Shader& shader, const glm::vec3& viewPos = {2.0f, 4.0f, 2.0f});
 
 } // namespace gil
-
-#endif // HSGIL_G_UTILS_HPP

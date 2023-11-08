@@ -21,8 +21,7 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_I_WINDOW_HPP
-#define HSGIL_I_WINDOW_HPP
+#pragma once
 
 #include <HSGIL/config/config.hpp>
 #include <HSGIL/config/common.hpp>
@@ -126,5 +125,3 @@ protected:
 };
 
 } // namespace gil
-
-#endif // HSGIL_I_WINDOW_HPP
