@@ -32,5 +32,8 @@ examples/*.so
 examples/ball
 examples/doubleWindow
 examples/finn
+examples/gyroscope
 examples/keys
+examples/physicsTest
+examples/shaderTester
 examples/triangle
