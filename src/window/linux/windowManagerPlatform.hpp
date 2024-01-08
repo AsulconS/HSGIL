@@ -1,7 +1,7 @@
 /********************************************************************************
  *                                                                              *
  * HSGIL - Handy Scalable Graphics Integration Library                          *
- * Copyright (c) 2019-2023 Adrian Bedregal                                      *
+ * Copyright (c) 2019-2024 Adrian Bedregal                                      *
  *                                                                              *
  * This software is provided 'as-is', without any express or implied            *
  * warranty. In no event will the authors be held liable for any damages        *
@@ -21,8 +21,7 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_LINUX_WINDOW_MANAGER_HPP
-#define HSGIL_LINUX_WINDOW_MANAGER_HPP
+#pragma once
 
 #include <HSGIL/external/glad/glad.h>
 
@@ -168,5 +167,3 @@ private:
 };
 
 } // namespace gil
-
-#endif // HSGIL_LINUX_WINDOW_MANAGER_HPP

@@ -1,7 +1,7 @@
 /********************************************************************************
  *                                                                              *
  * HSGIL - Handy Scalable Graphics Integration Library                          *
- * Copyright (c) 2019-2023 Adrian Bedregal                                      *
+ * Copyright (c) 2019-2024 Adrian Bedregal                                      *
  *                                                                              *
  * This software is provided 'as-is', without any express or implied            *
  * warranty. In no event will the authors be held liable for any damages        *
@@ -21,8 +21,7 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_W_UTILS_HPP
-#define HSGIL_W_UTILS_HPP
+#pragma once
 
 #include <HSGIL/config/config.hpp>
 #include <HSGIL/config/common.hpp>
@@ -40,5 +39,3 @@ namespace gil
 HSGIL_API bool isExtensionSupported(const char* extList, const char* extension);
 
 } // namespace gil
-
-#endif // HSGIL_W_UTILS_HPP
