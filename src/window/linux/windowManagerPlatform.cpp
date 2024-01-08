@@ -161,7 +161,14 @@ WindowRectParams WindowManager::createRenderingWindow(const char* title, int x, 
         (*s_hwndMap)[m_windowHandle] = m_index;
     }
 
-    return {};
+    XWindowAttributes windowAttributes{};
+    XGetWindowAttributes(s_display, m_windowHandle, &windowAttributes);
+    WindowRectParams windowRectParams{};
+    windowRectParams.clientWidth = windowAttributes.width;
+    windowRectParams.clientHeight = windowAttributes.height;
+    windowRectParams.windowWidth = windowAttributes.width; // TODO: Allow Caption Detection | WA: equal window and client dims
+    windowRectParams.windowHeight = windowAttributes.height; // TODO: Allow Caption Detection | WA: equal window and client dims
+    return windowRectParams;
 }
 
 void WindowManager::destroyWindow()
