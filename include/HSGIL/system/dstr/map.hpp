@@ -1,7 +1,7 @@
 /********************************************************************************
  *                                                                              *
  * HSGIL - Handy Scalable Graphics Integration Library                          *
- * Copyright (c) 2019-2022 Adrian Bedregal                                      *
+ * Copyright (c) 2019-2024 Adrian Bedregal                                      *
  *                                                                              *
  * This software is provided 'as-is', without any express or implied            *
  * warranty. In no event will the authors be held liable for any damages        *
@@ -21,8 +21,7 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_DSTR_MAP_HPP
-#define HSGIL_DSTR_MAP_HPP
+#pragma once
 
 #include <HSGIL/config/config.hpp>
 #include <HSGIL/config/common.hpp>
@@ -188,4 +187,5 @@ private:
 
 #include <HSGIL/system/dstr/map.inl>
 
-#endif // HSGIL_DSTR_MAP_HPP
+#undef HSGIL_CONST_RED
+#undef HSGIL_CONST_BLACK

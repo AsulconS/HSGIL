@@ -1,7 +1,7 @@
 /********************************************************************************
  *                                                                              *
  * HSGIL - Handy Scalable Graphics Integration Library                          *
- * Copyright (c) 2019-2022 Adrian Bedregal                                      *
+ * Copyright (c) 2019-2024 Adrian Bedregal                                      *
  *                                                                              *
  * This software is provided 'as-is', without any express or implied            *
  * warranty. In no event will the authors be held liable for any damages        *
@@ -69,6 +69,8 @@ GLXFBConfig* WindowManager::s_fbConfigs {nullptr};
 
 bool WindowManager::s_vSyncCompat {true};
 bool WindowManager::s_attribCtxCompat {true};
+int WindowManager::s_glxCtxVersionMajorCompat {4};
+int WindowManager::s_glxCtxVersionMinorCompat {6};
 
 PFNGLXCREATECONTEXTATTRIBSARBPROC WindowManager::glXCreateContextAttribsARB {nullptr};
 
@@ -161,7 +163,14 @@ WindowRectParams WindowManager::createRenderingWindow(const char* title, int x, 
         (*s_hwndMap)[m_windowHandle] = m_index;
     }
 
-    return {};
+    XWindowAttributes windowAttributes{};
+    XGetWindowAttributes(s_display, m_windowHandle, &windowAttributes);
+    WindowRectParams windowRectParams{};
+    windowRectParams.clientWidth = windowAttributes.width;
+    windowRectParams.clientHeight = windowAttributes.height;
+    windowRectParams.windowWidth = windowAttributes.width; // TODO: Allow Caption Detection | WA: equal window and client dims
+    windowRectParams.windowHeight = windowAttributes.height; // TODO: Allow Caption Detection | WA: equal window and client dims
+    return windowRectParams;
 }
 
 void WindowManager::destroyWindow()
@@ -238,10 +247,14 @@ WindowManager::~WindowManager()
 
 void WindowManager::createContext()
 {
+#if defined(C__HSGIL_FORCE_GLX_CTX_VERSION)
+    internalSetGlxContextVersion(C__HSGIL_GLX_CTX_VERSION_MAJOR, C__HSGIL_GLX_CTX_VERSION_MINOR);
+#endif
+
     int contextAttribs[] =
     {
-        GLX_CONTEXT_MAJOR_VERSION_ARB, 4,
-		GLX_CONTEXT_MINOR_VERSION_ARB, 6,
+        GLX_CONTEXT_MAJOR_VERSION_ARB, s_glxCtxVersionMajorCompat,
+		GLX_CONTEXT_MINOR_VERSION_ARB, s_glxCtxVersionMinorCompat,
 		GLX_CONTEXT_FLAGS_ARB, GLX_CONTEXT_FORWARD_COMPATIBLE_BIT_ARB,
 		None
 	};
@@ -269,6 +282,12 @@ void WindowManager::createContext()
     gladLoadGL();
 
     std::cout << "Context Created" << std::endl;
+}
+
+void WindowManager::internalSetGlxContextVersion(const int major, const int minor)
+{
+    s_glxCtxVersionMajorCompat = major;
+    s_glxCtxVersionMinorCompat = minor;
 }
 
 void WindowManager::loadInputMap()

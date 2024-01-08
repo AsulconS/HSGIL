@@ -21,36 +21,19 @@
  *                                                                              *
  ********************************************************************************/
 
-#pragma once
+#include <HSGIL/window/compatUtils.hpp>
 
-#include <HSGIL/math/vec2.hpp>
-
-#include <HSGIL/window/inputBindings.hpp>
+#include "windowManagerPlatform.hpp"
 
 namespace gil
 {
-
-struct WindowParams
+namespace compat
 {
-};
-
-struct MouseParams : public WindowParams
+void forceGlxContextToVersion(const int major, const int minor)
 {
-    InputCode code;
-    Vec2i pos;
-};
+    WindowManager::internalSetGlxContextVersion(major, minor);
+}
 
-struct KeyboardParams : public WindowParams
-{
-    InputCode code;
-};
-
-struct WindowRectParams : public WindowParams
-{
-    int clientWidth;
-    int clientHeight;
-    int windowWidth;
-    int windowHeight;
-};
+} // namespace compat
 
 } // namespace gil

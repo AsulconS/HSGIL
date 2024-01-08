@@ -1,7 +1,7 @@
 /********************************************************************************
  *                                                                              *
  * HSGIL - Handy Scalable Graphics Integration Library                          *
- * Copyright (c) 2019-2022 Adrian Bedregal                                      *
+ * Copyright (c) 2019-2024 Adrian Bedregal                                      *
  *                                                                              *
  * This software is provided 'as-is', without any express or implied            *
  * warranty. In no event will the authors be held liable for any damages        *
@@ -21,8 +21,7 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_MODEL_HPP
-#define HSGIL_MODEL_HPP
+#pragma once
 
 #include <HSGIL/external/glm/glm.hpp>
 
@@ -74,5 +73,3 @@ protected:
 };
 
 } // namespace gil
-
-#endif // HSGIL_MODEL_HPP

@@ -1,7 +1,7 @@
 /********************************************************************************
  *                                                                              *
  * HSGIL - Handy Scalable Graphics Integration Library                          *
- * Copyright (c) 2019-2022 Adrian Bedregal                                      *
+ * Copyright (c) 2019-2024 Adrian Bedregal                                      *
  *                                                                              *
  * This software is provided 'as-is', without any express or implied            *
  * warranty. In no event will the authors be held liable for any damages        *
@@ -21,8 +21,7 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_LINUX_WINDOW_MANAGER_HPP
-#define HSGIL_LINUX_WINDOW_MANAGER_HPP
+#pragma once
 
 #include <HSGIL/external/glad/glad.h>
 
@@ -36,6 +35,7 @@
 #include <HSGIL/window/inputEvents.hpp>
 #include <HSGIL/window/inputBindings.hpp>
 #include <HSGIL/window/customization.hpp>
+#include <HSGIL/window/compatUtils.hpp>
 
 #include "../safePtr.hpp"
 #include "../wmLazyPtr.hpp"
@@ -68,6 +68,7 @@ typedef int  (*PFNGLXSWAPINTERVALPROC2)(int);
 class HSGIL_API WindowManager final
 {
     friend HSGIL_API WMLazyPtr;
+    friend HSGIL_API void compat::forceGlxContextToVersion(const int major, const int minor);
 public:
     static WindowManager* createInstance();
     static WindowManager* getInstance(const uint32 index);
@@ -136,12 +137,16 @@ private:
 
     static bool s_vSyncCompat;
     static bool s_attribCtxCompat;
+    static int s_glxCtxVersionMajorCompat;
+    static int s_glxCtxVersionMinorCompat;
 
     static PFNGLXCREATECONTEXTATTRIBSARBPROC glXCreateContextAttribsARB;
 
     static bool glXSwapIntervalEXTMode;
     static PFNGLXSWAPINTERVALPROC1 glXSwapInterval1;
     static PFNGLXSWAPINTERVALPROC2 glXSwapInterval2;
+
+    static void internalSetGlxContextVersion(const int major, const int minor);
 
     static void loadInputMap();
     static int rawToStandard(int rawCode);
@@ -162,5 +167,3 @@ private:
 };
 
 } // namespace gil
-
-#endif // HSGIL_LINUX_WINDOW_MANAGER_HPP

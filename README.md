@@ -8,7 +8,6 @@
     <a href="#"><img src="https://img.shields.io/github/commit-activity/y/AsulconS/HSGIL"></a>
     <a href="https://github.com/AsulconS/HSGIL/issues"><img src="https://img.shields.io/github/issues/AsulconS/HSGIL"></a>
     <a href="https://github.com/AsulconS/HSGIL/pulls"><img src="https://img.shields.io/github/issues-pr/AsulconS/HSGIL"></a>
-    <a href="#"><img src="https://img.shields.io/tokei/lines/github/AsulconS/HSGIL"></a>
     <a href="#"><img src="https://img.shields.io/github/stars/AsulconS/HSGIL"></a>
 </p>
 

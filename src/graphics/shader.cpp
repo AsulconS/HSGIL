@@ -1,7 +1,7 @@
 /********************************************************************************
  *                                                                              *
  * HSGIL - Handy Scalable Graphics Integration Library                          *
- * Copyright (c) 2019-2022 Adrian Bedregal                                      *
+ * Copyright (c) 2019-2024 Adrian Bedregal                                      *
  *                                                                              *
  * This software is provided 'as-is', without any express or implied            *
  * warranty. In no event will the authors be held liable for any damages        *
@@ -23,6 +23,9 @@
 
 #include <HSGIL/graphics/shader.hpp>
 
+#include <HSGIL/exception/graphics/graphicsException.hpp>
+
+#include <cctype>
 #include <string>
 #include <fstream>
 #include <sstream>
@@ -34,6 +37,40 @@ Shader::Shader(const std::string& t_name)
 {
     std::string vsSrc {loadShaderFromFile(GL_VERTEX_SHADER, "shaders/" + t_name)};
     std::string fsSrc {loadShaderFromFile(GL_FRAGMENT_SHADER, "shaders/" + t_name)};
+
+#if defined(C__HSGIL_FORCE_GLX_CTX_VERSION)
+    constexpr int glxCtxMajorVersion{ C__HSGIL_GLX_CTX_VERSION_MAJOR };
+    constexpr int glxCtxMinorVersion{ C__HSGIL_GLX_CTX_VERSION_MINOR };
+    const auto replaceGlxContextVersion = [](std::string& shaderSrc) -> void {
+        const size_t versionDeclIdx = shaderSrc.find("#version");
+        size_t versionDefStartIdx = versionDeclIdx + 9;
+        while ((versionDefStartIdx < shaderSrc.size()) && !std::isdigit(shaderSrc[versionDefStartIdx]))
+        {
+            ++versionDefStartIdx;
+        }
+        size_t versionDefEndIdx = versionDefStartIdx + 1;
+        while ((versionDefEndIdx < shaderSrc.size()) && std::isdigit(shaderSrc[versionDefEndIdx]))
+        {
+            ++versionDefEndIdx;
+        }
+        if ((versionDefStartIdx >= shaderSrc.size()) || (versionDefEndIdx >= shaderSrc.size()))
+        {
+            throw GraphicsException();
+        }
+        std::string glxCtxVersionStr = std::to_string(glxCtxMajorVersion) + std::to_string(glxCtxMinorVersion) + std::string("0");
+        shaderSrc.replace(versionDefStartIdx, versionDefEndIdx - versionDefStartIdx, glxCtxVersionStr);
+    };
+
+    try
+    {
+        replaceGlxContextVersion(vsSrc);
+        replaceGlxContextVersion(fsSrc);
+    }
+    catch (const GenericException& e)
+    {
+        std::cerr << "An Exception has occurred: " << e.what() << std::endl;
+    }
+#endif
 
     uint32 vertexShader {createShader(GL_VERTEX_SHADER, vsSrc)};
     uint32 fragmentShader {createShader(GL_FRAGMENT_SHADER, fsSrc)};

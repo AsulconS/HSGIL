@@ -1,7 +1,7 @@
 /********************************************************************************
  *                                                                              *
  * HSGIL - Handy Scalable Graphics Integration Library                          *
- * Copyright (c) 2019-2022 Adrian Bedregal                                      *
+ * Copyright (c) 2019-2024 Adrian Bedregal                                      *
  *                                                                              *
  * This software is provided 'as-is', without any express or implied            *
  * warranty. In no event will the authors be held liable for any damages        *
@@ -21,8 +21,7 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_DSTR_VECTOR_HPP
-#define HSGIL_DSTR_VECTOR_HPP
+#pragma once
 
 #include <HSGIL/config/config.hpp>
 #include <HSGIL/config/common.hpp>
@@ -223,4 +222,4 @@ uint64 p2RoundUp(uint64 val);
 
 #include <HSGIL/system/dstr/vector.inl>
 
-#endif // HSGIL_DSTR_VECTOR_HPP
+#undef HSGIL_INITIAL_CAPACITY

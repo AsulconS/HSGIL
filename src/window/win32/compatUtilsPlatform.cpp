@@ -20,37 +20,3 @@
  * 3. This notice may not be removed or altered from any source distribution.   *
  *                                                                              *
  ********************************************************************************/
-
-#pragma once
-
-#include <HSGIL/math/vec2.hpp>
-
-#include <HSGIL/window/inputBindings.hpp>
-
-namespace gil
-{
-
-struct WindowParams
-{
-};
-
-struct MouseParams : public WindowParams
-{
-    InputCode code;
-    Vec2i pos;
-};
-
-struct KeyboardParams : public WindowParams
-{
-    InputCode code;
-};
-
-struct WindowRectParams : public WindowParams
-{
-    int clientWidth;
-    int clientHeight;
-    int windowWidth;
-    int windowHeight;
-};
-
-} // namespace gil

@@ -1,7 +1,7 @@
 /********************************************************************************
  *                                                                              *
  * HSGIL - Handy Scalable Graphics Integration Library                          *
- * Copyright (c) 2019-2022 Adrian Bedregal                                      *
+ * Copyright (c) 2019-2024 Adrian Bedregal                                      *
  *                                                                              *
  * This software is provided 'as-is', without any express or implied            *
  * warranty. In no event will the authors be held liable for any damages        *
@@ -21,8 +21,7 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_VEC3_HPP
-#define HSGIL_VEC3_HPP
+#pragma once
 
 namespace gil
 {
@@ -51,5 +50,3 @@ struct Vec3i
 using Vec3 = Vec3f;
 
 } // namespace gil
-
-#endif // HSGIL_VEC3_HPP

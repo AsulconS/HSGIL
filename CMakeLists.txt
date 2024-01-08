@@ -8,7 +8,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY $<1:${CMAKE_SOURCE_DIR}>/lib)
 
 # Set all version configuration
 set(VERSION_MAJOR 0)
-set(VERSION_MINOR 2)
+set(VERSION_MINOR 3)
 set(VERSION_PATCH 0)
 set(SO_VERSION ${VERSION_MAJOR}.${VERSION_MINOR})
 set(FULL_VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH})
@@ -19,7 +19,10 @@ project(HSGIL VERSION ${FULL_VERSION})
 # Project options
 option(HSGIL_BUILD_SHARED "Build HSGIL in shared mode [Static by default]." OFF)
 option(HSGIL_BUILD_EXAMPLES "Build HSGIL examples." OFF)
-option(HSGIL_DEV_OPT_1 OFF)
+option(HSGIL_FORCE_GLX_CTX_VERSION OFF)
+set(HSGIL_GLX_CTX_VERSION_MAJOR 4 CACHE STRING "Specifies Forced GLX Version Major")
+set(HSGIL_GLX_CTX_VERSION_MINOR 6 CACHE STRING "Specifies Forced GLX Version Minor")
+option(HSGIL_DEV_OPT_1 OFF) # VLD on Windows
 
 # Set C++17 as the standard
 set(CMAKE_CXX_STANDARD 17)
@@ -49,6 +52,7 @@ set(HSGIL_SOURCES
     src/window/inputHandler.cpp
     src/window/renderingWindow.cpp
     src/window/${HSGIL_PLATFORM}/windowManagerPlatform.cpp
+    src/window/${HSGIL_PLATFORM}/compatUtilsPlatform.cpp
     src/window/wmLazyPtr.cpp
     src/window/wUtils.cpp
 )
@@ -66,13 +70,24 @@ PROPERTIES
     PUBLIC_HEADER include/HSGIL/hsgil.hpp
 )
 configure_file(${HSGIL_LIB_NAME}.pc.in ${HSGIL_LIB_NAME}.pc @ONLY)
+
+# Set Dynamic Compile Definitions
+set(HSGIL_COMPILE_DEFINITIONS C__HSGIL_COMPILING)
+if(HSGIL_FORCE_GLX_CTX_VERSION)
+    set(HSGIL_COMPILE_DEFINITIONS ${HSGIL_COMPILE_DEFINITIONS}
+        C__HSGIL_FORCE_GLX_CTX_VERSION
+        C__HSGIL_GLX_CTX_VERSION_MAJOR=${HSGIL_GLX_CTX_VERSION_MAJOR}
+        C__HSGIL_GLX_CTX_VERSION_MINOR=${HSGIL_GLX_CTX_VERSION_MINOR}
+    )
+endif()
+
 if(HSGIL_BUILD_SHARED)
     target_compile_definitions(${HSGIL_LIB_NAME}
     PUBLIC
         GLAD_GLAPI_EXPORT
     PRIVATE
         __STDC_LIB_EXT1__
-        C__HSGIL_COMPILING
+        ${HSGIL_COMPILE_DEFINITIONS}
         C__HSGIL_SHARED_LIB
         GLAD_GLAPI_EXPORT_BUILD
     )
@@ -80,7 +95,7 @@ else()
     target_compile_definitions(${HSGIL_LIB_NAME}
     PRIVATE
         __STDC_LIB_EXT1__
-        C__HSGIL_COMPILING
+        ${HSGIL_COMPILE_DEFINITIONS}
     )
 endif()
 target_include_directories(${HSGIL_LIB_NAME} PRIVATE include)
