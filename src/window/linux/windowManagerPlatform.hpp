@@ -36,6 +36,7 @@
 #include <HSGIL/window/inputEvents.hpp>
 #include <HSGIL/window/inputBindings.hpp>
 #include <HSGIL/window/customization.hpp>
+#include <HSGIL/window/compatUtils.hpp>
 
 #include "../safePtr.hpp"
 #include "../wmLazyPtr.hpp"
@@ -68,6 +69,7 @@ typedef int  (*PFNGLXSWAPINTERVALPROC2)(int);
 class HSGIL_API WindowManager final
 {
     friend HSGIL_API WMLazyPtr;
+    friend HSGIL_API void compat::forceGlxContextToVersion(const int major, const int minor);
 public:
     static WindowManager* createInstance();
     static WindowManager* getInstance(const uint32 index);
@@ -136,12 +138,16 @@ private:
 
     static bool s_vSyncCompat;
     static bool s_attribCtxCompat;
+    static int s_glxCtxVersionMajorCompat;
+    static int s_glxCtxVersionMinorCompat;
 
     static PFNGLXCREATECONTEXTATTRIBSARBPROC glXCreateContextAttribsARB;
 
     static bool glXSwapIntervalEXTMode;
     static PFNGLXSWAPINTERVALPROC1 glXSwapInterval1;
     static PFNGLXSWAPINTERVALPROC2 glXSwapInterval2;
+
+    static void internalSetGlxContextVersion(const int major, const int minor);
 
     static void loadInputMap();
     static int rawToStandard(int rawCode);
