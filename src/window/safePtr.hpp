@@ -21,8 +21,7 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_SAFE_PTR_HPP
-#define HSGIL_SAFE_PTR_HPP
+#pragma once
 
 #include <HSGIL/config/config.hpp>
 #include <HSGIL/config/common.hpp>
@@ -55,5 +54,3 @@ private:
 } // namespace gil
 
 #include "safePtr.inl"
-
-#endif // HSGIL_SAFE_PTR_HPP

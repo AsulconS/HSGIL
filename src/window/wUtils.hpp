@@ -21,8 +21,7 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_W_UTILS_HPP
-#define HSGIL_W_UTILS_HPP
+#pragma once
 
 #include <HSGIL/config/config.hpp>
 #include <HSGIL/config/common.hpp>
@@ -40,5 +39,3 @@ namespace gil
 HSGIL_API bool isExtensionSupported(const char* extList, const char* extension);
 
 } // namespace gil
-
-#endif // HSGIL_W_UTILS_HPP

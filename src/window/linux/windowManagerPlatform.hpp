@@ -21,8 +21,7 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_LINUX_WINDOW_MANAGER_HPP
-#define HSGIL_LINUX_WINDOW_MANAGER_HPP
+#pragma once
 
 #include <HSGIL/external/glad/glad.h>
 
@@ -168,5 +167,3 @@ private:
 };
 
 } // namespace gil
-
-#endif // HSGIL_LINUX_WINDOW_MANAGER_HPP

@@ -21,8 +21,7 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_WINDOW_MANAGER_HPP
-#define HSGIL_WINDOW_MANAGER_HPP
+#pragma once
 
 #include <HSGIL/config/config.hpp>
 #include <HSGIL/config/common.hpp>
@@ -34,5 +33,3 @@
 #else
     #error HSGIL has no support for this OS
 #endif
-
-#endif // HSGIL_WINDOW_MANAGER_HPP

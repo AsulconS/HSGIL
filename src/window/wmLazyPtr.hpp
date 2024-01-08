@@ -21,8 +21,7 @@
  *                                                                              *
  ********************************************************************************/
 
-#ifndef HSGIL_WM_LAZY_PTR
-#define HSGIL_WM_LAZY_PTR
+#pragma once
 
 #include <HSGIL/config/config.hpp>
 #include <HSGIL/config/common.hpp>
@@ -52,5 +51,3 @@ private:
 };
 
 } // namespace gil
-
-#endif // HSGIL_WM_LAZY_PTR
