@@ -44,8 +44,8 @@
     #error HSGIL has no support for this OS
 #endif
 
-#if defined(C__HSGIL_SHARED_LIB)
-    #if defined(C__HSGIL_COMPILING)
+#if defined(C__HSGIL_API_CALL_EXPORT)
+    #if defined(C__HSGIL_API_CALL_EXPORT_BUILD)
         #define HSGIL_API CF__HSGIL_DLL_EXPORT
     #else
         #define HSGIL_API CF__HSGIL_DLL_IMPORT
@@ -54,6 +54,10 @@
     #define HSGIL_API
 #endif
 
-#if defined(C__HSGIL_DEV_OPT_1)
+/**
+ * @brief This enables or disabled VLD based
+ * on build type and options
+ */
+#if !defined(HSGIL_RELEASE) && defined(C__HSGIL_DEV_OPT_1)
     #include <vld.h>
 #endif

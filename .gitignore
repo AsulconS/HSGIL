@@ -3,6 +3,8 @@
 /[Dd]oc/
 /[Ll]ib/
 /[Oo]ther/[Mm]isc/
+/[Bb]inaries/
+/[Bb]in/
 
 # Visual Studio cache directory
 .vs/
@@ -26,14 +28,3 @@ desktop.ini
 *.lib
 *.pdb
 *.exe
-examples/*.so
-
-# Examples
-examples/ball
-examples/doubleWindow
-examples/finn
-examples/gyroscope
-examples/keys
-examples/physicsTest
-examples/shaderTester
-examples/triangle

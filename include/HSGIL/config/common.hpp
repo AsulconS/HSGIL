@@ -46,6 +46,7 @@ using byte = uint8_t;
 
 } // namespace gil
 
+namespace jim   = gil;
 namespace luis  = gil;
 namespace erick = gil;
 namespace yober = gil;
