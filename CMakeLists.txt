@@ -11,7 +11,7 @@ set(FULL_VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH})
 project(HSGIL VERSION ${FULL_VERSION} LANGUAGES C CXX)
 
 # Project options
-option(HSGIL_BUILD_SHARED "Build HSGIL in shared mode [Static by default]." OFF)
+option(BUILD_SHARED_LIBS "Build HSGIL in shared mode [Shared by default]." ON)
 option(HSGIL_BUILD_EXAMPLES "Build HSGIL examples." OFF)
 option(HSGIL_FORCE_GLX_CTX_VERSION OFF)
 option(HSGIL_DEV_OPT_1 OFF) # VLD on Windows
@@ -91,11 +91,7 @@ endif()
 # Build runtime module
 # ------------------------------------------------------------------------------
 # Core Dependencies and Definitions
-if (HSGIL_BUILD_SHARED)
-	add_library(${HSGIL_RUNTIME_LIB_NAME} SHARED ${HSGIL_SOURCES})
-else()
-	add_library(${HSGIL_RUNTIME_LIB_NAME} STATIC ${HSGIL_SOURCES})
-endif()
+add_library(${HSGIL_RUNTIME_LIB_NAME} ${HSGIL_SOURCES})
 set_target_properties(${HSGIL_RUNTIME_LIB_NAME}
 PROPERTIES
 	VERSION ${PROJECT_VERSION}
@@ -105,7 +101,7 @@ PROPERTIES
 	CXX_STANDARD_REQUIRED ON
 	CXX_EXTENSIONS OFF
 )
-if (HSGIL_BUILD_SHARED)
+if (BUILD_SHARED_LIBS)
 	target_compile_definitions(${HSGIL_RUNTIME_LIB_NAME}
 	PUBLIC
 		GLAD_GLAPI_EXPORT
