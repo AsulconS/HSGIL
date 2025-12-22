@@ -5,6 +5,7 @@
 /[Oo]ther/[Mm]isc/
 /[Bb]inaries/
 /[Bb]in/
+/[Oo]ut/
 
 # Visual Studio cache directory
 .vs/
@@ -14,6 +15,9 @@
 
 # Visual Studio Code counter extension directory
 .VSCodeCounter/
+
+# CMake specific files
+CMakeUserPresets.json
 
 # Utility files
 *.priv
