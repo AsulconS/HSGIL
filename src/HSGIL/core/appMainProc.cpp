@@ -19,18 +19,36 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-#pragma once
+#include <HSGIL/core/appMainProc.hpp>
+#include <HSGIL/window/renderingWindow.hpp>
 
-#include <HSGIL/core/minimal.hpp>
+#include <HSGIL/graphics/model.hpp>
+
+#include "GL/gl.h"
 
 namespace gil
 {
-namespace compat
+AppMainProc::AppMainProc()
+	: m_timer{ true }
 {
-#if defined(CF__HSGIL_OS_LINUX)
-HSGIL_API void forceGlxContextToVersion(const int major, const int minor);
-#endif
+}
 
-} // namespace compat
+AppMainProc::~AppMainProc()
+{
+}
+
+bool AppMainProc::mainProc(RenderingWindow* window, const WindowTickType tickType)
+{
+	m_timer.tick();
+	window->pollEvents();
+	if (window->getInputHandler()->onKeyTriggered(InputCode::KEY_ESCAPE))
+	{
+		window->close();
+	}
+	glClearColor(0.15f, 0.15f, 0.174f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT);
+	window->swapBuffers();
+	return window->isActive();
+}
 
 } // namespace gil

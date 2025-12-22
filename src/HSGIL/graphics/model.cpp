@@ -19,18 +19,39 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-#pragma once
+#include <HSGIL/graphics/model.hpp>
 
-#include <HSGIL/core/minimal.hpp>
+#include <HSGIL/graphics/gUtils.hpp>
+
+#include <HSGIL/core/GL/gl.h>
 
 namespace gil
 {
-namespace compat
+Model::Model()
+    : m_mesh       {},
+      m_diffuseMap {0}
 {
-#if defined(CF__HSGIL_OS_LINUX)
-HSGIL_API void forceGlxContextToVersion(const int major, const int minor);
-#endif
+}
 
-} // namespace compat
+Model::Model(const char* path, const char* texturePath, bool hasNormals, bool hasUVs)
+    : m_mesh       {path, hasNormals, hasUVs},
+      m_diffuseMap {0}
+{
+    m_diffuseMap = loadTexture(texturePath);
+}
+
+Model::~Model()
+{
+    glDeleteTextures(1, &m_diffuseMap);
+}
+
+void Model::draw(Shader& shader)
+{
+    shader.use();
+    shader.setInt("material.texture_diffuse", 0);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, m_diffuseMap);
+    m_mesh.draw(shader);
+}
 
 } // namespace gil

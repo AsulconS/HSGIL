@@ -21,16 +21,33 @@
 
 #pragma once
 
-#include <HSGIL/core/minimal.hpp>
+#include <HSGIL/math/vec2.hpp>
+
+#include <HSGIL/window/inputBindings.hpp>
 
 namespace gil
 {
-namespace compat
+struct WindowParams
 {
-#if defined(CF__HSGIL_OS_LINUX)
-HSGIL_API void forceGlxContextToVersion(const int major, const int minor);
-#endif
+};
 
-} // namespace compat
+struct MouseParams : public WindowParams
+{
+    InputCode code;
+    Vec2i pos;
+};
+
+struct KeyboardParams : public WindowParams
+{
+    InputCode code;
+};
+
+struct WindowRectParams : public WindowParams
+{
+    int clientWidth;
+    int clientHeight;
+    int windowWidth;
+    int windowHeight;
+};
 
 } // namespace gil

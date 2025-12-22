@@ -14,6 +14,7 @@ project(HSGIL VERSION ${FULL_VERSION} LANGUAGES C CXX)
 option(BUILD_SHARED_LIBS "Build HSGIL in shared mode [Shared by default]." ON)
 option(HSGIL_BUILD_EXAMPLES "Build HSGIL examples." OFF)
 option(HSGIL_FORCE_GLX_CTX_VERSION OFF)
+option(HSGIL_FREE_CONSOLE OFF)
 option(HSGIL_DEV_OPT_1 OFF) # VLD on Windows
 set(HSGIL_VLD_DIR "" CACHE STRING "Specifies the VLD Directory Path")
 set(HSGIL_GLX_CTX_VERSION_MAJOR 4 CACHE STRING "Specifies Forced GLX Version Major")
@@ -21,6 +22,9 @@ set(HSGIL_GLX_CTX_VERSION_MINOR 6 CACHE STRING "Specifies Forced GLX Version Min
 
 # Set where runtime files should go
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY $<1:${CMAKE_SOURCE_DIR}>/bin/$<IF:$<CONFIG:Debug>,Debug,Release>)
+
+# Export compile commands
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Set specific lib names
 set(HSGIL_LIB_NAME hsgil)
@@ -38,28 +42,28 @@ endif()
 # Source Files
 # ------------------------------------------------------------------------------
 set(HSGIL_SOURCES
-	external/src/glad/glad.c
-	src/system/timer.cpp
-	src/system/${HSGIL_PLATFORM}/timerPlatform.cpp
-	src/graphics/gUtils.cpp
-	src/graphics/mesh.cpp
-	src/graphics/model.cpp
-	src/graphics/shader.cpp
-	src/math/mUtils.cpp
-	src/math/vecArithmetic.cpp
-	src/window/inputHandler.cpp
-	src/window/renderingWindow.cpp
-	src/window/${HSGIL_PLATFORM}/windowManagerPlatform.cpp
-	src/window/${HSGIL_PLATFORM}/compatUtilsPlatform.cpp
-	src/window/wmLazyPtr.cpp
-	src/window/wUtils.cpp
+	src/HSGIL/core/GL/gl.c
+	src/HSGIL/core/appMainProc.cpp
+	src/HSGIL/system/timer.cpp
+	src/HSGIL/system/${HSGIL_PLATFORM}/timerPlatform.cpp
+	src/HSGIL/graphics/gUtils.cpp
+	src/HSGIL/graphics/mesh.cpp
+	src/HSGIL/graphics/model.cpp
+	src/HSGIL/graphics/shader.cpp
+	src/HSGIL/math/mUtils.cpp
+	src/HSGIL/math/vecArithmetic.cpp
+	src/HSGIL/window/inputHandler.cpp
+	src/HSGIL/window/renderingWindow.cpp
+	src/HSGIL/window/${HSGIL_PLATFORM}/windowManagerPlatform.cpp
+	src/HSGIL/window/${HSGIL_PLATFORM}/compatUtilsPlatform.cpp
 )
 
 
 # ------------------------------------------------------------------------------
 # Dynamic Compile Definitions
 # ------------------------------------------------------------------------------
-set(HSGIL_PRIVATE_COMPILE_DEFINITIONS $<IF:$<CONFIG:Debug>,HSGIL_DEBUG,HSGIL_RELEASE>)
+set(HSGIL_PUBLIC_COMPILE_DEFINITIONS $<IF:$<CONFIG:Debug>,HSGIL_DEBUG,HSGIL_RELEASE>)
+set(HSGIL_PRIVATE_COMPILE_DEFINITIONS "")
 if (HSGIL_FORCE_GLX_CTX_VERSION)
 	set(HSGIL_PRIVATE_COMPILE_DEFINITIONS ${HSGIL_PRIVATE_COMPILE_DEFINITIONS}
 		C__HSGIL_FORCE_GLX_CTX_VERSION
@@ -67,15 +71,43 @@ if (HSGIL_FORCE_GLX_CTX_VERSION)
 		C__HSGIL_GLX_CTX_VERSION_MINOR=${HSGIL_GLX_CTX_VERSION_MINOR}
 	)
 endif()
+if (HSGIL_FREE_CONSOLE)
+	set(HSGIL_PRIVATE_COMPILE_DEFINITIONS ${HSGIL_PRIVATE_COMPILE_DEFINITIONS}
+		C__HSGIL_FREE_CONSOLE
+	)
+endif()
 if (WIN32)
+	# Try to find a valid Windows SDK installation
+	if (NOT CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION)
+		# Attempt to find the Windows SDK installation root via Registry
+		get_filename_component(SDK_ROOT
+			"[HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows Kits\\Installed Roots;KitsRoot10]"
+			ABSOLUTE
+		)
+		if (EXISTS "${SDK_ROOT}/Include")
+			# Get all subdirectories in the 'Include' folder (e.g., 10.0.22621.0)
+			file(GLOB SDK_VERSIONS RELATIVE "${SDK_ROOT}/Include" "${SDK_ROOT}/Include/10.*")
+			# Sort them to find the latest version
+			if (SDK_VERSIONS)
+				list(SORT SDK_VERSIONS ORDER DESCENDING)
+				list(GET SDK_VERSIONS 0 LATEST_SDK)
+
+				# Populate the latest version
+				set(CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION "${LATEST_SDK}" CACHE STRING "Detected Windows SDK")
+			endif()
+		endif()
+	endif()
+
+	# If SDK found, set proper variables
 	if (CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION)
+		message(STATUS "${CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION} Windows SDK detected")
 		set(SDK_VERSION ${CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION})
 		string(REPLACE "." ";" SDK_VERSION_AS_LIST ${SDK_VERSION})
 		list(GET SDK_VERSION_AS_LIST 0 SDK_MAJOR)
 		list(GET SDK_VERSION_AS_LIST 1 SDK_MINOR)
 		list(GET SDK_VERSION_AS_LIST 2 SDK_PATCH)
 		set(HSGIL_PRIVATE_COMPILE_DEFINITIONS ${HSGIL_PRIVATE_COMPILE_DEFINITIONS}
-			C__WIN_SDK_SUPPORTED
+			C__WIN_SDK_AVAILABLE
 			C__WIN_SDK_VERSION_MAJOR=${SDK_MAJOR}
 			C__WIN_SDK_VERSION_MINOR=${SDK_MINOR}
 			C__WIN_SDK_VERSION_PATCH=${SDK_PATCH}
@@ -83,15 +115,22 @@ if (WIN32)
 	else()
 		message(WARNING "CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION is empty. Cannot parse version list.")
 	endif()
+
+	# Add generic windows compile definitions
 	set(HSGIL_PRIVATE_COMPILE_DEFINITIONS ${HSGIL_PRIVATE_COMPILE_DEFINITIONS}
 		NOMINMAX
 	)
 	if (HSGIL_DEV_OPT_1)
-		set(HSGIL_PRIVATE_COMPILE_DEFINITIONS ${HSGIL_PRIVATE_COMPILE_DEFINITIONS}
+		set(HSGIL_PUBLIC_COMPILE_DEFINITIONS ${HSGIL_PUBLIC_COMPILE_DEFINITIONS}
 			C__HSGIL_DEV_OPT_1
 		)
 	endif()
 endif()
+# Debug the definitions to a file
+file(GENERATE
+	OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/debug_defs_$<CONFIG>.txt"
+	CONTENT "Evaluated public definitions: ${HSGIL_PUBLIC_COMPILE_DEFINITIONS}\nEvaluated private definitions: ${HSGIL_PRIVATE_COMPILE_DEFINITIONS}\n"
+)
 
 
 # ------------------------------------------------------------------------------
@@ -111,16 +150,19 @@ PROPERTIES
 if (BUILD_SHARED_LIBS)
 	target_compile_definitions(${HSGIL_RUNTIME_LIB_NAME}
 	PUBLIC
-		GLAD_GLAPI_EXPORT
+		GLAD_API_CALL_EXPORT
 		C__HSGIL_API_CALL_EXPORT
+		${HSGIL_PUBLIC_COMPILE_DEFINITIONS}
 	PRIVATE
 		__STDC_LIB_EXT1__
-		GLAD_GLAPI_EXPORT_BUILD
+		GLAD_API_CALL_EXPORT_BUILD
 		C__HSGIL_API_CALL_EXPORT_BUILD
 		${HSGIL_PRIVATE_COMPILE_DEFINITIONS}
 	)
 else()
 	target_compile_definitions(${HSGIL_RUNTIME_LIB_NAME}
+	PUBLIC
+		${HSGIL_PUBLIC_COMPILE_DEFINITIONS}
 	PRIVATE
 		__STDC_LIB_EXT1__
 		${HSGIL_PRIVATE_COMPILE_DEFINITIONS}
@@ -128,7 +170,7 @@ else()
 endif()
 
 # Add Include Directories and Link
-target_include_directories(${HSGIL_RUNTIME_LIB_NAME} PUBLIC include)
+target_include_directories(${HSGIL_RUNTIME_LIB_NAME} PUBLIC include PRIVATE src)
 target_compile_features(${HSGIL_RUNTIME_LIB_NAME} PUBLIC cxx_std_20)
 if (WIN32)
 	target_link_libraries(${HSGIL_RUNTIME_LIB_NAME} opengl32)

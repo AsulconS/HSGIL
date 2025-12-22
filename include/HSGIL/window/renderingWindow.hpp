@@ -21,17 +21,27 @@
 
 #pragma once
 
-#include <HSGIL/config/config.hpp>
-#include <HSGIL/config/common.hpp>
+#include <HSGIL/core/minimal.hpp>
+#include <HSGIL/core/appMainProc.hpp>
 
 #include <HSGIL/window/iWindow.hpp>
 #include <HSGIL/window/inputEvents.hpp>
 #include <HSGIL/window/inputHandler.hpp>
+#include <HSGIL/window/windowParams.hpp>
 #include <HSGIL/window/customization.hpp>
 
 namespace gil
 {
-struct WindowParams;
+/**
+ * @brief Window Tick Type Class that identifies the type of tick being called
+ *
+ */
+enum class WindowTickType : uint8
+{
+    NONE,
+    PROC_TICK,
+    EXTERNAL_TICK
+};
 
 /**
  * @brief Rendering Window Class that handle a window for render of the program
@@ -39,6 +49,9 @@ struct WindowParams;
  */
 class HSGIL_API RenderingWindow : public IWindow
 {
+    using TickCallback = bool (AppMainProc::*)(RenderingWindow*, const WindowTickType);
+    using TickStaticCallback = bool (*)(RenderingWindow*, const WindowTickType);
+
 public:
     /**
      * @brief Construct a new RenderingWindow object
@@ -55,10 +68,41 @@ public:
     virtual ~RenderingWindow();
 
     /**
+     * @brief Starts Main Loop
+     *
+     * @return int
+     */
+    int startTicking();
+    /**
+     * @brief Starts Registered tick
+     *
+     */
+    bool tick();
+    /**
+     * @brief Ticks the main loop once
+     *
+     */
+    bool externalTick();
+
+    /**
      * @brief Swap the framebuffers
      * 
      */
     void swapBuffers();
+
+    /**
+     * @brief Binds the Tick Callback Function to a member function pointer
+     *
+     * @param obj
+     * @param callback
+     */
+    void bindTickCallbackFunction(AppMainProc* appMainProc, TickCallback callback);
+    /**
+     * @brief Binds the Tick Callback Function to a static function pointer
+     *
+     * @param callback
+     */
+    void bindStaticTickCallbackFunction(TickStaticCallback callback);
 
     /**
      * @brief Check if the Window shouldn't close
@@ -80,6 +124,12 @@ public:
      */
     virtual void close() override;
 
+    /**
+     * @brief Get the Input Handler object
+     *
+     * @return InputHandler*
+     */
+    virtual InputHandler* getInputHandler() override;
     /**
      * @brief Set the Input Handler object
      * 
@@ -118,14 +168,29 @@ protected:
 
 private:
     /**
+     * @brief Invokes bound tick callback
+     *
+     */
+    bool invokeTickCallback(RenderingWindow* window, const WindowTickType tickType);
+
+    /**
      * @brief Key Callback function
      * 
      * @param window 
      * @param event 
-     * @param inputCode 
-     * @param repeat 
+     * @param params
      */
     static void eventCallback(IWindow* window, InputEvent event, WindowParams* params);
+    /**
+     * @brief Ticks the main loop once (Callback Version)
+     *
+     */
+    static bool externalTickCallback(IWindow* window);
+
+private:
+    AppMainProc* m_appMainProc;
+    TickCallback m_tickCallback;
+    TickStaticCallback m_tickStaticCallback;
 };
 
 } // namespace gil

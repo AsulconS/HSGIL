@@ -21,16 +21,5 @@
 
 #pragma once
 
-#include <HSGIL/core/minimal.hpp>
-
-namespace gil
-{
-namespace compat
-{
-#if defined(CF__HSGIL_OS_LINUX)
-HSGIL_API void forceGlxContextToVersion(const int major, const int minor);
-#endif
-
-} // namespace compat
-
-} // namespace gil
+#include <HSGIL/core/config.hpp>
+#include <HSGIL/core/common.hpp>

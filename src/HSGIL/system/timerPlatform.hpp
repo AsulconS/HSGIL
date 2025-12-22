@@ -19,64 +19,26 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-#pragma once
-
-#include <HSGIL/external/glm/glm.hpp>
+#ifndef HSGIL_TIMER_PLATFORM_HPP
+#define HSGIL_TIMER_PLATFORM_HPP
 
 #include <HSGIL/core/minimal.hpp>
 
-#include <HSGIL/system/dstr/vector.hpp>
-
-#include <HSGIL/graphics/shader.hpp>
+#include <HSGIL/system/time.hpp>
 
 namespace gil
 {
-/**
- * @brief Mesh Class that stores a 3D Mesh and lets us draw it dynamically
- * 
- */
-class HSGIL_API Mesh
+namespace plat
 {
-public:
-    /**
-     * @brief Construct a new Mesh object
-     * 
-     */
-    Mesh();
-    /**
-     * @brief Construct a new Mesh object from a path to the OBJ file
-     * 
-     * @param path 
-     * @param hasNormals 
-     * @param hasUVs 
-     */
-    Mesh(const char* path, bool hasNormals = true, bool hasUVs = true);
-    /**
-     * @brief Destroy the Mesh object
-     * 
-     */
-    virtual ~Mesh();
+/**
+ * @brief Get the current Time
+ * 
+ * @return Time 
+ */
+HSGIL_API Time getTime();
 
-    /**
-     * @brief Draw the Mesh object with the shader passed by
-     * 
-     * @param shader 
-     */
-    virtual void draw(const Shader& shader);
-
-protected:
-    /**
-     * @brief Generate the VAO, VBO and EBO and setups them
-     * 
-     */
-    virtual void generate();
-
-    uint32 m_VAO;
-    uint32 m_VBO;
-    uint32 m_EBO;
-
-    Vector<uint32>* m_indices;
-    Vector<float>* m_vertexData;
-};
+} // namespace plat
 
 } // namespace gil
+
+#endif // HSGIL_TIMER_PLATFORM_HPP

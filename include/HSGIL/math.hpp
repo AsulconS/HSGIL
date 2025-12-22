@@ -21,7 +21,7 @@
 
 #pragma once
 
-#include <HSGIL/config/config.hpp>
+#include <HSGIL/core/config.hpp>
 
 #include <HSGIL/math/constants.hpp>
 #include <HSGIL/math/vec2.hpp>

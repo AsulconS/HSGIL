@@ -23,14 +23,10 @@
 
 #include <HSGIL/core/minimal.hpp>
 
-namespace gil
-{
-namespace compat
-{
-#if defined(CF__HSGIL_OS_LINUX)
-HSGIL_API void forceGlxContextToVersion(const int major, const int minor);
+#if defined(CF__HSGIL_OS_WINDOWS)
+    #include "win32/windowManagerPlatform.hpp"
+#elif defined(CF__HSGIL_OS_LINUX)
+    #include "linux/windowManagerPlatform.hpp"
+#else
+    #error HSGIL has no support for this OS
 #endif
-
-} // namespace compat
-
-} // namespace gil

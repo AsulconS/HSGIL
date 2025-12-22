@@ -25,6 +25,9 @@ namespace gil
 {
 enum InputCode
 {
+    /* Default */
+	NONE = 0x000,
+
     /* MOUSE BUTTONS */
     MOUSE_BUTTON_LEFT   = 0x001,
     MOUSE_BUTTON_RIGHT  = 0x002,

@@ -21,8 +21,7 @@
 
 #pragma once
 
-#include <HSGIL/config/config.hpp>
-#include <HSGIL/config/common.hpp>
+#include <HSGIL/core/minimal.hpp>
 
 #include <HSGIL/window/inputHandler.hpp>
 #include <HSGIL/window/customization.hpp>
@@ -73,6 +72,12 @@ public:
      */
     virtual void close() = 0;
 
+    /**
+     * @brief Get the Input Handler object
+     *
+     * @return InputHandler*
+     */
+    virtual InputHandler* getInputHandler() = 0;
     /**
      * @brief Set the Input Handler object
      * 

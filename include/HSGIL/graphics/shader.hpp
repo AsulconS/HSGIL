@@ -21,13 +21,11 @@
 
 #pragma once
 
-#include <HSGIL/external/glad/glad.h>
 #include <HSGIL/external/glm/glm.hpp>
 #include <HSGIL/external/glm/gtc/type_ptr.hpp>
 #include <HSGIL/external/glm/gtc/matrix_transform.hpp>
 
-#include <HSGIL/config/config.hpp>
-#include <HSGIL/config/common.hpp>
+#include <HSGIL/core/minimal.hpp>
 
 #include <HSGIL/math/vec2.hpp>
 #include <HSGIL/math/vec3.hpp>
@@ -43,6 +41,13 @@ namespace gil
  */
 class HSGIL_API Shader
 {
+public:
+	enum ShaderType : int
+	{
+		VERTEX_SHADER = 0x8B31,
+		FRAGMENT_SHADER = 0x8B30
+	};
+
 public:
     /**
      * @brief Construct a new Shader object from its name
@@ -164,14 +169,14 @@ private:
      * @param src 
      * @return uint32 
      */
-    uint32 createShader(const GLenum type, const std::string& src);
+    uint32 createShader(const ShaderType type, const std::string& src);
     /**
      * @brief Loads some type of shader from a file
      * 
      * @param type Specifies the type of the shader (VS or FS)
      * @return std::string 
      */
-    std::string loadShaderFromFile(const GLenum type, const std::string& path);
+    std::string loadShaderFromFile(const ShaderType type, const std::string& path);
 
     /**
      * @brief Check if some error ocurred

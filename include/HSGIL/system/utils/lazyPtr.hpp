@@ -1,15 +1,15 @@
 /**
  * HSGIL - Handy Scalable Graphics Integration Library
  * Copyright (c) 2025 Adrian Bedregal
- *
+ * 
  * This software is provided 'as-is', without any express or implied
  * warranty. In no event will the authors be held liable for any damages
  * arising from the use of this software.
- *
+ * 
  * Permission is granted to anyone to use this software for any purpose,
  * including commercial applications, and to alter it and redistribute it
  * freely, subject to the following restrictions:
- *
+ * 
  * 1. The origin of this software must not be misrepresented; you must not
  *    claim that you wrote the original software. If you use this software
  *    in a product, an acknowledgment in the product documentation would be
@@ -21,62 +21,35 @@
 
 #pragma once
 
-#include <HSGIL/external/glm/glm.hpp>
-
 #include <HSGIL/core/minimal.hpp>
-
-#include <HSGIL/system/dstr/vector.hpp>
-
-#include <HSGIL/graphics/shader.hpp>
 
 namespace gil
 {
-/**
- * @brief Mesh Class that stores a 3D Mesh and lets us draw it dynamically
- * 
- */
-class HSGIL_API Mesh
+template <typename T>
+class LazyPtr
 {
 public:
-    /**
-     * @brief Construct a new Mesh object
-     * 
-     */
-    Mesh();
-    /**
-     * @brief Construct a new Mesh object from a path to the OBJ file
-     * 
-     * @param path 
-     * @param hasNormals 
-     * @param hasUVs 
-     */
-    Mesh(const char* path, bool hasNormals = true, bool hasUVs = true);
-    /**
-     * @brief Destroy the Mesh object
-     * 
-     */
-    virtual ~Mesh();
+	LazyPtr(LazyPtr<T>&& o);
+	LazyPtr();
+	~LazyPtr();
 
-    /**
-     * @brief Draw the Mesh object with the shader passed by
-     * 
-     * @param shader 
-     */
-    virtual void draw(const Shader& shader);
+	template <typename... TArgs>
+	void init(TArgs... args);
 
-protected:
-    /**
-     * @brief Generate the VAO, VBO and EBO and setups them
-     * 
-     */
-    virtual void generate();
+	T& operator*();
+	T* operator->();
+	bool operator==(const LazyPtr<T>& o);
+	bool operator!=(const LazyPtr<T>& o);
+	bool operator==(const std::nullptr_t nullPtr);
+	bool operator!=(const std::nullptr_t nullPtr);
+	operator T*();
 
-    uint32 m_VAO;
-    uint32 m_VBO;
-    uint32 m_EBO;
+private:
+	T* m_data;
 
-    Vector<uint32>* m_indices;
-    Vector<float>* m_vertexData;
+	LazyPtr(const LazyPtr<T>& o) = delete;
 };
 
 } // namespace gil
+
+#include "lazyPtr.inl"

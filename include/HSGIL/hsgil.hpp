@@ -25,3 +25,7 @@
 #include <HSGIL/math.hpp>
 #include <HSGIL/window.hpp>
 #include <HSGIL/graphics.hpp>
+
+#if defined(C__HSGIL_INCLUDE_RAW_GL_H)
+	#include <gl.h>
+#endif

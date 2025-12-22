@@ -21,8 +21,7 @@
 
 #pragma once
 
-#include <HSGIL/config/config.hpp>
-#include <HSGIL/config/common.hpp>
+#include <HSGIL/core/minimal.hpp>
 
 #include <HSGIL/system/time.hpp>
 

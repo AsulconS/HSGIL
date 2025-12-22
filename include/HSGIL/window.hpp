@@ -21,7 +21,7 @@
 
 #pragma once
 
-#include <HSGIL/config/config.hpp>
+#include <HSGIL/core/config.hpp>
 
 #include <HSGIL/window/inputEvents.hpp>
 #include <HSGIL/window/inputBindings.hpp>

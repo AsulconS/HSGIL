@@ -8,9 +8,19 @@ add_custom_target(copy_assets
 macro(build_cpp_source filename)
 	add_executable(${filename} src/${filename}.cpp)
 	add_dependencies(${filename} copy_shaders copy_assets)
+	if (HSGIL_EXAMPLES_GL_DIRECT_SUPPORT)
+		target_include_directories(${filename} PRIVATE ${CMAKE_SOURCE_DIR}/src/HSGIL/core/GL)
+		target_compile_definitions(${filename}
+		PRIVATE
+			C__HSGIL_INCLUDE_RAW_GL_H
+		)
+	endif()
 	target_compile_features(${filename} PRIVATE cxx_std_20)
 	target_link_libraries(${filename} LINK_PUBLIC ${HSGIL_RUNTIME_LIB_NAME})
 endmacro(build_cpp_source)
+
+# Examples options
+option(HSGIL_EXAMPLES_GL_DIRECT_SUPPORT "Provide direct access to OpenGL functions in the examples sources." ON)
 
 #build_cpp_source(map)
 build_cpp_source(finn)

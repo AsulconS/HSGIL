@@ -21,62 +21,30 @@
 
 #pragma once
 
-#include <HSGIL/external/glm/glm.hpp>
-
 #include <HSGIL/core/minimal.hpp>
 
-#include <HSGIL/system/dstr/vector.hpp>
-
-#include <HSGIL/graphics/shader.hpp>
+#include <HSGIL/system/timer.hpp>
 
 namespace gil
 {
+// Forward Declarations
+class RenderingWindow;
+enum class WindowTickType : uint8;
+
 /**
- * @brief Mesh Class that stores a 3D Mesh and lets us draw it dynamically
- * 
+ * @brief Application Main Procedure class to handle main tick
+ *
  */
-class HSGIL_API Mesh
+class HSGIL_API AppMainProc
 {
 public:
-    /**
-     * @brief Construct a new Mesh object
-     * 
-     */
-    Mesh();
-    /**
-     * @brief Construct a new Mesh object from a path to the OBJ file
-     * 
-     * @param path 
-     * @param hasNormals 
-     * @param hasUVs 
-     */
-    Mesh(const char* path, bool hasNormals = true, bool hasUVs = true);
-    /**
-     * @brief Destroy the Mesh object
-     * 
-     */
-    virtual ~Mesh();
+	explicit AppMainProc();
+	virtual ~AppMainProc();
 
-    /**
-     * @brief Draw the Mesh object with the shader passed by
-     * 
-     * @param shader 
-     */
-    virtual void draw(const Shader& shader);
+	bool mainProc(RenderingWindow* window, const WindowTickType tickType);
 
-protected:
-    /**
-     * @brief Generate the VAO, VBO and EBO and setups them
-     * 
-     */
-    virtual void generate();
-
-    uint32 m_VAO;
-    uint32 m_VBO;
-    uint32 m_EBO;
-
-    Vector<uint32>* m_indices;
-    Vector<float>* m_vertexData;
+private:
+	Timer m_timer;
 };
 
 } // namespace gil

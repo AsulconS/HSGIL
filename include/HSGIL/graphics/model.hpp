@@ -23,8 +23,7 @@
 
 #include <HSGIL/external/glm/glm.hpp>
 
-#include <HSGIL/config/config.hpp>
-#include <HSGIL/config/common.hpp>
+#include <HSGIL/core/minimal.hpp>
 
 #include <HSGIL/graphics/mesh.hpp>
 #include <HSGIL/graphics/shader.hpp>
