@@ -29,8 +29,8 @@ namespace gil
  */
 struct Vec2f
 {
-    float x;
-    float y;
+	float x;
+	float y;
 };
 
 /**
@@ -39,8 +39,8 @@ struct Vec2f
  */
 struct Vec2i
 {
-    uint32 x;
-    uint32 y;
+	uint32 x;
+	uint32 y;
 };
 
 using Vec2 = Vec2f;

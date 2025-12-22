@@ -32,12 +32,12 @@ namespace gil
 class DStrException : public GenericException
 {
 public:
-    /**
-     * @brief Overridden method to know why exactly the DStr Exception was thrown
-     * 
-     * @return const char* 
-     */
-    virtual const char* what() const throw() override;
+	/**
+	 * @brief Overridden method to know why exactly the DStr Exception was thrown
+	 * 
+	 * @return const char* 
+	 */
+	virtual const char* what() const throw() override;
 };
 
 /**
@@ -47,12 +47,12 @@ public:
 class KeyNotFoundException : public DStrException
 {
 public:
-    /**
-     * @brief Overridden method to know why exactly the Exception was thrown
-     * 
-     * @return const char* 
-     */
-    virtual const char* what() const throw() override;
+	/**
+	 * @brief Overridden method to know why exactly the Exception was thrown
+	 * 
+	 * @return const char* 
+	 */
+	virtual const char* what() const throw() override;
 };
 
 } // namespace gil

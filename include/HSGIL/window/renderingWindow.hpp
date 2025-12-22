@@ -38,9 +38,9 @@ namespace gil
  */
 enum class WindowTickType : uint8
 {
-    NONE,
-    PROC_TICK,
-    EXTERNAL_TICK
+	NONE,
+	PROC_TICK,
+	EXTERNAL_TICK
 };
 
 /**
@@ -49,148 +49,148 @@ enum class WindowTickType : uint8
  */
 class HSGIL_API RenderingWindow : public IWindow
 {
-    using TickCallback = bool (AppMainProc::*)(RenderingWindow*, const WindowTickType);
-    using TickStaticCallback = bool (*)(RenderingWindow*, const WindowTickType);
+	using TickCallback = bool (AppMainProc::*)(RenderingWindow*, const WindowTickType);
+	using TickStaticCallback = bool (*)(RenderingWindow*, const WindowTickType);
 
 public:
-    /**
-     * @brief Construct a new RenderingWindow object
-     * 
-     * @param t_title 
-     * @param t_width 
-     * @param t_height 
-     */
-    explicit RenderingWindow(const uint32 t_width = 800u, const uint32 t_height = 600u, const char* t_title = "Untitled", WindowStyle t_style = WindowStyle::WINDOWED_STYLE, InputHandler* t_inputHandler = nullptr);
-    /**
-     * @brief Destroy the RenderingWindow object
-     * 
-     */
-    virtual ~RenderingWindow();
+	/**
+	 * @brief Construct a new RenderingWindow object
+	 * 
+	 * @param t_title 
+	 * @param t_width 
+	 * @param t_height 
+	 */
+	explicit RenderingWindow(const uint32 t_width = 800u, const uint32 t_height = 600u, const char* t_title = "Untitled", WindowStyle t_style = WindowStyle::WINDOWED_STYLE, InputHandler* t_inputHandler = nullptr);
+	/**
+	 * @brief Destroy the RenderingWindow object
+	 * 
+	 */
+	virtual ~RenderingWindow();
 
-    /**
-     * @brief Starts Main Loop
-     *
-     * @return int
-     */
-    int startTicking();
-    /**
-     * @brief Starts Registered tick
-     *
-     */
-    bool tick();
-    /**
-     * @brief Ticks the main loop once
-     *
-     */
-    bool externalTick();
+	/**
+	 * @brief Starts Main Loop
+	 *
+	 * @return int
+	 */
+	int startTicking();
+	/**
+	 * @brief Starts Registered tick
+	 *
+	 */
+	bool tick();
+	/**
+	 * @brief Ticks the main loop once
+	 *
+	 */
+	bool externalTick();
 
-    /**
-     * @brief Swap the framebuffers
-     * 
-     */
-    void swapBuffers();
+	/**
+	 * @brief Swap the framebuffers
+	 * 
+	 */
+	void swapBuffers();
 
-    /**
-     * @brief Binds the Tick Callback Function to a member function pointer
-     *
-     * @param obj
-     * @param callback
-     */
-    void bindTickCallbackFunction(AppMainProc* appMainProc, TickCallback callback);
-    /**
-     * @brief Binds the Tick Callback Function to a static function pointer
-     *
-     * @param callback
-     */
-    void bindStaticTickCallbackFunction(TickStaticCallback callback);
+	/**
+	 * @brief Binds the Tick Callback Function to a member function pointer
+	 *
+	 * @param obj
+	 * @param callback
+	 */
+	void bindTickCallbackFunction(AppMainProc* appMainProc, TickCallback callback);
+	/**
+	 * @brief Binds the Tick Callback Function to a static function pointer
+	 *
+	 * @param callback
+	 */
+	void bindStaticTickCallbackFunction(TickStaticCallback callback);
 
-    /**
-     * @brief Check if the Window shouldn't close
-     * 
-     * @return true if the Window is active
-     * @return false if not
-     */
-    virtual bool isActive() override;
-    /**
-     * @brief Check if the Window is able to start rendering
-     * 
-     * @return true if right
-     * @return false if not
-     */
-    virtual bool isReady() override;
-    /**
-     * @brief Send signal to close window
-     * 
-     */
-    virtual void close() override;
+	/**
+	 * @brief Check if the Window shouldn't close
+	 * 
+	 * @return true if the Window is active
+	 * @return false if not
+	 */
+	virtual bool isActive() override;
+	/**
+	 * @brief Check if the Window is able to start rendering
+	 * 
+	 * @return true if right
+	 * @return false if not
+	 */
+	virtual bool isReady() override;
+	/**
+	 * @brief Send signal to close window
+	 * 
+	 */
+	virtual void close() override;
 
-    /**
-     * @brief Get the Input Handler object
-     *
-     * @return InputHandler*
-     */
-    virtual InputHandler* getInputHandler() override;
-    /**
-     * @brief Set the Input Handler object
-     * 
-     */
-    virtual void setInputHandler(InputHandler& t_inputHandler) override;
-    /**
-     * @brief Poll the Events to process the input
-     * 
-     */
-    virtual void pollEvents() override;
-    /**
-     * @brief Get the Aspect Ratio
-     * 
-     * @return float 
-     */
-    virtual float getAspectRatio() const override;
-    /**
-     * @brief Get the Window Rect object as Vec2i
-     * 
-     * @return Vec2i vector containing width and height of the window in pixels
-     */
-    virtual Vec2i getWindowRect() const override;
-    /**
-     * @brief Get the Workspace Rect object as Vec2i
-     * 
-     * @return Vec2i vector containing width and height of the viewport in pixels
-     */
-    virtual Vec2i getViewportRect() const override;
+	/**
+	 * @brief Get the Input Handler object
+	 *
+	 * @return InputHandler*
+	 */
+	virtual InputHandler* getInputHandler() override;
+	/**
+	 * @brief Set the Input Handler object
+	 * 
+	 */
+	virtual void setInputHandler(InputHandler& t_inputHandler) override;
+	/**
+	 * @brief Poll the Events to process the input
+	 * 
+	 */
+	virtual void pollEvents() override;
+	/**
+	 * @brief Get the Aspect Ratio
+	 * 
+	 * @return float 
+	 */
+	virtual float getAspectRatio() const override;
+	/**
+	 * @brief Get the Window Rect object as Vec2i
+	 * 
+	 * @return Vec2i vector containing width and height of the window in pixels
+	 */
+	virtual Vec2i getWindowRect() const override;
+	/**
+	 * @brief Get the Workspace Rect object as Vec2i
+	 * 
+	 * @return Vec2i vector containing width and height of the viewport in pixels
+	 */
+	virtual Vec2i getViewportRect() const override;
 
 protected:
-    /**
-     * @brief Initializes the Window itself
-     * 
-     */
-    virtual void initializeWindow() override;
+	/**
+	 * @brief Initializes the Window itself
+	 * 
+	 */
+	virtual void initializeWindow() override;
 
 private:
-    /**
-     * @brief Invokes bound tick callback
-     *
-     */
-    bool invokeTickCallback(RenderingWindow* window, const WindowTickType tickType);
+	/**
+	 * @brief Invokes bound tick callback
+	 *
+	 */
+	bool invokeTickCallback(RenderingWindow* window, const WindowTickType tickType);
 
-    /**
-     * @brief Key Callback function
-     * 
-     * @param window 
-     * @param event 
-     * @param params
-     */
-    static void eventCallback(IWindow* window, InputEvent event, WindowParams* params);
-    /**
-     * @brief Ticks the main loop once (Callback Version)
-     *
-     */
-    static bool externalTickCallback(IWindow* window);
+	/**
+	 * @brief Key Callback function
+	 * 
+	 * @param window 
+	 * @param event 
+	 * @param params
+	 */
+	static void eventCallback(IWindow* window, InputEvent event, WindowParams* params);
+	/**
+	 * @brief Ticks the main loop once (Callback Version)
+	 *
+	 */
+	static bool externalTickCallback(IWindow* window);
 
 private:
-    AppMainProc* m_appMainProc;
-    TickCallback m_tickCallback;
-    TickStaticCallback m_tickStaticCallback;
+	AppMainProc* m_appMainProc;
+	TickCallback m_tickCallback;
+	TickStaticCallback m_tickStaticCallback;
 };
 
 } // namespace gil

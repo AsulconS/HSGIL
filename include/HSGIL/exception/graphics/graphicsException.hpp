@@ -32,12 +32,12 @@ namespace gil
 class GraphicsException : public GenericException
 {
 public:
-    /**
-     * @brief Overridden method to know why exactly the Graphics Exception was thrown
-     * 
-     * @return const char* 
-     */
-    virtual const char* what() const throw() override;
+	/**
+	 * @brief Overridden method to know why exactly the Graphics Exception was thrown
+	 * 
+	 * @return const char* 
+	 */
+	virtual const char* what() const throw() override;
 };
 
 /**
@@ -47,12 +47,12 @@ public:
 class ShaderException : public GraphicsException
 {
 public:
-    /**
-     * @brief Overridden method to know why exactly the Shader Exception was thrown
-     * 
-     * @return const char* 
-     */
-    virtual const char* what() const throw() override;
+	/**
+	 * @brief Overridden method to know why exactly the Shader Exception was thrown
+	 * 
+	 * @return const char* 
+	 */
+	virtual const char* what() const throw() override;
 };
 
 } // namespace gil

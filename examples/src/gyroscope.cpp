@@ -25,31 +25,31 @@
 
 int main()
 {
-    gil::RenderingWindow window(800, 600, "Gyroscope");
-    if (!window.isReady())
-    {
-        std::cerr << "Window is not ready, something went wrong" << std::endl;
-        return -1;
-    }
+	gil::RenderingWindow window(800, 600, "Gyroscope");
+	if (!window.isReady())
+	{
+		std::cerr << "Window is not ready, something went wrong" << std::endl;
+		return -1;
+	}
 
-    gil::InputHandler inputHandler;
-    window.setInputHandler(inputHandler);
+	gil::InputHandler inputHandler;
+	window.setInputHandler(inputHandler);
 
-    gil::Timer timer;
-    while (window.isActive())
-    {
-        window.pollEvents();
-        if (inputHandler.onKeyDown(gil::KEY_ESCAPE))
-        {
-            window.close();
-        }
+	gil::Timer timer;
+	while (window.isActive())
+	{
+		window.pollEvents();
+		if (inputHandler.onKeyDown(gil::KEY_ESCAPE))
+		{
+			window.close();
+		}
 
-        glClearColor(0.2f, 0.5f, 1.0f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+		glClearColor(0.2f, 0.5f, 1.0f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT);
 
-        window.swapBuffers();
-        timer.tick();
-    }
+		window.swapBuffers();
+		timer.tick();
+	}
 
-    return 0;
+	return 0;
 }

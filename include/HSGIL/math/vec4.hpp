@@ -29,10 +29,10 @@ namespace gil
  */
 struct Vec4f
 {
-    float x;
-    float y;
-    float z;
-    float w;
+	float x;
+	float y;
+	float z;
+	float w;
 };
 
 /**
@@ -41,10 +41,10 @@ struct Vec4f
  */
 struct Vec4i
 {
-    int x;
-    int y;
-    int z;
-    int w;
+	int x;
+	int y;
+	int z;
+	int w;
 };
 
 using Vec4 = Vec4f;

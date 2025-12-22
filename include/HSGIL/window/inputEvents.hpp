@@ -25,14 +25,14 @@ namespace gil
 {
 enum InputEvent
 {
-    KEY_RELEASED    = 0x0,
-    KEY_PRESSED     = 0x1,
-    BUTTON_PRESSED  = 0x2,
-    BUTTON_RELEASED = 0x3,
+	KEY_RELEASED    = 0x0,
+	KEY_PRESSED     = 0x1,
+	BUTTON_PRESSED  = 0x2,
+	BUTTON_RELEASED = 0x3,
 
-    MOUSE_MOVE = 0x4,
+	MOUSE_MOVE = 0x4,
 
-    UNKNOWN_INPUT_EVENT = 0xFFF
+	UNKNOWN_INPUT_EVENT = 0xFFF
 };
 
 } // namespace gil

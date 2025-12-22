@@ -32,12 +32,12 @@ namespace gil
 class GenericException : public std::exception
 {
 public:
-    /**
-     * @brief Overridden method to know why exactly the Exception was thrown
-     * 
-     * @return const char* 
-     */
-    virtual const char* what() const throw() override;
+	/**
+	 * @brief Overridden method to know why exactly the Exception was thrown
+	 * 
+	 * @return const char* 
+	 */
+	virtual const char* what() const throw() override;
 };
 
 } // namespace gil

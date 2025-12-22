@@ -23,20 +23,20 @@
 
 int main()
 {
-    gil::RenderingWindow window(800, 600, "Key-Codes Testing");
-    if(!window.isReady())
-    {
-        return -1;
-    }
+	gil::RenderingWindow window(800, 600, "Key-Codes Testing");
+	if(!window.isReady())
+	{
+		return -1;
+	}
 
-    gil::InputHandler inputHandler;
-    window.setInputHandler(inputHandler);
+	gil::InputHandler inputHandler;
+	window.setInputHandler(inputHandler);
 
-    while(window.isActive())
-    {
-        window.pollEvents();
-        window.swapBuffers();
-    }
+	while(window.isActive())
+	{
+		window.pollEvents();
+		window.swapBuffers();
+	}
 
-    return 0;
+	return 0;
 }

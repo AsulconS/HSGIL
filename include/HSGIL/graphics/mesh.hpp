@@ -38,45 +38,45 @@ namespace gil
 class HSGIL_API Mesh
 {
 public:
-    /**
-     * @brief Construct a new Mesh object
-     * 
-     */
-    Mesh();
-    /**
-     * @brief Construct a new Mesh object from a path to the OBJ file
-     * 
-     * @param path 
-     * @param hasNormals 
-     * @param hasUVs 
-     */
-    Mesh(const char* path, bool hasNormals = true, bool hasUVs = true);
-    /**
-     * @brief Destroy the Mesh object
-     * 
-     */
-    virtual ~Mesh();
+	/**
+	 * @brief Construct a new Mesh object
+	 * 
+	 */
+	Mesh();
+	/**
+	 * @brief Construct a new Mesh object from a path to the OBJ file
+	 * 
+	 * @param path 
+	 * @param hasNormals 
+	 * @param hasUVs 
+	 */
+	Mesh(const char* path, bool hasNormals = true, bool hasUVs = true);
+	/**
+	 * @brief Destroy the Mesh object
+	 * 
+	 */
+	virtual ~Mesh();
 
-    /**
-     * @brief Draw the Mesh object with the shader passed by
-     * 
-     * @param shader 
-     */
-    virtual void draw(const Shader& shader);
+	/**
+	 * @brief Draw the Mesh object with the shader passed by
+	 * 
+	 * @param shader 
+	 */
+	virtual void draw(const Shader& shader);
 
 protected:
-    /**
-     * @brief Generate the VAO, VBO and EBO and setups them
-     * 
-     */
-    virtual void generate();
+	/**
+	 * @brief Generate the VAO, VBO and EBO and setups them
+	 * 
+	 */
+	virtual void generate();
 
-    uint32 m_VAO;
-    uint32 m_VBO;
-    uint32 m_EBO;
+	uint32 m_VAO;
+	uint32 m_VBO;
+	uint32 m_EBO;
 
-    Vector<uint32>* m_indices;
-    Vector<float>* m_vertexData;
+	Vector<uint32>* m_indices;
+	Vector<float>* m_vertexData;
 };
 
 } // namespace gil

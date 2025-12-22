@@ -29,7 +29,7 @@ namespace compat
 {
 void forceGlxContextToVersion(const int major, const int minor)
 {
-    WindowManager::internalSetGlxContextVersion(major, minor);
+	WindowManager::internalSetGlxContextVersion(major, minor);
 }
 
 } // namespace compat

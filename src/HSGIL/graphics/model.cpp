@@ -28,30 +28,30 @@
 namespace gil
 {
 Model::Model()
-    : m_mesh       {},
-      m_diffuseMap {0}
+	: m_mesh       {},
+	  m_diffuseMap {0}
 {
 }
 
 Model::Model(const char* path, const char* texturePath, bool hasNormals, bool hasUVs)
-    : m_mesh       {path, hasNormals, hasUVs},
-      m_diffuseMap {0}
+	: m_mesh       {path, hasNormals, hasUVs},
+	  m_diffuseMap {0}
 {
-    m_diffuseMap = loadTexture(texturePath);
+	m_diffuseMap = loadTexture(texturePath);
 }
 
 Model::~Model()
 {
-    glDeleteTextures(1, &m_diffuseMap);
+	glDeleteTextures(1, &m_diffuseMap);
 }
 
 void Model::draw(Shader& shader)
 {
-    shader.use();
-    shader.setInt("material.texture_diffuse", 0);
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, m_diffuseMap);
-    m_mesh.draw(shader);
+	shader.use();
+	shader.setInt("material.texture_diffuse", 0);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, m_diffuseMap);
+	m_mesh.draw(shader);
 }
 
 } // namespace gil

@@ -34,63 +34,63 @@ namespace gil
 class HSGIL_API Timer
 {
 public:
-    /**
-     * @brief Construct a new Timer object
-     * 
-     */
-    explicit Timer(const bool t_debugMode = false, const float t_period = 1.0f);
-    /**
-     * @brief Destroy the Timer object
-     * 
-     */
-    virtual ~Timer();
+	/**
+	 * @brief Construct a new Timer object
+	 * 
+	 */
+	explicit Timer(const bool t_debugMode = false, const float t_period = 1.0f);
+	/**
+	 * @brief Destroy the Timer object
+	 * 
+	 */
+	virtual ~Timer();
 
-    /**
-     * @brief Update the timer
-     * 
-     */
-    void tick();
-    /**
-     * @brief Restart the timer
-     * 
-     */
-    void restart();
+	/**
+	 * @brief Update the timer
+	 * 
+	 */
+	void tick();
+	/**
+	 * @brief Restart the timer
+	 * 
+	 */
+	void restart();
 
-    /**
-     * @brief Get the Delta Time
-     * 
-     * @return float 
-     */
-    secT getDeltaTime();
-    /**
-     * @brief Get the Total Frame count
-     * 
-     * @return uint32 
-     */
-    uint32 getTotalFrames();
-    /**
-     * @brief Get the Frames Per Second count
-     * 
-     * @return uint32 
-     */
-    uint32 getFramesPerSecond();
+	/**
+	 * @brief Get the Delta Time
+	 * 
+	 * @return float 
+	 */
+	secT getDeltaTime();
+	/**
+	 * @brief Get the Total Frame count
+	 * 
+	 * @return uint32 
+	 */
+	uint32 getTotalFrames();
+	/**
+	 * @brief Get the Frames Per Second count
+	 * 
+	 * @return uint32 
+	 */
+	uint32 getFramesPerSecond();
 
 private:
-    secT procDeltaTime();
-    secT procTotalElapsedTime();
-    secT procCurrentElapsedTime();
+	secT procDeltaTime();
+	secT procTotalElapsedTime();
+	secT procCurrentElapsedTime();
 
-    microT m_start;
-    microT m_currentStart;
-    microT m_lastTime;
+	microT m_start;
+	microT m_currentStart;
+	microT m_lastTime;
 
-    secT m_deltaTime;
-    secT m_currentTime;
-    uint32 m_totalFrames;
-    uint32 m_framesPerSecond;
+	secT m_deltaTime;
+	secT m_currentTime;
+	uint32 m_totalFrames;
+	uint32 m_framesPerSecond;
 
-    secT m_period;
-    bool m_debugMode;
+	secT m_period;
+	bool m_debugMode;
 };
 
 } // namespace gil

@@ -64,109 +64,109 @@ using PFNGLXSWAPINTERVALPROC2 = int (*)(int);
 
 class HSGIL_API WindowManager final
 {
-    friend gil::LazyPtr<WindowManager>;
-    friend void compat::forceGlxContextToVersion(const int major, const int minor);
+	friend gil::LazyPtr<WindowManager>;
+	friend void compat::forceGlxContextToVersion(const int major, const int minor);
 
 public:
-    static WindowManager* createInstance();
-    static WindowManager* getInstance(const uint32 index);
+	static WindowManager* createInstance();
+	static WindowManager* getInstance(const uint32 index);
 
-    bool isActive();
-    WindowRectParams createRenderingWindow(const char* title, int x, int y, int width, int height, WindowStyle style);
-    void destroyWindow();
+	bool isActive();
+	WindowRectParams createRenderingWindow(const char* title, int x, int y, int width, int height, WindowStyle style);
+	void destroyWindow();
 
-    void registerWindowInstance(IWindow* windowInstance);
-    void setEventCallbackFunction(EventCallbackFunction tf_eventCallbackFunction);
-    void setExternalTickCallbackFunction(ExternalTickCallbackFunction tf_externalTickCallbackFunction);
+	void registerWindowInstance(IWindow* windowInstance);
+	void setEventCallbackFunction(EventCallbackFunction tf_eventCallbackFunction);
+	void setExternalTickCallbackFunction(ExternalTickCallbackFunction tf_externalTickCallbackFunction);
 
-    void pollEvents();
-    void swapBuffers();
-
-private:
-    /* Privated constructor and destructor */
-
-    WindowManager(const uint32 t_index);
-    ~WindowManager();
-
-    void createContext();
-
-    static void internalSetGlxContextVersion(const int major, const int minor);
-
-    static void loadInputMap();
-    static int rawToStandard(int rawCode);
-
-    static bool isExtensionSupported(const char* extList, const char* extension);
-    static void loadGLExtensions();
-    static GLXFBConfig chooseBestFBC();
-
-    static void fatalError(const char* msg);
-
-    static void HSGILProc();
-
-    /* Deleted Constructors and assignment */
-
-    WindowManager(const WindowManager&) = delete;
-    WindowManager(WindowManager&&) = delete;
-
-    WindowManager& operator=(const WindowManager&) = delete;
+	void pollEvents();
+	void swapBuffers();
 
 private:
-    bool m_isInstanceActive;
+	/* Privated constructor and destructor */
 
-    uint32 m_index;
-    XWND m_windowHandle;
-    Atom m_atomWmDeleteWindow;
+	WindowManager(const uint32 t_index);
+	~WindowManager();
 
-    GLXFBConfig m_fbConfig;
-    GLXContext m_context;
+	void createContext();
 
-    XVisualInfo* m_visual;
-    XSetWindowAttributes m_windowAttributes;
+	static void internalSetGlxContextVersion(const int major, const int minor);
 
-    IWindow* m_windowCallbackInstance;
-    EventCallbackFunction mf_eventCallbackFunction;
-    ExternalTickCallbackFunction mf_externalTickCallbackFunction;
+	static void loadInputMap();
+	static int rawToStandard(int rawCode);
 
-    /* ---- Static Instances ---- */
+	static bool isExtensionSupported(const char* extList, const char* extension);
+	static void loadGLExtensions();
+	static GLXFBConfig chooseBestFBC();
 
-    /* Instance Tracking variables */
+	static void fatalError(const char* msg);
 
-    static uint32 s_activeSessions;
-    static uint32 s_wmInstanceCount;
-    static gil::LazyPtr<WindowManager> s_wmInstances[MAX_WINDOW_INSTANCES];
+	static void HSGILProc();
 
-    /**
-     * @brief   Window Hash Table <Window Handler, Instance ID>
-     */
-    static gil::SafePtr<Map<XWND, uint32>> s_hwndMap;
+	/* Deleted Constructors and assignment */
 
-    /* Static Internal Data */
+	WindowManager(const WindowManager&) = delete;
+	WindowManager(WindowManager&&) = delete;
 
-    static const int s_glxAttribs[ATTRIB_LIST_SIZE];
+	WindowManager& operator=(const WindowManager&) = delete;
 
-    static int s_keyCodesMap[NUM_KEYS_SIZE];
-    static int s_keyPhysicStates[NUM_KEYS_SIZE];
-    static int s_mouseButtonsMap[NUM_BUTTONS_SIZE];
+private:
+	bool m_isInstanceActive;
 
-    static XEvent s_event;
-    static XkbDescPtr s_kbDesc;
-    static Display* s_display;
-    static Screen*  s_screen;
-    static int s_screenID;
+	uint32 m_index;
+	XWND m_windowHandle;
+	Atom m_atomWmDeleteWindow;
 
-    static int s_fbCount;
-    static GLXFBConfig* s_fbConfigs;
+	GLXFBConfig m_fbConfig;
+	GLXContext m_context;
 
-    static bool s_vSyncCompat;
-    static bool s_attribCtxCompat;
-    static int s_glxCtxVersionMajorCompat;
-    static int s_glxCtxVersionMinorCompat;
+	XVisualInfo* m_visual;
+	XSetWindowAttributes m_windowAttributes;
 
-    static PFNGLXCREATECONTEXTATTRIBSARBPROC glXCreateContextAttribsARB;
+	IWindow* m_windowCallbackInstance;
+	EventCallbackFunction mf_eventCallbackFunction;
+	ExternalTickCallbackFunction mf_externalTickCallbackFunction;
 
-    static bool glXSwapIntervalEXTMode;
-    static PFNGLXSWAPINTERVALPROC1 glXSwapInterval1;
-    static PFNGLXSWAPINTERVALPROC2 glXSwapInterval2;
+	/* ---- Static Instances ---- */
+
+	/* Instance Tracking variables */
+
+	static uint32 s_activeSessions;
+	static uint32 s_wmInstanceCount;
+	static gil::LazyPtr<WindowManager> s_wmInstances[MAX_WINDOW_INSTANCES];
+
+	/**
+	 * @brief   Window Hash Table <Window Handler, Instance ID>
+	 */
+	static gil::SafePtr<Map<XWND, uint32>> s_hwndMap;
+
+	/* Static Internal Data */
+
+	static const int s_glxAttribs[ATTRIB_LIST_SIZE];
+
+	static int s_keyCodesMap[NUM_KEYS_SIZE];
+	static int s_keyPhysicStates[NUM_KEYS_SIZE];
+	static int s_mouseButtonsMap[NUM_BUTTONS_SIZE];
+
+	static XEvent s_event;
+	static XkbDescPtr s_kbDesc;
+	static Display* s_display;
+	static Screen*  s_screen;
+	static int s_screenID;
+
+	static int s_fbCount;
+	static GLXFBConfig* s_fbConfigs;
+
+	static bool s_vSyncCompat;
+	static bool s_attribCtxCompat;
+	static int s_glxCtxVersionMajorCompat;
+	static int s_glxCtxVersionMinorCompat;
+
+	static PFNGLXCREATECONTEXTATTRIBSARBPROC glXCreateContextAttribsARB;
+
+	static bool glXSwapIntervalEXTMode;
+	static PFNGLXSWAPINTERVALPROC1 glXSwapInterval1;
+	static PFNGLXSWAPINTERVALPROC2 glXSwapInterval2;
 };
 
 } // namespace gil

@@ -24,9 +24,9 @@
 #include <HSGIL/core/minimal.hpp>
 
 #if defined(CF__HSGIL_OS_WINDOWS)
-    #include "win32/windowManagerPlatform.hpp"
+	#include "win32/windowManagerPlatform.hpp"
 #elif defined(CF__HSGIL_OS_LINUX)
-    #include "linux/windowManagerPlatform.hpp"
+	#include "linux/windowManagerPlatform.hpp"
 #else
-    #error HSGIL has no support for this OS
+	#error HSGIL has no support for this OS
 #endif

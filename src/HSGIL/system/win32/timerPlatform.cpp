@@ -26,9 +26,9 @@
 #include <HSGIL/system/timerPlatform.hpp>
 
 #ifdef CF__HSGIL_OS_WINDOWS
-    #define HSGIL_GET_TICK_COUNT GetTickCount64
+	#define HSGIL_GET_TICK_COUNT GetTickCount64
 #else
-    #define HSGIL_GET_TICK_COUNT GetTickCount
+	#define HSGIL_GET_TICK_COUNT GetTickCount
 #endif
 
 namespace gil
@@ -42,7 +42,7 @@ namespace plat
  */
 Time getTime()
 {
-    return rawTimeBuilder(HSGIL_GET_TICK_COUNT() * 1000ull);
+	return rawTimeBuilder(HSGIL_GET_TICK_COUNT() * 1000ull);
 }
 
 } // namespace plat

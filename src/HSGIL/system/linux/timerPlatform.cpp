@@ -34,12 +34,12 @@ namespace plat
  */
 Time getTime()
 {
-    timespec ts {};
-    clock_gettime(CLOCK_MONOTONIC, &ts);
-    uint64 tick {};
-    tick  = ts.tv_nsec / 1000;
-    tick += ts.tv_sec * 1000000;
-    return rawTimeBuilder(tick);
+	timespec ts {};
+	clock_gettime(CLOCK_MONOTONIC, &ts);
+	uint64 tick {};
+	tick  = ts.tv_nsec / 1000;
+	tick += ts.tv_sec * 1000000;
+	return rawTimeBuilder(tick);
 }
 
 } // namespace plat

@@ -37,94 +37,94 @@ class WindowManager;
 class HSGIL_API IWindow
 {
 public:
-    /**
-     * @brief Construct a new IWindow object
-     * 
-     * @param t_width 
-     * @param t_height 
-     * @param t_title 
-     * @param t_eventHandler 
-     */
-    IWindow(const uint32 t_width, const uint32 t_height, const char* t_title, WindowStyle t_style, InputHandler* t_inputHandler) : m_windowWidth {t_width}, m_windowHeight {t_height}, m_title {t_title}, m_style {t_style}, m_ready {false}, m_inputHandler {t_inputHandler} {}
-    /**
-     * @brief Destroy the Window object
-     * 
-     */
-    virtual ~IWindow() {}
+	/**
+	 * @brief Construct a new IWindow object
+	 * 
+	 * @param t_width 
+	 * @param t_height 
+	 * @param t_title 
+	 * @param t_eventHandler 
+	 */
+	IWindow(const uint32 t_width, const uint32 t_height, const char* t_title, WindowStyle t_style, InputHandler* t_inputHandler) : m_windowWidth {t_width}, m_windowHeight {t_height}, m_title {t_title}, m_style {t_style}, m_ready {false}, m_inputHandler {t_inputHandler} {}
+	/**
+	 * @brief Destroy the Window object
+	 * 
+	 */
+	virtual ~IWindow() {}
 
-    /**
-     * @brief Check if the Window shouldn't close
-     * 
-     * @return true if the Window is active
-     * @return false if the Windows is not active
-     */
-    virtual bool isActive() = 0;
-    /**
-     * @brief Check if the Window is able to start rendering
-     * 
-     * @return true if the Window is able
-     * @return false if the Window is not able
-     */
-    virtual bool isReady() = 0;
-    /**
-     * @brief Send signal to close window
-     * 
-     */
-    virtual void close() = 0;
+	/**
+	 * @brief Check if the Window shouldn't close
+	 * 
+	 * @return true if the Window is active
+	 * @return false if the Windows is not active
+	 */
+	virtual bool isActive() = 0;
+	/**
+	 * @brief Check if the Window is able to start rendering
+	 * 
+	 * @return true if the Window is able
+	 * @return false if the Window is not able
+	 */
+	virtual bool isReady() = 0;
+	/**
+	 * @brief Send signal to close window
+	 * 
+	 */
+	virtual void close() = 0;
 
-    /**
-     * @brief Get the Input Handler object
-     *
-     * @return InputHandler*
-     */
-    virtual InputHandler* getInputHandler() = 0;
-    /**
-     * @brief Set the Input Handler object
-     * 
-     */
-    virtual void setInputHandler(InputHandler& t_inputHandler) = 0;
-    /**
-     * @brief Poll the Events to process the input
-     * 
-     */
-    virtual void pollEvents() = 0;
-    /**
-     * @brief Get the Aspect Ratio
-     * 
-     * @return float value containing the current aspect ratio
-     */
-    virtual float getAspectRatio() const = 0;
-    /**
-     * @brief Get the Window Rect object as Vec2i
-     * 
-     * @return Vec2i vector containing width and height of the window in pixels
-     */
-    virtual Vec2i getWindowRect() const = 0;
-    /**
-     * @brief Get the Workspace Rect object as Vec2i
-     * 
-     * @return Vec2i vector containing width and height of the viewport in pixels
-     */
-    virtual Vec2i getViewportRect() const = 0;
+	/**
+	 * @brief Get the Input Handler object
+	 *
+	 * @return InputHandler*
+	 */
+	virtual InputHandler* getInputHandler() = 0;
+	/**
+	 * @brief Set the Input Handler object
+	 * 
+	 */
+	virtual void setInputHandler(InputHandler& t_inputHandler) = 0;
+	/**
+	 * @brief Poll the Events to process the input
+	 * 
+	 */
+	virtual void pollEvents() = 0;
+	/**
+	 * @brief Get the Aspect Ratio
+	 * 
+	 * @return float value containing the current aspect ratio
+	 */
+	virtual float getAspectRatio() const = 0;
+	/**
+	 * @brief Get the Window Rect object as Vec2i
+	 * 
+	 * @return Vec2i vector containing width and height of the window in pixels
+	 */
+	virtual Vec2i getWindowRect() const = 0;
+	/**
+	 * @brief Get the Workspace Rect object as Vec2i
+	 * 
+	 * @return Vec2i vector containing width and height of the viewport in pixels
+	 */
+	virtual Vec2i getViewportRect() const = 0;
 
 protected:
-    /**
-     * @brief Initializes the Window itself
-     * 
-     */
-    virtual void initializeWindow() = 0;
+	/**
+	 * @brief Initializes the Window itself
+	 * 
+	 */
+	virtual void initializeWindow() = 0;
 
-    uint32 m_windowWidth;
-    uint32 m_windowHeight;
-    uint32 m_viewportWidth;
-    uint32 m_viewportHeight;
-    const char* m_title;
-    WindowStyle m_style;
+	uint32 m_windowWidth;
+	uint32 m_windowHeight;
+	uint32 m_viewportWidth;
+	uint32 m_viewportHeight;
+	const char* m_title;
+	WindowStyle m_style;
 
-    bool m_ready;
+	bool m_ready;
 
-    InputHandler* m_inputHandler;
-    WindowManager* m_windowManager;
+	InputHandler* m_inputHandler;
+	WindowManager* m_windowManager;
 };
 
 } // namespace gil

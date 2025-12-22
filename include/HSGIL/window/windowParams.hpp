@@ -33,21 +33,21 @@ struct WindowParams
 
 struct MouseParams : public WindowParams
 {
-    InputCode code;
-    Vec2i pos;
+	InputCode code;
+	Vec2i pos;
 };
 
 struct KeyboardParams : public WindowParams
 {
-    InputCode code;
+	InputCode code;
 };
 
 struct WindowRectParams : public WindowParams
 {
-    int clientWidth;
-    int clientHeight;
-    int windowWidth;
-    int windowHeight;
+	int clientWidth;
+	int clientHeight;
+	int windowWidth;
+	int windowHeight;
 };
 
 } // namespace gil

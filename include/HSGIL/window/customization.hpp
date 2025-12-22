@@ -24,9 +24,9 @@
 namespace gil
 {
 enum class WindowStyle {
-    WINDOWED_STYLE,
-    BORDERLESS_STYLE,
-    BORDERLESS_FULLSCREEN_STYLE
+	WINDOWED_STYLE,
+	BORDERLESS_STYLE,
+	BORDERLESS_FULLSCREEN_STYLE
 };
 
 } // namespace gil

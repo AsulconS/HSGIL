@@ -37,36 +37,36 @@ namespace gil
 class HSGIL_API Model
 {
 public:
-    /**
-     * @brief Construct a new Model object
-     * 
-     */
-    Model();
-    /**
-     * @brief Construct a new Model object from an OBJ file path and texture path
-     * 
-     * @param path 
-     * @param texturePath 
-     * @param hasNormals 
-     * @param hasUVs 
-     */
-    Model(const char* path, const char* texturePath = nullptr, bool hasNormals = true, bool hasUVs = true);
-    /**
-     * @brief Destroy the Model object
-     * 
-     */
-    virtual ~Model();
+	/**
+	 * @brief Construct a new Model object
+	 * 
+	 */
+	Model();
+	/**
+	 * @brief Construct a new Model object from an OBJ file path and texture path
+	 * 
+	 * @param path 
+	 * @param texturePath 
+	 * @param hasNormals 
+	 * @param hasUVs 
+	 */
+	Model(const char* path, const char* texturePath = nullptr, bool hasNormals = true, bool hasUVs = true);
+	/**
+	 * @brief Destroy the Model object
+	 * 
+	 */
+	virtual ~Model();
 
-    /**
-     * @brief Draw the Model object with the shader passed by
-     * 
-     * @param shader 
-     */
-    void draw(Shader& shader);
+	/**
+	 * @brief Draw the Model object with the shader passed by
+	 * 
+	 * @param shader 
+	 */
+	void draw(Shader& shader);
 
 protected:
-    Mesh   m_mesh;
-    uint32 m_diffuseMap;
+	Mesh   m_mesh;
+	uint32 m_diffuseMap;
 };
 
 } // namespace gil

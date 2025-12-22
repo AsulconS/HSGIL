@@ -25,105 +25,105 @@ namespace gil
 {
 int absolute(int val)
 {
-    return (val < 0) ? -val : val;
+	return (val < 0) ? -val : val;
 }
 
 float absolute(float val)
 {
-    return (val < 0.0f) ? -val : val;
+	return (val < 0.0f) ? -val : val;
 }
 
 int npow(int val, unsigned int exp)
 {
-    int res {1};
-    while(exp--)
-    {
-        res *= val;
-    }
-    return res;
+	int res {1};
+	while(exp--)
+	{
+		res *= val;
+	}
+	return res;
 }
 
 unsigned int npow(unsigned int val, unsigned int exp)
 {
-    unsigned int res {1};
-    while(exp--)
-    {
-        res *= val;
-    }
-    return res;
+	unsigned int res {1};
+	while(exp--)
+	{
+		res *= val;
+	}
+	return res;
 }
 
 float npow(float val, unsigned int exp)
 {
-    float res {1};
-    while(exp--)
-    {
-        res *= val;
-    }
-    return res;
+	float res {1};
+	while(exp--)
+	{
+		res *= val;
+	}
+	return res;
 }
 
 int clamp(int val, int lBound, int rBound)
 {
-    if(val < lBound)
-    {
-        return lBound;
-    }
-    else if(val > rBound)
-    {
-        return rBound;
-    }
-    else
-    {
-        return val;
-    }
+	if(val < lBound)
+	{
+		return lBound;
+	}
+	else if(val > rBound)
+	{
+		return rBound;
+	}
+	else
+	{
+		return val;
+	}
 }
 
 unsigned int clamp(unsigned int val, unsigned int lBound, unsigned int rBound)
 {
-    if(val < lBound)
-    {
-        return lBound;
-    }
-    else if(val > rBound)
-    {
-        return rBound;
-    }
-    else
-    {
-        return val;
-    }
+	if(val < lBound)
+	{
+		return lBound;
+	}
+	else if(val > rBound)
+	{
+		return rBound;
+	}
+	else
+	{
+		return val;
+	}
 }
 
 float clamp(float val, float lBound, float rBound)
 {
-    if(val < lBound)
-    {
-        return lBound;
-    }
-    else if(val > rBound)
-    {
-        return rBound;
-    }
-    else
-    {
-        return val;
-    }
+	if(val < lBound)
+	{
+		return lBound;
+	}
+	else if(val > rBound)
+	{
+		return rBound;
+	}
+	else
+	{
+		return val;
+	}
 }
 
 bool isBetween(int val, int lBound, int rBound)
 {
-    return ((val - lBound) * (rBound - val)) >= 0;
+	return ((val - lBound) * (rBound - val)) >= 0;
 }
 
 bool isBetween(unsigned int val, unsigned int lBound, unsigned int rBound)
 {
-    return ((static_cast<int>(val) - static_cast<int>(lBound)) * (static_cast<int>(rBound) - static_cast<int>(val))) >= 0;
+	return ((static_cast<int>(val) - static_cast<int>(lBound)) * (static_cast<int>(rBound) - static_cast<int>(val))) >= 0;
 }
 
 bool isBetween(float val, float lBound, float rBound)
 {
-    return ((val - lBound) * (rBound - val)) >= 0.0f;
+	return ((val - lBound) * (rBound - val)) >= 0.0f;
 }
 
 } // namespace gil

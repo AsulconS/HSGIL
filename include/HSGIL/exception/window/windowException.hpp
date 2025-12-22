@@ -32,12 +32,12 @@ namespace gil
 class WindowException : public GenericException
 {
 public:
-    /**
-     * @brief Overridden method to know why exactly the Window Exception was thrown
-     * 
-     * @return const char* 
-     */
-    virtual const char* what() const throw() override;
+	/**
+	 * @brief Overridden method to know why exactly the Window Exception was thrown
+	 * 
+	 * @return const char* 
+	 */
+	virtual const char* what() const throw() override;
 };
 
 /**
@@ -47,12 +47,12 @@ public:
 class WindowInitException : public WindowException
 {
 public:
-    /**
-     * @brief Overridden method to know why exactly the Window Init Exception was thrown
-     * 
-     * @return const char* 
-     */
-    virtual const char* what() const throw() override;
+	/**
+	 * @brief Overridden method to know why exactly the Window Init Exception was thrown
+	 * 
+	 * @return const char* 
+	 */
+	virtual const char* what() const throw() override;
 };
 
 /**
@@ -62,12 +62,12 @@ public:
 class GLADInitException : public WindowException
 {
 public:
-    /**
-     * @brief Overridden method to know why exactly the GLAD Init Exception was thrown
-     * 
-     * @return const char* 
-     */
-    virtual const char* what() const throw() override;
+	/**
+	 * @brief Overridden method to know why exactly the GLAD Init Exception was thrown
+	 * 
+	 * @return const char* 
+	 */
+	virtual const char* what() const throw() override;
 };
 
 } // namespace gil

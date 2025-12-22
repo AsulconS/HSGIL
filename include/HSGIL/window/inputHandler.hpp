@@ -40,51 +40,51 @@ namespace gil
  */
 class HSGIL_API InputHandler
 {
-    friend class RenderingWindow;
+	friend class RenderingWindow;
 public:
-    InputHandler();
-    virtual ~InputHandler();
+	InputHandler();
+	virtual ~InputHandler();
 
-    bool onKeyDown(InputCode key);
-    bool onKeyUp(InputCode key);
-    bool onKeyReleased(InputCode key);
-    bool onKeyTriggered(InputCode key);
+	bool onKeyDown(InputCode key);
+	bool onKeyUp(InputCode key);
+	bool onKeyReleased(InputCode key);
+	bool onKeyTriggered(InputCode key);
 
-    bool onClick(InputCode button);
-    bool onRelease(InputCode button);
-    bool onButtonDown(InputCode button);
-    bool onButtonUp(InputCode button);
+	bool onClick(InputCode button);
+	bool onRelease(InputCode button);
+	bool onButtonDown(InputCode button);
+	bool onButtonUp(InputCode button);
 
-    Vec2i getMousePos();
-
-private:
-    struct KeyInfo
-    {
-        InputEvent event;
-        int32 time;
-    };
-
-    struct MouseInfo
-    {
-        InputEvent event;
-        int32 time;
-    };
+	Vec2i getMousePos();
 
 private:
-    void tick();
+	struct KeyInfo
+	{
+		InputEvent event;
+		int32 time;
+	};
 
-    void initKey(InputCode key);
-    void initButton(InputCode button);
+	struct MouseInfo
+	{
+		InputEvent event;
+		int32 time;
+	};
 
-    void updateKeyEvent(InputCode key, InputEvent event);
-    void updateMouseEvent(InputCode button, InputEvent event);
-    void updateMousePosition(Vec2i position);
+private:
+	void tick();
 
-    Vec2i m_mousePos;
-    Map<InputCode, KeyInfo>* m_keys;
-    Map<InputCode, MouseInfo>* m_mouseButtons;
+	void initKey(InputCode key);
+	void initButton(InputCode button);
 
-    int32 m_currentTime;
+	void updateKeyEvent(InputCode key, InputEvent event);
+	void updateMouseEvent(InputCode button, InputEvent event);
+	void updateMousePosition(Vec2i position);
+
+	Vec2i m_mousePos;
+	Map<InputCode, KeyInfo>* m_keys;
+	Map<InputCode, MouseInfo>* m_mouseButtons;
+
+	int32 m_currentTime;
 };
 
 } // namespace gil

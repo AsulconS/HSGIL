@@ -25,57 +25,57 @@
 
 int main()
 {
-    gil::RenderingWindow window(800, 600, "Shader Tester");
-    if (!window.isReady())
-    {
-        std::cerr << "Window is not ready, something went wrong" << std::endl;
-        return -1;
-    }
+	gil::RenderingWindow window(800, 600, "Shader Tester");
+	if (!window.isReady())
+	{
+		std::cerr << "Window is not ready, something went wrong" << std::endl;
+		return -1;
+	}
 
-    gil::InputHandler inputHandler;
-    window.setInputHandler(inputHandler);
+	gil::InputHandler inputHandler;
+	window.setInputHandler(inputHandler);
 
-    gil::Shader shader("test");
-    float vertexData[] =
-    {
-        // Position
-        -0.5f, -0.5f,
-         0.5f, -0.5f,
-         0.0f,  0.5f
-    };
-    gil::uint32 VAO, VBO;
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
+	gil::Shader shader("test");
+	float vertexData[] =
+	{
+		// Position
+		-0.5f, -0.5f,
+		 0.5f, -0.5f,
+		 0.0f,  0.5f
+	};
+	gil::uint32 VAO, VBO;
+	glGenVertexArrays(1, &VAO);
+	glGenBuffers(1, &VBO);
 
-    glBindVertexArray(VAO);
+	glBindVertexArray(VAO);
 
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertexData), vertexData, GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertexData), vertexData, GL_STATIC_DRAW);
 
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (const void*)0);
-    glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (const void*)0);
+	glEnableVertexAttribArray(0);
 
-    glBindVertexArray(0);
+	glBindVertexArray(0);
 
-    gil::Timer timer;
-    while (window.isActive())
-    {
-        window.pollEvents();
-        if (inputHandler.onKeyDown(gil::KEY_ESCAPE))
-        {
-            window.close();
-        }
+	gil::Timer timer;
+	while (window.isActive())
+	{
+		window.pollEvents();
+		if (inputHandler.onKeyDown(gil::KEY_ESCAPE))
+		{
+			window.close();
+		}
 
-        shader.use();
-        glClearColor(0.2f, 0.5f, 1.0f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
-        glBindVertexArray(VAO);
-            glDrawArrays(GL_TRIANGLES, 0, sizeof(vertexData) / sizeof(float));
-        glBindVertexArray(0);
+		shader.use();
+		glClearColor(0.2f, 0.5f, 1.0f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT);
+		glBindVertexArray(VAO);
+			glDrawArrays(GL_TRIANGLES, 0, sizeof(vertexData) / sizeof(float));
+		glBindVertexArray(0);
 
-        window.swapBuffers();
-        timer.tick();
-    }
+		window.swapBuffers();
+		timer.tick();
+	}
 
-    return 0;
+	return 0;
 }
