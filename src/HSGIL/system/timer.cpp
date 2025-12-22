@@ -21,10 +21,10 @@
 
 #include <HSGIL/system/timer.hpp>
 
+#include <HSGIL/system/timerPlatform.hpp>
+
 #include <chrono>
 #include <iostream>
-
-#include "timerPlatform.hpp"
 
 namespace gil
 {

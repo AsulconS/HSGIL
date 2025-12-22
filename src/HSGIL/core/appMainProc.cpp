@@ -24,7 +24,7 @@
 
 #include <HSGIL/graphics/model.hpp>
 
-#include "GL/gl.h"
+#include <HSGIL/core/GL/gl.h>
 
 namespace gil
 {

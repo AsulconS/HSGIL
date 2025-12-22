@@ -21,7 +21,7 @@
 
 #include <HSGIL/window/compatUtils.hpp>
 
-#include "windowManagerPlatform.hpp"
+#include <HSGIL/window/linux/windowManagerPlatform.hpp>
 
 namespace gil
 {

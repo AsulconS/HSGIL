@@ -21,9 +21,11 @@
 
 #include <Windows.h>
 
-#include "../timerPlatform.hpp"
+#include <HSGIL/core/minimal.hpp>
 
-#ifdef _WIN64
+#include <HSGIL/system/timerPlatform.hpp>
+
+#ifdef CF__HSGIL_OS_WINDOWS
     #define HSGIL_GET_TICK_COUNT GetTickCount64
 #else
     #define HSGIL_GET_TICK_COUNT GetTickCount

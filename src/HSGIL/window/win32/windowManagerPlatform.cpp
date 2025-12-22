@@ -19,7 +19,7 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-#include "windowManagerPlatform.hpp"
+#include <HSGIL/window/win32/windowManagerPlatform.hpp>
 
 #include <HSGIL/window/inputBindings.hpp>
 

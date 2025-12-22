@@ -21,7 +21,7 @@
 
 #include <time.h>
 
-#include "../timerPlatform.hpp"
+#include <HSGIL/system/timerPlatform.hpp>
 
 namespace gil
 {
