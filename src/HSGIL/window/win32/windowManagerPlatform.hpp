@@ -37,10 +37,10 @@
 #include <HSGIL/window/windowParams.hpp>
 #include <HSGIL/window/customization.hpp>
 
-#define NUM_KEYS_SIZE 256u
-#define GLDCC_NAME_SIZE 6u
-#define ATTRIB_LIST_SIZE 17u
-#define MAX_WINDOW_INSTANCES 4u
+#define NUM_KEYS_SIZE 256
+#define GLDCC_NAME_SIZE 6
+#define ATTRIB_LIST_SIZE 17
+#define MAX_WINDOW_INSTANCES 4
 
 namespace gil
 {
@@ -77,7 +77,7 @@ private:
 	/* Privated constructor and destructor */
 
 	WindowManager(const uint32 t_index);
-	~WindowManager();
+	virtual ~WindowManager();
 
 	static void registerAppRenderingWindowClass();
 	static void warning(const char* msg);

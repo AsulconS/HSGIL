@@ -1,0 +1,19 @@
+services:
+  test-arch:
+    build:
+      context: .
+      dockerfile: docker/arch.Dockerfile
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+
+  test-alpine:
+    build:
+      context: .
+      dockerfile: docker/alpine.Dockerfile
+    environment:
+      - LIBGL_ALWAYS_SOFTWARE=1

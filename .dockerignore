@@ -1,0 +1,56 @@
+# Ignore the Git directory and associated files
+.git/
+.gitignore
+.gitattributes
+
+# --- IDE & development/editor files ---
+.vs/
+.vscode/
+.idea/
+*.swp
+*.user
+*.suo
+*.sln
+*.vcxproj
+*.filters
+*.log
+.env
+.env.*
+CMakeUserPresets.json
+
+# --- C++ Build Artifacts and common build directories and files ---
+**/venv/
+dist/
+out/
+bin/
+build/
+*.o
+*.obj
+*.so
+*.dll
+*.exe
+*.a
+*.lib
+*.pdb
+
+# --- Ignore docker files ---
+docker/
+.dockerignore
+compose.yaml
+Dockerfile
+
+# --- OS Junk ---
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.DS_Store
+._*.DS_Store
+.Spotlight-V100
+.Trashes
+.VolumeIcon.icns
+
+# --- Exclude all markdown files and other ---
+other/
+docs/
+*.md
+_config.yml

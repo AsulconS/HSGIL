@@ -32,7 +32,6 @@
 
 #include <HSGIL/window/inputEvents.hpp>
 #include <HSGIL/window/windowParams.hpp>
-#include <HSGIL/window/inputBindings.hpp>
 #include <HSGIL/window/customization.hpp>
 #include <HSGIL/window/compatUtils.hpp>
 
@@ -47,10 +46,10 @@
 #define NUM_KEYS_SIZE 256
 #define NUM_BUTTONS_SIZE 10
 
-#define ATTRIB_LIST_SIZE 23u
-#define MAX_WINDOW_INSTANCES 4u
+#define ATTRIB_LIST_SIZE 23
+#define MAX_WINDOW_INSTANCES 4
 
-typedef XID XWND;
+using XWND = XID;
 
 namespace gil
 {
@@ -65,7 +64,7 @@ using PFNGLXSWAPINTERVALPROC2 = int (*)(int);
 class HSGIL_API WindowManager final
 {
 	friend gil::LazyPtr<WindowManager>;
-	friend void compat::forceGlxContextToVersion(const int major, const int minor);
+	friend void gil::compat::forceGlxContextToVersion(const int major, const int minor);
 
 public:
 	static WindowManager* createInstance();
@@ -86,7 +85,7 @@ private:
 	/* Privated constructor and destructor */
 
 	WindowManager(const uint32 t_index);
-	~WindowManager();
+	virtual ~WindowManager();
 
 	void createContext();
 
@@ -101,7 +100,7 @@ private:
 
 	static void fatalError(const char* msg);
 
-	static void HSGILProc();
+	static void HsgilMainProc();
 
 	/* Deleted Constructors and assignment */
 

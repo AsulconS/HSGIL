@@ -7,8 +7,9 @@
 /[Bb]in/
 /[Oo]ut/
 
-# Visual Studio cache directory
+# Visual Studio and Rider cache directory
 .vs/
+.idea/
 
 # Visual Studio Code configuration directory
 .vscode/
@@ -33,3 +34,10 @@ desktop.ini
 *.lib
 *.pdb
 *.exe
+
+# Environment and developer files
+.env
+.env.*
+!.env.example
+*.local
+*.ps1

@@ -1,9 +1,26 @@
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/examples)
+
 add_custom_target(copy_shaders
 	COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_LIST_DIR}/shaders ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/shaders
 )
 add_custom_target(copy_assets
 	COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_LIST_DIR}/res ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/res
 )
+
+# Function to automatically copy required DLLs to the executable's directory
+function(copy_runtime_dlls target)
+	if (WIN32)
+		add_custom_command(
+			TARGET "${target}"
+			POST_BUILD
+			COMMAND ${CMAKE_COMMAND} -E copy_if_different
+				$<TARGET_RUNTIME_DLLS:${target}>
+				$<TARGET_FILE_DIR:${target}>
+			COMMENT "Copying DLLs for ${target} to target directory"
+			COMMAND_EXPAND_LISTS
+		)
+	endif()
+endfunction()
 
 macro(build_cpp_source filename)
 	add_executable(${filename} src/${filename}.cpp)
@@ -17,6 +34,7 @@ macro(build_cpp_source filename)
 	endif()
 	target_compile_features(${filename} PRIVATE cxx_std_20)
 	target_link_libraries(${filename} LINK_PUBLIC ${HSGIL_RUNTIME_LIB_NAME})
+	copy_runtime_dlls(${filename})
 endmacro(build_cpp_source)
 
 # Examples options

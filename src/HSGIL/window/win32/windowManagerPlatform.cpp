@@ -102,8 +102,8 @@ PFNWGLCREATECONTEXTATTRIBSARBPROC wglCreateContextAttribsARB{ nullptr };
 PFNWGLSWAPINTERVALEXTPROC wglSwapIntervalEXT{ nullptr };
 PFNWGLGETSWAPINTERVALEXTPROC wglGetSwapIntervalEXT{ nullptr };
 
-WindowManager::WindowManager(const uint32 t_index)
-	: m_isInstanceActive{ false },
+WindowManager::WindowManager(const uint32 t_index) :
+	m_isInstanceActive{ false },
 	m_index{ t_index },
 	m_windowHandle{ nullptr },
 	m_deviceContextHandle{ nullptr },
@@ -143,7 +143,7 @@ WindowManager* WindowManager::createInstance()
 
 WindowManager* WindowManager::getInstance(const uint32 index)
 {
-	if(index > 0 && index < (MAX_WINDOW_INSTANCES - 1))
+	if((0 < index) && (index < (MAX_WINDOW_INSTANCES - 1)))
 	{
 		if(s_wmInstances[index] != nullptr)
 		{
@@ -563,7 +563,7 @@ void WindowManager::handleWindowCreateMsg(HWND hWnd)
 
 	memset(s_keyPhysicStates, 0, sizeof(s_keyPhysicStates));
 
-	std::cout << "OpenGL " << (char*)glGetString(GL_VERSION);
+	std::cout << "OpenGL " << (char*)glGetString(GL_VERSION) << std::endl;
 	std::cout << "Renderer: " << (char*)glGetString(GL_RENDERER) << std::endl;
 	std::cout << "GLSL Version: " << (char*)glGetString(GL_SHADING_LANGUAGE_VERSION) << std::endl;
 }

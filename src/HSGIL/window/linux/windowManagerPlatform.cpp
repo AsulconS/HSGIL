@@ -19,7 +19,10 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
+#include <HSGIL/core/GL/gl.h>
 #include <HSGIL/window/linux/windowManagerPlatform.hpp>
+
+#include <HSGIL/window/inputBindings.hpp>
 
 #include <cstring>
 #include <iostream>
@@ -28,7 +31,7 @@ namespace gil
 {
 uint32 WindowManager::s_activeSessions{ 0 };
 uint32 WindowManager::s_wmInstanceCount{ 0 };
-WMLazyPtr WindowManager::s_wmInstances[MAX_WINDOW_INSTANCES]{};
+gil::LazyPtr<WindowManager> WindowManager::s_wmInstances[MAX_WINDOW_INSTANCES]{};
 
 gil::SafePtr<Map<XWND, uint32>> WindowManager::s_hwndMap{};
 
@@ -220,7 +223,7 @@ void WindowManager::pollEvents()
 		while(QLength(s_display))
 		{
 			XNextEvent(s_display, &s_event);
-			HSGILProc();
+			HsgilMainProc();
 		}
 		if(s_activeSessions)
 		{
@@ -282,9 +285,11 @@ void WindowManager::createContext()
 	}
 	glXMakeCurrent(s_display, m_windowHandle, m_context);
 
-	gladLoadGL();
+	gladLoadGL((GLADloadfunc)glXGetProcAddressARB);
 
-	std::cout << "Context Created" << std::endl;
+	std::cout << "OpenGL " << (char*)glGetString(GL_VERSION) << std::endl;
+	std::cout << "Renderer: " << (char*)glGetString(GL_RENDERER) << std::endl;
+	std::cout << "GLSL Version: " << (char*)glGetString(GL_SHADING_LANGUAGE_VERSION) << std::endl;
 }
 
 void WindowManager::internalSetGlxContextVersion(const int major, const int minor)
@@ -623,7 +628,7 @@ void WindowManager::fatalError(const char* msg)
 	exit(EXIT_FAILURE);
 }
 
-void WindowManager::HSGILProc()
+void WindowManager::HsgilMainProc()
 {
 	switch(s_event.type)
 	{

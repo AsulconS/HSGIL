@@ -20,11 +20,10 @@ set(HSGIL_VLD_DIR "" CACHE STRING "Specifies the VLD Directory Path")
 set(HSGIL_GLX_CTX_VERSION_MAJOR 4 CACHE STRING "Specifies Forced GLX Version Major")
 set(HSGIL_GLX_CTX_VERSION_MINOR 6 CACHE STRING "Specifies Forced GLX Version Minor")
 
-# Set where runtime files should go
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY $<1:${CMAKE_SOURCE_DIR}>/bin/$<IF:$<CONFIG:Debug>,Debug,Release>)
-
-# Export compile commands
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+# Set where archive, library, and runtime files should go
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib/$<CONFIG>)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib/$<CONFIG>)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/$<CONFIG>)
 
 # Set specific lib names
 set(HSGIL_LIB_NAME hsgil)
@@ -41,7 +40,10 @@ endif()
 # ------------------------------------------------------------------------------
 # Source Files
 # ------------------------------------------------------------------------------
-set(HSGIL_SOURCES
+add_library(${HSGIL_RUNTIME_LIB_NAME})
+
+# Source only (.cpp and .c files)
+set(HSGIL_SOURCE_FILES
 	src/HSGIL/core/GL/gl.c
 	src/HSGIL/core/appMainProc.cpp
 	src/HSGIL/system/timer.cpp
@@ -56,6 +58,24 @@ set(HSGIL_SOURCES
 	src/HSGIL/window/renderingWindow.cpp
 	src/HSGIL/window/${HSGIL_PLATFORM}/windowManagerPlatform.cpp
 	src/HSGIL/window/${HSGIL_PLATFORM}/compatUtilsPlatform.cpp
+)
+
+# Header files (.hpp and .h files)
+file(GLOB_RECURSE HSGIL_HEADER_FILES
+	"${CMAKE_CURRENT_SOURCE_DIR}/include/HSGIL/*.hpp"
+	"${CMAKE_CURRENT_SOURCE_DIR}/include/HSGIL/*.h"
+)
+
+# Group source files in IDEs
+if(WIN32)
+	source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}/include" PREFIX "Header Files" FILES ${HSGIL_HEADER_FILES})
+endif()
+
+# Add source files to target
+target_sources(${HSGIL_RUNTIME_LIB_NAME}
+PRIVATE
+	${HSGIL_SOURCE_FILES}
+	${HSGIL_HEADER_FILES}
 )
 
 
@@ -137,7 +157,6 @@ file(GENERATE
 # Build runtime module
 # ------------------------------------------------------------------------------
 # Core Dependencies and Definitions
-add_library(${HSGIL_RUNTIME_LIB_NAME} ${HSGIL_SOURCES})
 set_target_properties(${HSGIL_RUNTIME_LIB_NAME}
 PROPERTIES
 	VERSION ${PROJECT_VERSION}
@@ -170,17 +189,25 @@ else()
 endif()
 
 # Add Include Directories and Link
-target_include_directories(${HSGIL_RUNTIME_LIB_NAME} PUBLIC include PRIVATE src)
+target_include_directories(${HSGIL_RUNTIME_LIB_NAME}
+PUBLIC
+	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+	$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+PRIVATE
+	src
+)
 target_compile_features(${HSGIL_RUNTIME_LIB_NAME} PUBLIC cxx_std_20)
 if (WIN32)
-	target_link_libraries(${HSGIL_RUNTIME_LIB_NAME} opengl32)
+	target_link_libraries(${HSGIL_RUNTIME_LIB_NAME} PRIVATE opengl32)
 	if (HSGIL_DEV_OPT_1)
 		target_include_directories(${HSGIL_RUNTIME_LIB_NAME} PRIVATE ${HSGIL_VLD_DIR}/include)
 		target_link_directories(${HSGIL_RUNTIME_LIB_NAME} PRIVATE ${HSGIL_VLD_DIR}/lib/Win64)
 		target_link_libraries(${HSGIL_RUNTIME_LIB_NAME} vld)
 	endif()
 else()
-	target_link_libraries(${HSGIL_RUNTIME_LIB_NAME} GL X11)
+	find_package(X11 REQUIRED)
+	find_package(OpenGL REQUIRED)
+	target_link_libraries(${HSGIL_RUNTIME_LIB_NAME} PRIVATE OpenGL::GL X11::X11)
 endif()
 
 
