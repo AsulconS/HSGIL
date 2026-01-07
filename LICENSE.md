@@ -2,6 +2,7 @@
 ## Handy Scalable Graphics Integration Library
 
 HSGIL - Handy Scalable Graphics Integration Library
+
 Copyright (c) 2026 Adrian Bedregal
 
 This software is provided 'as-is', without any express or implied
