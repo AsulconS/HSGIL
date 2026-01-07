@@ -23,7 +23,6 @@ RUN apk add --no-cache \
 	libx11 libxinerama xcb-util-cursor \
 	mesa mesa-gl gdb
 
-
 # Clean up any existing X11 socket files
 RUN rm -rf /tmp/.X11-unix
 
