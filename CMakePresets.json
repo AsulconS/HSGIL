@@ -15,7 +15,7 @@
 			"binaryDir": "${sourceDir}/out/build/${presetName}",
 			"installDir": "${sourceDir}/out/install/${presetName}",
 			"cacheVariables": {
-				"CMAKE_CONFIGURATION_TYPES": "Debug;Release",
+				"CMAKE_CONFIGURATION_TYPES": "Debug;Release;MinSizeRel",
 				"CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
 			}
 		},
@@ -56,6 +56,12 @@
 			"configuration": "Release"
 		},
 		{
+			"name": "win32-msvc-x64-minsizerel",
+			"displayName": "Windows MSVC x64 - MinSizeRel",
+			"configurePreset": "win32-msvc-x64",
+			"configuration": "MinSizeRel"
+		},
+		{
 			"name": "win32-gcc-x64-debug",
 			"displayName": "Windows GCC x64 - Debug",
 			"configurePreset": "win32-gcc-x64",
@@ -68,6 +74,12 @@
 			"configuration": "Release"
 		},
 		{
+			"name": "win32-gcc-x64-minsizerel",
+			"displayName": "Windows GCC x64 - MinSizeRel",
+			"configurePreset": "win32-gcc-x64",
+			"configuration": "MinSizeRel"
+		},
+		{
 			"name": "linux-gcc-x64-debug",
 			"displayName": "Linux GCC x64 - Debug",
 			"configurePreset": "linux-gcc-x64",
@@ -78,6 +90,12 @@
 			"displayName": "Linux GCC x64 - Release",
 			"configurePreset": "linux-gcc-x64",
 			"configuration": "Release"
+		},
+		{
+			"name": "linux-gcc-x64-minsizerel",
+			"displayName": "Linux GCC x64 - MinSizeRel",
+			"configurePreset": "linux-gcc-x64",
+			"configuration": "MinSizeRel"
 		}
 	],
 
