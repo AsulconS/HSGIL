@@ -1,30 +1,27 @@
-/********************************************************************************
- *                                                                              *
- * HSGIL - Handy Scalable Graphics Integration Library                          *
- * Copyright (c) 2019-2024 Adrian Bedregal                                      *
- *                                                                              *
- * This software is provided 'as-is', without any express or implied            *
- * warranty. In no event will the authors be held liable for any damages        *
- * arising from the use of this software.                                       *
- *                                                                              *
- * Permission is granted to anyone to use this software for any purpose,        *
- * including commercial applications, and to alter it and redistribute it       *
- * freely, subject to the following restrictions:                               *
- *                                                                              *
- * 1. The origin of this software must not be misrepresented; you must not      *
- *    claim that you wrote the original software. If you use this software      *
- *    in a product, an acknowledgment in the product documentation would be     *
- *    appreciated but is not required.                                          *
- * 2. Altered source versions must be plainly marked as such, and must not be   *
- *    misrepresented as being the original software.                            *
- * 3. This notice may not be removed or altered from any source distribution.   *
- *                                                                              *
- ********************************************************************************/
+/**
+ * HSGIL - Handy Scalable Graphics Integration Library
+ * Copyright (c) 2026 Adrian Bedregal
+ *
+ * This software is provided 'as-is', without any express or implied
+ * warranty. In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ *
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ *
+ * 1. The origin of this software must not be misrepresented; you must not
+ *    claim that you wrote the original software. If you use this software
+ *    in a product, an acknowledgment in the product documentation would be
+ *    appreciated but is not required.
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ *    misrepresented as being the original software.
+ * 3. This notice may not be removed or altered from any source distribution.
+ */
 
 #pragma once
 
-#include <HSGIL/config/config.hpp>
-#include <HSGIL/config/common.hpp>
+#include <HSGIL/core/minimal.hpp>
 
 namespace gil
 {
@@ -34,54 +31,54 @@ namespace gil
  */
 class Time final
 {
-    friend constexpr Time seconds(secT seconds);
-    friend constexpr Time milliseconds(milliT milliseconds);
-    friend constexpr Time microseconds(microT microseconds);
-    friend constexpr Time rawTimeBuilder(microT microseconds);
+	friend constexpr Time seconds(secT seconds);
+	friend constexpr Time milliseconds(milliT milliseconds);
+	friend constexpr Time microseconds(microT microseconds);
+	friend constexpr Time rawTimeBuilder(microT microseconds);
 public:
-    /**
-     * @brief Construct a new Time object
-     * 
-     */
-    constexpr Time();
+	/**
+	 * @brief Construct a new Time object
+	 * 
+	 */
+	constexpr Time();
 
-    /**
-     * @brief Get the Time Point value as seconds
-     * 
-     * @return secT 
-     */
-    constexpr secT asSeconds() const;
-    /**
-     * @brief Get the Time Point value as milliseconds
-     * 
-     * @return milliT 
-     */
-    constexpr milliT asMilliseconds() const;
-    /**
-     * @brief Get the Time Point value as microseconds
-     * 
-     * @return microT 
-     */
-    constexpr microT asMicroseconds() const;
-    /**
-     * @brief Get the Raw Time Count as microseconds
-     * It's equivalent to asMicroseconds function
-     * 
-     * @return microT 
-     */
-    constexpr microT getRawTimeCount() const;
-
-private:
-    /**
-     * @brief Construct a new Time object explicitly
-     * in order to prevent outer construction
-     * 
-     * @param t_timeCount 
-     */
-    constexpr explicit Time(microT t_timeCount);
+	/**
+	 * @brief Get the Time Point value as seconds
+	 * 
+	 * @return secT 
+	 */
+	constexpr secT asSeconds() const;
+	/**
+	 * @brief Get the Time Point value as milliseconds
+	 * 
+	 * @return milliT 
+	 */
+	constexpr milliT asMilliseconds() const;
+	/**
+	 * @brief Get the Time Point value as microseconds
+	 * 
+	 * @return microT 
+	 */
+	constexpr microT asMicroseconds() const;
+	/**
+	 * @brief Get the Raw Time Count as microseconds
+	 * It's equivalent to asMicroseconds function
+	 * 
+	 * @return microT 
+	 */
+	constexpr microT getRawTimeCount() const;
 
 private:
-    microT m_timeCount;
+	/**
+	 * @brief Construct a new Time object explicitly
+	 * in order to prevent outer construction
+	 * 
+	 * @param t_timeCount 
+	 */
+	constexpr explicit Time(microT t_timeCount);
+
+private:
+	microT m_timeCount;
 };
 
 /**

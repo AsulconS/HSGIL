@@ -1,0 +1,48 @@
+services:
+  test-arch:
+    build:
+      context: .
+      dockerfile: docker/arch.Dockerfile
+    image: hsgil/test-arch:latest
+    environment:
+      # Enable NVIDIA GPU support
+      - LIBGL_ALWAYS_SOFTWARE=0
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=all
+      # WSLg specific environment variables for Direct3D 12 support
+      - GALLIUM_DRIVER=d3d12
+      - MESA_D3D12_DEFAULT_ADAPTER_NAME=NVIDIA
+      - LD_LIBRARY_PATH=/usr/lib/wsl/lib
+      # Standard WSLg environment variables
+      - DISPLAY=:0
+      - WAYLAND_DISPLAY=wayland-0
+      - XDG_RUNTIME_DIR=/mnt/wslg/runtime-dir
+    volumes:
+      # Standard WSLg volume mounts
+      - /run/desktop/mnt/host/wslg/.X11-unix:/tmp/.X11-unix
+      - /run/desktop/mnt/host/wslg:/mnt/wslg
+      - /usr/lib/wsl:/usr/lib/wsl
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu, display, graphics, utility]
+
+  test-alpine:
+    build:
+      context: .
+      dockerfile: docker/alpine.Dockerfile
+    image: hsgil/test-alpine:latest
+    environment:
+      # Enable CPU (software) Rendering support
+      - LIBGL_ALWAYS_SOFTWARE=1
+      # Standard WSLg environment variables
+      - DISPLAY=:0
+      - WAYLAND_DISPLAY=wayland-0
+      - XDG_RUNTIME_DIR=/mnt/wslg/runtime-dir
+    volumes:
+      # Standard WSLg volume mounts
+      - /run/desktop/mnt/host/wslg/.X11-unix:/tmp/.X11-unix
+      - /run/desktop/mnt/host/wslg:/mnt/wslg

@@ -3,9 +3,13 @@
 /[Dd]oc/
 /[Ll]ib/
 /[Oo]ther/[Mm]isc/
+/[Bb]inaries/
+/[Bb]in/
+/[Oo]ut/
 
-# Visual Studio cache directory
+# Visual Studio and Rider cache directory
 .vs/
+.idea/
 
 # Visual Studio Code configuration directory
 .vscode/
@@ -13,9 +17,13 @@
 # Visual Studio Code counter extension directory
 .VSCodeCounter/
 
+# CMake specific files
+CMakeUserPresets.json
+
 # Utility files
 *.priv
 *.bat
+*.cmd
 
 # OS generated files
 desktop.ini
@@ -26,14 +34,10 @@ desktop.ini
 *.lib
 *.pdb
 *.exe
-examples/*.so
 
-# Examples
-examples/ball
-examples/doubleWindow
-examples/finn
-examples/gyroscope
-examples/keys
-examples/physicsTest
-examples/shaderTester
-examples/triangle
+# Environment and developer files
+.env
+.env.*
+!.env.example
+*.local
+*.ps1

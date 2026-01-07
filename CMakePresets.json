@@ -1,0 +1,140 @@
+{
+	"version": 10,
+	"cmakeMinimumRequired": {
+		"major": 4,
+		"minor": 0,
+		"patch": 0
+	},
+	"$comment": "The default HSGIL CMakePresets.json file",
+	"include": [ "cmake/presets/compilers.json" ],
+	"configurePresets": [
+		{
+			"name": "base",
+			"hidden": true,
+			"generator": "Ninja Multi-Config",
+			"binaryDir": "${sourceDir}/out/build/${presetName}",
+			"installDir": "${sourceDir}/out/install/${presetName}",
+			"cacheVariables": {
+				"CMAKE_CONFIGURATION_TYPES": "Debug;Release;MinSizeRel",
+				"CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+			}
+		},
+		{
+			"name": "win32-msvc-x64",
+			"displayName": "Windows MSVC x64",
+			"description": "Sets Windows targeting x64 architecture using MSVC compiler",
+			"inherits": [ "base", "comp-msvc", "arch-x64" ],
+			"condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Windows" }
+		},
+		{
+			"name": "win32-gcc-x64",
+			"displayName": "Windows GCC x64",
+			"description": "Sets Windows targeting x64 architecture using GCC compiler",
+			"inherits": [ "base", "comp-gcc", "arch-x64" ],
+			"condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Windows" }
+		},
+		{
+			"name": "linux-gcc-x64",
+			"displayName": "Linux GCC x64",
+			"description": "Sets Linux targeting x64 architecture using GCC compiler",
+			"inherits": [ "base", "comp-gcc", "arch-x64" ],
+			"condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Linux" }
+		}
+	],
+
+	"buildPresets": [
+		{
+			"name": "win32-msvc-x64-debug",
+			"displayName": "Windows MSVC x64 - Debug",
+			"configurePreset": "win32-msvc-x64",
+			"configuration": "Debug"
+		},
+		{
+			"name": "win32-msvc-x64-release",
+			"displayName": "Windows MSVC x64 - Release",
+			"configurePreset": "win32-msvc-x64",
+			"configuration": "Release"
+		},
+		{
+			"name": "win32-msvc-x64-minsizerel",
+			"displayName": "Windows MSVC x64 - MinSizeRel",
+			"configurePreset": "win32-msvc-x64",
+			"configuration": "MinSizeRel"
+		},
+		{
+			"name": "win32-gcc-x64-debug",
+			"displayName": "Windows GCC x64 - Debug",
+			"configurePreset": "win32-gcc-x64",
+			"configuration": "Debug"
+		},
+		{
+			"name": "win32-gcc-x64-release",
+			"displayName": "Windows GCC x64 - Release",
+			"configurePreset": "win32-gcc-x64",
+			"configuration": "Release"
+		},
+		{
+			"name": "win32-gcc-x64-minsizerel",
+			"displayName": "Windows GCC x64 - MinSizeRel",
+			"configurePreset": "win32-gcc-x64",
+			"configuration": "MinSizeRel"
+		},
+		{
+			"name": "linux-gcc-x64-debug",
+			"displayName": "Linux GCC x64 - Debug",
+			"configurePreset": "linux-gcc-x64",
+			"configuration": "Debug"
+		},
+		{
+			"name": "linux-gcc-x64-release",
+			"displayName": "Linux GCC x64 - Release",
+			"configurePreset": "linux-gcc-x64",
+			"configuration": "Release"
+		},
+		{
+			"name": "linux-gcc-x64-minsizerel",
+			"displayName": "Linux GCC x64 - MinSizeRel",
+			"configurePreset": "linux-gcc-x64",
+			"configuration": "MinSizeRel"
+		}
+	],
+
+	"testPresets": [
+		{
+			"name": "win32-msvc-x64-test-debug",
+			"configurePreset": "win32-msvc-x64",
+			"configuration": "Debug",
+			"output": { "outputOnFailure": true }
+		},
+		{
+			"name": "win32-msvc-x64-test-release",
+			"configurePreset": "win32-msvc-x64",
+			"configuration": "Release",
+			"output": { "outputOnFailure": true }
+		},
+		{
+			"name": "win32-gcc-x64-test-debug",
+			"configurePreset": "win32-gcc-x64",
+			"configuration": "Debug",
+			"output": { "outputOnFailure": true }
+		},
+		{
+			"name": "win32-gcc-x64-test-release",
+			"configurePreset": "win32-gcc-x64",
+			"configuration": "Release",
+			"output": { "outputOnFailure": true }
+		},
+		{
+			"name": "linux-gcc-x64-test-debug",
+			"configurePreset": "linux-gcc-x64",
+			"configuration": "Debug",
+			"output": { "outputOnFailure": true }
+		},
+		{
+			"name": "linux-gcc-x64-test-release",
+			"configurePreset": "linux-gcc-x64",
+			"configuration": "Release",
+			"output": { "outputOnFailure": true }
+		}
+	]
+}
