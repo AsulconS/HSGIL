@@ -24,10 +24,17 @@ set(HSGIL_GLX_CTX_VERSION_MINOR 6 CACHE STRING "Specifies Forced GLX Version Min
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib/$<CONFIG>)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib/$<CONFIG>)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/$<CONFIG>)
+if (HSGIL_BUILD_EXAMPLES)
+	set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/examples)
+endif()
 
 # Set specific lib names
-set(HSGIL_LIB_NAME hsgil)
-set(HSGIL_RUNTIME_LIB_NAME hsgil-runtime)
+set(HSGIL_BASE_NAME hsgil)
+if (BUILD_SHARED_LIBS)
+	set(HSGIL_LIB_NAME hsgil-runtime)
+else()
+	set(HSGIL_LIB_NAME hsgil)
+endif()
 
 # Set Target Platform
 if (WIN32)
@@ -40,7 +47,7 @@ endif()
 # ------------------------------------------------------------------------------
 # Source Files
 # ------------------------------------------------------------------------------
-add_library(${HSGIL_RUNTIME_LIB_NAME})
+add_library(${HSGIL_LIB_NAME})
 
 # Source only (.cpp and .c files)
 set(HSGIL_SOURCE_FILES
@@ -72,7 +79,7 @@ if(WIN32)
 endif()
 
 # Add source files to target
-target_sources(${HSGIL_RUNTIME_LIB_NAME}
+target_sources(${HSGIL_LIB_NAME}
 PRIVATE
 	${HSGIL_SOURCE_FILES}
 	${HSGIL_HEADER_FILES}
@@ -157,7 +164,7 @@ file(GENERATE
 # Build runtime module
 # ------------------------------------------------------------------------------
 # Core Dependencies and Definitions
-set_target_properties(${HSGIL_RUNTIME_LIB_NAME}
+set_target_properties(${HSGIL_LIB_NAME}
 PROPERTIES
 	VERSION ${PROJECT_VERSION}
 	SOVERSION ${SO_VERSION}
@@ -167,7 +174,7 @@ PROPERTIES
 	CXX_EXTENSIONS OFF
 )
 if (BUILD_SHARED_LIBS)
-	target_compile_definitions(${HSGIL_RUNTIME_LIB_NAME}
+	target_compile_definitions(${HSGIL_LIB_NAME}
 	PUBLIC
 		GLAD_API_CALL_EXPORT
 		C__HSGIL_API_CALL_EXPORT
@@ -179,7 +186,7 @@ if (BUILD_SHARED_LIBS)
 		${HSGIL_PRIVATE_COMPILE_DEFINITIONS}
 	)
 else()
-	target_compile_definitions(${HSGIL_RUNTIME_LIB_NAME}
+	target_compile_definitions(${HSGIL_LIB_NAME}
 	PUBLIC
 		${HSGIL_PUBLIC_COMPILE_DEFINITIONS}
 	PRIVATE
@@ -189,38 +196,38 @@ else()
 endif()
 
 # Add Include Directories and Link
-target_include_directories(${HSGIL_RUNTIME_LIB_NAME}
+target_include_directories(${HSGIL_LIB_NAME}
 PUBLIC
 	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 	$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
 PRIVATE
 	src
 )
-target_compile_features(${HSGIL_RUNTIME_LIB_NAME} PUBLIC cxx_std_20)
+target_compile_features(${HSGIL_LIB_NAME} PUBLIC cxx_std_20)
 if (WIN32)
-	target_link_libraries(${HSGIL_RUNTIME_LIB_NAME} PRIVATE opengl32)
+	target_link_libraries(${HSGIL_LIB_NAME} PRIVATE opengl32)
 	if (HSGIL_DEV_OPT_1)
-		target_include_directories(${HSGIL_RUNTIME_LIB_NAME} PRIVATE ${HSGIL_VLD_DIR}/include)
-		target_link_directories(${HSGIL_RUNTIME_LIB_NAME} PRIVATE ${HSGIL_VLD_DIR}/lib/Win64)
-		target_link_libraries(${HSGIL_RUNTIME_LIB_NAME} vld)
+		target_include_directories(${HSGIL_LIB_NAME} PRIVATE ${HSGIL_VLD_DIR}/include)
+		target_link_directories(${HSGIL_LIB_NAME} PRIVATE ${HSGIL_VLD_DIR}/lib/Win64)
+		target_link_libraries(${HSGIL_LIB_NAME} vld)
 	endif()
 else()
 	find_package(X11 REQUIRED)
 	find_package(OpenGL REQUIRED)
-	target_link_libraries(${HSGIL_RUNTIME_LIB_NAME} PRIVATE OpenGL::GL X11::X11)
+	target_link_libraries(${HSGIL_LIB_NAME} PRIVATE OpenGL::GL X11::X11)
 endif()
 
 
 # ------------------------------------------------------------------------------
 # Configuration and Install
 # ------------------------------------------------------------------------------
-configure_file(${HSGIL_LIB_NAME}.pc.in ${HSGIL_LIB_NAME}.pc @ONLY)
+configure_file(${HSGIL_BASE_NAME}.pc.in ${HSGIL_BASE_NAME}.pc @ONLY)
 include(GNUInstallDirs)
-install(TARGETS ${HSGIL_RUNTIME_LIB_NAME}
+install(TARGETS ${HSGIL_LIB_NAME}
 	LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
 	PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
-install(FILES ${CMAKE_BINARY_DIR}/${HSGIL_LIB_NAME}.pc
+install(FILES ${CMAKE_BINARY_DIR}/${HSGIL_BASE_NAME}.pc
 	DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/pkgconfig
 )
 

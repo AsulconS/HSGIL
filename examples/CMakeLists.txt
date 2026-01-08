@@ -1,5 +1,3 @@
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/examples)
-
 add_custom_target(copy_shaders
 	COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_LIST_DIR}/shaders ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/shaders
 )
@@ -33,8 +31,10 @@ macro(build_cpp_source filename)
 		)
 	endif()
 	target_compile_features(${filename} PRIVATE cxx_std_20)
-	target_link_libraries(${filename} LINK_PUBLIC ${HSGIL_RUNTIME_LIB_NAME})
-	copy_runtime_dlls(${filename})
+	target_link_libraries(${filename} LINK_PUBLIC ${HSGIL_LIB_NAME})
+	if (BUILD_SHARED_LIBS)
+		copy_runtime_dlls(${filename})
+	endif()
 endmacro(build_cpp_source)
 
 # Examples options
