@@ -35,14 +35,14 @@ namespace gil
  * @brief Mesh Class that stores a 3D Mesh and lets us draw it dynamically
  * 
  */
-class HSGIL_API Mesh
+class Mesh
 {
 public:
 	/**
 	 * @brief Construct a new Mesh object
 	 * 
 	 */
-	Mesh();
+	HSGIL_API Mesh();
 	/**
 	 * @brief Construct a new Mesh object from a path to the OBJ file
 	 * 
@@ -50,26 +50,26 @@ public:
 	 * @param hasNormals 
 	 * @param hasUVs 
 	 */
-	Mesh(const char* path, bool hasNormals = true, bool hasUVs = true);
+	HSGIL_API Mesh(const char* path, bool hasNormals = true, bool hasUVs = true);
 	/**
 	 * @brief Destroy the Mesh object
 	 * 
 	 */
-	virtual ~Mesh();
+	HSGIL_API virtual ~Mesh();
 
 	/**
 	 * @brief Draw the Mesh object with the shader passed by
 	 * 
 	 * @param shader 
 	 */
-	virtual void draw(const Shader& shader);
+	HSGIL_API virtual void draw(const Shader& shader);
 
 protected:
 	/**
 	 * @brief Generate the VAO, VBO and EBO and setups them
 	 * 
 	 */
-	virtual void generate();
+	HSGIL_API virtual void generate();
 
 	uint32 m_VAO;
 	uint32 m_VBO;

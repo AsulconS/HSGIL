@@ -136,5 +136,77 @@
 			"configuration": "Release",
 			"output": { "outputOnFailure": true }
 		}
+	],
+
+	"workflowPresets": [
+		{
+			"name": "win32-msvc-x64-ci",
+			"displayName": "Windows MSVC x64 - CI",
+			"description": "Workflow preset for CI builds using Windows MSVC x64",
+			"steps": [
+				{
+					"name": "win32-msvc-x64",
+					"type": "configure"
+				},
+				{
+					"name": "win32-msvc-x64-debug",
+					"type": "build"
+				},
+				{
+					"name": "win32-msvc-x64-release",
+					"type": "build"
+				},
+				{
+					"name": "win32-msvc-x64-minsizerel",
+					"type": "build"
+				}
+			]
+		},
+		{
+			"name": "win32-gcc-x64-ci",
+			"displayName": "Windows GCC x64 - CI",
+			"description": "Workflow preset for CI builds using Windows GCC x64",
+			"steps": [
+				{
+					"name": "win32-gcc-x64",
+					"type": "configure"
+				},
+				{
+					"name": "win32-gcc-x64-debug",
+					"type": "build"
+				},
+				{
+					"name": "win32-gcc-x64-release",
+					"type": "build"
+				},
+				{
+					"name": "win32-gcc-x64-minsizerel",
+					"type": "build"
+				}
+			]
+		},
+		{
+			"name": "linux-gcc-x64-ci",
+			"displayName": "Linux GCC x64 - CI",
+			"description": "Workflow preset for CI builds using Linux GCC x64",
+			"steps": [
+				{
+					"name": "linux-gcc-x64",
+					"type": "configure"
+				},
+				{
+					"name": "linux-gcc-x64-debug",
+					"type": "build"
+				},
+				{
+					"name": "linux-gcc-x64-release",
+					"type": "build"
+				},
+				{
+					"name": "linux-gcc-x64-minsizerel",
+					"type": "build"
+				}
+			]
+		}
 	]
 }

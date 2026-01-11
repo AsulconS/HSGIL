@@ -31,55 +31,56 @@ namespace gil
  * @brief Timer Class that measures the time intervals, calculate Delta Time and other time stuff
  * 
  */
-class HSGIL_API Timer
+class Timer
 {
 public:
 	/**
 	 * @brief Construct a new Timer object
 	 * 
 	 */
-	explicit Timer(const bool t_debugMode = false, const float t_period = 1.0f);
+	HSGIL_API explicit Timer(const bool t_debugMode = false, const float t_period = 1.0f);
 	/**
 	 * @brief Destroy the Timer object
 	 * 
 	 */
-	virtual ~Timer();
+	HSGIL_API virtual ~Timer();
 
 	/**
 	 * @brief Update the timer
 	 * 
 	 */
-	void tick();
+	HSGIL_API void tick();
 	/**
 	 * @brief Restart the timer
 	 * 
 	 */
-	void restart();
+	HSGIL_API void restart();
 
 	/**
 	 * @brief Get the Delta Time
 	 * 
 	 * @return float 
 	 */
-	secT getDeltaTime();
+	HSGIL_API secT getDeltaTime();
 	/**
 	 * @brief Get the Total Frame count
 	 * 
 	 * @return uint32 
 	 */
-	uint32 getTotalFrames();
+	HSGIL_API uint32 getTotalFrames();
 	/**
 	 * @brief Get the Frames Per Second count
 	 * 
 	 * @return uint32 
 	 */
-	uint32 getFramesPerSecond();
+	HSGIL_API uint32 getFramesPerSecond();
 
 private:
 	secT procDeltaTime();
 	secT procTotalElapsedTime();
 	secT procCurrentElapsedTime();
 
+private:
 	microT m_start;
 	microT m_currentStart;
 	microT m_lastTime;

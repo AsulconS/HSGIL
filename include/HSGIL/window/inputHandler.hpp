@@ -38,24 +38,24 @@ namespace gil
  * @brief InputHandler class that handles input
  * 
  */
-class HSGIL_API InputHandler
+class InputHandler
 {
 	friend class RenderingWindow;
 public:
-	InputHandler();
-	virtual ~InputHandler();
+	HSGIL_API InputHandler();
+	HSGIL_API virtual ~InputHandler();
 
-	bool onKeyDown(InputCode key);
-	bool onKeyUp(InputCode key);
-	bool onKeyReleased(InputCode key);
-	bool onKeyTriggered(InputCode key);
+	HSGIL_API bool onKeyDown(InputCode key);
+	HSGIL_API bool onKeyUp(InputCode key);
+	HSGIL_API bool onKeyReleased(InputCode key);
+	HSGIL_API bool onKeyTriggered(InputCode key);
 
-	bool onClick(InputCode button);
-	bool onRelease(InputCode button);
-	bool onButtonDown(InputCode button);
-	bool onButtonUp(InputCode button);
+	HSGIL_API bool onClick(InputCode button);
+	HSGIL_API bool onRelease(InputCode button);
+	HSGIL_API bool onButtonDown(InputCode button);
+	HSGIL_API bool onButtonUp(InputCode button);
 
-	Vec2i getMousePos();
+	HSGIL_API Vec2i getMousePos();
 
 private:
 	struct KeyInfo
@@ -80,6 +80,7 @@ private:
 	void updateMouseEvent(InputCode button, InputEvent event);
 	void updateMousePosition(Vec2i position);
 
+private:
 	Vec2i m_mousePos;
 	Map<InputCode, KeyInfo>* m_keys;
 	Map<InputCode, MouseInfo>* m_mouseButtons;

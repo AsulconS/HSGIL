@@ -34,14 +34,14 @@ namespace gil
  * @brief Model Class that allows us to load a 3D Model from a file and store it with a texture
  * 
  */
-class HSGIL_API Model
+class Model
 {
 public:
 	/**
 	 * @brief Construct a new Model object
 	 * 
 	 */
-	Model();
+	HSGIL_API Model();
 	/**
 	 * @brief Construct a new Model object from an OBJ file path and texture path
 	 * 
@@ -50,19 +50,19 @@ public:
 	 * @param hasNormals 
 	 * @param hasUVs 
 	 */
-	Model(const char* path, const char* texturePath = nullptr, bool hasNormals = true, bool hasUVs = true);
+	HSGIL_API Model(const char* path, const char* texturePath = nullptr, bool hasNormals = true, bool hasUVs = true);
 	/**
 	 * @brief Destroy the Model object
 	 * 
 	 */
-	virtual ~Model();
+	HSGIL_API virtual ~Model();
 
 	/**
 	 * @brief Draw the Model object with the shader passed by
 	 * 
 	 * @param shader 
 	 */
-	void draw(Shader& shader);
+	HSGIL_API void draw(Shader& shader);
 
 protected:
 	Mesh   m_mesh;

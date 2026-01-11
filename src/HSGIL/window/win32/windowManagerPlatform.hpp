@@ -49,7 +49,7 @@ class IWindow;
 using EventCallbackFunction = void (*)(IWindow*, InputEvent, WindowParams*);
 using ExternalTickCallbackFunction = bool (*)(IWindow*);
 
-class HSGIL_API WindowManager final
+class WindowManager final
 {
 	friend class gil::LazyPtr<WindowManager>;
 

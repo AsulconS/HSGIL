@@ -35,7 +35,7 @@ namespace plat
  * 
  * @return Time 
  */
-HSGIL_API Time getTime();
+Time getTime();
 
 } // namespace plat
 
