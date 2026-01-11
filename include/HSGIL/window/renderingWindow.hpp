@@ -47,7 +47,7 @@ enum class WindowTickType : uint8
  * @brief Rendering Window Class that handle a window for render of the program
  * 
  */
-class HSGIL_API RenderingWindow : public IWindow
+class RenderingWindow : public IWindow
 {
 	using TickCallback = bool (AppMainProc::*)(RenderingWindow*, const WindowTickType);
 	using TickStaticCallback = bool (*)(RenderingWindow*, const WindowTickType);
@@ -60,35 +60,35 @@ public:
 	 * @param t_width 
 	 * @param t_height 
 	 */
-	explicit RenderingWindow(const uint32 t_width = 800u, const uint32 t_height = 600u, const char* t_title = "Untitled", WindowStyle t_style = WindowStyle::WINDOWED_STYLE, InputHandler* t_inputHandler = nullptr);
+	HSGIL_API explicit RenderingWindow(const uint32 t_width = 800u, const uint32 t_height = 600u, const char* t_title = "Untitled", WindowStyle t_style = WindowStyle::WINDOWED_STYLE, InputHandler* t_inputHandler = nullptr);
 	/**
 	 * @brief Destroy the RenderingWindow object
 	 * 
 	 */
-	virtual ~RenderingWindow();
+	HSGIL_API virtual ~RenderingWindow();
 
 	/**
 	 * @brief Starts Main Loop
 	 *
 	 * @return int
 	 */
-	int startTicking();
+	HSGIL_API int startTicking();
 	/**
 	 * @brief Starts Registered tick
 	 *
 	 */
-	bool tick();
+	HSGIL_API bool tick();
 	/**
 	 * @brief Ticks the main loop once
 	 *
 	 */
-	bool externalTick();
+	HSGIL_API bool externalTick();
 
 	/**
 	 * @brief Swap the framebuffers
 	 * 
 	 */
-	void swapBuffers();
+	HSGIL_API void swapBuffers();
 
 	/**
 	 * @brief Binds the Tick Callback Function to a member function pointer
@@ -96,13 +96,13 @@ public:
 	 * @param obj
 	 * @param callback
 	 */
-	void bindTickCallbackFunction(AppMainProc* appMainProc, TickCallback callback);
+	HSGIL_API void bindTickCallbackFunction(AppMainProc* appMainProc, TickCallback callback);
 	/**
 	 * @brief Binds the Tick Callback Function to a static function pointer
 	 *
 	 * @param callback
 	 */
-	void bindStaticTickCallbackFunction(TickStaticCallback callback);
+	HSGIL_API void bindStaticTickCallbackFunction(TickStaticCallback callback);
 
 	/**
 	 * @brief Check if the Window shouldn't close
@@ -110,54 +110,54 @@ public:
 	 * @return true if the Window is active
 	 * @return false if not
 	 */
-	virtual bool isActive() override;
+	HSGIL_API virtual bool isActive() override;
 	/**
 	 * @brief Check if the Window is able to start rendering
 	 * 
 	 * @return true if right
 	 * @return false if not
 	 */
-	virtual bool isReady() override;
+	HSGIL_API virtual bool isReady() override;
 	/**
 	 * @brief Send signal to close window
 	 * 
 	 */
-	virtual void close() override;
+	HSGIL_API virtual void close() override;
 
 	/**
 	 * @brief Get the Input Handler object
 	 *
 	 * @return InputHandler*
 	 */
-	virtual InputHandler* getInputHandler() override;
+	HSGIL_API virtual InputHandler* getInputHandler() override;
 	/**
 	 * @brief Set the Input Handler object
 	 * 
 	 */
-	virtual void setInputHandler(InputHandler& t_inputHandler) override;
+	HSGIL_API virtual void setInputHandler(InputHandler& t_inputHandler) override;
 	/**
 	 * @brief Poll the Events to process the input
 	 * 
 	 */
-	virtual void pollEvents() override;
+	HSGIL_API virtual void pollEvents() override;
 	/**
 	 * @brief Get the Aspect Ratio
 	 * 
 	 * @return float 
 	 */
-	virtual float getAspectRatio() const override;
+	HSGIL_API virtual float getAspectRatio() const override;
 	/**
 	 * @brief Get the Window Rect object as Vec2i
 	 * 
 	 * @return Vec2i vector containing width and height of the window in pixels
 	 */
-	virtual Vec2i getWindowRect() const override;
+	HSGIL_API virtual Vec2i getWindowRect() const override;
 	/**
 	 * @brief Get the Workspace Rect object as Vec2i
 	 * 
 	 * @return Vec2i vector containing width and height of the viewport in pixels
 	 */
-	virtual Vec2i getViewportRect() const override;
+	HSGIL_API virtual Vec2i getViewportRect() const override;
 
 protected:
 	/**

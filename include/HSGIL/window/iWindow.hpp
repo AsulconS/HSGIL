@@ -34,7 +34,7 @@ class WindowManager;
  * @brief Window Class that handle a Window of the program
  * 
  */
-class HSGIL_API IWindow
+class IWindow
 {
 public:
 	/**
@@ -45,7 +45,7 @@ public:
 	 * @param t_title 
 	 * @param t_eventHandler 
 	 */
-	IWindow(const uint32 t_width, const uint32 t_height, const char* t_title, WindowStyle t_style, InputHandler* t_inputHandler) : m_windowWidth {t_width}, m_windowHeight {t_height}, m_title {t_title}, m_style {t_style}, m_ready {false}, m_inputHandler {t_inputHandler} {}
+	IWindow(const uint32 t_width, const uint32 t_height, const char* t_title, WindowStyle t_style, InputHandler* t_inputHandler) : m_windowWidth{ t_width }, m_windowHeight{ t_height }, m_title{ t_title }, m_style{ t_style }, m_ready{ false }, m_inputHandler{ t_inputHandler } {}
 	/**
 	 * @brief Destroy the Window object
 	 * 
@@ -114,6 +114,7 @@ protected:
 	 */
 	virtual void initializeWindow() = 0;
 
+protected:
 	uint32 m_windowWidth;
 	uint32 m_windowHeight;
 	uint32 m_viewportWidth;

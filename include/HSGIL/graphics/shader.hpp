@@ -39,7 +39,7 @@ namespace gil
  * @brief Shader Class that abstracts almost all the shader functions
  * 
  */
-class HSGIL_API Shader
+class Shader
 {
 public:
 	enum ShaderType : int
@@ -54,25 +54,25 @@ public:
 	 * 
 	 * @param name 
 	 */
-	Shader(const std::string& name);
+	HSGIL_API Shader(const std::string& name);
 	/**
 	 * @brief Construct a new Shader object from string source
 	 * 
 	 * @param vsSrc 
 	 * @param fsSrc 
 	 */
-	Shader(const std::string& vsSrc, const std::string& fsSrc);
+	HSGIL_API Shader(const std::string& vsSrc, const std::string& fsSrc);
 	/**
 	 * @brief Destroy the Shader object
 	 * 
 	 */
-	virtual ~Shader();
+	HSGIL_API virtual ~Shader();
 
 	/**
 	 * @brief Binds the current context to this shader
 	 * 
 	 */
-	void use() const;
+	HSGIL_API void use() const;
 
 	/**
 	 * @brief Set the Bool object
@@ -80,21 +80,21 @@ public:
 	 * @param name 
 	 * @param v0 
 	 */
-	void setBool(const std::string& name, bool v0);
+	HSGIL_API void setBool(const std::string& name, bool v0);
 	/**
 	 * @brief Set the Int object
 	 * 
 	 * @param name 
 	 * @param v0 
 	 */
-	void setInt(const std::string& name, int v0);
+	HSGIL_API void setInt(const std::string& name, int v0);
 	/**
 	 * @brief Set the Float object
 	 * 
 	 * @param name 
 	 * @param v0 
 	 */
-	void setFloat(const std::string& name, float v0);
+	HSGIL_API void setFloat(const std::string& name, float v0);
 
 	/**
 	 * @brief Set the Vec2 object
@@ -103,7 +103,7 @@ public:
 	 * @param v0 
 	 * @param v1 
 	 */
-	void setVec2(const std::string& name, float v0, float v1);
+	HSGIL_API void setVec2(const std::string& name, float v0, float v1);
 	/**
 	 * @brief Set the Vec3 object
 	 * 
@@ -112,7 +112,7 @@ public:
 	 * @param v1 
 	 * @param v2 
 	 */
-	void setVec3(const std::string& name, float v0, float v1, float v2);
+	HSGIL_API void setVec3(const std::string& name, float v0, float v1, float v2);
 	/**
 	 * @brief Set the Vec4 object
 	 * 
@@ -122,7 +122,7 @@ public:
 	 * @param v2 
 	 * @param v3 
 	 */
-	void setVec4(const std::string& name, float v0, float v1, float v2, float v3);
+	HSGIL_API void setVec4(const std::string& name, float v0, float v1, float v2, float v3);
 
 	/**
 	 * @brief Set the Vec2 object
@@ -130,21 +130,21 @@ public:
 	 * @param name 
 	 * @param v 
 	 */
-	void setVec2(const std::string& name, const Vec2& v);
+	HSGIL_API void setVec2(const std::string& name, const Vec2& v);
 	/**
 	 * @brief Set the Vec3 object
 	 * 
 	 * @param name 
 	 * @param v 
 	 */
-	void setVec3(const std::string& name, const Vec3& v);
+	HSGIL_API void setVec3(const std::string& name, const Vec3& v);
 	/**
 	 * @brief Set the Vec4 object
 	 * 
 	 * @param name 
 	 * @param v 
 	 */
-	void setVec4(const std::string& name, const Vec4& v);
+	HSGIL_API void setVec4(const std::string& name, const Vec4& v);
 
 	/**
 	 * @brief Set the Mat3 object
@@ -152,14 +152,14 @@ public:
 	 * @param name 
 	 * @param m0 
 	 */
-	void setMat3(const std::string& name, const glm::mat3& m0);
+	HSGIL_API void setMat3(const std::string& name, const glm::mat3& m0);
 	/**
 	 * @brief Set the Mat4 object
 	 * 
 	 * @param name 
 	 * @param m0 
 	 */
-	void setMat4(const std::string& name, const glm::mat4& m0);
+	HSGIL_API void setMat4(const std::string& name, const glm::mat4& m0);
 
 private:
 	/**

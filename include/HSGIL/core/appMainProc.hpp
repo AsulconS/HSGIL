@@ -35,13 +35,13 @@ enum class WindowTickType : uint8;
  * @brief Application Main Procedure class to handle main tick
  *
  */
-class HSGIL_API AppMainProc
+class AppMainProc
 {
 public:
-	explicit AppMainProc();
-	virtual ~AppMainProc();
+	HSGIL_API explicit AppMainProc();
+	HSGIL_API virtual ~AppMainProc();
 
-	bool mainProc(RenderingWindow* window, const WindowTickType tickType);
+	HSGIL_API bool mainProc(RenderingWindow* window, const WindowTickType tickType);
 
 private:
 	Timer m_timer;

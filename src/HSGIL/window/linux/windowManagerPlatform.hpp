@@ -61,7 +61,7 @@ using ExternalTickCallbackFunction = bool (*)(IWindow*);
 using PFNGLXSWAPINTERVALPROC1 = void (*)(Display*, GLXDrawable, int);
 using PFNGLXSWAPINTERVALPROC2 = int (*)(int);
 
-class HSGIL_API WindowManager final
+class WindowManager final
 {
 	friend gil::LazyPtr<WindowManager>;
 	friend void gil::compat::forceGlxContextToVersion(const int major, const int minor);
