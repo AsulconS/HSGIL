@@ -20,6 +20,12 @@
 			}
 		},
 		{
+			"name": "clang-x64",
+			"displayName": "Clang x64",
+			"description": "Sets targeting x64 architecture using Clang compiler",
+			"inherits": [ "base", "comp-clang", "arch-x64" ]
+		},
+		{
 			"name": "win32-msvc-x64",
 			"displayName": "Windows MSVC x64",
 			"description": "Sets Windows targeting x64 architecture using MSVC compiler",
@@ -43,6 +49,24 @@
 	],
 
 	"buildPresets": [
+		{
+			"name": "clang-x64-debug",
+			"displayName": "Clang x64 - Debug",
+			"configurePreset": "clang-x64",
+			"configuration": "Debug"
+		},
+		{
+			"name": "clang-x64-release",
+			"displayName": "Clang x64 - Release",
+			"configurePreset": "clang-x64",
+			"configuration": "Release"
+		},
+		{
+			"name": "clang-x64-minsizerel",
+			"displayName": "Clang x64 - MinSizeRel",
+			"configurePreset": "clang-x64",
+			"configuration": "MinSizeRel"
+		},
 		{
 			"name": "win32-msvc-x64-debug",
 			"displayName": "Windows MSVC x64 - Debug",
@@ -101,6 +125,18 @@
 
 	"testPresets": [
 		{
+			"name": "clang-x64-test-debug",
+			"configurePreset": "clang-x64",
+			"configuration": "Debug",
+			"output": { "outputOnFailure": true }
+		},
+		{
+			"name": "clang-x64-test-release",
+			"configurePreset": "clang-x64",
+			"configuration": "Release",
+			"output": { "outputOnFailure": true }
+		},
+		{
 			"name": "win32-msvc-x64-test-debug",
 			"configurePreset": "win32-msvc-x64",
 			"configuration": "Debug",
@@ -139,6 +175,29 @@
 	],
 
 	"workflowPresets": [
+		{
+			"name": "clang-x64-ci",
+			"displayName": "Clang x64 - CI",
+			"description": "Workflow preset for CI builds using Clang x64",
+			"steps": [
+				{
+					"name": "clang-x64",
+					"type": "configure"
+				},
+				{
+					"name": "clang-x64-debug",
+					"type": "build"
+				},
+				{
+					"name": "clang-x64-release",
+					"type": "build"
+				},
+				{
+					"name": "clang-x64-minsizerel",
+					"type": "build"
+				}
+			]
+		},
 		{
 			"name": "win32-msvc-x64-ci",
 			"displayName": "Windows MSVC x64 - CI",

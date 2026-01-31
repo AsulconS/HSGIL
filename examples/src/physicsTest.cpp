@@ -28,7 +28,7 @@ class Ball : public gil::Mesh
 {
 public:
 	Ball(const float t_radius = 1.0f, const gil::uint32 t_segmentCount = 36, const gil::uint32 t_ringCount = 18);
-	~Ball() final = default;
+	virtual ~Ball() override = default;
 
 private:
 	float _radius;

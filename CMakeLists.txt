@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 4.0...4.2)
 
 # Set all version configuration
 set(VERSION_MAJOR 0)
-set(VERSION_MINOR 3)
+set(VERSION_MINOR 4)
 set(VERSION_PATCH 0)
 set(SO_VERSION ${VERSION_MAJOR}.${VERSION_MINOR})
 set(FULL_VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH})
@@ -48,6 +48,9 @@ endif()
 # Source Files
 # ------------------------------------------------------------------------------
 add_library(${HSGIL_LIB_NAME})
+
+# Create an alias for better submodule integration
+add_library(HSGIL::HSGIL ALIAS ${HSGIL_LIB_NAME})
 
 # Source only (.cpp and .c files)
 set(HSGIL_SOURCE_FILES
@@ -168,7 +171,6 @@ set_target_properties(${HSGIL_LIB_NAME}
 PROPERTIES
 	VERSION ${PROJECT_VERSION}
 	SOVERSION ${SO_VERSION}
-	PUBLIC_HEADER include/HSGIL/hsgil.hpp
 	CXX_STANDARD 20
 	CXX_STANDARD_REQUIRED ON
 	CXX_EXTENSIONS OFF
@@ -221,15 +223,27 @@ endif()
 # ------------------------------------------------------------------------------
 # Configuration and Install
 # ------------------------------------------------------------------------------
-configure_file(${HSGIL_BASE_NAME}.pc.in ${HSGIL_BASE_NAME}.pc @ONLY)
-include(GNUInstallDirs)
-install(TARGETS ${HSGIL_LIB_NAME}
-	LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-	PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-)
-install(FILES ${CMAKE_BINARY_DIR}/${HSGIL_BASE_NAME}.pc
-	DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/pkgconfig
-)
+# Only configure installation if this is the top-level project
+if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
+	configure_file(${HSGIL_BASE_NAME}.pc.in ${HSGIL_BASE_NAME}.pc @ONLY)
+	include(GNUInstallDirs)
+
+	install(TARGETS ${HSGIL_LIB_NAME}
+		LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+		ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+		RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+	)
+
+	# Install all header files preserving directory structure
+	install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/HSGIL
+		DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+		FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp"
+	)
+
+	install(FILES ${CMAKE_BINARY_DIR}/${HSGIL_BASE_NAME}.pc
+		DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/pkgconfig
+	)
+endif()
 
 
 # ------------------------------------------------------------------------------
