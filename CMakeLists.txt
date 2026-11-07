@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 4.0...4.2)
+cmake_minimum_required(VERSION 4.0...4.5)
 
 # Set all version configuration
 set(VERSION_MAJOR 0)
@@ -110,11 +110,18 @@ if (WIN32)
 	# Try to find a valid Windows SDK installation
 	if (NOT CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION)
 		# Attempt to find the Windows SDK installation root via Registry
-		get_filename_component(SDK_ROOT
-			"[HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows Kits\\Installed Roots;KitsRoot10]"
-			ABSOLUTE
+		cmake_host_system_information(RESULT SDK_ROOT
+			QUERY WINDOWS_REGISTRY "HKLM\\SOFTWARE\\Microsoft\\Windows Kits\\Installed Roots"
+			VALUE "KitsRoot10"
 		)
-		if (EXISTS "${SDK_ROOT}/Include")
+		# Fallback to the 32-bit registry node if the primary search returned empty or the include directory does not exist
+		if (NOT SDK_ROOT OR NOT EXISTS "${SDK_ROOT}/Include")
+			cmake_host_system_information(RESULT SDK_ROOT
+				QUERY WINDOWS_REGISTRY "HKLM\\SOFTWARE\\WOW6432Node\\Microsoft\\Windows Kits\\Installed Roots"
+				VALUE "KitsRoot10"
+			)
+		endif()
+		if (SDK_ROOT AND EXISTS "${SDK_ROOT}/Include")
 			# Get all subdirectories in the 'Include' folder (e.g., 10.0.22621.0)
 			file(GLOB SDK_VERSIONS RELATIVE "${SDK_ROOT}/Include" "${SDK_ROOT}/Include/10.*")
 			# Sort them to find the latest version
